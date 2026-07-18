@@ -154,6 +154,21 @@ arbitrarias, a soma direta e a soma esperada diferem exatamente pelas
 incidencias extras menos as faltantes. Quando a imagem da caixa de pernas e a
 caixa esperada coincidem, a reindexacao nao possui bordo.
 
+## Checkpoint de caixa alinhada Cp
+
+- commit certificado: `49f8d226f1f9718fb15d76b89c5934f9852e8303`;
+- workflow run: `29642943076` (`Lean kernel audit`, run number 57);
+- job: `88076344500` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Carry.CpAlignedBox`.
+
+Para primo impar `p`, o kernel verificou que os indices dos centros
+`p,2p,...,Mp` e de todos os offsets balanceados se injetam nas incidencias sem
+colisoes. As caixas de incidencias e de pernas possuem cardinalidade exata
+`M(p-1)`. A caixa de pernas e a pre-imagem pela equivalencia global Cp; sua
+imagem e, portanto, exatamente a caixa bracketada. Extras e faltantes sao
+vazios e a reindexacao ponderada possui bordo zero.
+
 O alvo compilado e `CPFormal.lean`, isto e, o nucleo Genuine-first. O modulo
 `CPFormal.ResearchReserve` e seus imports espectrais/projetivos nao foram
 promovidos por esse run.
