@@ -32,7 +32,7 @@ open Filter Metric Set
 
 noncomputable section
 
-local instance : Module ℂ ℂ :=
+local instance (priority := 10000) : Module ℂ ℂ :=
   (CommCStarAlgebra.toNonUnitalCommCStarAlgebra ℂ).toNonUnitalCStarAlgebra.toModule
 
 /-- Dominio natural aberto da serie bracketada. -/
@@ -183,8 +183,7 @@ theorem cpBracketMajorantConstant_le_local
 
 /-- A bola canonica permanece acima do piso real escolhido. -/
 theorem bracketNeighborhoodFloor_lt_re
-    {z w : ℂ} (hz : z ∈ bracketHalfPlane)
-    (hw : w ∈ Metric.ball z (bracketNeighborhoodRadius z)) :
+    {z w : ℂ} (hw : w ∈ Metric.ball z (bracketNeighborhoodRadius z)) :
     bracketNeighborhoodFloor z < w.re := by
   have hdist : ‖w - z‖ < bracketNeighborhoodRadius z := by
     simpa [dist_eq_norm] using hw
@@ -246,7 +245,7 @@ theorem norm_realCpSaturatedBracket_le_local
     ‖realCpSaturatedBracket p k w‖ ≤
       localCpBracketMajorantConstant p z (bracketNeighborhoodRadius z) *
         ((k + 1 : ℕ) : ℝ) ^ (-bracketNeighborhoodFloor z - 2) := by
-  have hfloor := bracketNeighborhoodFloor_lt_re hz hw
+  have hfloor := bracketNeighborhoodFloor_lt_re hw
   have hwDomain : -1 < w.re :=
     lt_trans (neg_one_lt_bracketNeighborhoodFloor hz) hfloor
   have hconstant := cpBracketMajorantConstant_le_local (p := p)
@@ -269,7 +268,8 @@ theorem norm_realCpSaturatedBracket_le_local
             ((k + 1 : ℕ) : ℝ) ^ (-w.re - 2) ≤
             localCpBracketMajorantConstant p z (bracketNeighborhoodRadius z) *
               ((k + 1 : ℕ) : ℝ) ^ (-w.re - 2) :=
-          mul_le_mul_of_nonneg_right hconstant (Real.rpow_nonneg _ _)
+          mul_le_mul_of_nonneg_right hconstant
+            (Real.rpow_nonneg (by positivity) _)
         _ ≤ localCpBracketMajorantConstant p z (bracketNeighborhoodRadius z) *
               ((k + 1 : ℕ) : ℝ) ^ (-bracketNeighborhoodFloor z - 2) :=
           mul_le_mul_of_nonneg_left hpower
