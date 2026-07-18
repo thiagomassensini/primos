@@ -37,7 +37,7 @@ theorem summable_dirichletTerm_nat_add_one
   have hshift := hbase.comp_injective
     (show Function.Injective (fun n : ℕ => n + 1) by
       intro a b hab
-      omega)
+      exact Nat.add_right_cancel hab)
   simpa [Function.comp_def, dirichletTerm, Complex.cpow_neg] using hshift
 
 /-- Os prefixos positivos convergem para o canal Genuine inicial. -/
@@ -114,7 +114,12 @@ theorem chartCutoff_tendsto_atTop
   intro b
   filter_upwards [eventually_ge_atTop b] with a ha
   have hpone : 1 ≤ p := hp.one_le
-  omega
+  calc
+    b ≤ a := ha
+    _ ≤ p * a := by
+      simpa only [one_mul] using Nat.mul_le_mul_right a hpone
+    _ ≤ p * a + CPFormal.Genuine.Cp.halfRange p :=
+      Nat.le_add_right _ _
 
 /-!
 Passagem ao limite principal. Os dois prefixos convergem para o mesmo canal;
