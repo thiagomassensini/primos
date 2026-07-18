@@ -103,7 +103,7 @@ theorem centerBlock_eq_sum_Icc
   apply Finset.sum_bijective (fun a : ℤ => center + a)
   · constructor
     · intro a b hab
-      omega
+      exact add_left_cancel hab
     · intro n
       exact ⟨n - center, by ring⟩
   · intro a
