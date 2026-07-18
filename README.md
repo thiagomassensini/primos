@@ -31,6 +31,8 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
 - unicidade da perna balanceada que produz carry em cada carta Cp;
 - igualdade entre a maior profundidade das pernas e a profundidade `v_p` do
   centro canonico;
+- reindexacao ponderada Cp com bordo `extras - faltantes` explicito e corolario
+  de cobertura exata;
 - ledger de afirmacoes, mapa de dependencias e caixa de ideias.
 
 Os modulos projetivo e Hilbert--Polya permanecem preservados em
@@ -71,8 +73,8 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 marcadas como abertas no ledger.
 
 O checkpoint mais recente do nucleo ativo passou por essa verificacao no
-commit `b24ea3d440198b779d30333df608a4cb0b2c78a0`, workflow run
-`29640037006`. A certificacao cobre os imports de `CPFormal.lean`;
+commit `52afc4ffa81f0d62ed732b86de3c4c7f3537284a`, workflow run
+`29640821068`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
 ## Ordem de leitura
@@ -80,7 +82,7 @@ commit `b24ea3d440198b779d30333df608a4cb0b2c78a0`, workflow run
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
 3. `docs/CLAIM_LEDGER.md`
-4. `docs/RELEASE_0.6.0.md`
+4. `docs/RELEASE_0.7.0.md`
 5. `docs/VISION_INBOX.md`
 6. `CPFormal/Genuine/FiniteCancellation.lean`
 7. `CPFormal/Genuine/C2.lean`
@@ -92,3 +94,4 @@ commit `b24ea3d440198b779d30333df608a4cb0b2c78a0`, workflow run
 13. `CPFormal/Carry/CpBalancedResidue.lean`
 14. `CPFormal/Carry/CpGlobalIncidence.lean`
 15. `CPFormal/Carry/CpDepth.lean`
+16. `CPFormal/Carry/CpWeightedReindex.lean`
