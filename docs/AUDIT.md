@@ -111,6 +111,20 @@ Para primo impar `p`, o kernel verificou a equivalencia entre offsets
 balanceados e residuos nao nulos de `ZMod p`. A inversa usa
 `ZMod.valMinAbs`, e a camera possui cardinalidade `p-1`.
 
+## Checkpoint da bijecao global Cp
+
+- commit certificado: `e8b9cf7cedf15e7917d7837bb50bb6412d048ccb`;
+- workflow run: `29638936254` (`Lean kernel audit`, run number 34);
+- job: `88066026811` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Carry.CpGlobalIncidence`.
+
+Para primo impar `p`, o kernel verificou que todo inteiro nao divisivel por
+`p` possui um unico offset balanceado `a`; o numero `c=n-a` e divisivel por
+`p`, e a correspondencia `n <-> (c,a)` e uma equivalencia. Tambem foi
+elaborada diretamente a forma existencial unica `∃! (c,a), n=c+a` dentro do
+tipo de incidencias.
+
 O alvo compilado e `CPFormal.lean`, isto e, o nucleo Genuine-first. O modulo
 `CPFormal.ResearchReserve` e seus imports espectrais/projetivos nao foram
 promovidos por esse run.
