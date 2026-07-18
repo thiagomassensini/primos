@@ -102,7 +102,7 @@ theorem mem_alignedIncidenceBox_iff
 @[simp] theorem card_incidenceIndexBox
     {p M : ℕ} (hpodd : Odd p) :
     (incidenceIndexBox p M).card = M * (p - 1) := by
-  simp only [incidenceIndexBox, BalancedOffset, Finset.card_product,
+  rw [incidenceIndexBox, Finset.product_eq_sprod, Finset.card_product,
     Finset.card_range, Finset.card_attach, card_balancedOffsets hpodd]
 
 /-- A caixa de incidencias possui `M * (p-1)` elementos distintos. -/
