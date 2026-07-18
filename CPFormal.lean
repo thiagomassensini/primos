@@ -27,3 +27,4 @@ import CPFormal.Analytic.CpDirichletLimit
 import CPFormal.Analytic.CenteredSecondDifferenceBound
 import CPFormal.Analytic.DirichletSecondDifference
 import CPFormal.Analytic.CpBracketConvergence
+import CPFormal.Analytic.CpBracketHolomorphic
