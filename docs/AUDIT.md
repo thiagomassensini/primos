@@ -172,3 +172,23 @@ vazios e a reindexacao ponderada possui bordo zero.
 O alvo compilado e `CPFormal.lean`, isto e, o nucleo Genuine-first. O modulo
 `CPFormal.ResearchReserve` e seus imports espectrais/projetivos nao foram
 promovidos por esse run.
+
+## Checkpoint dos pesos, norma de ramo e tilt Cp
+
+- commit certificado: `aec9140c36ed5274a8eb7e8a919ef86c0971c5e9`;
+- workflow run: `29644692098` (`Lean kernel audit`, run number 65);
+- job da tentativa verde: `88080985687` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novos alvos compilados: `CPFormal.Carry.CpBranchWeight`,
+  `CPFormal.Analytic.CpBranchNorm` e `CPFormal.Analytic.CpTilt`.
+
+O kernel verificou a identidade amplitude--massa, o transporte dos pesos
+`p^(-k)` pela profundidade de carry, a soma geometrica da norma quadratica, o
+criterio `norma^2=1 <-> sigma=1/2`, a anulacao critica do tilt Cp e a
+implicacao defeito nulo da norma para tilt nulo. A primeira tentativa desse
+run falhou antes do Lean por reset de conexao ao instalar Elan; a reexecucao
+do mesmo workflow concluiu com sucesso.
+
+A estrutura `GenuineBranchBridge` permanece sem instancia. Portanto esse run
+nao prova que um zero Genuine satura a norma; apenas verifica a conclusao
+condicional caso essa ponte seja construida.
