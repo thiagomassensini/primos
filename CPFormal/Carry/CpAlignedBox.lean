@@ -110,7 +110,8 @@ theorem mem_alignedIncidenceBox_iff
 @[simp] theorem card_alignedIncidenceBox
     (p : ℕ) (hp : Nat.Prime p) (hpodd : Odd p) (M : ℕ) :
     (alignedIncidenceBox p hp M).card = M * (p - 1) := by
-  simp [alignedIncidenceBox, card_incidenceIndexBox hpodd]
+  rw [alignedIncidenceBox, Finset.card_map]
+  exact card_incidenceIndexBox hpodd
 
 /-- A caixa direta e a pre-imagem exata da caixa bracketada pela bijecao. -/
 def alignedNonmultipleBox
@@ -123,7 +124,8 @@ def alignedNonmultipleBox
 @[simp] theorem card_alignedNonmultipleBox
     (p : ℕ) (hp : Nat.Prime p) (hpodd : Odd p) (M : ℕ) :
     (alignedNonmultipleBox p hp hpodd M).card = M * (p - 1) := by
-  simp [alignedNonmultipleBox, card_alignedIncidenceBox p hp hpodd M]
+  rw [alignedNonmultipleBox, Finset.card_map]
+  exact card_alignedIncidenceBox p hp hpodd M
 
 /-- Aplicar a bijecao de volta recupera literalmente a caixa bracketada. -/
 theorem incidenceImage_alignedNonmultipleBox
