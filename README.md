@@ -60,16 +60,17 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 `KERNEL_CHECKED`; ele nao promove automaticamente pontes matematicas ainda
 marcadas como abertas no ledger.
 
-O nucleo ativo passou por essa verificacao no commit
-`2a29c850389c888c6f1b5bde2dcb899fd261b559`. A certificacao cobre os imports
-de `CPFormal.lean`; `CPFormal.ResearchReserve` permanece fora dela.
+O checkpoint mais recente do nucleo ativo passou por essa verificacao no
+commit `0cc016b69419b811cbf12867f46605280ecdf7db`, workflow run
+`29635654651`. A certificacao cobre os imports de `CPFormal.lean`;
+`CPFormal.ResearchReserve` permanece fora dela.
 
 ## Ordem de leitura
 
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
 3. `docs/CLAIM_LEDGER.md`
-4. `docs/RELEASE_0.2.0.md`
+4. `docs/RELEASE_0.3.0.md`
 5. `docs/VISION_INBOX.md`
 6. `CPFormal/Genuine/FiniteCancellation.lean`
 7. `CPFormal/Genuine/C2.lean`
