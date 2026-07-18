@@ -100,7 +100,7 @@ theorem norm_realCpPairBracket_le
   have hradiusUpper : radius ≤ halfRange p :=
     (Finset.mem_Icc.mp hradius).2
   have hleftLower :=
-    natCast_add_one_le_alignedCenter_sub_radius hp hradiusUpper
+    natCast_add_one_le_alignedCenter_sub_radius (k := k) hp hradiusUpper
   have hkpos : 0 < ((k + 1 : ℕ) : ℝ) := by positivity
   have hleft :
       0 < (p : ℝ) * ((k + 1 : ℕ) : ℝ) - (radius : ℝ) :=
