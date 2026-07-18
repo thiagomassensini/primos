@@ -101,3 +101,16 @@ Foram elaborados pelo kernel a preservacao termo a termo do valor e do peso de
 profundidade pela equivalencia Cp, a reindexacao de qualquer `Finset` de
 pernas, a identidade de bordo `extras - faltantes` e o corolario de cobertura
 exata.
+
+## Checkpoint de caixa alinhada Cp
+
+- commit: `49f8d226f1f9718fb15d76b89c5934f9852e8303`;
+- run: `29642943076`;
+- job: `88076344500`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+Foram elaborados pelo kernel a familia concreta de incidencias nos centros
+`p,2p,...,Mp`, a ausencia de colisoes, as cardinalidades `M(p-1)`, a caixa
+direta obtida pela bijecao Cp, a cobertura exata, o esvaziamento dos dois
+termos de bordo e a igualdade ponderada resultante.
