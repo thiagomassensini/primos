@@ -59,4 +59,5 @@ theorem finite_genuine_cancellation
   simp [bracket]
   ring
 
+end
 end CPFormal.Genuine.Cp
