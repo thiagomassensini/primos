@@ -20,8 +20,8 @@
 - por isso o `lake build` falhou antes da elaboracao dos arquivos do projeto,
   com `error: failed to locate application`.
 
-Uma execucao fora do sandbox exige autorizacao explicita do usuario. Nenhum
-lema recebe o estado `KERNEL_CHECKED` antes dessa execucao terminar com sucesso.
+O bloqueio local foi contornado de forma auditavel pelo GitHub Actions, sem
+alterar o executavel nem as regras do sandbox.
 
 Primeiro comando obrigatorio num ambiente Lean:
 
@@ -44,3 +44,18 @@ O workflow `.github/workflows/lean.yml` usa `leanprover/lean-action@v1` num
 runner `ubuntu-latest`, roda primeiro `scripts/static_audit.sh` e depois
 `lake build --wfail`. O workflow e uma alternativa limpa ao compilador local
 quando o sandbox impede a inicializacao do Lean.
+
+## Certificacao do nucleo ativo
+
+- repositorio privado: `thiagomassensini/primos`;
+- pull request de auditoria: `#1`;
+- branch: `agent/lean-kernel-audit`;
+- commit certificado: `2a29c850389c888c6f1b5bde2dcb899fd261b559`;
+- workflow run: `29634840124` (`Lean kernel audit`, run number 9);
+- resultado: `success` em `lake build --wfail`;
+- Lean: `v4.32.0`;
+- mathlib: revisao fixada pelo `lake-manifest.json`.
+
+O alvo compilado e `CPFormal.lean`, isto e, o nucleo Genuine-first. O modulo
+`CPFormal.ResearchReserve` e seus imports espectrais/projetivos nao foram
+promovidos por esse run.
