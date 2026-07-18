@@ -98,11 +98,9 @@ pernas, produz exatamente a correcao `p * f(center)`.
 theorem bracket_eq_centerBlock_sub_p_mul_center
     (p : ℕ) (hp : Nat.Prime p) (f : ℤ → R) (center : ℤ) :
     bracket p f center = centerBlock p f center - (p : R) * f center := by
-  have hpcast : (((p - 1 : ℕ) : R) + 1) = (p : R) := by
-    rw [← Nat.cast_one, ← Nat.cast_add, Nat.sub_add_cancel hp.one_le]
   rw [centerBlock_eq_legSum_add_center]
   unfold bracket
-  rw [← hpcast]
+  rw [Nat.cast_sub hp.one_le, Nat.cast_one]
   ring
 
 /-!
