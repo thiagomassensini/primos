@@ -25,7 +25,7 @@ noncomputable section
 
 /-- Inteiros que não pertencem à vertical de base `p`. -/
 def Nonmultiple (p : ℕ) :=
-  {n : ℤ // ¬(p : ℤ) ∣ n}
+  {n : ℤ // ¬ ((p : ℤ) ∣ n)}
 
 /--
 Uma incidência Cₚ guarda um centro múltiplo de `p` e um offset balanceado.
@@ -52,7 +52,11 @@ def offsetOfNonmultiple
     (p : ℕ) (hp : Nat.Prime p) (hpodd : Odd p)
     (n : Nonmultiple p) :
     ((offsetOfNonmultiple p hp hpodd n).1 : ZMod p) = (n.1 : ZMod p) := by
-  simpa [offsetOfNonmultiple] using congrArg Subtype.val
+  change
+    (residueOfBalanced p hp hpodd
+      (offsetOfNonmultiple p hp hpodd n)).1 =
+      (residueOfNonmultiple p n).1
+  exact congrArg Subtype.val
     ((balancedOffsetEquivNonzeroResidue p hp hpodd).apply_symm_apply
       (residueOfNonmultiple p n))
 
@@ -69,6 +73,7 @@ theorem dvd_centerOfNonmultiple
     (p : ℤ) ∣ centerOfNonmultiple p hp hpodd n := by
   apply (ZMod.intCast_zmod_eq_zero_iff_dvd
     (centerOfNonmultiple p hp hpodd n) p).mp
+  unfold centerOfNonmultiple
   change (n.1 : ZMod p) -
     ((offsetOfNonmultiple p hp hpodd n).1 : ZMod p) = 0
   rw [cast_offsetOfNonmultiple]
