@@ -22,6 +22,9 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
 - igualdade entre profundidade efetiva da perna e profundidade do centro C2;
 - reindexacao ponderada C2 com bordo `extras - faltantes` explicito;
 - caixas C2 nos centros `4,8,...,4M` com cobertura exata e bordo vazio;
+- identificacao dessas pernas com `3,5,...,4M+1` e cardinalidade `2M`;
+- bijecao Cp entre offsets balanceados e residuos nao nulos modulo primo;
+- cardinalidade `p-1` da camera balanceada Cp;
 - ledger de afirmacoes, mapa de dependencias e caixa de ideias.
 
 Os modulos projetivo e Hilbert--Polya permanecem preservados em
@@ -62,8 +65,8 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 marcadas como abertas no ledger.
 
 O checkpoint mais recente do nucleo ativo passou por essa verificacao no
-commit `45b7fe8bb761117609054f0b448c8c11db375b78`, workflow run
-`29636078858`. A certificacao cobre os imports de `CPFormal.lean`;
+commit `211e2a09fa5312c5fb851de9f4a71f05209b0b24`, workflow run
+`29637023211`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
 ## Ordem de leitura
@@ -71,7 +74,7 @@ commit `45b7fe8bb761117609054f0b448c8c11db375b78`, workflow run
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
 3. `docs/CLAIM_LEDGER.md`
-4. `docs/RELEASE_0.3.0.md`
+4. `docs/RELEASE_0.4.0.md`
 5. `docs/VISION_INBOX.md`
 6. `CPFormal/Genuine/FiniteCancellation.lean`
 7. `CPFormal/Genuine/C2.lean`
@@ -80,3 +83,4 @@ commit `45b7fe8bb761117609054f0b448c8c11db375b78`, workflow run
 10. `CPFormal/Carry/C2Depth.lean`
 11. `CPFormal/Carry/C2WeightedReindex.lean`
 12. `CPFormal/Carry/C2AlignedBox.lean`
+13. `CPFormal/Carry/CpBalancedResidue.lean`
