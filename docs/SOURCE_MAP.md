@@ -71,6 +71,15 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | prefixos positivos convergem para o Genuine inicial | `Analytic.Cp.positiveDirichletPrefix_tendsto_genuineDirichlet` |
 | carta finita escrita como dois prefixos da mesma serie | `Analytic.Cp.finiteChart_dirichlet_eq_two_prefixes` |
 | passagem ao limite `finiteChart -> (1-p^(1-s))*Genuine` em `Re(s)>1` | `Analytic.Cp.finiteChart_dirichlet_tendsto_genuine_factor` |
+| cota quadratica abstrata da segunda diferenca centrada | `Analytic.norm_centeredSecondDifference_le` |
+| derivadas primeira e segunda de `x^(-s)` no eixo real positivo | `Analytic.hasDerivAt_realDirichletPower`, `Analytic.hasDerivAt_realDirichletPowerDeriv` |
+| ganho de duas potencias para a segunda diferenca de `x^(-s)` | `Analytic.norm_realDirichletPower_centeredSecondDifference_le` |
+| bracket Genuine Cp = soma saturada das segundas diferencas | `Genuine.Cp.bracket_eq_saturatedBracket` |
+| majorante de um bloco Cp por `(k+1)^(-Re(s)-2)` | `Analytic.Cp.norm_realCpSaturatedBracket_le` |
+| somabilidade absoluta da carta bracketada em `Re(s)>-1` | `Analytic.Cp.summable_norm_realCpSaturatedBracket` |
+| prefixo bracketado = `Genuine.Cp.finiteChart` em cada corte | `Analytic.Cp.finiteBracketedDirichletChart_eq_finiteChart` |
+| prefixos Genuine convergem para a carta bracketada em `Re(s)>-1` | `Analytic.Cp.finiteChart_dirichlet_tendsto_bracketedDirichletChart` |
+| carta bracketada = fator Genuine no semiplano comum `Re(s)>1` | `Analytic.Cp.bracketedDirichletChart_eq_genuine_factor` |
 | identidade Green assinada, energia positiva e bordo fechado implicam `delta=0` | `Analytic.Cp.SignedGreenCertificate.criticalDisplacement_eq_zero_of_genuine_zero` |
 | certificado Green concreto produz a ponte Genuine--ramo | `Analytic.Cp.SignedGreenCertificate.toGenuineBranchBridge` |
 | ponte ainda aberta de zeros Genuine para a norma | `Analytic.Cp.GenuineBranchBridge` (sem instancia) |
