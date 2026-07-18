@@ -73,12 +73,12 @@ theorem criticalAmplitude_nonneg (p k : ℕ) :
   calc
     ((p : ℝ) ^ (-((k : ℝ)) * sigma)) ^ 2 =
         (p : ℝ) ^ ((-((k : ℝ)) * sigma) * (2 : ℝ)) := by
-      rw [Real.rpow_mul_natCast hp0]
+      exact (Real.rpow_mul_natCast hp0 (-((k : ℝ)) * sigma) 2).symm
     _ = (p : ℝ) ^ ((-2 * sigma) * (k : ℝ)) := by
       congr 1
       ring
     _ = ((p : ℝ) ^ (-2 * sigma)) ^ k := by
-      rw [Real.rpow_mul_natCast hp0]
+      exact Real.rpow_mul_natCast hp0 (-2 * sigma) k
 
 /-- Em `sigma = 1/2`, a amplitude geral vira `p^(-k/2)`. -/
 @[simp] theorem branchAmplitude_half (p k : ℕ) :
