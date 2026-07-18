@@ -148,9 +148,17 @@ caixa aritmetica C2 foi implementada com os centros `4,8,...,4M` e as duas
 pernas de cada centro. O kernel verificou que a caixa induzida de pernas
 recupera exatamente essas incidencias, logo extras e faltantes sao vazios.
 
-O proximo refinamento finito e caracterizar essa caixa de pernas diretamente
-como os impares entre `3` e `4M+1`, provar sua cardinalidade `2M` e entao
-transportar a construcao para Cp.
+A caixa de pernas tambem foi caracterizada diretamente como a enumeracao
+`2k+3`, `k<2M`. Portanto ela contem exatamente os impares entre `3` e
+`4M+1` e possui cardinalidade `2M`; ambos os fatos estao verificados pelo
+kernel.
+
+O primeiro passo Cp tambem esta verificado: para primo impar `p`,
+`ZMod.valMinAbs` fornece uma bijecao entre residuos nao nulos e offsets
+balanceados, e a camera possui exatamente `p-1` pernas. O proximo alvo e a
+bijeção global entre inteiros nao multiplos de `p` e incidencias
+`(centro multiplo de p, offset balanceado)`, seguida do transporte da
+profundidade de carry.
 
 ## Fase 3 — pesos, series e caudas
 
