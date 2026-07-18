@@ -315,9 +315,19 @@ Genuine.Cp.bracket = saturatedBracket.
 Consequentemente, os proprios prefixos `Genuine.Cp.finiteChart` convergem
 para `bracketedDirichletChart` em `Re(s)>-1`. No semiplano comum `Re(s)>1`, a
 unicidade do limite identifica essa carta com
-`(1-p^(1-s))*genuineDirichlet(s)`. Isso ainda nao fornece convergencia
-localmente uniforme, holomorfia do `tsum`, equivalencia com a zeta da Mathlib
-ou informacao sobre zeros.
+`(1-p^(1-s))*genuineDirichlet(s)`.
+
+O passo local-uniforme tambem foi fechado. Em torno de cada ponto
+`z` com `Re(z)>-1`, escolhe-se a bola de raio `(Re(z)+1)/2`. Nela, o kernel
+verificou uma p-serie somavel que domina simultaneamente todos os blocos,
+independentemente do ponto da bola. O criterio de Weierstrass fornece a
+holomorfia da cauda e da carta. Como o semiplano e preconexo, o principio da
+identidade prova a unicidade da continuacao a partir de `Re(s)>1`.
+
+Foi exportada a forma local em bolas, que e suficiente para holomorfia; nao
+foi criado um corolario redundante quantificando separadamente sobre todo
+compacto. Ainda faltam a identificacao com a zeta da Mathlib, a nao anulacao
+formal do fator no critical strip e as consequencias sobre zeros.
 
 O gargalo Green foi decomposto numa interface mais informativa que a ponte
 final. `SignedGreenCertificate` exige separadamente
@@ -346,10 +356,10 @@ Objetos:
 Teoremas-alvo:
 
 - representacao integral da segunda diferenca;
-- majorante uniforme `O(m^(-sigma-2))` em compactos;
-- somabilidade para a regiao declarada;
-- convergencia localmente uniforme;
-- holomorfia da carta;
+- majorante uniforme `O(m^(-sigma-2))` em vizinhancas locais — concluido;
+- somabilidade para a regiao declarada — concluido;
+- convergencia localmente uniforme suficiente para Weierstrass — concluido;
+- holomorfia da carta — concluido;
 - taxa de cauda na linha critica.
 
 Nenhum `O(...)` de documento entra no kernel sem uma desigualdade com
@@ -366,8 +376,9 @@ Teoremas-alvo:
 - preservacao de multiplicidade;
 - compatibilidade entre cartas primas.
 
-O arquivo `Analytic/Chart.lean` contem apenas a logica abstrata
-`chart = factor * genuine`; a instancia CP concreta ainda deve ser construida.
+O arquivo `Analytic/Chart.lean` contem a logica abstrata
+`chart = factor * genuine`; a instancia Cp concreta de continuacao esta em
+`Analytic/CpBracketHolomorphic.lean`.
 
 Ordem local atual para essa instancia:
 
@@ -378,10 +389,13 @@ Ordem local atual para essa instancia:
 3. **concluido:** ganho de duas potencias, somabilidade absoluta pontual em
    `Re(s)>-1`, identificacao finita com o bracket Genuine e passagem dos
    prefixos ao limite;
-4. **proximo nucleo:** transformar o majorante pontual em majorante uniforme
-   sobre compactos, provar holomorfia da carta bracketada e aplicar o teorema
-   de identidade;
-5. depois, construir o traco Green usando o mesmo ledger de bordo, sem trocar o
+4. **concluido:** majorante uniforme numa bola canonica em torno de cada ponto,
+   holomorfia da carta bracketada e unicidade da continuacao pelo principio da
+   identidade;
+5. **proximo nucleo minimo:** provar que `1-p^(1-s)` nao zera no interior do
+   critical strip e formular a equivalencia de zeros que realmente decorre da
+   carta continuada;
+6. depois, construir o traco Green usando o mesmo ledger de bordo, sem trocar o
    escalar Genuine por uma amplitude modelada.
 
 ## Fase 5 — Hilbert ponderado e projecao
