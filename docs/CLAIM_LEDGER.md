@@ -1,4 +1,4 @@
-# Ledger de afirmacoes — checkpoint 0.9.0 Genuine-first
+# Ledger de afirmacoes — checkpoint 0.10.0 Genuine-first
 
 Estados usados:
 
@@ -40,8 +40,10 @@ Estados usados:
 | GEN-WEIGHT-CP | na profundidade de carry `k`, a massa critica e `p^(-k)`, a amplitude e `p^(-k/2)` e `amplitude^2 = massa`; a caixa alinhada transporta esse peso sem bordo | KERNEL_CHECKED | GEN-DEP-CP, GEN-BOX-CP, potencia real | usar nos coeficientes complexos `p^(-ks)` |
 | BRANCH-NORM-CP | a norma quadratica pura e a serie `(p-1) sum_{k>=1} p^(-2k sigma)` e possui a forma geometrica fechada para `sigma>0` | KERNEL_CHECKED | GEN-CARD-CP, GEN-WEIGHT-CP, serie geometrica | ligar aos coeficientes complexos do ramo |
 | BRANCH-HALF-CP | para primo impar e `sigma>0`, `branchNormSq p sigma = 1 <-> sigma=1/2` | KERNEL_CHECKED | BRANCH-NORM-CP, monotonicidade de `Real.rpow` | usar como barreira quadratica |
-| TILT-CP-ANN | o tilt de todas as pernas Cp se anula em `sigma=1/2`; defeito nulo da norma implica tilt nulo em qualquer centro | KERNEL_CHECKED | BRANCH-HALF-CP, GEN-CARD-CP | provar a rigidez reciproca |
-| TILT-CP-RIGID | no dominio `sigma>0` e para centros admissiveis, tilt nulo implica `sigma=1/2` | OPEN_BRIDGE | convexidade/concavidade de `x^(-delta)`, pareamento dos offsets | portar a prova de sinal para todo Cp |
+| TILT-CP-ANN | o tilt de todas as pernas Cp se anula em `sigma=1/2`; defeito nulo da norma implica tilt nulo em qualquer centro | KERNEL_CHECKED | BRANCH-HALF-CP, GEN-CARD-CP | usado na equivalencia norma--tilt |
+| TILT-CP-PAIR | o tilt Cp e metade da soma dos brackets simetricos dos pares `±a` | KERNEL_CHECKED | GEN-CARD-CP, involucao dos offsets | usado na prova de sinal global |
+| TILT-CP-SIGN | para primo impar, centro `c>halfRange(p)` e `sigma>0`, o tilt e negativo abaixo de `1/2` e positivo acima de `1/2` | KERNEL_CHECKED | TILT-CP-PAIR, convexidade/concavidade estritas de `x^(-delta)` | usado na rigidez |
+| TILT-CP-RIGID | para primo impar, `sigma>0` e `c>halfRange(p)`, `tilt=0 <-> sigma=1/2`; nesse dominio, tilt nulo equivale a defeito nulo da norma | KERNEL_CHECKED | TILT-CP-SIGN, TILT-CP-ANN, BRANCH-HALF-CP | usar na ponte Genuine--ramo |
 | BRIDGE-GEN-BRANCH | zero Genuine implica saturacao da norma do ramo | OPEN_BRIDGE | identidade analitica da carta e exclusao de cancelamento global | construir instancia de `GenuineBranchBridge` |
 | RH-COND-CP | dada uma instancia de `GenuineBranchBridge`, todo zero no semiplano positivo possui parte real `1/2` e anula o tilt | KERNEL_CHECKED | BRIDGE-GEN-BRANCH, BRANCH-HALF-CP | teorema condicional compilado; nao confundir com uma instancia da ponte |
 | CHP-001 | carta e fator vezes Genuine | PAPER_ARGUMENT | reindexacao e analise | formalizar primeiro finito |
@@ -56,6 +58,6 @@ Estados usados:
 | RH-001 | todo zero Genuine esta na linha critica | BLOQUEADO | BRG-001 ou SPC-001+SPC-002 | nao enunciar como provado |
 
 O checkpoint mais recente do nucleo ativo foi compilado pelo GitHub Actions no
-commit `aec9140c36ed5274a8eb7e8a919ef86c0971c5e9`, run `29644692098`.
+commit `4ed11cfed623a94982a7ba3316f5a290c16fb4c9`, run `29647362054`.
 Modulos mantidos apenas em `CPFormal.ResearchReserve` nao fazem parte dessa
 certificacao. Consulte `AUDIT.md`.

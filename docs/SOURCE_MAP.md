@@ -47,6 +47,12 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | defeito da norma e `sigma-1/2` possuem o mesmo zero | `Analytic.Cp.branchDefect_eq_zero_iff_criticalDisplacement_eq_zero` |
 | tilt bracketado de todas as pernas Cp | `Analytic.Cp.cpTilt` |
 | norma saturada implica tilt nulo | `Analytic.Cp.branchDefect_zero_implies_cpTiltAtSigma_zero` |
+| pareamento exato do tilt por `a ↦ -a` | `Analytic.Cp.cpTilt_eq_half_sum_pair` |
+| sinal positivo de cada bracket para `delta>0` | `Analytic.Cp.cpPairTilt_pos_of_delta_pos` |
+| sinal negativo de cada bracket para `-1<delta<0` | `Analytic.Cp.cpPairTilt_neg_of_neg_one_lt_delta` |
+| rigidez canonica do tilt fora da camera | `Analytic.Cp.tiltRigidityAt_of_halfRange_lt_center` |
+| zeros do tilt exatamente na meia abscissa | `Analytic.Cp.cpTiltAtSigma_eq_zero_iff_half` |
+| equivalencia entre defeito da norma e tilt no centro admissivel | `Analytic.Cp.branchDefect_eq_zero_iff_cpTiltAtSigma_eq_zero_of_admissible_center` |
 | ponte ainda aberta de zeros Genuine para a norma | `Analytic.Cp.GenuineBranchBridge` (sem instancia) |
 
 Observacao: `GEOMETRIA_C2_CP_DECOMPOSICAO_POR_CARRY(1).md` chegou vazio na

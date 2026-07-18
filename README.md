@@ -41,10 +41,14 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
   `(p-1) * sum_{k>=1} p^(-2 k sigma)`;
 - forma fechada da serie e criterio exato, para `sigma > 0`,
   `branchNormSq p sigma = 1 <-> sigma = 1/2`;
-- tilt transversal de todas as `p-1` pernas da carta Cp, sua anulacao em
-  `sigma = 1/2` e a implicacao `defeito da norma = 0 -> tilt = 0`;
-- interfaces explicitas, ainda sem instancias, para a rigidez reciproca do
-  tilt e para a ponte `zero Genuine -> saturacao do ramo`;
+- tilt transversal de todas as `p-1` pernas da carta Cp e sua decomposicao
+  exata como metade da soma dos brackets dos pares `±a`;
+- sinal estrito do tilt, para centro fora da camera: negativo abaixo de
+  `sigma=1/2`, nulo em `sigma=1/2` e positivo acima;
+- rigidez canonica `tilt = 0 <-> sigma = 1/2` no semiplano `sigma>0`, e
+  equivalencia entre tilt nulo e defeito nulo da norma;
+- interface explicita, ainda sem instancia, para a ponte
+  `zero Genuine -> saturacao do ramo`;
 - ledger de afirmacoes, mapa de dependencias e caixa de ideias.
 
 Os modulos projetivo e Hilbert--Polya permanecem preservados em
@@ -85,8 +89,8 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 marcadas como abertas no ledger.
 
 O checkpoint mais recente do nucleo ativo passou por essa verificacao no
-commit `aec9140c36ed5274a8eb7e8a919ef86c0971c5e9`, workflow run
-`29644692098`. A certificacao cobre os imports de `CPFormal.lean`;
+commit `4ed11cfed623a94982a7ba3316f5a290c16fb4c9`, workflow run
+`29647362054`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
 ## Ordem de leitura
@@ -94,7 +98,7 @@ commit `aec9140c36ed5274a8eb7e8a919ef86c0971c5e9`, workflow run
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
 3. `docs/CLAIM_LEDGER.md`
-4. `docs/RELEASE_0.9.0.md`
+4. `docs/RELEASE_0.10.0.md`
 5. `docs/VISION_INBOX.md`
 6. `CPFormal/Genuine/FiniteCancellation.lean`
 7. `CPFormal/Genuine/C2.lean`
@@ -111,3 +115,4 @@ commit `aec9140c36ed5274a8eb7e8a919ef86c0971c5e9`, workflow run
 18. `CPFormal/Carry/CpBranchWeight.lean`
 19. `CPFormal/Analytic/CpBranchNorm.lean`
 20. `CPFormal/Analytic/CpTilt.lean`
+21. `CPFormal/Analytic/CpTiltRigidity.lean`

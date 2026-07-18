@@ -127,3 +127,15 @@ Foram elaborados pelo kernel os pesos `p^(-k)` e `p^(-k/2)`, a identidade
 quadratica local, sua reindexacao pela geometria de carry, a serie infinita da
 norma do ramo Cp, sua forma fechada, o criterio unitario na meia abscissa, o
 tilt multirramo e a seta de saturacao da norma para anulacao do tilt.
+
+## Checkpoint da rigidez do tilt Cp
+
+- commit: `4ed11cfed623a94982a7ba3316f5a290c16fb4c9`;
+- run: `29647362054`;
+- job: `88087733439`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+Foram elaborados pelo kernel o pareamento exato das pernas `±a`, a escrita do
+tilt como soma de segundas diferencas centradas, os dois regimes de sinal e a
+construcao canonica de `TiltRigidityAt` para centros fora da camera.

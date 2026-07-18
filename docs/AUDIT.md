@@ -192,3 +192,23 @@ do mesmo workflow concluiu com sucesso.
 A estrutura `GenuineBranchBridge` permanece sem instancia. Portanto esse run
 nao prova que um zero Genuine satura a norma; apenas verifica a conclusao
 condicional caso essa ponte seja construida.
+
+## Checkpoint da rigidez de sinal do tilt Cp
+
+- commit certificado: `4ed11cfed623a94982a7ba3316f5a290c16fb4c9`;
+- workflow run: `29647362054` (`Lean kernel audit`, run number 69);
+- job: `88087733439` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpTiltRigidity`.
+
+O kernel verificou a invariancia dos offsets balanceados por negacao, a
+decomposicao do tilt em brackets simetricos, o sinal estrito de cada bracket
+por convexidade/concavidade e a conclusao
+
+```text
+cpTiltAtSigma p sigma center = 0  <->  sigma = 1/2
+```
+
+para primo impar, `sigma>0` e `center>halfRange(p)`. No mesmo dominio, o zero
+do tilt foi identificado com o zero do defeito da norma de ramo. Esse
+checkpoint nao fornece uma instancia de `GenuineBranchBridge`.

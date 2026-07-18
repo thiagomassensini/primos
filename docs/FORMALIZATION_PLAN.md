@@ -230,10 +230,28 @@ branchNormSq(p,sigma) = 1  <->  sigma = 1/2.
 
 O tilt Cp de todas as pernas foi definido separadamente. Sua anulacao em
 `delta = sigma-1/2 = 0` e a implicacao `defeito da norma = 0 -> tilt = 0`
-estao verificadas. A volta `tilt = 0 -> delta = 0` foi isolada como
-`TiltRigidityAt`; uma prova uniforme por convexidade/concavidade ainda deve
-ser portada. A ponte `zero Genuine -> saturacao do ramo` permanece uma
-interface sem instancia.
+estao verificadas. A volta tambem foi fechada para todo primo impar e centro
+estritamente fora do semialcance da camera. O kernel verificou primeiro a
+identidade finita
+
+```text
+cpTilt(p,delta,c)
+  = (1/2) * sum_{a in A_p}
+      [(c-a)^(-delta) + (c+a)^(-delta) - 2c^(-delta)].
+```
+
+Cada termo e estritamente positivo para `delta>0`, por convexidade estrita, e
+estritamente negativo para `-1<delta<0`, por concavidade estrita. Como
+`sigma>0` implica `delta=sigma-1/2>-1`, segue
+
+```text
+cpTiltAtSigma(p,sigma,c)=0  <->  sigma=1/2
+```
+
+quando `c>halfRange(p)`. Assim `TiltRigidityAt` agora possui uma construcao
+canonica nesse dominio, e o tilt nulo equivale ao defeito nulo da norma. A
+ponte `zero Genuine -> saturacao do ramo` permanece uma interface sem
+instancia e e o proximo gargalo analitico.
 
 A caracterizacao direta da pre-imagem alinhada por desigualdades e residuos
 continua sendo um alvo finito independente, mas nao bloqueia os pesos ja
