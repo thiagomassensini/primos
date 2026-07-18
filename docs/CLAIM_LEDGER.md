@@ -1,4 +1,4 @@
-# Ledger de afirmacoes — versao 0.2.0 Genuine-first
+# Ledger de afirmacoes — checkpoint 0.3.0 Genuine-first
 
 Estados usados:
 
@@ -28,7 +28,7 @@ Estados usados:
 | GEN-CP-003 | canal Cp finito direto menos brackets deixa centros | KERNEL_CHECKED | GEN-002, GEN-CP-002 | adicionar reindexacao Cp |
 | GEN-BIJ-C2 | pernas impares `n>=3` estao em bijecao com incidencias `(centro multiplo de 4, perna)` | KERNEL_CHECKED | aritmetica modular | usar na reindexacao ponderada |
 | GEN-DEP-C2 | `max(v_2(n-1),v_2(n+1)) = v_2(adjacentCenter(n))` para `n` impar, `n>=3` | KERNEL_CHECKED | GEN-BIJ-C2, valoracao 2-adica | transportar o peso na soma finita |
-| GEN-REINDEX-C2 | soma ponderada das pernas = soma das incidencias esperadas + extras - faltantes | LEAN_STATEMENT | GEN-BIJ-C2, GEN-DEP-C2, somas finitas | compilar e instanciar em caixas alinhadas |
+| GEN-REINDEX-C2 | soma ponderada das pernas = soma das incidencias esperadas + extras - faltantes | KERNEL_CHECKED | GEN-BIJ-C2, GEN-DEP-C2, somas finitas | instanciar em caixas aritmeticas alinhadas |
 | GEN-BIJ-CP | residuos nao nulos correspondem unicamente aos offsets balanceados | OPEN_BRIDGE | primo impar, aritmetica modular | formalizar bijecao |
 | CHP-001 | carta e fator vezes Genuine | PAPER_ARGUMENT | reindexacao e analise | formalizar primeiro finito |
 | CHP-002 | fator da carta nao zera no critical strip | PAPER_ARGUMENT | modulo complexo | formalizar apos CHP-001 |
@@ -41,7 +41,7 @@ Estados usados:
 | SPC-002 | `H_CP` e autoadjunto em dominio fixo | OPEN_BRIDGE | SPC-001 | indices de deficiencia/fronteira |
 | RH-001 | todo zero Genuine esta na linha critica | BLOQUEADO | BRG-001 ou SPC-001+SPC-002 | nao enunciar como provado |
 
-O nucleo ativo foi compilado pelo GitHub Actions no commit
-`2a29c850389c888c6f1b5bde2dcb899fd261b559`. Modulos mantidos apenas em
-`CPFormal.ResearchReserve` nao fazem parte dessa certificacao. Consulte
-`AUDIT.md`.
+O checkpoint mais recente do nucleo ativo foi compilado pelo GitHub Actions no
+commit `0cc016b69419b811cbf12867f46605280ecdf7db`, run `29635654651`.
+Modulos mantidos apenas em `CPFormal.ResearchReserve` nao fazem parte dessa
+certificacao. Consulte `AUDIT.md`.
