@@ -90,15 +90,18 @@ theorem differentiable_realCpPairBracket
     differentiable_realDirichletPower_in_parameter (ne_of_gt hcenter)
   have hrightDiff :=
     differentiable_realDirichletPower_in_parameter (ne_of_gt hright)
-  change Differentiable ℂ (fun s : ℂ ↦
-    realDirichletPower s
-        ((p : ℝ) * ((k + 1 : ℕ) : ℝ) - (radius : ℝ)) -
-      (2 • realDirichletPower s
-        ((p : ℝ) * ((k + 1 : ℕ) : ℝ))) +
-      realDirichletPower s
-        ((p : ℝ) * ((k + 1 : ℕ) : ℝ) + (radius : ℝ)))
-  simpa [two_smul] using
-    (hleftDiff.sub (hcenterDiff.add hcenterDiff)).add hrightDiff
+  rw [show realCpPairBracket p radius k =
+      ((fun s : ℂ ↦ realDirichletPower s
+          ((p : ℝ) * ((k + 1 : ℕ) : ℝ) - (radius : ℝ))) -
+        ((fun s : ℂ ↦ realDirichletPower s
+            ((p : ℝ) * ((k + 1 : ℕ) : ℝ))) +
+          (fun s : ℂ ↦ realDirichletPower s
+            ((p : ℝ) * ((k + 1 : ℕ) : ℝ))))) +
+        (fun s : ℂ ↦ realDirichletPower s
+          ((p : ℝ) * ((k + 1 : ℕ) : ℝ) + (radius : ℝ))) by
+    funext s
+    simp [realCpPairBracket, two_smul]]
+  exact (hleftDiff.sub (hcenterDiff.add hcenterDiff)).add hrightDiff
 
 /-- Cada bloco Cp saturado e uma soma finita de funcoes inteiras. -/
 theorem differentiable_realCpSaturatedBracket
