@@ -29,6 +29,11 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | soma ponderada Cp preserva o peso do carry sob a bijecao | `Carry.Cp.weighted_reindex` |
 | caixa Cp arbitraria possui bordo assinado `extras - faltantes` | `Carry.Cp.weighted_reindex_with_boundary` |
 | cobertura Cp exata elimina o bordo | `Carry.Cp.weighted_reindex_of_exact_cover` |
+| centros Cp `p,2p,...,Mp` com todos os offsets balanceados | `Carry.Cp.alignedIncidenceBox` |
+| caixa Cp alinhada possui `M(p-1)` incidencias e pernas | `Carry.Cp.card_alignedIncidenceBox`, `Carry.Cp.card_alignedNonmultipleBox` |
+| a caixa direta Cp cobre exatamente a caixa bracketada | `Carry.Cp.incidenceImage_alignedNonmultipleBox` |
+| caixas Cp alinhadas possuem extras e faltantes vazios | `Carry.Cp.extraIncidences_alignedBox`, `Carry.Cp.missingIncidences_alignedBox` |
+| reindexacao ponderada sem bordo na caixa Cp alinhada | `Carry.Cp.weighted_reindex_alignedBox` |
 
 Observacao: `GEOMETRIA_C2_CP_DECOMPOSICAO_POR_CARRY(1).md` chegou vazio na
 copia de trabalho desta versao e, portanto, nao foi usado para afirmacoes.
