@@ -53,8 +53,8 @@ Entregas:
 - estados de evidencia;
 - proibicao mecanica e editorial de `sorry` e `axiom`.
 
-Estado inicial: implementado, ainda aguardando passagem pelo kernel neste
-ambiente.
+Estado: os modulos importados pelo nucleo ativo passaram pelo kernel no
+checkpoint 0.2.0. Os modulos de reserva continuam separados.
 
 ## Fase 1 — combinatoria finita do carry
 
@@ -107,8 +107,8 @@ C2.finite_genuine_cancellation
 Cp.finite_genuine_cancellation
 ```
 
-Esses endpoints ainda aguardam compilacao pelo kernel; nao usam resultados
-analiticos como hipoteses.
+Esses endpoints estao `KERNEL_CHECKED`; nao usam resultados analiticos como
+hipoteses.
 
 Ponte de carry C2 implementada como enunciado Lean:
 
@@ -131,8 +131,8 @@ effectiveDepth(n)
 ```
 
 Ela e a justificativa formal para transportar o mesmo peso `2^(-k)` do canal
-direto para o bracket correspondente. A identidade de somas ponderadas ainda
-sera escrita depois de essa camada compilar.
+direto para o bracket correspondente. A identidade de somas ponderadas e o
+proximo endpoint.
 
 ## Fase 3 — pesos, series e caudas
 
