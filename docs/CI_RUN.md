@@ -27,3 +27,15 @@ fora do escopo certificado.
 
 Foram elaborados pelo kernel `weighted_reindex`, a identidade generica de
 bordo, `weighted_reindex_with_boundary` e o corolario de cobertura exata.
+
+## Checkpoint de caixa alinhada C2
+
+- commit: `45b7fe8bb761117609054f0b448c8c11db375b78`;
+- run: `29636078858`;
+- job: `88058546887`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+Foram elaborados pelo kernel a caixa concreta de incidencias nos centros
+`4,8,...,4M`, sua caixa de pernas, a cobertura exata, o esvaziamento dos dois
+termos de bordo e a igualdade ponderada resultante.
