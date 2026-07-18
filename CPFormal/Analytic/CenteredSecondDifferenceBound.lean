@@ -20,7 +20,7 @@ namespace CPFormal.Analytic
 
 noncomputable section
 
-local instance : NormedSpace ℝ ℂ := NormedSpace.complexToReal
+attribute [local instance 10000] NormedSpace.complexToReal
 
 /--
 Uma cota uniforme para a segunda derivada produz o ganho quadratico de uma
