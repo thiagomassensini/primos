@@ -1,4 +1,4 @@
-# Ledger de afirmacoes — checkpoint 0.8.0 Genuine-first
+# Ledger de afirmacoes — checkpoint 0.9.0 Genuine-first
 
 Estados usados:
 
@@ -37,6 +37,13 @@ Estados usados:
 | GEN-DEP-CP | somente o offset canonico satisfaz `p | (n-a)`, os demais possuem profundidade zero e `sup_a v_p(n-a) = v_p(centroCanonico(n))` | KERNEL_CHECKED | GEN-GLOBAL-BIJ-CP, valoracao `p`-adica, supremo finito | usado na reindexacao ponderada Cp |
 | GEN-REINDEX-CP | soma ponderada das pernas Cp = soma das incidencias esperadas + extras - faltantes; cobertura exata elimina o bordo | KERNEL_CHECKED | GEN-GLOBAL-BIJ-CP, GEN-DEP-CP, somas finitas | construir caixas Cp alinhadas |
 | GEN-BOX-CP | os centros `p,2p,...,Mp`, cada um com todos os `p-1` offsets balanceados, possuem `M(p-1)` incidencias, cobertura exata e bordo vazio | KERNEL_CHECKED | GEN-REINDEX-CP, GEN-CARD-CP | caracterizar diretamente a caixa de pernas |
+| GEN-WEIGHT-CP | na profundidade de carry `k`, a massa critica e `p^(-k)`, a amplitude e `p^(-k/2)` e `amplitude^2 = massa`; a caixa alinhada transporta esse peso sem bordo | KERNEL_CHECKED | GEN-DEP-CP, GEN-BOX-CP, potencia real | usar nos coeficientes complexos `p^(-ks)` |
+| BRANCH-NORM-CP | a norma quadratica pura e a serie `(p-1) sum_{k>=1} p^(-2k sigma)` e possui a forma geometrica fechada para `sigma>0` | KERNEL_CHECKED | GEN-CARD-CP, GEN-WEIGHT-CP, serie geometrica | ligar aos coeficientes complexos do ramo |
+| BRANCH-HALF-CP | para primo impar e `sigma>0`, `branchNormSq p sigma = 1 <-> sigma=1/2` | KERNEL_CHECKED | BRANCH-NORM-CP, monotonicidade de `Real.rpow` | usar como barreira quadratica |
+| TILT-CP-ANN | o tilt de todas as pernas Cp se anula em `sigma=1/2`; defeito nulo da norma implica tilt nulo em qualquer centro | KERNEL_CHECKED | BRANCH-HALF-CP, GEN-CARD-CP | provar a rigidez reciproca |
+| TILT-CP-RIGID | no dominio `sigma>0` e para centros admissiveis, tilt nulo implica `sigma=1/2` | OPEN_BRIDGE | convexidade/concavidade de `x^(-delta)`, pareamento dos offsets | portar a prova de sinal para todo Cp |
+| BRIDGE-GEN-BRANCH | zero Genuine implica saturacao da norma do ramo | OPEN_BRIDGE | identidade analitica da carta e exclusao de cancelamento global | construir instancia de `GenuineBranchBridge` |
+| RH-COND-CP | dada uma instancia de `GenuineBranchBridge`, todo zero no semiplano positivo possui parte real `1/2` e anula o tilt | KERNEL_CHECKED | BRIDGE-GEN-BRANCH, BRANCH-HALF-CP | teorema condicional compilado; nao confundir com uma instancia da ponte |
 | CHP-001 | carta e fator vezes Genuine | PAPER_ARGUMENT | reindexacao e analise | formalizar primeiro finito |
 | CHP-002 | fator da carta nao zera no critical strip | PAPER_ARGUMENT | modulo complexo | formalizar apos CHP-001 |
 | HIL-001 | sintese possui vetor de Riesz ponderado | PAPER_ARGUMENT | somabilidade dos pesos | construir espaco |
@@ -49,6 +56,6 @@ Estados usados:
 | RH-001 | todo zero Genuine esta na linha critica | BLOQUEADO | BRG-001 ou SPC-001+SPC-002 | nao enunciar como provado |
 
 O checkpoint mais recente do nucleo ativo foi compilado pelo GitHub Actions no
-commit `49f8d226f1f9718fb15d76b89c5934f9852e8303`, run `29642943076`.
+commit `aec9140c36ed5274a8eb7e8a919ef86c0971c5e9`, run `29644692098`.
 Modulos mantidos apenas em `CPFormal.ResearchReserve` nao fazem parte dessa
 certificacao. Consulte `AUDIT.md`.
