@@ -211,3 +211,20 @@ serie, sem identificar por definicao o objeto com `riemannZeta`.
 
 Este run nao certifica convergencia bracketada em `Re(s)>-1`, continuacao
 analitica, equivalencia de zeros, certificado Green concreto ou RH.
+
+## Checkpoint da passagem bracketada Cp
+
+- commit: `af30c410ed6c68f4f4d9a35a4d88435a592b55c8`;
+- run: `29662384450`;
+- job: `88127131010`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+O kernel elaborou a identidade finita entre o bracket Genuine e o bracket
+saturado, o ganho de duas potencias, a somabilidade absoluta para
+`Re(s)>-1`, a passagem dos prefixos Genuine ao limite bracketado e a
+identificacao com `(1-p^(1-s))*genuineDirichlet(s)` em `Re(s)>1` pela
+unicidade do limite.
+
+O run nao promoveu a afirmacao de continuacao analitica: ainda faltam
+convergencia localmente uniforme em compactos e holomorfia da soma.
