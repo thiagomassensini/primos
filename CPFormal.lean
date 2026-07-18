@@ -5,6 +5,7 @@ import CPFormal.Carry.Shift
 import CPFormal.Carry.C2Adjacent
 import CPFormal.Carry.C2Depth
 import CPFormal.Carry.C2WeightedReindex
+import CPFormal.Carry.C2AlignedBox
 import CPFormal.Genuine.BalancedOffsets
 import CPFormal.Genuine.FiniteCancellation
 import CPFormal.Genuine.C2
