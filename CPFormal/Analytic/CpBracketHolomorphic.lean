@@ -32,7 +32,8 @@ open Filter Metric Set
 
 noncomputable section
 
-attribute [local instance 10000] Complex.instModuleSelf
+local instance : Module ℂ ℂ :=
+  (CommCStarAlgebra.toNonUnitalCommCStarAlgebra ℂ).toNonUnitalCStarAlgebra.toModule
 
 /-- Dominio natural aberto da serie bracketada. -/
 def bracketHalfPlane : Set ℂ :=
@@ -130,6 +131,19 @@ def localCpBracketMajorantConstant (p : ℕ) (z : ℂ) (R : ℝ) : ℝ :=
   ∑ radius ∈ Finset.Icc 1 (halfRange p),
     2 * localQuadraticNormBound z R * (radius : ℝ) ^ 2
 
+theorem localCpBracketMajorantConstant_nonneg
+    {p : ℕ} {z : ℂ} {R : ℝ} (hR : 0 ≤ R) :
+    0 ≤ localCpBracketMajorantConstant p z R := by
+  classical
+  unfold localCpBracketMajorantConstant localQuadraticNormBound
+  apply Finset.sum_nonneg
+  intro radius _hradius
+  have hzR : 0 ≤ ‖z‖ + R := add_nonneg (norm_nonneg _) hR
+  have hzROne : 0 ≤ ‖z‖ + R + 1 := by linarith
+  exact mul_nonneg
+    (mul_nonneg (by norm_num) (mul_nonneg hzR hzROne))
+    (sq_nonneg (radius : ℝ))
+
 /-- Dentro de uma bola, a norma quadratica em `w` e uniformemente limitada. -/
 theorem norm_mul_add_one_le_localQuadraticNormBound
     {z w : ℂ} {R : ℝ} (hR : 0 ≤ R)
@@ -180,8 +194,10 @@ theorem bracketNeighborhoodFloor_lt_re
     calc
       -‖w - z‖ ≤ -|w.re - z.re| := neg_le_neg hreNorm
       _ ≤ w.re - z.re := neg_abs_le _
+  have hdist' : ‖w - z‖ < (z.re + 1) / 2 := by
+    simpa [bracketNeighborhoodRadius] using hdist
   change (z.re - 1) / 2 < w.re
-  linarith
+  linarith [hdist']
 
 theorem neg_one_lt_bracketNeighborhoodFloor
     {z : ℂ} (hz : z ∈ bracketHalfPlane) :
@@ -256,7 +272,9 @@ theorem norm_realCpSaturatedBracket_le_local
           mul_le_mul_of_nonneg_right hconstant (Real.rpow_nonneg _ _)
         _ ≤ localCpBracketMajorantConstant p z (bracketNeighborhoodRadius z) *
               ((k + 1 : ℕ) : ℝ) ^ (-bracketNeighborhoodFloor z - 2) :=
-          mul_le_mul_of_nonneg_left hpower (by positivity)
+          mul_le_mul_of_nonneg_left hpower
+            (localCpBracketMajorantConstant_nonneg
+              (le_of_lt (bracketNeighborhoodRadius_pos hz)))
 
 /-- A cauda bracketada e holomorfa em todo o semiplano `re(s)>-1`. -/
 theorem differentiableOn_tsum_realCpSaturatedBracket
@@ -273,8 +291,7 @@ theorem differentiableOn_tsum_realCpSaturatedBracket
   have hR : 0 < R := bracketNeighborhoodRadius_pos hz
   have hu : Summable u := by
     simpa [u, R] using summable_localCpBracketMajorant p hz
-  have hUOpen : IsOpen U := by
-    simpa [U] using (Metric.isOpen_ball : IsOpen (Metric.ball z R))
+  have hUOpen : IsOpen U := Metric.isOpen_ball
   have htailOn : DifferentiableOn ℂ
       (fun w : ℂ ↦ ∑' k : ℕ, realCpSaturatedBracket p k w) U := by
     apply Complex.differentiableOn_tsum_of_summable_norm hu
