@@ -109,8 +109,8 @@ theorem centerBlock_eq_center_add_pairSum
     (R := R) (halfRange p) (fun a : ℤ ↦ f (center + a))]
   rw [← sum_nat_radii_eq_sum_int_positive
     (R := R) (halfRange p) (fun a : ℤ ↦ f (center + a))]
-  simp only [Finset.sum_add_distrib]
-  simp <;> ring
+  simp [Finset.sum_add_distrib, sub_eq_add_neg]
+  abel
 
 /-- As pernas balanceadas sao exatamente a soma dos pares de raios positivos. -/
 theorem legSum_eq_pairSum
