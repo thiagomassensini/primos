@@ -59,7 +59,8 @@ def alignedIncidenceEmbedding
     · exact congrArg (fun z : Incidence p => z.1.2) hxy
 
 /-- Os indices dos primeiros `M` centros e de todos os offsets da camera. -/
-def incidenceIndexBox (p M : ℕ) : Finset (ℕ × BalancedOffset p) :=
+def incidenceIndexBox (p M : ℕ) :
+    Finset (ℕ × {a : ℤ // a ∈ balancedOffsets p}) :=
   (Finset.range M).product (balancedOffsets p).attach
 
 /--
