@@ -1,4 +1,4 @@
-# Ledger de afirmacoes — checkpoint 0.13.0 Genuine-first
+# Ledger de afirmacoes — checkpoint 0.14.0 Genuine-first
 
 Estados usados:
 
@@ -28,7 +28,8 @@ Estados usados:
 | GEN-CP-003 | canal Cp finito direto menos brackets deixa centros | KERNEL_CHECKED | GEN-002, GEN-CP-002 | adicionar reindexacao Cp |
 | GEN-CP-BLOCK | o bloco completo inclui exatamente as `p-1` pernas e uma copia do centro; para `p` impar possui cardinalidade `p` | KERNEL_CHECKED | GEN-CP-001, GEN-CARD-CP | usado na abertura da carta finita |
 | GEN-CP-CHART-FIN | nos centros `p,2p,...,Mp`, os blocos ladrilham exatamente `1,...,pM+halfRange(p)` e a carta finita e esse prefixo literal menos `p` vezes a soma dos centros | KERNEL_CHECKED | GEN-CP-BLOCK, GEN-CP-002 | usado na carta finita de Dirichlet |
-| GEN-CP-DIR-FIN | para o ramo principal positivo, `p sum_(m=1)^M (pm)^(-s) = p^(1-s) sum_(m=1)^M m^(-s)` e a carta finita e o prefixo longo menos esse termo | KERNEL_CHECKED | GEN-CP-CHART-FIN, multiplicatividade de `Complex.cpow` em naturais nao negativos | passar ao limite primeiro em `Re(s)>1` |
+| GEN-CP-DIR-FIN | para o ramo principal positivo, `p sum_(m=1)^M (pm)^(-s) = p^(1-s) sum_(m=1)^M m^(-s)` e a carta finita e o prefixo longo menos esse termo | KERNEL_CHECKED | GEN-CP-CHART-FIN, multiplicatividade de `Complex.cpow` em naturais nao negativos | usado na passagem ao limite |
+| GEN-CP-DIR-LIM | para primo impar e `Re(s)>1`, `finiteChart_p,M(s)` converge para `(1-p^(1-s))*genuineDirichlet(s)`, onde `genuineDirichlet` e a propria serie positiva | KERNEL_CHECKED | GEN-CP-DIR-FIN, somabilidade complexa de `n^(-s)`, convergencia dos prefixos | obter o ganho bracketado e decidir a extensao necessaria alem de `Re(s)>1` |
 | GEN-BIJ-C2 | pernas impares `n>=3` estao em bijecao com incidencias `(centro multiplo de 4, perna)` | KERNEL_CHECKED | aritmetica modular | usar na reindexacao ponderada |
 | GEN-DEP-C2 | `max(v_2(n-1),v_2(n+1)) = v_2(adjacentCenter(n))` para `n` impar, `n>=3` | KERNEL_CHECKED | GEN-BIJ-C2, valoracao 2-adica | transportar o peso na soma finita |
 | GEN-REINDEX-C2 | soma ponderada das pernas = soma das incidencias esperadas + extras - faltantes | KERNEL_CHECKED | GEN-BIJ-C2, GEN-DEP-C2, somas finitas | reutilizar nas caixas Cp |
@@ -51,7 +52,7 @@ Estados usados:
 | GREEN-CERT | existe um `SignedGreenCertificate` concreto para a carta Genuine | OPEN_BRIDGE | traco de fluxo, energia radial, cauda e identidade de Green | construir primeiro em cortes finitos com bordo explicito e depois controlar o limite |
 | BRIDGE-GEN-BRANCH | zero Genuine implica saturacao da norma do ramo | OPEN_BRIDGE | GREEN-CERT ou outra identidade analitica independente | obter pelo teorema `SignedGreenCertificate.toGenuineBranchBridge` sem postular a instancia |
 | RH-COND-CP | dada uma instancia de `GenuineBranchBridge`, todo zero no semiplano positivo possui parte real `1/2` e anula o tilt | KERNEL_CHECKED | BRIDGE-GEN-BRANCH, BRANCH-HALF-CP | teorema condicional compilado; nao confundir com uma instancia da ponte |
-| CHP-001 | carta e fator vezes Genuine | PAPER_ARGUMENT | GEN-CP-DIR-FIN, convergencia dos prefixos e analise | formalizar primeiro a identidade limite em `Re(s)>1` |
+| CHP-001 | a carta bracketada prolongada alem do semiplano absoluto continua igual a fator vezes Genuine | PAPER_ARGUMENT | GEN-CP-DIR-LIM, convergencia bracketada e identidade holomorfa | provar majorante com ganho de duas potencias e o dominio exato de extensao |
 | CHP-002 | fator da carta nao zera no critical strip | PAPER_ARGUMENT | modulo complexo | formalizar apos CHP-001 |
 | HIL-001 | sintese possui vetor de Riesz ponderado | PAPER_ARGUMENT | somabilidade dos pesos | construir espaco |
 | HIL-002 | `P_syn` e projecao ortogonal autoadjunta | PAPER_ARGUMENT | HIL-001 | formalizar API mathlib |
@@ -63,6 +64,6 @@ Estados usados:
 | RH-001 | todo zero Genuine esta na linha critica | BLOQUEADO | BRG-001 ou SPC-001+SPC-002 | nao enunciar como provado |
 
 O checkpoint mais recente do nucleo ativo foi compilado pelo GitHub Actions no
-commit `8d941e55af4b1e4e1c6b325b6b07bc90aaa04e8c`, run `29653694412`.
+commit `44a539e2c432f88d1bda4670ff3daba1a287819e`, run `29656769332`.
 Modulos mantidos apenas em `CPFormal.ResearchReserve` nao fazem parte dessa
 certificacao. Consulte `AUDIT.md`.

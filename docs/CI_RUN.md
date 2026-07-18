@@ -189,3 +189,25 @@ p * sum_{m=1}^M (p*m)^(-s)
 Combinada ao ladrilhamento anterior, ela fornece a carta finita de Dirichlet
 como prefixo longo menos o prefixo curto fatorado. O run nao tomou limites,
 nao usou zeta e nao certificou convergencia ou equivalencia de zeros.
+
+## Checkpoint da passagem ao limite Cp em `Re(s)>1`
+
+- commit: `44a539e2c432f88d1bda4670ff3daba1a287819e`;
+- run: `29656769332`;
+- job: `88112424965`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+O kernel elaborou a somabilidade da serie positiva, a convergencia de seus
+prefixos, a divergencia do cutoff `pM+halfRange(p)` e a passagem ao limite
+
+```text
+finiteChart_p,M(s)
+  -> (1-p^(1-s)) * genuineDirichlet(s)
+```
+
+para primo impar e `Re(s)>1`. `genuineDirichlet` foi definido pela propria
+serie, sem identificar por definicao o objeto com `riemannZeta`.
+
+Este run nao certifica convergencia bracketada em `Re(s)>-1`, continuacao
+analitica, equivalencia de zeros, certificado Green concreto ou RH.

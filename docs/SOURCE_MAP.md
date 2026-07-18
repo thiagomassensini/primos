@@ -15,6 +15,8 @@ importada automaticamente como teorema Lean.
 | `Library/Lean/Tilt.lean` | antecedentes de anulacao e sinal do tilt de duas pernas; somente a parte estrutural foi reaproveitada nesta etapa |
 | `Library/GENUINE_FIRST/cp_branch_tilt_operator.py` | especificacao Cp do ramo puro, energia por perna, profundidade inicial e tilt multirramo |
 | `C2_GREEN_HARDY_BOUNDARY_RELATION.md` | registra que continuidade Green nao fornece por si so o traco de fluxo; usado para manter o certificado concreto aberto |
+| `TEORIA_GEOMETRICA_DO_CARRY_E_OPERADOR_ORTOGONAL_MULTIBASE.md` | mapa de pesquisa para a formula da carta Cp e para a ponte carry--operador; nao importado como prova |
+| `GENUINE_GLOBAL_GEOMETRIA_VERTICAL_MULTIPRIMA_GITHUB.md` | mapa de pesquisa para a identidade inicial e para o alvo posterior de convergencia bracketada; nao importado como prova |
 
 Correspondencia atualmente formalizada a partir do resumo Genuine:
 
@@ -64,6 +66,11 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | separar `(p*m)^(-s)` em `p^(-s)m^(-s)` | `Analytic.Cp.dirichletTerm_alignedCenter` |
 | `p` vezes a soma dos centros = `p^(1-s)` vezes o prefixo curto | `Analytic.Cp.p_mul_centerSum_dirichlet_eq_cpow_mul_prefix` |
 | carta finita de Dirichlet com correcao vertical fatorada | `Analytic.Cp.finiteChart_dirichlet_eq_prefix_sub_cpow_mul_prefix` |
+| Genuine inicial definido pela serie positiva | `Analytic.Cp.genuineDirichlet` |
+| somabilidade de `n^(-s)` para `Re(s)>1` | `Analytic.Cp.summable_dirichletTerm_nat_add_one` |
+| prefixos positivos convergem para o Genuine inicial | `Analytic.Cp.positiveDirichletPrefix_tendsto_genuineDirichlet` |
+| carta finita escrita como dois prefixos da mesma serie | `Analytic.Cp.finiteChart_dirichlet_eq_two_prefixes` |
+| passagem ao limite `finiteChart -> (1-p^(1-s))*Genuine` em `Re(s)>1` | `Analytic.Cp.finiteChart_dirichlet_tendsto_genuine_factor` |
 | identidade Green assinada, energia positiva e bordo fechado implicam `delta=0` | `Analytic.Cp.SignedGreenCertificate.criticalDisplacement_eq_zero_of_genuine_zero` |
 | certificado Green concreto produz a ponte Genuine--ramo | `Analytic.Cp.SignedGreenCertificate.toGenuineBranchBridge` |
 | ponte ainda aberta de zeros Genuine para a norma | `Analytic.Cp.GenuineBranchBridge` (sem instancia) |

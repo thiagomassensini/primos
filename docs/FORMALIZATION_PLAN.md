@@ -294,6 +294,20 @@ p * sum_{m=1}^M (p*m)^(-s)
 e substituiu esse termo na carta finita. Nenhum limite ou hipotese sobre
 `Re(s)` e necessario nessa igualdade.
 
+A passagem minima ao limite tambem esta verificada. Foi definido
+`genuineDirichlet(s)` pela propria serie positiva `sum_(n>=1) n^(-s)`, sem
+usar `riemannZeta` como definicao. Para `Re(s)>1`, o kernel provou a
+somabilidade, a convergencia dos prefixos curto e longo e o limite
+
+```text
+finiteChart_p,M(s)
+  -> (1-p^(1-s)) * genuineDirichlet(s).
+```
+
+Esse teorema fecha somente o semiplano de convergencia absoluta. Ele nao
+fornece ainda o ganho de duas potencias da segunda diferenca, continuacao
+analitica, equivalencia com a zeta da Mathlib ou informacao sobre zeros.
+
 O gargalo Green foi decomposto numa interface mais informativa que a ponte
 final. `SignedGreenCertificate` exige separadamente
 
@@ -346,12 +360,13 @@ O arquivo `Analytic/Chart.lean` contem apenas a logica abstrata
 
 Ordem local atual para essa instancia:
 
-1. provar a passagem ao limite minima em `Re(s)>1`, onde os dois prefixos de
-   Dirichlet convergem absolutamente;
-2. obter nesse semiplano a identidade inicial da carta com o Genuine;
-3. somente depois formalizar o ganho de duas potencias do bracket e decidir a
-   extensao exata necessaria ate `Re(s)>-1`;
-4. construir o traco Green usando o mesmo ledger de bordo, sem trocar o
+1. **concluido:** passagem ao limite minima em `Re(s)>1`, onde os dois
+   prefixos de Dirichlet convergem absolutamente;
+2. **concluido:** identidade inicial do limite da carta com o Genuine definido
+   pela serie positiva;
+3. **proximo nucleo:** formalizar o ganho de duas potencias do bracket e
+   decidir a extensao exata necessaria ate `Re(s)>-1`;
+4. depois, construir o traco Green usando o mesmo ledger de bordo, sem trocar o
    escalar Genuine por uma amplitude modelada.
 
 ## Fase 5 — Hilbert ponderado e projecao

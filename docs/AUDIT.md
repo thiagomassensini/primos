@@ -271,3 +271,26 @@ O resultado e puramente finito e vale para todo `s : Complex`. Este checkpoint
 nao afirma convergencia da serie bracketada, identidade com zeta/Genuine no
 limite, continuacao analitica, equivalencia de zeros, certificado Green
 concreto ou RH.
+
+## Checkpoint da passagem ao limite Cp em `Re(s)>1`
+
+- commit certificado: `44a539e2c432f88d1bda4670ff3daba1a287819e`;
+- workflow run: `29656769332` (`Lean kernel audit`, run number 84);
+- job: `88112424965` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpDirichletLimit`.
+
+O kernel verificou `Complex.summable_one_div_nat_cpow` sob `Re(s)>1`, o
+reindexamento da serie a partir de `n=1`, a convergencia dos prefixos e o fato
+de que `pM+halfRange(p)` tende a infinito. Com a identidade finita anterior,
+isso produz
+
+```text
+finiteChart_p,M(s)
+  -> (1-p^(1-s)) * genuineDirichlet(s).
+```
+
+O objeto `genuineDirichlet` e a soma da serie positiva definida dentro do
+projeto. O checkpoint nao prova que ele coincide, por um teorema separado,
+com a zeta de Riemann da Mathlib; tambem nao trata `Re(s)<=1`, continuacao
+analitica, equivalencia de zeros, certificado Green concreto ou RH.
