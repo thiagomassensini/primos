@@ -69,12 +69,10 @@ theorem norm_centeredSecondDifference_le
     have hplusPoint : lower ≤ center + t := by linarith [ht.1]
     have hinnerMinus :
         HasDerivAt (fun u : ℝ ↦ center - u) (-1 : ℝ) t := by
-      convert (hasDerivAt_const t center).sub (hasDerivAt_id' t) using 1 <;>
-        simp
+      simpa using (hasDerivAt_const t center).sub (hasDerivAt_id' t)
     have hinnerPlus :
         HasDerivAt (fun u : ℝ ↦ center + u) (1 : ℝ) t := by
-      convert (hasDerivAt_const t center).add (hasDerivAt_id' t) using 1 <;>
-        simp
+      simpa using (hasDerivAt_const t center).add (hasDerivAt_id' t)
     have hminus :
         HasDerivAt (fun u : ℝ ↦ f (center - u))
           (-f' (center - t)) t := by
@@ -106,7 +104,7 @@ theorem norm_centeredSecondDifference_le
           f (center + radius)‖ := by
     simp only [g]
     congr 1
-    simp only [sub_zero, add_sub_cancel_left, two_smul]
+    simp only [sub_zero, two_smul]
     abel
 
   rw [hleftNorm] at houter
@@ -115,7 +113,7 @@ theorem norm_centeredSecondDifference_le
         f (center + radius)‖ ≤
         (2 * C * radius) * ‖radius - 0‖ := houter
     _ = 2 * C * radius ^ 2 := by
-      rw [Real.norm_eq_abs, abs_of_nonneg hradius]
+      rw [Real.norm_eq_abs, sub_zero, abs_of_nonneg hradius]
       ring
 
 end CPFormal.Analytic
