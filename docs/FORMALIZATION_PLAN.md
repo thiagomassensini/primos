@@ -282,8 +282,17 @@ blockPrefix(p,M,f)
 
 e portanto a forma literal da carta finita. Como o teorema vale para qualquer
 `f`, nao sera criado um lema separado que apenas o especialize em `n^(-s)`.
-O proximo conteudo matematico novo e fatorar a correcao vertical para essa
-escolha complexa.
+Em vez disso, a primeira especializacao analitica foi feita somente onde
+acrescenta conteudo: usando a multiplicatividade segura de `Complex.cpow` em
+bases naturais nao negativas, o kernel verificou
+
+```text
+p * sum_{m=1}^M (p*m)^(-s)
+  = p^(1-s) * sum_{m=1}^M m^(-s),
+```
+
+e substituiu esse termo na carta finita. Nenhum limite ou hipotese sobre
+`Re(s)` e necessario nessa igualdade.
 
 O gargalo Green foi decomposto numa interface mais informativa que a ponte
 final. `SignedGreenCertificate` exige separadamente
@@ -337,9 +346,11 @@ O arquivo `Analytic/Chart.lean` contem apenas a logica abstrata
 
 Ordem local atual para essa instancia:
 
-1. definir somente o termo complexo positivo necessario para a carta;
-2. separar a correcao vertical como `p^(1-s)` vezes o prefixo menor;
-3. provar convergencia/cauda na regiao declarada;
+1. provar a passagem ao limite minima em `Re(s)>1`, onde os dois prefixos de
+   Dirichlet convergem absolutamente;
+2. obter nesse semiplano a identidade inicial da carta com o Genuine;
+3. somente depois formalizar o ganho de duas potencias do bracket e decidir a
+   extensao exata necessaria ate `Re(s)>-1`;
 4. construir o traco Green usando o mesmo ledger de bordo, sem trocar o
    escalar Genuine por uma amplitude modelada.
 

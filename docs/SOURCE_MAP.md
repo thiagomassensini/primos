@@ -60,6 +60,10 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | carta finita = prefixo por blocos menos correcao vertical | `Genuine.Cp.finiteChart_eq_blockPrefix_sub_p_mul_centerSum` |
 | os blocos alinhados ladrilham `1,...,pM+halfRange(p)` | `Genuine.Cp.blockPrefix_eq_positiveIntervalSum` |
 | carta finita = prefixo positivo literal menos centros | `Genuine.Cp.finiteChart_eq_positiveIntervalSum_sub_p_mul_centerSum` |
+| monomio de Dirichlet no ramo principal positivo | `Analytic.Cp.dirichletTerm` |
+| separar `(p*m)^(-s)` em `p^(-s)m^(-s)` | `Analytic.Cp.dirichletTerm_alignedCenter` |
+| `p` vezes a soma dos centros = `p^(1-s)` vezes o prefixo curto | `Analytic.Cp.p_mul_centerSum_dirichlet_eq_cpow_mul_prefix` |
+| carta finita de Dirichlet com correcao vertical fatorada | `Analytic.Cp.finiteChart_dirichlet_eq_prefix_sub_cpow_mul_prefix` |
 | identidade Green assinada, energia positiva e bordo fechado implicam `delta=0` | `Analytic.Cp.SignedGreenCertificate.criticalDisplacement_eq_zero_of_genuine_zero` |
 | certificado Green concreto produz a ponte Genuine--ramo | `Analytic.Cp.SignedGreenCertificate.toGenuineBranchBridge` |
 | ponte ainda aberta de zeros Genuine para a norma | `Analytic.Cp.GenuineBranchBridge` (sem instancia) |

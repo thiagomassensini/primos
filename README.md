@@ -54,6 +54,11 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
 - identidade literal
   `finiteChart = sum_(1 <= n <= pM+halfRange(p)) f(n) - p * centerSum`, antes
   de qualquer limite ou potencia complexa;
+- termo complexo principal `n^(-s)` em inteiros positivos e fatoracao finita
+  exata
+  `p * sum_(m=1)^M (p*m)^(-s) = p^(1-s) * sum_(m=1)^M m^(-s)`;
+- carta finita de Dirichlet escrita como prefixo longo menos
+  `p^(1-s)` vezes o prefixo curto, ainda sem passagem ao limite;
 - criterio Green assinado que transforma um certificado concreto de
   fluxo--energia--bordo numa ponte `zero Genuine -> saturacao do ramo`;
 - interface Green explicita ainda sem certificado concreto: o fluxo e o traco
@@ -98,8 +103,8 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 marcadas como abertas no ledger.
 
 O checkpoint mais recente do nucleo ativo passou por essa verificacao no
-commit `bad4f56825e0d42d0fc628c3a54a46d8503865bf`, workflow run
-`29649780593`. A certificacao cobre os imports de `CPFormal.lean`;
+commit `8d941e55af4b1e4e1c6b325b6b07bc90aaa04e8c`, workflow run
+`29653694412`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
 ## Ordem de leitura
@@ -107,7 +112,7 @@ commit `bad4f56825e0d42d0fc628c3a54a46d8503865bf`, workflow run
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
 3. `docs/CLAIM_LEDGER.md`
-4. `docs/RELEASE_0.12.0.md`
+4. `docs/RELEASE_0.13.0.md`
 5. `docs/VISION_INBOX.md`
 6. `CPFormal/Genuine/FiniteCancellation.lean`
 7. `CPFormal/Genuine/C2.lean`
@@ -126,4 +131,5 @@ commit `bad4f56825e0d42d0fc628c3a54a46d8503865bf`, workflow run
 20. `CPFormal/Analytic/CpTilt.lean`
 21. `CPFormal/Analytic/CpTiltRigidity.lean`
 22. `CPFormal/Genuine/CpFiniteChart.lean`
-23. `CPFormal/Analytic/CpGreenBridge.lean`
+23. `CPFormal/Analytic/CpFiniteDirichletChart.lean`
+24. `CPFormal/Analytic/CpGreenBridge.lean`

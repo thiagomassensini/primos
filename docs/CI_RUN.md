@@ -169,3 +169,23 @@ que os blocos nos centros `p,2p,...,Mp` sao adjacentes e ladrilham exatamente
 tatica automatica nao cancelou `center` numa igualdade; a prova corrigida usa
 cancelamento aditivo exato. Nao foram introduzidas potencias complexas,
 limites, zeros ou um certificado Green concreto.
+
+## Checkpoint da fatoracao finita de Dirichlet Cp
+
+- commit: `8d941e55af4b1e4e1c6b325b6b07bc90aaa04e8c`;
+- run: `29653694412`;
+- job: `88104213909`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+O kernel elaborou o monomio principal `n^(-s)` nos inteiros positivos, sua
+multiplicatividade nos centros alinhados e a identidade
+
+```text
+p * sum_{m=1}^M (p*m)^(-s)
+  = p^(1-s) * sum_{m=1}^M m^(-s).
+```
+
+Combinada ao ladrilhamento anterior, ela fornece a carta finita de Dirichlet
+como prefixo longo menos o prefixo curto fatorado. O run nao tomou limites,
+nao usou zeta e nao certificou convergencia ou equivalencia de zeros.

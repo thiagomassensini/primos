@@ -254,3 +254,20 @@ por isso nao se acrescentou uma especializacao redundante em potencias
 complexas. Este checkpoint nao certifica fatoracao da soma central,
 convergencia, identidade infinita, equivalencia de zeros, certificado Green
 concreto ou RH.
+
+## Checkpoint da fatoracao finita de Dirichlet Cp
+
+- commit certificado: `8d941e55af4b1e4e1c6b325b6b07bc90aaa04e8c`;
+- workflow run: `29653694412` (`Lean kernel audit`, run number 80);
+- job: `88104213909` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpFiniteDirichletChart`.
+
+O kernel verificou a multiplicatividade da potencia complexa principal nas
+bases naturais nao negativas, a igualdade `p*p^(-s)=p^(1-s)` para primo `p`,
+a fatoracao da soma finita dos centros e sua substituicao na carta literal.
+
+O resultado e puramente finito e vale para todo `s : Complex`. Este checkpoint
+nao afirma convergencia da serie bracketada, identidade com zeta/Genuine no
+limite, continuacao analitica, equivalencia de zeros, certificado Green
+concreto ou RH.
