@@ -11,6 +11,9 @@ importada automaticamente como teorema Lean.
 | `TEOREMA_CARTA_BRACKETADA_ADAPTADA_A_CARACTERES_DE_DIRICHLET(2).md` | reserva de pesquisa para cartas sincronizadas |
 | `Texto colado(76).txt` | implementacao numerica intervalar finita |
 | `Library/Lean/GlobalDecomposition.lean` | antecedente arquitetural C2 para endereco global e existencia unica; nao importado como prova Cp |
+| `Library/Lean/OperatorNorm.lean` | antecedente C2 da massa dominante e do criterio de saturacao; auditado, mas a formula Cp foi derivada novamente |
+| `Library/Lean/Tilt.lean` | antecedentes de anulacao e sinal do tilt de duas pernas; somente a parte estrutural foi reaproveitada nesta etapa |
+| `Library/GENUINE_FIRST/cp_branch_tilt_operator.py` | especificacao Cp do ramo puro, energia por perna, profundidade inicial e tilt multirramo |
 
 Correspondencia atualmente formalizada a partir do resumo Genuine:
 
@@ -34,6 +37,17 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | a caixa direta Cp cobre exatamente a caixa bracketada | `Carry.Cp.incidenceImage_alignedNonmultipleBox` |
 | caixas Cp alinhadas possuem extras e faltantes vazios | `Carry.Cp.extraIncidences_alignedBox`, `Carry.Cp.missingIncidences_alignedBox` |
 | reindexacao ponderada sem bordo na caixa Cp alinhada | `Carry.Cp.weighted_reindex_alignedBox` |
+| massa critica `p^(-k)` e amplitude `p^(-k/2)` | `Carry.Cp.criticalMass`, `Carry.Cp.criticalAmplitude` |
+| quadrado da amplitude e a massa | `Carry.Cp.criticalAmplitude_sq_eq_mass` |
+| o peso concreto de carry atravessa a caixa Cp sem bordo | `Carry.Cp.criticalMass_reindex_alignedBox` |
+| massa do ramo em `sigma` e razao `p^(-2 sigma)` | `Carry.Cp.branchMassWeight`, `Carry.Cp.branchRatio` |
+| norma quadratica definida pela serie de profundidades | `Analytic.Cp.branchNormSq` |
+| forma fechada da norma | `Analytic.Cp.branchNormSq_eq_closed` |
+| norma quadratica igual a um exatamente em `sigma=1/2` | `Analytic.Cp.branchNormSq_eq_one_iff` |
+| defeito da norma e `sigma-1/2` possuem o mesmo zero | `Analytic.Cp.branchDefect_eq_zero_iff_criticalDisplacement_eq_zero` |
+| tilt bracketado de todas as pernas Cp | `Analytic.Cp.cpTilt` |
+| norma saturada implica tilt nulo | `Analytic.Cp.branchDefect_zero_implies_cpTiltAtSigma_zero` |
+| ponte ainda aberta de zeros Genuine para a norma | `Analytic.Cp.GenuineBranchBridge` (sem instancia) |
 
 Observacao: `GEOMETRIA_C2_CP_DECOMPOSICAO_POR_CARRY(1).md` chegou vazio na
 copia de trabalho desta versao e, portanto, nao foi usado para afirmacoes.
