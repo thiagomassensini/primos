@@ -96,12 +96,15 @@ theorem centerBlock_eq_center_add_pairSum
   have hh : 1 ≤ halfRange p := by
     unfold halfRange
     omega
-  have hneg : -(halfRange p : ℤ) ≤ -1 := by exact_mod_cast hh
+  have hhInt : (1 : ℤ) ≤ (halfRange p : ℤ) := by
+    exact_mod_cast hh
+  have hneg : -(halfRange p : ℤ) ≤ -1 := by omega
   have hpos : (0 : ℤ) < halfRange p := by exact_mod_cast hh
   rw [centerBlock]
   unfold fullOffsets
   rw [sum_Icc_split_adjacent (fun a : ℤ ↦ f (center + a)) hneg (by omega)]
   rw [sum_Icc_split_adjacent (fun a : ℤ ↦ f (center + a)) (by omega) hpos]
+  norm_num only [Int.reduceNeg, Int.reduceAdd, zero_add, add_zero]
   rw [← sum_neg_nat_radii_eq_sum_int_negative
     (R := R) (halfRange p) (fun a : ℤ ↦ f (center + a))]
   rw [← sum_nat_radii_eq_sum_int_positive
@@ -139,7 +142,8 @@ theorem bracket_eq_saturatedBracket
   unfold bracket CPFormal.saturatedBracket CPFormal.centeredSecondDifference
   rw [hleg]
   simp only [Finset.sum_add_distrib, Finset.sum_sub_distrib]
-  simp [hcard, hpminus, nsmul_eq_mul] <;> ring
+  simp [hcard, hpminus, nsmul_eq_mul]
+  ring
 
 end
 
