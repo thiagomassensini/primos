@@ -55,7 +55,7 @@ theorem sum_balancedOffsets_neg
   have hbij : Function.Bijective (fun a : ℤ => -a) := by
     constructor
     · intro a b hab
-      omega
+      simpa using congrArg (fun z : ℤ => -z) hab
     · intro b
       exact ⟨-b, by simp⟩
   apply Finset.sum_bijective (fun a : ℤ => -a) hbij
@@ -79,7 +79,7 @@ theorem cpLegTilt_add_neg
     cpLegTilt delta center a + cpLegTilt delta center (-a) =
       cpPairTilt delta center a := by
   simp [cpLegTilt, cpPairTilt]
-  ring
+  ring_nf
 
 /--
 Decomposicao angular fundamental: o tilt inteiro e metade da soma dos
