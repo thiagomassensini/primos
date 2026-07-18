@@ -21,6 +21,7 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
 - bijecao C2 entre pernas impares e incidencias centro-perna;
 - igualdade entre profundidade efetiva da perna e profundidade do centro C2;
 - reindexacao ponderada C2 com bordo `extras - faltantes` explicito;
+- caixas C2 nos centros `4,8,...,4M` com cobertura exata e bordo vazio;
 - ledger de afirmacoes, mapa de dependencias e caixa de ideias.
 
 Os modulos projetivo e Hilbert--Polya permanecem preservados em
@@ -61,8 +62,8 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 marcadas como abertas no ledger.
 
 O checkpoint mais recente do nucleo ativo passou por essa verificacao no
-commit `0cc016b69419b811cbf12867f46605280ecdf7db`, workflow run
-`29635654651`. A certificacao cobre os imports de `CPFormal.lean`;
+commit `45b7fe8bb761117609054f0b448c8c11db375b78`, workflow run
+`29636078858`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
 ## Ordem de leitura
@@ -78,3 +79,4 @@ commit `0cc016b69419b811cbf12867f46605280ecdf7db`, workflow run
 9. `CPFormal/Carry/C2Adjacent.lean`
 10. `CPFormal/Carry/C2Depth.lean`
 11. `CPFormal/Carry/C2WeightedReindex.lean`
+12. `CPFormal/Carry/C2AlignedBox.lean`
