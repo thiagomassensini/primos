@@ -6,3 +6,13 @@ O pull request correspondente deve permanecer em rascunho enquanto houver
 erros de elaboracao. Cada correcao sera registrada em commit separado. Um
 workflow verde autoriza promover no ledger somente os lemas realmente
 compilados; nao fecha pontes matematicas ainda marcadas como abertas.
+
+## Primeiro resultado verde
+
+- commit: `2a29c850389c888c6f1b5bde2dcb899fd261b559`;
+- run: `29634840124`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+O nucleo Genuine-first foi promovido no ledger. A reserva espectral permanece
+fora do escopo certificado.
