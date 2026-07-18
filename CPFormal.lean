@@ -11,7 +11,9 @@ import CPFormal.Carry.CpGlobalIncidence
 import CPFormal.Carry.CpDepth
 import CPFormal.Carry.CpWeightedReindex
 import CPFormal.Carry.CpAlignedBox
+import CPFormal.Carry.CpBranchWeight
 import CPFormal.Genuine.BalancedOffsets
 import CPFormal.Genuine.FiniteCancellation
 import CPFormal.Genuine.C2
 import CPFormal.Genuine.Cp
+import CPFormal.Analytic.CpBranchNorm
