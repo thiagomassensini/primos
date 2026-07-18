@@ -39,7 +39,7 @@ theorem centeredSecondDifference_add
 
 /-- Soma das segundas diferencas para raios `1, ..., h`. -/
 def saturatedBracket (h : ℕ) (f : ℤ → A) (center : ℤ) : A :=
-  ∑ radius in Finset.Icc 1 h,
+  ∑ radius ∈ Finset.Icc 1 h,
     centeredSecondDifference f center (radius : ℤ)
 
 @[simp] theorem saturatedBracket_zero (h : ℕ) (center : ℤ) :
