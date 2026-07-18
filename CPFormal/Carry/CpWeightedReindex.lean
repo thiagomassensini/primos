@@ -92,18 +92,20 @@ theorem weighted_reindex
   simp [incidenceImage]
 
 /-- Incidencias do canal direto que estao fora da caixa esperada. -/
-def extraIncidences
+noncomputable def extraIncidences
     (p : ℕ) (hp : Nat.Prime p) (hpodd : Odd p)
     (legs : Finset (Nonmultiple p))
-    (expected : Finset (Incidence p)) : Finset (Incidence p) :=
-  incidenceImage p hp hpodd legs \ expected
+    (expected : Finset (Incidence p)) : Finset (Incidence p) := by
+  classical
+  exact incidenceImage p hp hpodd legs \ expected
 
 /-- Incidencias esperadas que estao ausentes no canal direto. -/
-def missingIncidences
+noncomputable def missingIncidences
     (p : ℕ) (hp : Nat.Prime p) (hpodd : Odd p)
     (legs : Finset (Nonmultiple p))
-    (expected : Finset (Incidence p)) : Finset (Incidence p) :=
-  expected \ incidenceImage p hp hpodd legs
+    (expected : Finset (Incidence p)) : Finset (Incidence p) := by
+  classical
+  exact expected \ incidenceImage p hp hpodd legs
 
 /--
 Identidade abstrata de bordo para dois conjuntos finitos. A igualdade e
@@ -153,9 +155,10 @@ theorem weighted_reindex_with_boundary
             incidenceTerm p depthWeight value x) := by
   classical
   rw [weighted_reindex p hp hpodd]
-  exact finset_sum_eq_expected_add_boundary
-    (incidenceImage p hp hpodd legs) expected
-    (incidenceTerm p depthWeight value)
+  simpa [extraIncidences, missingIncidences] using
+    (finset_sum_eq_expected_add_boundary
+      (incidenceImage p hp hpodd legs) expected
+      (incidenceTerm p depthWeight value))
 
 /-- Caixas `Cₚ` com cobertura exata possuem bordo vazio. -/
 theorem weighted_reindex_of_exact_cover
