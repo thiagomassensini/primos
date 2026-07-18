@@ -228,3 +228,20 @@ unicidade do limite.
 
 O run nao promoveu a afirmacao de continuacao analitica: ainda faltam
 convergencia localmente uniforme em compactos e holomorfia da soma.
+
+## Checkpoint da holomorfia e continuacao unica Cp
+
+- commit: `da0585ced6f3922da6b32d57b54f169910357ca7`;
+- run: `29665212572`;
+- job: `88134403089`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+O kernel elaborou a diferenciabilidade de cada bloco na variavel espectral,
+um majorante uniforme somavel numa bola canonica em torno de cada ponto de
+`Re(s)>-1`, a holomorfia do `tsum` e da carta completa e a preconexidade do
+semiplano. Pelo principio da identidade, a carta e a unica continuacao
+analitica da identidade com o fator Genuine conhecida em `Re(s)>1`.
+
+O run nao certifica identificacao com `riemannZeta`, nao anulacao do fator,
+equivalencia de zeros, certificado Green concreto ou RH.
