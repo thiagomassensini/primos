@@ -18,6 +18,10 @@ desloca a barreira de convergencia de `re(s)>1` para `re(s)>-1`.
 
 namespace CPFormal.Analytic
 
+noncomputable section
+
+local instance : NormedSpace ℝ ℂ := NormedSpace.complexToReal
+
 /--
 Uma cota uniforme para a segunda derivada produz o ganho quadratico de uma
 segunda diferenca central. A formulacao usa derivadas ordinarias nos pontos
@@ -105,7 +109,7 @@ theorem norm_centeredSecondDifference_le
     simp only [g]
     congr 1
     simp only [sub_zero, two_smul]
-    abel
+    abel_nf
 
   rw [hleftNorm] at houter
   calc
@@ -115,5 +119,7 @@ theorem norm_centeredSecondDifference_le
     _ = 2 * C * radius ^ 2 := by
       rw [Real.norm_eq_abs, sub_zero, abs_of_nonneg hradius]
       ring
+
+end
 
 end CPFormal.Analytic
