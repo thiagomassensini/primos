@@ -22,3 +22,4 @@ import CPFormal.Analytic.CpTilt
 import CPFormal.Analytic.CpTiltRigidity
 import CPFormal.Analytic.CpGreenBridge
 import CPFormal.Analytic.CpFiniteDirichletChart
+import CPFormal.Analytic.CpDirichletLimit
