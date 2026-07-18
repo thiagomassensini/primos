@@ -53,7 +53,7 @@ theorem differentiable_realDirichletPower_in_parameter
     Differentiable ℂ (fun s : ℂ ↦ realDirichletPower s x) := by
   have hxComplex : (x : ℂ) ≠ 0 := by exact_mod_cast hx
   letI : NeZero (x : ℂ) := ⟨hxComplex⟩
-  simpa [realDirichletPower] using
+  simpa [realDirichletPower, Function.comp_def] using
     (differentiable_const_cpow_of_neZero (x : ℂ)).comp differentiable_neg
 
 /-- A potencia de Dirichlet de um inteiro positivo e inteira em `s`. -/
@@ -63,7 +63,7 @@ theorem differentiable_dirichletTerm_in_parameter
   have hn0 : n ≠ 0 := ne_of_gt hn
   have hnComplex : (n : ℂ) ≠ 0 := by exact_mod_cast hn0
   letI : NeZero (n : ℂ) := ⟨hnComplex⟩
-  simpa [dirichletTerm] using
+  simpa [dirichletTerm, Function.comp_def] using
     (differentiable_const_cpow_of_neZero (n : ℂ)).comp differentiable_neg
 
 /-- Cada par bracketado admissivel e inteiro na variavel espectral. -/
@@ -97,7 +97,7 @@ theorem differentiable_realCpPairBracket
         ((p : ℝ) * ((k + 1 : ℕ) : ℝ))) +
       realDirichletPower s
         ((p : ℝ) * ((k + 1 : ℕ) : ℝ) + (radius : ℝ)))
-  simpa only [two_smul] using
+  simpa [two_smul] using
     (hleftDiff.sub (hcenterDiff.add hcenterDiff)).add hrightDiff
 
 /-- Cada bloco Cp saturado e uma soma finita de funcoes inteiras. -/
