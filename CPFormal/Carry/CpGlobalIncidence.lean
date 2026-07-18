@@ -74,8 +74,7 @@ theorem dvd_centerOfNonmultiple
   apply (ZMod.intCast_zmod_eq_zero_iff_dvd
     (centerOfNonmultiple p hp hpodd n) p).mp
   unfold centerOfNonmultiple
-  change (n.1 : ZMod p) -
-    ((offsetOfNonmultiple p hp hpodd n).1 : ZMod p) = 0
+  rw [Int.cast_sub]
   rw [cast_offsetOfNonmultiple]
   simp
 
