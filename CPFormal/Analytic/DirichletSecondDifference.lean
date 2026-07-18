@@ -23,6 +23,8 @@ namespace CPFormal.Analytic.Cp
 
 noncomputable section
 
+local instance : NormedSpace ℝ ℂ := NormedSpace.complexToReal
+
 /-- O monomio de Dirichlet visto como funcao de uma variavel real positiva. -/
 def realDirichletPower (s : ℂ) (x : ℝ) : ℂ :=
   (x : ℂ) ^ (-s)
@@ -56,13 +58,9 @@ theorem hasDerivAt_realDirichletPowerDeriv
   have hpow :=
     hasDerivAt_ofReal_cpow_const (ne_of_gt hx) hexponent
   have hexponentSub : (-s - 1) - 1 = -s - 2 := by ring
-  have hmul := hpow.const_mul (-s)
-  rw [hexponentSub] at hmul
-  change HasDerivAt
-    (fun y : ℝ ↦ (-s) * (y : ℂ) ^ (-s - 1))
-    (s * (s + 1) * (x : ℂ) ^ (-s - 2)) x
-  convert hmul using 1
-  ring
+  have hcoefficient : (-s) * (-s - 1) = s * (s + 1) := by ring
+  simpa only [realDirichletPowerDeriv, realDirichletPowerDeriv2,
+    hexponentSub, ← mul_assoc, hcoefficient] using hpow.const_mul (-s)
 
 /-- Norma exata da segunda derivada sobre o eixo real positivo. -/
 theorem norm_realDirichletPowerDeriv2
@@ -72,7 +70,6 @@ theorem norm_realDirichletPowerDeriv2
   rw [realDirichletPowerDeriv2, norm_mul,
     Complex.norm_cpow_eq_rpow_re_of_pos hx]
   congr 1
-  simp
 
 /-!
 O ganho concreto: a braquetada compra duas potencias. A base da cota e o
@@ -93,7 +90,7 @@ theorem norm_realDirichletPower_centeredSecondDifference_le
         radius ^ 2 := by
   by_cases hs0 : s = 0
   · subst s
-    simp [realDirichletPower]
+    norm_num [realDirichletPower, two_smul]
   · refine norm_centeredSecondDifference_le
       (f := realDirichletPower s)
       (f' := realDirichletPowerDeriv s)
