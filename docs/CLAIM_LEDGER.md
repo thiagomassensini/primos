@@ -28,7 +28,8 @@ Estados usados:
 | GEN-CP-003 | canal Cp finito direto menos brackets deixa centros | KERNEL_CHECKED | GEN-002, GEN-CP-002 | adicionar reindexacao Cp |
 | GEN-BIJ-C2 | pernas impares `n>=3` estao em bijecao com incidencias `(centro multiplo de 4, perna)` | KERNEL_CHECKED | aritmetica modular | usar na reindexacao ponderada |
 | GEN-DEP-C2 | `max(v_2(n-1),v_2(n+1)) = v_2(adjacentCenter(n))` para `n` impar, `n>=3` | KERNEL_CHECKED | GEN-BIJ-C2, valoracao 2-adica | transportar o peso na soma finita |
-| GEN-REINDEX-C2 | soma ponderada das pernas = soma das incidencias esperadas + extras - faltantes | KERNEL_CHECKED | GEN-BIJ-C2, GEN-DEP-C2, somas finitas | instanciar em caixas aritmeticas alinhadas |
+| GEN-REINDEX-C2 | soma ponderada das pernas = soma das incidencias esperadas + extras - faltantes | KERNEL_CHECKED | GEN-BIJ-C2, GEN-DEP-C2, somas finitas | reutilizar nas caixas Cp |
+| GEN-BOX-C2 | os centros `4,8,...,4M` com suas duas pernas possuem cobertura exata e bordo vazio | KERNEL_CHECKED | GEN-REINDEX-C2 | caracterizar a caixa de pernas como intervalo impar e provar cardinalidade |
 | GEN-BIJ-CP | residuos nao nulos correspondem unicamente aos offsets balanceados | OPEN_BRIDGE | primo impar, aritmetica modular | formalizar bijecao |
 | CHP-001 | carta e fator vezes Genuine | PAPER_ARGUMENT | reindexacao e analise | formalizar primeiro finito |
 | CHP-002 | fator da carta nao zera no critical strip | PAPER_ARGUMENT | modulo complexo | formalizar apos CHP-001 |
@@ -42,6 +43,6 @@ Estados usados:
 | RH-001 | todo zero Genuine esta na linha critica | BLOQUEADO | BRG-001 ou SPC-001+SPC-002 | nao enunciar como provado |
 
 O checkpoint mais recente do nucleo ativo foi compilado pelo GitHub Actions no
-commit `0cc016b69419b811cbf12867f46605280ecdf7db`, run `29635654651`.
+commit `45b7fe8bb761117609054f0b448c8c11db375b78`, run `29636078858`.
 Modulos mantidos apenas em `CPFormal.ResearchReserve` nao fazem parte dessa
 certificacao. Consulte `AUDIT.md`.
