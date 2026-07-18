@@ -75,3 +75,16 @@ O kernel elaborou a classe de inteiros nao multiplos de `p`, as incidencias
 centro--offset, a escolha canonica do offset por residuo balanceado, a prova de
 que o centro e divisivel por `p`, as duas leis de inversa e o teorema `∃!` da
 decomposicao `n = centro + offset`.
+
+## Checkpoint da profundidade efetiva Cp
+
+- commit: `b24ea3d440198b779d30333df608a4cb0b2c78a0`;
+- run: `29640037006`;
+- job: `88068948411`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+Foram elaborados pelo kernel a unicidade do offset que produz divisibilidade
+por `p`, a profundidade zero de cada offset nao canonico, a igualdade entre o
+supremo das profundidades da carta e a profundidade do centro canonico, e a
+positividade dessa profundidade quando o centro nao e zero.
