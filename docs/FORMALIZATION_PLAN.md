@@ -143,8 +143,14 @@ direct(legs)
     - missing bracket incidences.
 ```
 
-Para uma cobertura exata, os dois termos de bordo desaparecem. O proximo
-passo e construir caixas aritmeticas concretas cuja cobertura seja exata.
+Para uma cobertura exata, os dois termos de bordo desaparecem. A primeira
+caixa aritmetica C2 foi implementada com os centros `4,8,...,4M` e as duas
+pernas de cada centro. O kernel verificou que a caixa induzida de pernas
+recupera exatamente essas incidencias, logo extras e faltantes sao vazios.
+
+O proximo refinamento finito e caracterizar essa caixa de pernas diretamente
+como os impares entre `3` e `4M+1`, provar sua cardinalidade `2M` e entao
+transportar a construcao para Cp.
 
 ## Fase 3 — pesos, series e caudas
 
