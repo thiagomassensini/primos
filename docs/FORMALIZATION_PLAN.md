@@ -304,9 +304,20 @@ finiteChart_p,M(s)
   -> (1-p^(1-s)) * genuineDirichlet(s).
 ```
 
-Esse teorema fecha somente o semiplano de convergencia absoluta. Ele nao
-fornece ainda o ganho de duas potencias da segunda diferenca, continuacao
-analitica, equivalencia com a zeta da Mathlib ou informacao sobre zeros.
+O passo bracketado seguinte tambem foi fechado no nivel pontual. O kernel
+verificou o ganho quadratico da segunda diferenca, sua especializacao a
+`x^(-s)`, a somabilidade absoluta para `Re(s)>-1` e a identidade finita
+
+```text
+Genuine.Cp.bracket = saturatedBracket.
+```
+
+Consequentemente, os proprios prefixos `Genuine.Cp.finiteChart` convergem
+para `bracketedDirichletChart` em `Re(s)>-1`. No semiplano comum `Re(s)>1`, a
+unicidade do limite identifica essa carta com
+`(1-p^(1-s))*genuineDirichlet(s)`. Isso ainda nao fornece convergencia
+localmente uniforme, holomorfia do `tsum`, equivalencia com a zeta da Mathlib
+ou informacao sobre zeros.
 
 O gargalo Green foi decomposto numa interface mais informativa que a ponte
 final. `SignedGreenCertificate` exige separadamente
@@ -364,9 +375,13 @@ Ordem local atual para essa instancia:
    prefixos de Dirichlet convergem absolutamente;
 2. **concluido:** identidade inicial do limite da carta com o Genuine definido
    pela serie positiva;
-3. **proximo nucleo:** formalizar o ganho de duas potencias do bracket e
-   decidir a extensao exata necessaria ate `Re(s)>-1`;
-4. depois, construir o traco Green usando o mesmo ledger de bordo, sem trocar o
+3. **concluido:** ganho de duas potencias, somabilidade absoluta pontual em
+   `Re(s)>-1`, identificacao finita com o bracket Genuine e passagem dos
+   prefixos ao limite;
+4. **proximo nucleo:** transformar o majorante pontual em majorante uniforme
+   sobre compactos, provar holomorfia da carta bracketada e aplicar o teorema
+   de identidade;
+5. depois, construir o traco Green usando o mesmo ledger de bordo, sem trocar o
    escalar Genuine por uma amplitude modelada.
 
 ## Fase 5 — Hilbert ponderado e projecao
