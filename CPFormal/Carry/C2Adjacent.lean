@@ -95,6 +95,7 @@ def oddLegOfIncidence (x : Incidence) : OddLeg := by
   · have hc4 : 4 ≤ x.1.1 := x.2.1
     rcases x.2.2.2 with h | h <;> omega
   · have htwoFour : 2 ∣ (4 : ℕ) := by norm_num
+    have hc4 : 4 ≤ x.1.1 := x.2.1
     have hcTwo : 2 ∣ x.1.1 := htwoFour.trans x.2.2.1
     have hcEven : Even x.1.1 := even_iff_two_dvd.mpr hcTwo
     rcases x.2.2.2 with h | h
