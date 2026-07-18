@@ -92,11 +92,16 @@ def incidenceOfOddLeg (n : OddLeg) : Incidence :=
 /-- A perna guardada por uma incidencia C2 e impar e pelo menos `3`. -/
 def oddLegOfIncidence (x : Incidence) : OddLeg := by
   refine ⟨x.1.2, ?_, ?_⟩
-  · rcases x.2.2.2 with h | h <;> omega
-  · rw [Nat.odd_iff]
-    have hcmod : x.1.1 % 4 = 0 :=
-      Nat.dvd_iff_mod_eq_zero.mp x.2.2.1
+  · have hc4 : 4 ≤ x.1.1 := x.2.1
     rcases x.2.2.2 with h | h <;> omega
+  · have htwoFour : 2 ∣ (4 : ℕ) := by norm_num
+    have hcTwo : 2 ∣ x.1.1 := htwoFour.trans x.2.2.1
+    have hcEven : Even x.1.1 := even_iff_two_dvd.mpr hcTwo
+    rcases x.2.2.2 with h | h
+    · rw [h]
+      exact Nat.Even.sub_odd (by omega) hcEven odd_one
+    · rw [h]
+      exact hcEven.add_one
 
 /--
 Bijeção combinatoria exata da ponte C2: cada perna impar `n >= 3` corresponde
