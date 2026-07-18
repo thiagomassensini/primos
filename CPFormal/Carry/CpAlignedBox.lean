@@ -26,6 +26,8 @@ open scoped BigOperators
 
 namespace CPFormal.Carry.Cp
 
+open CPFormal.Genuine.Cp
+
 noncomputable section
 
 /-- A incidencia no centro `p * (k+1)` e no offset balanceado `a`. -/
