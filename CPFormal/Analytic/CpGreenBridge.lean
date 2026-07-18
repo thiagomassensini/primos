@@ -67,7 +67,7 @@ theorem SignedGreenCertificate.criticalDisplacement_eq_zero_of_genuine_zero
   exact (mul_eq_zero.mp hproduct).resolve_right (ne_of_gt henergy)
 
 /-- Um certificado Green concreto fabrica a ponte Genuine--ramo, para cada primo. -/
-def SignedGreenCertificate.toGenuineBranchBridge
+theorem SignedGreenCertificate.toGenuineBranchBridge
     {genuine : ℂ → ℂ} (certificate : SignedGreenCertificate genuine)
     (p : ℕ) (hp : Nat.Prime p) :
     GenuineBranchBridge p genuine := by
