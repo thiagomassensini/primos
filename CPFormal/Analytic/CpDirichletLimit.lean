@@ -35,7 +35,7 @@ theorem summable_dirichletTerm_nat_add_one
   have hbase : Summable (fun n : ℕ => 1 / (n : ℂ) ^ s) :=
     Complex.summable_one_div_nat_cpow.mpr hs
   have hshift := hbase.comp_injective
-    (fun n : ℕ => n + 1) (by
+    (show Function.Injective (fun n : ℕ => n + 1) by
       intro a b hab
       omega)
   simpa [Function.comp_def, dirichletTerm, Complex.cpow_neg] using hshift
@@ -45,8 +45,13 @@ theorem positiveDirichletPrefix_tendsto_genuineDirichlet
     {s : ℂ} (hs : 1 < s.re) :
     Tendsto (positiveDirichletPrefix s) atTop
       (nhds (genuineDirichlet s)) := by
-  simpa [positiveDirichletPrefix, genuineDirichlet] using
-    (summable_dirichletTerm_nat_add_one hs).tendsto_sum_tsum_nat
+  change Tendsto
+    (fun N : ℕ => ∑ k ∈ Finset.range N,
+      dirichletTerm s (((k + 1 : ℕ) : ℤ)))
+    atTop
+    (nhds (∑' k : ℕ,
+      dirichletTerm s (((k + 1 : ℕ) : ℤ))))
+  exact (summable_dirichletTerm_nat_add_one hs).tendsto_sum_tsum_nat
 
 /-- Acrescentar um termo ao prefixo positivo. -/
 theorem positiveDirichletPrefix_succ
@@ -107,8 +112,7 @@ theorem chartCutoff_tendsto_atTop
       p * M + CPFormal.Genuine.Cp.halfRange p) atTop atTop := by
   refine Filter.tendsto_atTop.2 ?_
   intro b
-  refine ⟨b, ?_⟩
-  intro a ha
+  filter_upwards [eventually_ge_atTop b] with a ha
   have hpone : 1 ≤ p := hp.one_le
   omega
 
