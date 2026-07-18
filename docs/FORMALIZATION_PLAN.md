@@ -195,8 +195,22 @@ direct(L)
 O peso do canal direto pode ser qualquer funcao da profundidade efetiva; na
 incidencia, ele se torna a mesma funcao de `v_p(centro)`. Se a imagem da
 bijecao coincide com `E`, o bordo desaparece por igualdade finita exata. O
-proximo alvo e construir uma familia concreta de caixas alinhadas Cp que
-satisfaca essa cobertura.
+kernel tambem verificou a primeira familia concreta que satisfaz essa
+cobertura. Para `M` centros, ela usa
+
+```text
+centros = p, 2p, ..., Mp
+offsets por centro = todos os p-1 offsets balanceados nao nulos
+numero de incidencias = M(p-1).
+```
+
+A caixa direta e definida como a pre-imagem dessa caixa de incidencias pela
+bijecao global Cp. Aplicar a bijecao de volta recupera literalmente a caixa
+esperada; portanto extras e faltantes sao ambos vazios e a igualdade
+ponderada nao possui termo de bordo.
+
+O proximo alvo finito e caracterizar essa pre-imagem diretamente por
+desigualdades aritmeticas e residuos, analogamente ao intervalo impar C2.
 
 ## Fase 3 — pesos, series e caudas
 
