@@ -20,6 +20,7 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
 - instancias locais e finitas para C2 e Cp;
 - bijecao C2 entre pernas impares e incidencias centro-perna;
 - igualdade entre profundidade efetiva da perna e profundidade do centro C2;
+- reindexacao ponderada C2 com bordo `extras - faltantes` explicito;
 - ledger de afirmacoes, mapa de dependencias e caixa de ideias.
 
 Os modulos projetivo e Hilbert--Polya permanecem preservados em
@@ -75,3 +76,4 @@ de `CPFormal.lean`; `CPFormal.ResearchReserve` permanece fora dela.
 8. `CPFormal/Genuine/Cp.lean`
 9. `CPFormal/Carry/C2Adjacent.lean`
 10. `CPFormal/Carry/C2Depth.lean`
+11. `CPFormal/Carry/C2WeightedReindex.lean`
