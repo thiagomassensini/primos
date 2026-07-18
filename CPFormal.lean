@@ -17,6 +17,7 @@ import CPFormal.Genuine.FiniteCancellation
 import CPFormal.Genuine.C2
 import CPFormal.Genuine.Cp
 import CPFormal.Genuine.CpFiniteChart
+import CPFormal.Genuine.CpBracketPairing
 import CPFormal.Analytic.CpBranchNorm
 import CPFormal.Analytic.CpTilt
 import CPFormal.Analytic.CpTiltRigidity
