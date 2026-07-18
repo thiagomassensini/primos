@@ -231,3 +231,26 @@ do ramo.
 `SignedGreenCertificate` nao possui uma instancia concreta neste checkpoint.
 Em particular, fluxo, cauda, convergencia, identidade infinita da carta e RH
 permanecem fora da conclusao certificada.
+
+## Checkpoint do ladrilhamento literal da carta Cp
+
+- commit certificado: `bad4f56825e0d42d0fc628c3a54a46d8503865bf`;
+- workflow run: `29649780593` (`Lean kernel audit`, run number 78);
+- job: `88094014871` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- alvo compilado ampliado: `CPFormal.Genuine.CpFiniteChart`.
+
+O kernel verificou a traducao de cada bloco para um intervalo inteiro, a
+decomposicao de intervalos adjacentes e a inducao que identifica
+
+```text
+blockPrefix p M f
+  = sum_{1 <= n <= pM+halfRange(p)} f(n).
+```
+
+Por substituicao, a carta finita ficou escrita diretamente como esse prefixo
+positivo menos `p` vezes a soma dos centros. O enunciado e generico em `f`,
+por isso nao se acrescentou uma especializacao redundante em potencias
+complexas. Este checkpoint nao certifica fatoracao da soma central,
+convergencia, identidade infinita, equivalencia de zeros, certificado Green
+concreto ou RH.

@@ -55,8 +55,11 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | zeros do tilt exatamente na meia abscissa | `Analytic.Cp.cpTiltAtSigma_eq_zero_iff_half` |
 | equivalencia entre defeito da norma e tilt no centro admissivel | `Analytic.Cp.branchDefect_eq_zero_iff_cpTiltAtSigma_eq_zero_of_admissible_center` |
 | bloco completo = pernas + centro | `Genuine.Cp.centerBlock_eq_legSum_add_center` |
+| transladar um bloco completo produz seu intervalo inteiro | `Genuine.Cp.centerBlock_eq_sum_Icc` |
 | bracket Cp = bloco completo menos `p` centros | `Genuine.Cp.bracket_eq_centerBlock_sub_p_mul_center` |
 | carta finita = prefixo por blocos menos correcao vertical | `Genuine.Cp.finiteChart_eq_blockPrefix_sub_p_mul_centerSum` |
+| os blocos alinhados ladrilham `1,...,pM+halfRange(p)` | `Genuine.Cp.blockPrefix_eq_positiveIntervalSum` |
+| carta finita = prefixo positivo literal menos centros | `Genuine.Cp.finiteChart_eq_positiveIntervalSum_sub_p_mul_centerSum` |
 | identidade Green assinada, energia positiva e bordo fechado implicam `delta=0` | `Analytic.Cp.SignedGreenCertificate.criticalDisplacement_eq_zero_of_genuine_zero` |
 | certificado Green concreto produz a ponte Genuine--ramo | `Analytic.Cp.SignedGreenCertificate.toGenuineBranchBridge` |
 | ponte ainda aberta de zeros Genuine para a norma | `Analytic.Cp.GenuineBranchBridge` (sem instancia) |

@@ -153,3 +153,19 @@ do centro, a identidade da carta finita em todos os primeiros `M` centros e o
 teorema que converte um `SignedGreenCertificate` concreto em deslocamento
 critico nulo, tilt nulo e `GenuineBranchBridge`. O run nao construiu o
 certificado concreto nem provou a RH.
+
+## Checkpoint do ladrilhamento literal da carta Cp
+
+- commit: `bad4f56825e0d42d0fc628c3a54a46d8503865bf`;
+- run: `29649780593`;
+- job: `88094014871`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+O kernel verificou que cada bloco completo e o intervalo inteiro transladado,
+que os blocos nos centros `p,2p,...,Mp` sao adjacentes e ladrilham exatamente
+`1,...,pM+halfRange(p)`, e que a carta finita e esse prefixo literal menos
+`p` vezes a soma dos centros. Uma tentativa anterior falhou apenas porque a
+tatica automatica nao cancelou `center` numa igualdade; a prova corrigida usa
+cancelamento aditivo exato. Nao foram introduzidas potencias complexas,
+limites, zeros ou um certificado Green concreto.

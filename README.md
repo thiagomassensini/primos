@@ -49,8 +49,11 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
   equivalencia entre tilt nulo e defeito nulo da norma;
 - abertura finita da carta Cp: cada bracket e um bloco completo de `p`
   posicoes menos `p` copias do centro;
-- identidade exata `finiteChart = blockPrefix - verticalCorrection`, antes de
-  qualquer limite ou potencia complexa;
+- ladrilhamento exato do prefixo por blocos:
+  `blockPrefix = sum_(1 <= n <= pM+halfRange(p)) f(n)`;
+- identidade literal
+  `finiteChart = sum_(1 <= n <= pM+halfRange(p)) f(n) - p * centerSum`, antes
+  de qualquer limite ou potencia complexa;
 - criterio Green assinado que transforma um certificado concreto de
   fluxo--energia--bordo numa ponte `zero Genuine -> saturacao do ramo`;
 - interface Green explicita ainda sem certificado concreto: o fluxo e o traco
@@ -95,8 +98,8 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 marcadas como abertas no ledger.
 
 O checkpoint mais recente do nucleo ativo passou por essa verificacao no
-commit `e9b8c3d9cd3e13b7085db35b9947743204fcf5b1`, workflow run
-`29648404437`. A certificacao cobre os imports de `CPFormal.lean`;
+commit `bad4f56825e0d42d0fc628c3a54a46d8503865bf`, workflow run
+`29649780593`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
 ## Ordem de leitura
@@ -104,7 +107,7 @@ commit `e9b8c3d9cd3e13b7085db35b9947743204fcf5b1`, workflow run
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
 3. `docs/CLAIM_LEDGER.md`
-4. `docs/RELEASE_0.11.0.md`
+4. `docs/RELEASE_0.12.0.md`
 5. `docs/VISION_INBOX.md`
 6. `CPFormal/Genuine/FiniteCancellation.lean`
 7. `CPFormal/Genuine/C2.lean`

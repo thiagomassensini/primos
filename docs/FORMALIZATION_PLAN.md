@@ -273,9 +273,17 @@ finiteChart(p,M,f)
     - p * sum_{k<M} f(p(k+1)).
 ```
 
-O proximo lema finito deve identificar `blockPrefix` com a soma literal no
-intervalo positivo `1 <= n <= pM+halfRange(p)`. Somente depois entra a
-especializacao `f(n)=n^(-s)`.
+O kernel tambem verificou o ladrilhamento minimo indispensavel
+
+```text
+blockPrefix(p,M,f)
+  = sum_{1 <= n <= pM+halfRange(p)} f(n),
+```
+
+e portanto a forma literal da carta finita. Como o teorema vale para qualquer
+`f`, nao sera criado um lema separado que apenas o especialize em `n^(-s)`.
+O proximo conteudo matematico novo e fatorar a correcao vertical para essa
+escolha complexa.
 
 O gargalo Green foi decomposto numa interface mais informativa que a ponte
 final. `SignedGreenCertificate` exige separadamente
@@ -329,11 +337,10 @@ O arquivo `Analytic/Chart.lean` contem apenas a logica abstrata
 
 Ordem local atual para essa instancia:
 
-1. provar que os blocos completos ladrilham exatamente o prefixo inteiro;
-2. especializar a identidade finita em potencias complexas;
-3. separar a correcao vertical como `p^(1-s)` vezes o prefixo menor;
-4. provar convergencia/cauda na regiao declarada;
-5. construir o traco Green usando o mesmo ledger de bordo, sem trocar o
+1. definir somente o termo complexo positivo necessario para a carta;
+2. separar a correcao vertical como `p^(1-s)` vezes o prefixo menor;
+3. provar convergencia/cauda na regiao declarada;
+4. construir o traco Green usando o mesmo ledger de bordo, sem trocar o
    escalar Genuine por uma amplitude modelada.
 
 ## Fase 5 — Hilbert ponderado e projecao

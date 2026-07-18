@@ -16,8 +16,9 @@ literalmente
 
 Somando os primeiros `M` centros `p, 2p, ..., Mp`, obtemos a identidade
 finita da carta como prefixo por blocos menos a correcao vertical dos centros.
-Ainda nao identificamos aqui o prefixo por blocos com uma serie de Dirichlet,
-nem tomamos limites.
+Os blocos sao depois ladrilhados no intervalo literal
+`1, ..., pM + halfRange p`. Ainda nao introduzimos potencias complexas, series
+infinitas ou limites.
 -/
 
 open scoped BigOperators
