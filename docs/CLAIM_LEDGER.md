@@ -1,4 +1,4 @@
-# Ledger de afirmacoes — checkpoint 0.4.0 Genuine-first
+# Ledger de afirmacoes — checkpoint 0.5.0 Genuine-first
 
 Estados usados:
 
@@ -31,8 +31,9 @@ Estados usados:
 | GEN-REINDEX-C2 | soma ponderada das pernas = soma das incidencias esperadas + extras - faltantes | KERNEL_CHECKED | GEN-BIJ-C2, GEN-DEP-C2, somas finitas | reutilizar nas caixas Cp |
 | GEN-BOX-C2 | os centros `4,8,...,4M` com suas duas pernas possuem cobertura exata e bordo vazio | KERNEL_CHECKED | GEN-REINDEX-C2 | reutilizar como modelo das caixas Cp |
 | GEN-INTERVAL-C2 | a caixa alinhada de pernas e exatamente `3,5,...,4M+1` e possui cardinalidade `2M` | KERNEL_CHECKED | GEN-BOX-C2, paridade | transportar a construcao para Cp |
-| GEN-BIJ-CP | residuos nao nulos correspondem unicamente aos offsets balanceados | KERNEL_CHECKED | primo impar, `ZMod.valMinAbs` | construir incidencias globais centro-offset |
+| GEN-BIJ-CP | residuos nao nulos correspondem unicamente aos offsets balanceados | KERNEL_CHECKED | primo impar, `ZMod.valMinAbs` | usado na bijecao global Cp |
 | GEN-CARD-CP | a camera balanceada de modulo primo impar possui exatamente `p-1` pernas | KERNEL_CHECKED | GEN-BIJ-CP, intervalo inteiro | usar na reindexacao Cp |
+| GEN-GLOBAL-BIJ-CP | inteiros nao multiplos de `p` estao em bijecao com incidencias `(centro multiplo de p, offset balanceado)` e admitem decomposicao unica `n=c+a` | KERNEL_CHECKED | GEN-BIJ-CP, aritmetica modular | transportar a profundidade `v_p` |
 | CHP-001 | carta e fator vezes Genuine | PAPER_ARGUMENT | reindexacao e analise | formalizar primeiro finito |
 | CHP-002 | fator da carta nao zera no critical strip | PAPER_ARGUMENT | modulo complexo | formalizar apos CHP-001 |
 | HIL-001 | sintese possui vetor de Riesz ponderado | PAPER_ARGUMENT | somabilidade dos pesos | construir espaco |
@@ -45,6 +46,6 @@ Estados usados:
 | RH-001 | todo zero Genuine esta na linha critica | BLOQUEADO | BRG-001 ou SPC-001+SPC-002 | nao enunciar como provado |
 
 O checkpoint mais recente do nucleo ativo foi compilado pelo GitHub Actions no
-commit `211e2a09fa5312c5fb851de9f4a71f05209b0b24`, run `29637023211`.
+commit `e8b9cf7cedf15e7917d7837bb50bb6412d048ccb`, run `29638936254`.
 Modulos mantidos apenas em `CPFormal.ResearchReserve` nao fazem parte dessa
 certificacao. Consulte `AUDIT.md`.
