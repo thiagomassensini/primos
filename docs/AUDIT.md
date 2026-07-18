@@ -125,6 +125,21 @@ Para primo impar `p`, o kernel verificou que todo inteiro nao divisivel por
 elaborada diretamente a forma existencial unica `∃! (c,a), n=c+a` dentro do
 tipo de incidencias.
 
+## Checkpoint da profundidade efetiva Cp
+
+- commit certificado: `b24ea3d440198b779d30333df608a4cb0b2c78a0`;
+- workflow run: `29640037006` (`Lean kernel audit`, run number 38);
+- job: `88068948411` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Carry.CpDepth`.
+
+O kernel verificou que, entre todos os offsets balanceados da carta, apenas o
+offset canonico torna `n-a` divisivel por `p`. Os demais termos possuem
+`padicValInt` zero, e o supremo finito das profundidades e igual a profundidade
+do centro canonico. O caso `centro = 0` segue a convencao explicita da Mathlib
+`padicValInt p 0 = 0`; para centro nao nulo, foi provada profundidade ao menos
+um.
+
 O alvo compilado e `CPFormal.lean`, isto e, o nucleo Genuine-first. O modulo
 `CPFormal.ResearchReserve` e seus imports espectrais/projetivos nao foram
 promovidos por esse run.
