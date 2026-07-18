@@ -73,6 +73,13 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
   bracketada;
 - identificacao por unicidade do limite, no semiplano comum `Re(s)>1`,
   `bracketedDirichletChart = (1-p^(1-s))*genuineDirichlet`;
+- majorante uniforme somavel em uma bola canonica ao redor de cada ponto de
+  `Re(s)>-1`, com constante e expoente independentes do ponto da bola e da
+  profundidade do bloco;
+- holomorfia da cauda e da carta bracketada em todo o semiplano `Re(s)>-1`;
+- unicidade da continuacao analitica: toda funcao analitica nesse semiplano
+  que coincide com o fator Genuine em `Re(s)>1` coincide com a carta
+  bracketada em todo o dominio;
 - criterio Green assinado que transforma um certificado concreto de
   fluxo--energia--bordo numa ponte `zero Genuine -> saturacao do ramo`;
 - interface Green explicita ainda sem certificado concreto: o fluxo e o traco
@@ -117,8 +124,8 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 marcadas como abertas no ledger.
 
 O checkpoint mais recente do nucleo ativo passou por essa verificacao no
-commit `af30c410ed6c68f4f4d9a35a4d88435a592b55c8`, workflow run
-`29662384450`. A certificacao cobre os imports de `CPFormal.lean`;
+commit `da0585ced6f3922da6b32d57b54f169910357ca7`, workflow run
+`29665212572`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
 ## Ordem de leitura
@@ -126,7 +133,7 @@ commit `af30c410ed6c68f4f4d9a35a4d88435a592b55c8`, workflow run
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
 3. `docs/CLAIM_LEDGER.md`
-4. `docs/RELEASE_0.15.0.md`
+4. `docs/RELEASE_0.16.0.md`
 5. `docs/VISION_INBOX.md`
 6. `CPFormal/Genuine/FiniteCancellation.lean`
 7. `CPFormal/Genuine/C2.lean`
@@ -151,4 +158,5 @@ commit `af30c410ed6c68f4f4d9a35a4d88435a592b55c8`, workflow run
 26. `CPFormal/Analytic/DirichletSecondDifference.lean`
 27. `CPFormal/Genuine/CpBracketPairing.lean`
 28. `CPFormal/Analytic/CpBracketConvergence.lean`
-29. `CPFormal/Analytic/CpGreenBridge.lean`
+29. `CPFormal/Analytic/CpBracketHolomorphic.lean`
+30. `CPFormal/Analytic/CpGreenBridge.lean`
