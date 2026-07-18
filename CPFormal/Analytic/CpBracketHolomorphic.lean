@@ -23,7 +23,7 @@ a carta bracketada e a unica funcao analitica no semiplano `re(s)>-1` que
 coincide com o fator Genuine no subsemiplano `re(s)>1`.
 -/
 
-open scoped BigOperators
+open scoped BigOperators Topology
 
 namespace CPFormal.Analytic.Cp
 
@@ -31,6 +31,8 @@ open CPFormal.Genuine.Cp
 open Filter Metric Set
 
 noncomputable section
+
+attribute [local instance 10000] Complex.instModuleSelf
 
 /-- Dominio natural aberto da serie bracketada. -/
 def bracketHalfPlane : Set ℂ :=
@@ -73,17 +75,24 @@ theorem differentiable_realCpPairBracket
       0 < (p : ℝ) * ((k + 1 : ℕ) : ℝ) - (radius : ℝ) :=
     lt_of_lt_of_le hkpos hleftLower
   have hcenter : 0 < (p : ℝ) * ((k + 1 : ℕ) : ℝ) := by
-    positivity
+    exact mul_pos (by exact_mod_cast hp.pos) (by positivity)
   have hright :
       0 < (p : ℝ) * ((k + 1 : ℕ) : ℝ) + (radius : ℝ) := by
-    positivity
+    exact add_pos_of_pos_of_nonneg hcenter (by positivity)
   have hleftDiff :=
     differentiable_realDirichletPower_in_parameter (ne_of_gt hleft)
   have hcenterDiff :=
     differentiable_realDirichletPower_in_parameter (ne_of_gt hcenter)
   have hrightDiff :=
     differentiable_realDirichletPower_in_parameter (ne_of_gt hright)
-  simpa only [realCpPairBracket, two_smul] using
+  change Differentiable ℂ (fun s : ℂ ↦
+    realDirichletPower s
+        ((p : ℝ) * ((k + 1 : ℕ) : ℝ) - (radius : ℝ)) -
+      (2 • realDirichletPower s
+        ((p : ℝ) * ((k + 1 : ℕ) : ℝ))) +
+      realDirichletPower s
+        ((p : ℝ) * ((k + 1 : ℕ) : ℝ) + (radius : ℝ)))
+  simpa only [two_smul] using
     (hleftDiff.sub (hcenterDiff.add hcenterDiff)).add hrightDiff
 
 /-- Cada bloco Cp saturado e uma soma finita de funcoes inteiras. -/
@@ -154,9 +163,8 @@ theorem cpBracketMajorantConstant_le_local
   classical
   unfold cpBracketMajorantConstant localCpBracketMajorantConstant
   apply Finset.sum_le_sum
-  intro radius hradius
+  intro radius _hradius
   have hquad := norm_mul_add_one_le_localQuadraticNormBound hR hw
-  dsimp only
   nlinarith [sq_nonneg (radius : ℝ)]
 
 /-- A bola canonica permanece acima do piso real escolhido. -/
@@ -172,7 +180,7 @@ theorem bracketNeighborhoodFloor_lt_re
     calc
       -‖w - z‖ ≤ -|w.re - z.re| := neg_le_neg hreNorm
       _ ≤ w.re - z.re := neg_abs_le _
-  unfold bracketNeighborhoodFloor bracketNeighborhoodRadius
+  change (z.re - 1) / 2 < w.re
   linarith
 
 theorem neg_one_lt_bracketNeighborhoodFloor
@@ -225,7 +233,7 @@ theorem norm_realCpSaturatedBracket_le_local
   have hfloor := bracketNeighborhoodFloor_lt_re hz hw
   have hwDomain : -1 < w.re :=
     lt_trans (neg_one_lt_bracketNeighborhoodFloor hz) hfloor
-  have hconstant := cpBracketMajorantConstant_le_local
+  have hconstant := cpBracketMajorantConstant_le_local (p := p)
     (le_of_lt (bracketNeighborhoodRadius_pos hz)) hw
   have hbase : 1 ≤ ((k + 1 : ℕ) : ℝ) := by
     exact_mod_cast Nat.succ_le_succ (Nat.zero_le k)
@@ -265,18 +273,21 @@ theorem differentiableOn_tsum_realCpSaturatedBracket
   have hR : 0 < R := bracketNeighborhoodRadius_pos hz
   have hu : Summable u := by
     simpa [u, R] using summable_localCpBracketMajorant p hz
+  have hUOpen : IsOpen U := by
+    simpa [U] using (Metric.isOpen_ball : IsOpen (Metric.ball z R))
   have htailOn : DifferentiableOn ℂ
       (fun w : ℂ ↦ ∑' k : ℕ, realCpSaturatedBracket p k w) U := by
     apply Complex.differentiableOn_tsum_of_summable_norm hu
     · intro k
       exact (differentiable_realCpSaturatedBracket p k hp).differentiableOn
-    · exact Metric.isOpen_ball
+    · exact hUOpen
     · intro k w hw
       simpa [u, U, R] using
         norm_realCpSaturatedBracket_le_local p hp hz hw k
   have hzU : z ∈ U := by
-    simpa [U, R] using Metric.mem_ball_self hR
-  exact (htailOn.differentiableAt (Metric.isOpen_ball.mem_nhds hzU)).differentiableWithinAt
+    change dist z z < R
+    simpa using hR
+  exact (htailOn.differentiableAt (hUOpen.mem_nhds hzU)).differentiableWithinAt
 
 /-- A carta bracketada completa e holomorfa em `re(s)>-1`. -/
 theorem differentiableOn_bracketedDirichletChart
