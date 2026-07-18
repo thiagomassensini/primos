@@ -1,4 +1,4 @@
-# Ledger de afirmacoes — checkpoint 0.3.0 Genuine-first
+# Ledger de afirmacoes — checkpoint 0.4.0 Genuine-first
 
 Estados usados:
 
@@ -29,8 +29,10 @@ Estados usados:
 | GEN-BIJ-C2 | pernas impares `n>=3` estao em bijecao com incidencias `(centro multiplo de 4, perna)` | KERNEL_CHECKED | aritmetica modular | usar na reindexacao ponderada |
 | GEN-DEP-C2 | `max(v_2(n-1),v_2(n+1)) = v_2(adjacentCenter(n))` para `n` impar, `n>=3` | KERNEL_CHECKED | GEN-BIJ-C2, valoracao 2-adica | transportar o peso na soma finita |
 | GEN-REINDEX-C2 | soma ponderada das pernas = soma das incidencias esperadas + extras - faltantes | KERNEL_CHECKED | GEN-BIJ-C2, GEN-DEP-C2, somas finitas | reutilizar nas caixas Cp |
-| GEN-BOX-C2 | os centros `4,8,...,4M` com suas duas pernas possuem cobertura exata e bordo vazio | KERNEL_CHECKED | GEN-REINDEX-C2 | caracterizar a caixa de pernas como intervalo impar e provar cardinalidade |
-| GEN-BIJ-CP | residuos nao nulos correspondem unicamente aos offsets balanceados | OPEN_BRIDGE | primo impar, aritmetica modular | formalizar bijecao |
+| GEN-BOX-C2 | os centros `4,8,...,4M` com suas duas pernas possuem cobertura exata e bordo vazio | KERNEL_CHECKED | GEN-REINDEX-C2 | reutilizar como modelo das caixas Cp |
+| GEN-INTERVAL-C2 | a caixa alinhada de pernas e exatamente `3,5,...,4M+1` e possui cardinalidade `2M` | KERNEL_CHECKED | GEN-BOX-C2, paridade | transportar a construcao para Cp |
+| GEN-BIJ-CP | residuos nao nulos correspondem unicamente aos offsets balanceados | KERNEL_CHECKED | primo impar, `ZMod.valMinAbs` | construir incidencias globais centro-offset |
+| GEN-CARD-CP | a camera balanceada de modulo primo impar possui exatamente `p-1` pernas | KERNEL_CHECKED | GEN-BIJ-CP, intervalo inteiro | usar na reindexacao Cp |
 | CHP-001 | carta e fator vezes Genuine | PAPER_ARGUMENT | reindexacao e analise | formalizar primeiro finito |
 | CHP-002 | fator da carta nao zera no critical strip | PAPER_ARGUMENT | modulo complexo | formalizar apos CHP-001 |
 | HIL-001 | sintese possui vetor de Riesz ponderado | PAPER_ARGUMENT | somabilidade dos pesos | construir espaco |
@@ -43,6 +45,6 @@ Estados usados:
 | RH-001 | todo zero Genuine esta na linha critica | BLOQUEADO | BRG-001 ou SPC-001+SPC-002 | nao enunciar como provado |
 
 O checkpoint mais recente do nucleo ativo foi compilado pelo GitHub Actions no
-commit `45b7fe8bb761117609054f0b448c8c11db375b78`, run `29636078858`.
+commit `211e2a09fa5312c5fb851de9f4a71f05209b0b24`, run `29637023211`.
 Modulos mantidos apenas em `CPFormal.ResearchReserve` nao fazem parte dessa
 certificacao. Consulte `AUDIT.md`.
