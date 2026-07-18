@@ -32,10 +32,11 @@ open Filter Metric Set
 
 noncomputable section
 
-private abbrev cpComplexModule : Module ℂ ℂ :=
-  (CommCStarAlgebra.toNonUnitalCommCStarAlgebra ℂ).toNonUnitalCStarAlgebra.toModule
-
-attribute [local instance 10000] cpComplexModule
+attribute [local instance 10000]
+  NormedAddCommGroup.toAddCommGroup
+  CommCStarAlgebra.toNonUnitalCommCStarAlgebra
+  NonUnitalCommCStarAlgebra.toNonUnitalCStarAlgebra
+  NonUnitalCStarAlgebra.toModule
 
 /-- Dominio natural aberto da serie bracketada. -/
 def bracketHalfPlane : Set ℂ :=
