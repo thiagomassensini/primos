@@ -13,7 +13,8 @@ camera e comparada com a p-serie
 O modulo prova a somabilidade absoluta dos blocos bracketados, identifica
 cada prefixo com `Genuine.Cp.finiteChart` e usa a unicidade do limite para
 recuperar o fator Genuine no semiplano comum `re(s)>1`. Holomorfia e
-continuacao analitica permanecem deliberadamente fora deste checkpoint.
+continuacao analitica sao tratadas no modulo seguinte,
+`CpBracketHolomorphic`.
 -/
 
 open scoped BigOperators
