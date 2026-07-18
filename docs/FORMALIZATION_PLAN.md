@@ -164,9 +164,24 @@ elevada a uma bijecao global
 {(c,a) // p divide c e a e offset balanceado},
 ```
 
-com `n=c+a` e existencia/unicidade verificadas pelo kernel. O proximo alvo e
-transportar a profundidade de carry `v_p` para o centro canonico e depois
-construir caixas alinhadas Cp.
+com `n=c+a` e existencia/unicidade verificadas pelo kernel.
+
+O transporte da profundidade Cp tambem esta verificado. Para cada perna `n`
+nao multipla de `p`, a carta testa independentemente todos os offsets
+balanceados `a` por meio de `v_p(n-a)`. O kernel provou
+
+```text
+p divide (n-a)  <->  a = offsetCanonico(n)
+
+sup {v_p(n-a) | a offset balanceado}
+  = v_p(centroCanonico(n)).
+```
+
+Logo a definicao da profundidade efetiva nao foi calibrada com o centro: ela
+e um supremo finito sobre a carta inteira, e a bijecao prova qual termo
+sobrevive. Pela convencao finita de `padicValInt`, `v_p(0)=0`; a profundidade
+positiva foi registrada separadamente sob a hipotese `centroCanonico(n) != 0`.
+O proximo alvo e construir a reindexacao ponderada e as caixas alinhadas Cp.
 
 ## Fase 3 — pesos, series e caudas
 
