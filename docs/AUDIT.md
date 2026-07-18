@@ -74,6 +74,20 @@ direct = expected + extra - missing.
 Ele nao certifica uma escolha concreta de caixas infinitas, convergencia,
 identidade com zeta, equivalencia de zeros ou RH.
 
+## Checkpoint de caixa alinhada C2
+
+- commit certificado: `45b7fe8bb761117609054f0b448c8c11db375b78`;
+- workflow run: `29636078858` (`Lean kernel audit`, run number 20);
+- job: `88058546887` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Carry.C2AlignedBox`.
+
+Esse checkpoint define concretamente os centros `4,8,...,4M`, inclui as duas
+pernas de cada centro e prova que a caixa de pernas transportada pela bijecao
+recupera exatamente essas incidencias. Portanto os Finsets de extras e de
+faltantes sao ambos vazios e a reindexacao ponderada nao possui termo de
+bordo.
+
 O alvo compilado e `CPFormal.lean`, isto e, o nucleo Genuine-first. O modulo
 `CPFormal.ResearchReserve` e seus imports espectrais/projetivos nao foram
 promovidos por esse run.
