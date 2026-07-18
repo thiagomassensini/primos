@@ -69,10 +69,10 @@ theorem norm_centeredSecondDifference_le
     have hplusPoint : lower ≤ center + t := by linarith [ht.1]
     have hinnerMinus :
         HasDerivAt (fun u : ℝ ↦ center - u) (-1 : ℝ) t := by
-      simpa using (hasDerivAt_const t center).sub (hasDerivAt_id' t)
+      exact (hasDerivAt_id' t).const_sub center
     have hinnerPlus :
         HasDerivAt (fun u : ℝ ↦ center + u) (1 : ℝ) t := by
-      simpa using (hasDerivAt_const t center).add (hasDerivAt_id' t)
+      exact (hasDerivAt_id' t).const_add center
     have hminus :
         HasDerivAt (fun u : ℝ ↦ f (center - u))
           (-f' (center - t)) t := by
