@@ -181,7 +181,22 @@ Logo a definicao da profundidade efetiva nao foi calibrada com o centro: ela
 e um supremo finito sobre a carta inteira, e a bijecao prova qual termo
 sobrevive. Pela convencao finita de `padicValInt`, `v_p(0)=0`; a profundidade
 positiva foi registrada separadamente sob a hipotese `centroCanonico(n) != 0`.
-O proximo alvo e construir a reindexacao ponderada e as caixas alinhadas Cp.
+
+A reindexacao ponderada Cp tambem esta verificada. Para qualquer caixa finita
+de pernas `L` e qualquer caixa esperada de incidencias `E`, o kernel elaborou
+
+```text
+direct(L)
+  = expected(E)
+    + extra(incidenceImage(L), E)
+    - missing(incidenceImage(L), E).
+```
+
+O peso do canal direto pode ser qualquer funcao da profundidade efetiva; na
+incidencia, ele se torna a mesma funcao de `v_p(centro)`. Se a imagem da
+bijecao coincide com `E`, o bordo desaparece por igualdade finita exata. O
+proximo alvo e construir uma familia concreta de caixas alinhadas Cp que
+satisfaca essa cobertura.
 
 ## Fase 3 — pesos, series e caudas
 
