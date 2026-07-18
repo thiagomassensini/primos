@@ -88,6 +88,29 @@ recupera exatamente essas incidencias. Portanto os Finsets de extras e de
 faltantes sao ambos vazios e a reindexacao ponderada nao possui termo de
 bordo.
 
+## Checkpoint de intervalo impar C2
+
+- commit certificado: `b6cdb634a1bbb25eb56709e964d9738e4d001e26`;
+- workflow run: `29636657680` (`Lean kernel audit`, run number 25);
+- job: `88060082966` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`.
+
+O kernel verificou que a caixa de pernas puxada das incidencias e literalmente
+a enumeracao `2k+3`, para `k<2M`. Em particular, seus elementos sao exatamente
+os impares de `3` a `4M+1` e sua cardinalidade e `2M`.
+
+## Checkpoint de residuos balanceados Cp
+
+- commit certificado: `211e2a09fa5312c5fb851de9f4a71f05209b0b24`;
+- workflow run: `29637023211` (`Lean kernel audit`, run number 27);
+- job: `88061047891` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Carry.CpBalancedResidue`.
+
+Para primo impar `p`, o kernel verificou a equivalencia entre offsets
+balanceados e residuos nao nulos de `ZMod p`. A inversa usa
+`ZMod.valMinAbs`, e a camera possui cardinalidade `p-1`.
+
 O alvo compilado e `CPFormal.lean`, isto e, o nucleo Genuine-first. O modulo
 `CPFormal.ResearchReserve` e seus imports espectrais/projetivos nao foram
 promovidos por esse run.
