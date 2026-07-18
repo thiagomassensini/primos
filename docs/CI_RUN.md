@@ -39,3 +39,26 @@ bordo, `weighted_reindex_with_boundary` e o corolario de cobertura exata.
 Foram elaborados pelo kernel a caixa concreta de incidencias nos centros
 `4,8,...,4M`, sua caixa de pernas, a cobertura exata, o esvaziamento dos dois
 termos de bordo e a igualdade ponderada resultante.
+
+## Checkpoint de intervalo impar C2
+
+- commit: `b6cdb634a1bbb25eb56709e964d9738e4d001e26`;
+- run: `29636657680`;
+- job: `88060082966`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+Foram elaboradas a alternancia esquerda/direita pelos indices pares e impares,
+a igualdade da caixa com `3,5,...,4M+1`, a caracterizacao de pertinencia e a
+cardinalidade exata `2M`.
+
+## Checkpoint de residuos balanceados Cp
+
+- commit: `211e2a09fa5312c5fb851de9f4a71f05209b0b24`;
+- run: `29637023211`;
+- job: `88061047891`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+Foram elaboradas a ida offset--residuo, a volta por `ZMod.valMinAbs`, as duas
+leis de inversa e a cardinalidade `p-1` da camera balanceada.
