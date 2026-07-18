@@ -1,4 +1,4 @@
-# Ledger de afirmacoes — checkpoint 0.6.0 Genuine-first
+# Ledger de afirmacoes — checkpoint 0.7.0 Genuine-first
 
 Estados usados:
 
@@ -34,7 +34,8 @@ Estados usados:
 | GEN-BIJ-CP | residuos nao nulos correspondem unicamente aos offsets balanceados | KERNEL_CHECKED | primo impar, `ZMod.valMinAbs` | usado na bijecao global Cp |
 | GEN-CARD-CP | a camera balanceada de modulo primo impar possui exatamente `p-1` pernas | KERNEL_CHECKED | GEN-BIJ-CP, intervalo inteiro | usar na reindexacao Cp |
 | GEN-GLOBAL-BIJ-CP | inteiros nao multiplos de `p` estao em bijecao com incidencias `(centro multiplo de p, offset balanceado)` e admitem decomposicao unica `n=c+a` | KERNEL_CHECKED | GEN-BIJ-CP, aritmetica modular | transportar a profundidade `v_p` |
-| GEN-DEP-CP | somente o offset canonico satisfaz `p | (n-a)`, os demais possuem profundidade zero e `sup_a v_p(n-a) = v_p(centroCanonico(n))` | KERNEL_CHECKED | GEN-GLOBAL-BIJ-CP, valoracao `p`-adica, supremo finito | construir reindexacao e caixas Cp |
+| GEN-DEP-CP | somente o offset canonico satisfaz `p | (n-a)`, os demais possuem profundidade zero e `sup_a v_p(n-a) = v_p(centroCanonico(n))` | KERNEL_CHECKED | GEN-GLOBAL-BIJ-CP, valoracao `p`-adica, supremo finito | usado na reindexacao ponderada Cp |
+| GEN-REINDEX-CP | soma ponderada das pernas Cp = soma das incidencias esperadas + extras - faltantes; cobertura exata elimina o bordo | KERNEL_CHECKED | GEN-GLOBAL-BIJ-CP, GEN-DEP-CP, somas finitas | construir caixas Cp alinhadas |
 | CHP-001 | carta e fator vezes Genuine | PAPER_ARGUMENT | reindexacao e analise | formalizar primeiro finito |
 | CHP-002 | fator da carta nao zera no critical strip | PAPER_ARGUMENT | modulo complexo | formalizar apos CHP-001 |
 | HIL-001 | sintese possui vetor de Riesz ponderado | PAPER_ARGUMENT | somabilidade dos pesos | construir espaco |
@@ -47,6 +48,6 @@ Estados usados:
 | RH-001 | todo zero Genuine esta na linha critica | BLOQUEADO | BRG-001 ou SPC-001+SPC-002 | nao enunciar como provado |
 
 O checkpoint mais recente do nucleo ativo foi compilado pelo GitHub Actions no
-commit `b24ea3d440198b779d30333df608a4cb0b2c78a0`, run `29640037006`.
+commit `52afc4ffa81f0d62ed732b86de3c4c7f3537284a`, run `29640821068`.
 Modulos mantidos apenas em `CPFormal.ResearchReserve` nao fazem parte dessa
 certificacao. Consulte `AUDIT.md`.
