@@ -10,6 +10,7 @@ importada automaticamente como teorema Lean.
 | `C2_EQUACAO_ANGULAR_PROJETIVA_MULTIBASE.md` | espaco ponderado, sintese de Riesz e projecao |
 | `TEOREMA_CARTA_BRACKETADA_ADAPTADA_A_CARACTERES_DE_DIRICHLET(2).md` | reserva de pesquisa para cartas sincronizadas |
 | `Texto colado(76).txt` | implementacao numerica intervalar finita |
+| `Library/Lean/GlobalDecomposition.lean` | antecedente arquitetural C2 para endereco global e existencia unica; nao importado como prova Cp |
 
 Correspondencia atualmente formalizada a partir do resumo Genuine:
 
@@ -22,6 +23,7 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | peso efetivo e peso do centro escolhido | `Carry.C2.effectiveDepth_eq_centerDepth` |
 | residuos nao nulos correspondem aos offsets balanceados Cp | `Carry.Cp.balancedOffsetEquivNonzeroResidue` |
 | camera Cp possui `p-1` pernas | `Carry.Cp.card_balancedOffsets` |
+| cada perna Cp nao multipla possui centro e offset balanceado unicos | `Carry.Cp.nonmultipleEquivIncidence`, `Carry.Cp.existsUnique_incidence` |
 
 Observacao: `GEOMETRIA_C2_CP_DECOMPOSICAO_POR_CARRY(1).md` chegou vazio na
 copia de trabalho desta versao e, portanto, nao foi usado para afirmacoes.
