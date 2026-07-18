@@ -36,7 +36,8 @@ attribute [local instance 10000]
   NormedAddCommGroup.toAddCommGroup
   CommCStarAlgebra.toNonUnitalCommCStarAlgebra
   NonUnitalCommCStarAlgebra.toNonUnitalCStarAlgebra
-  NonUnitalCStarAlgebra.toModule
+  NonUnitalCStarAlgebra.toNormedSpace
+  NormedSpace.toModule
 
 /-- Dominio natural aberto da serie bracketada. -/
 def bracketHalfPlane : Set ℂ :=
