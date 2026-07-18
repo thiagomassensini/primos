@@ -323,3 +323,28 @@ Este checkpoint prova convergencia absoluta pontual, nao convergencia
 localmente uniforme. Assim, ainda nao certifica holomorfia do `tsum`,
 continuacao analitica pelo teorema de identidade, equivalencia de zeros,
 certificado Green concreto ou RH.
+
+## Checkpoint da holomorfia e unicidade da continuacao Cp
+
+- commit certificado: `da0585ced6f3922da6b32d57b54f169910357ca7`;
+- workflow run: `29665212572` (`Lean kernel audit`);
+- job: `88134403089` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpBracketHolomorphic`.
+
+Para cada `z` em `Re(s)>-1`, o kernel verificou que a bola de raio
+`(Re(z)+1)/2` admite um majorante somavel comum para todos os blocos
+bracketados. A constante controla `||s(s+1)||` em toda a bola, e o expoente
+usa o piso real `(Re(z)-1)/2>-1`. O criterio de Weierstrass da Mathlib produz
+a holomorfia da cauda e da carta completa nesse semiplano.
+
+O kernel tambem verificou que o semiplano e convexo e preconexo e aplicou o
+principio da identidade: qualquer funcao analitica em `Re(s)>-1` que coincide
+com `(1-p^(1-s))*genuineDirichlet(s)` em `Re(s)>1` coincide com a carta
+bracketada em todo o dominio.
+
+Este checkpoint nao identifica `genuineDirichlet` com `riemannZeta`, nao
+prova a nao anulacao do fator, equivalencia de zeros, certificado Green
+concreto, operador Hilbert--Polya ou RH. Tambem nao exporta um teorema separado
+quantificado sobre compactos; o majorante local em bolas e o endpoint usado
+para certificar a holomorfia.
