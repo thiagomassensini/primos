@@ -16,6 +16,8 @@ import CPFormal.Genuine.BalancedOffsets
 import CPFormal.Genuine.FiniteCancellation
 import CPFormal.Genuine.C2
 import CPFormal.Genuine.Cp
+import CPFormal.Genuine.CpFiniteChart
 import CPFormal.Analytic.CpBranchNorm
 import CPFormal.Analytic.CpTilt
 import CPFormal.Analytic.CpTiltRigidity
+import CPFormal.Analytic.CpGreenBridge
