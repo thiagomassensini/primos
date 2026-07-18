@@ -21,3 +21,4 @@ import CPFormal.Analytic.CpBranchNorm
 import CPFormal.Analytic.CpTilt
 import CPFormal.Analytic.CpTiltRigidity
 import CPFormal.Analytic.CpGreenBridge
+import CPFormal.Analytic.CpFiniteDirichletChart
