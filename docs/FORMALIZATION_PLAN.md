@@ -153,12 +153,20 @@ A caixa de pernas tambem foi caracterizada diretamente como a enumeracao
 `4M+1` e possui cardinalidade `2M`; ambos os fatos estao verificados pelo
 kernel.
 
-O primeiro passo Cp tambem esta verificado: para primo impar `p`,
+Os dois primeiros passos Cp estao verificados. Para primo impar `p`,
 `ZMod.valMinAbs` fornece uma bijecao entre residuos nao nulos e offsets
-balanceados, e a camera possui exatamente `p-1` pernas. O proximo alvo e a
-bijeção global entre inteiros nao multiplos de `p` e incidencias
-`(centro multiplo de p, offset balanceado)`, seguida do transporte da
-profundidade de carry.
+balanceados, e a camera possui exatamente `p-1` pernas. Essa bijecao foi
+elevada a uma bijecao global
+
+```text
+{n : Int // p nao divide n}
+  equiv
+{(c,a) // p divide c e a e offset balanceado},
+```
+
+com `n=c+a` e existencia/unicidade verificadas pelo kernel. O proximo alvo e
+transportar a profundidade de carry `v_p` para o centro canonico e depois
+construir caixas alinhadas Cp.
 
 ## Fase 3 — pesos, series e caudas
 
