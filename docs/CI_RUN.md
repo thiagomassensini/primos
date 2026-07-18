@@ -88,3 +88,16 @@ Foram elaborados pelo kernel a unicidade do offset que produz divisibilidade
 por `p`, a profundidade zero de cada offset nao canonico, a igualdade entre o
 supremo das profundidades da carta e a profundidade do centro canonico, e a
 positividade dessa profundidade quando o centro nao e zero.
+
+## Checkpoint da reindexacao ponderada Cp
+
+- commit: `52afc4ffa81f0d62ed732b86de3c4c7f3537284a`;
+- run: `29640821068`;
+- job: `88070933888`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+Foram elaborados pelo kernel a preservacao termo a termo do valor e do peso de
+profundidade pela equivalencia Cp, a reindexacao de qualquer `Finset` de
+pernas, a identidade de bordo `extras - faltantes` e o corolario de cobertura
+exata.
