@@ -49,8 +49,7 @@ def incidenceTerm {R : Type*} [Mul R]
     (n : OddLeg) :
     incidenceTerm depthWeight value (oddLegEquivIncidence n) =
       oddLegTerm depthWeight value n := by
-  simpa [oddLegEquivIncidence] using
-    incidenceTerm_incidenceOfOddLeg depthWeight value n
+  simp [oddLegEquivIncidence]
 
 /-- Reindexacao exata de qualquer caixa finita de pernas. -/
 theorem weighted_reindex
@@ -118,6 +117,7 @@ theorem weighted_reindex_with_boundary
             incidenceTerm depthWeight value x) -
           ∑ x ∈ missingIncidences legs expected,
             incidenceTerm depthWeight value x) := by
+  classical
   rw [weighted_reindex]
   exact finset_sum_eq_expected_add_boundary
     (incidenceImage legs) expected (incidenceTerm depthWeight value)
