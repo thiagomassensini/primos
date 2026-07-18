@@ -59,6 +59,10 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 `KERNEL_CHECKED`; ele nao promove automaticamente pontes matematicas ainda
 marcadas como abertas no ledger.
 
+O nucleo ativo passou por essa verificacao no commit
+`2a29c850389c888c6f1b5bde2dcb899fd261b559`. A certificacao cobre os imports
+de `CPFormal.lean`; `CPFormal.ResearchReserve` permanece fora dela.
+
 ## Ordem de leitura
 
 1. `docs/WORKING_AGREEMENT.md`
