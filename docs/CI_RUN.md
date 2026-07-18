@@ -62,3 +62,16 @@ cardinalidade exata `2M`.
 
 Foram elaboradas a ida offset--residuo, a volta por `ZMod.valMinAbs`, as duas
 leis de inversa e a cardinalidade `p-1` da camera balanceada.
+
+## Checkpoint da bijecao global Cp
+
+- commit: `e8b9cf7cedf15e7917d7837bb50bb6412d048ccb`;
+- run: `29638936254`;
+- job: `88066026811`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+O kernel elaborou a classe de inteiros nao multiplos de `p`, as incidencias
+centro--offset, a escolha canonica do offset por residuo balanceado, a prova de
+que o centro e divisivel por `p`, as duas leis de inversa e o teorema `∃!` da
+decomposicao `n = centro + offset`.
