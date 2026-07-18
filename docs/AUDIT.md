@@ -140,6 +140,20 @@ do centro canonico. O caso `centro = 0` segue a convencao explicita da Mathlib
 `padicValInt p 0 = 0`; para centro nao nulo, foi provada profundidade ao menos
 um.
 
+## Checkpoint da reindexacao ponderada Cp
+
+- commit certificado: `52afc4ffa81f0d62ed732b86de3c4c7f3537284a`;
+- workflow run: `29640821068` (`Lean kernel audit`, run number 45);
+- job: `88070933888` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Carry.CpWeightedReindex`.
+
+O kernel verificou que a bijecao global Cp preserva simultaneamente o valor da
+perna e qualquer peso que dependa da profundidade efetiva. Para caixas finitas
+arbitrarias, a soma direta e a soma esperada diferem exatamente pelas
+incidencias extras menos as faltantes. Quando a imagem da caixa de pernas e a
+caixa esperada coincidem, a reindexacao nao possui bordo.
+
 O alvo compilado e `CPFormal.lean`, isto e, o nucleo Genuine-first. O modulo
 `CPFormal.ResearchReserve` e seus imports espectrais/projetivos nao foram
 promovidos por esse run.
