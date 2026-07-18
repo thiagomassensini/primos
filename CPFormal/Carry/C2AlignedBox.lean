@@ -118,12 +118,18 @@ theorem alignedOddLegBox_eq_arithmeticOddLegBox (M : ℕ) :
       have hklt : k < M := Finset.mem_range.mp hk
       subst x
       subst n
+      change
+        oddLegEquivIncidence.symm (leftIncidence k) ∈
+          arithmeticOddLegBox M
       rw [← arithmeticOddLeg_even]
       exact Finset.mem_map.mpr
         ⟨2 * k, Finset.mem_range.mpr (by omega), rfl⟩
     · rcases Finset.mem_map.mp hx with ⟨k, hk, hkx⟩
       subst x
       subst n
+      change
+        oddLegEquivIncidence.symm (rightIncidence k) ∈
+          arithmeticOddLegBox M
       rw [← arithmeticOddLeg_odd]
       have hklt : k < M := Finset.mem_range.mp hk
       exact Finset.mem_map.mpr
@@ -139,7 +145,9 @@ theorem alignedOddLegBox_eq_arithmeticOddLegBox (M : ℕ) :
     rcases hcases with hzero | hone
     · have hkform : k = 2 * (k / 2) := by omega
       have hhalf : k / 2 < M := by omega
-      rw [hkform, arithmeticOddLeg_even, alignedOddLegBox]
+      rw [hkform]
+      change arithmeticOddLeg (2 * (k / 2)) ∈ alignedOddLegBox M
+      rw [arithmeticOddLeg_even, alignedOddLegBox]
       apply Finset.mem_map.mpr
       refine ⟨leftIncidence (k / 2), ?_, rfl⟩
       rw [alignedIncidenceBox]
@@ -148,7 +156,9 @@ theorem alignedOddLegBox_eq_arithmeticOddLegBox (M : ℕ) :
         ⟨k / 2, Finset.mem_range.mpr hhalf, rfl⟩
     · have hkform : k = 2 * (k / 2) + 1 := by omega
       have hhalf : k / 2 < M := by omega
-      rw [hkform, arithmeticOddLeg_odd, alignedOddLegBox]
+      rw [hkform]
+      change arithmeticOddLeg (2 * (k / 2) + 1) ∈ alignedOddLegBox M
+      rw [arithmeticOddLeg_odd, alignedOddLegBox]
       apply Finset.mem_map.mpr
       refine ⟨rightIncidence (k / 2), ?_, rfl⟩
       rw [alignedIncidenceBox]
@@ -169,6 +179,7 @@ theorem mem_alignedOddLegBox_iff {M : ℕ} {n : OddLeg} :
     omega
   · intro hn
     rcases n.2.2 with ⟨q, hq⟩
+    have hn3 : 3 ≤ n.1 := n.2.1
     have hqpos : 1 ≤ q := by omega
     have hklt : q - 1 < 2 * M := by omega
     have heq : arithmeticOddLeg (q - 1) = n := by
