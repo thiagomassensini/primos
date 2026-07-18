@@ -1,4 +1,4 @@
-# Auditoria do bootstrap 0.2.0 Genuine-first
+# Auditoria Genuine-first
 
 ## Verificacoes realizadas
 
@@ -55,6 +55,24 @@ quando o sandbox impede a inicializacao do Lean.
 - resultado: `success` em `lake build --wfail`;
 - Lean: `v4.32.0`;
 - mathlib: revisao fixada pelo `lake-manifest.json`.
+
+## Checkpoint ponderado C2
+
+- commit certificado: `0cc016b69419b811cbf12867f46605280ecdf7db`;
+- workflow run: `29635654651` (`Lean kernel audit`, run number 17);
+- job: `88057413962` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Carry.C2WeightedReindex`.
+
+Esse checkpoint certifica a bijecao finita, o transporte do peso de
+profundidade e a identidade
+
+```text
+direct = expected + extra - missing.
+```
+
+Ele nao certifica uma escolha concreta de caixas infinitas, convergencia,
+identidade com zeta, equivalencia de zeros ou RH.
 
 O alvo compilado e `CPFormal.lean`, isto e, o nucleo Genuine-first. O modulo
 `CPFormal.ResearchReserve` e seus imports espectrais/projetivos nao foram
