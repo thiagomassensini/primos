@@ -114,3 +114,16 @@ Foram elaborados pelo kernel a familia concreta de incidencias nos centros
 `p,2p,...,Mp`, a ausencia de colisoes, as cardinalidades `M(p-1)`, a caixa
 direta obtida pela bijecao Cp, a cobertura exata, o esvaziamento dos dois
 termos de bordo e a igualdade ponderada resultante.
+
+## Checkpoint dos pesos, norma de ramo e tilt Cp
+
+- commit: `aec9140c36ed5274a8eb7e8a919ef86c0971c5e9`;
+- run: `29644692098`;
+- job verde: `88080985687`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+Foram elaborados pelo kernel os pesos `p^(-k)` e `p^(-k/2)`, a identidade
+quadratica local, sua reindexacao pela geometria de carry, a serie infinita da
+norma do ramo Cp, sua forma fechada, o criterio unitario na meia abscissa, o
+tilt multirramo e a seta de saturacao da norma para anulacao do tilt.
