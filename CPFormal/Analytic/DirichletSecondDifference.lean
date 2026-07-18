@@ -23,7 +23,7 @@ namespace CPFormal.Analytic.Cp
 
 noncomputable section
 
-local instance : NormedSpace ℝ ℂ := NormedSpace.complexToReal
+attribute [local instance 10000] NormedSpace.complexToReal
 
 /-- O monomio de Dirichlet visto como funcao de uma variavel real positiva. -/
 def realDirichletPower (s : ℂ) (x : ℝ) : ℂ :=
@@ -60,7 +60,8 @@ theorem hasDerivAt_realDirichletPowerDeriv
   have hexponentSub : (-s - 1) - 1 = -s - 2 := by ring
   have hcoefficient : (-s) * (-s - 1) = s * (s + 1) := by ring
   simpa only [realDirichletPowerDeriv, realDirichletPowerDeriv2,
-    hexponentSub, ← mul_assoc, hcoefficient] using hpow.const_mul (-s)
+    smul_eq_mul, hexponentSub, ← mul_assoc, hcoefficient] using
+      hpow.fun_const_smul (-s)
 
 /-- Norma exata da segunda derivada sobre o eixo real positivo. -/
 theorem norm_realDirichletPowerDeriv2
