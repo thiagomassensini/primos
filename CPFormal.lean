@@ -25,3 +25,4 @@ import CPFormal.Analytic.CpFiniteDirichletChart
 import CPFormal.Analytic.CpDirichletLimit
 import CPFormal.Analytic.CenteredSecondDifferenceBound
 import CPFormal.Analytic.DirichletSecondDifference
+import CPFormal.Analytic.CpBracketConvergence
