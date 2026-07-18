@@ -16,3 +16,14 @@ compilados; nao fecha pontes matematicas ainda marcadas como abertas.
 
 O nucleo Genuine-first foi promovido no ledger. A reserva espectral permanece
 fora do escopo certificado.
+
+## Checkpoint de reindexacao ponderada C2
+
+- commit: `0cc016b69419b811cbf12867f46605280ecdf7db`;
+- run: `29635654651`;
+- job: `88057413962`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+Foram elaborados pelo kernel `weighted_reindex`, a identidade generica de
+bordo, `weighted_reindex_with_boundary` e o corolario de cobertura exata.
