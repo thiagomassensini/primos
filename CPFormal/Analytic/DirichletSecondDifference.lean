@@ -42,7 +42,9 @@ theorem hasDerivAt_realDirichletPower
     {s : ℂ} (hs : s ≠ 0) {x : ℝ} (hx : 0 < x) :
     HasDerivAt (realDirichletPower s)
       (realDirichletPowerDeriv s x) x := by
-  simpa [realDirichletPower, realDirichletPowerDeriv] using
+  change HasDerivAt (fun y : ℝ ↦ (y : ℂ) ^ (-s))
+    ((-s) * (x : ℂ) ^ (-s - 1)) x
+  simpa only [neg_mul] using
     (hasDerivAt_ofReal_cpow_const (ne_of_gt hx) (neg_ne_zero.mpr hs))
 
 /-- A segunda derivada existe em todo ponto positivo quando `re(s)>-1`. -/
@@ -57,11 +59,20 @@ theorem hasDerivAt_realDirichletPowerDeriv
     linarith
   have hpow :=
     hasDerivAt_ofReal_cpow_const (ne_of_gt hx) hexponent
+  have hscaled :
+      HasDerivAt
+        (fun y : ℝ ↦ (-s) • (y : ℂ) ^ (-s - 1))
+        ((-s) • ((-s - 1) * (x : ℂ) ^ ((-s - 1) - 1))) x := by
+    apply HasDerivAt.fun_const_smul
+    exact hpow
   have hexponentSub : (-s - 1) - 1 = -s - 2 := by ring
   have hcoefficient : (-s) * (-s - 1) = s * (s + 1) := by ring
+  change HasDerivAt
+    (fun y : ℝ ↦ (-s) * (y : ℂ) ^ (-s - 1))
+    (s * (s + 1) * (x : ℂ) ^ (-s - 2)) x
   simpa only [realDirichletPowerDeriv, realDirichletPowerDeriv2,
     smul_eq_mul, hexponentSub, ← mul_assoc, hcoefficient] using
-      hpow.fun_const_smul (-s)
+      hscaled
 
 /-- Norma exata da segunda derivada sobre o eixo real positivo. -/
 theorem norm_realDirichletPowerDeriv2
