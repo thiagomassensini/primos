@@ -90,6 +90,8 @@ def balancedOfResidue
         (p : ℤ) = 2 * (halfRange p : ℤ) + 1 := by
       exact_mod_cast hpformNat.symm
     have hwindow := ZMod.valMinAbs_mem_Ioc x.1
+    have hlower : (-(p : ℤ)) < x.1.valMinAbs * 2 := hwindow.1
+    have hupper : x.1.valMinAbs * 2 ≤ (p : ℤ) := hwindow.2
     constructor <;> omega
 
 /--
