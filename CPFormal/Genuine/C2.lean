@@ -29,17 +29,17 @@ def bracket (f : ℤ → R) (center : ℤ) : R :=
 /-- Canal direto C2 em uma caixa finita de centros. -/
 def finiteDirect
     (centers : Finset ℤ) (weight : ℤ → R) (f : ℤ → R) : R :=
-  ∑ c in centers, weight c * legSum f c
+  ∑ c ∈ centers, weight c * legSum f c
 
 /-- Canal de brackets C2 na mesma caixa e com os mesmos pesos. -/
 def finiteBrackets
     (centers : Finset ℤ) (weight : ℤ → R) (f : ℤ → R) : R :=
-  ∑ c in centers, weight c * bracket f c
+  ∑ c ∈ centers, weight c * bracket f c
 
 /-- Canal dos centros C2 que sobrevivem. -/
 def finiteCenters
     (centers : Finset ℤ) (weight : ℤ → R) (f : ℤ → R) : R :=
-  ∑ c in centers, weight c * (2 : R) * f c
+  ∑ c ∈ centers, weight c * (2 : R) * f c
 
 /-- Versao C2 da lei Genuine finita. -/
 theorem finite_genuine_cancellation
