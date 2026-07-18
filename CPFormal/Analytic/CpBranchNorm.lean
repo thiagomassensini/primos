@@ -79,7 +79,8 @@ theorem branchNormSq_eq_closed
 @[simp] theorem branchRatio_half (p : ℕ) :
     branchRatio p ((1 : ℝ) / 2) = (p : ℝ)⁻¹ := by
   unfold branchRatio
-  convert Real.rpow_neg_one (p : ℝ) using 1 <;> ring
+  have hexponent : -2 * ((1 : ℝ) / 2) = (-1 : ℝ) := by ring
+  rw [hexponent, Real.rpow_neg_one]
 
 /--
 Lema algebrico: com `p-1` pernas, a massa geometrica normalizada vale um
@@ -99,9 +100,8 @@ theorem normalizedGeometricMass_eq_one_iff
       simpa [div_eq_mul_inv, mul_assoc] using h
     have hmul : ((p : ℝ) - 1) * q = 1 - q := by
       simpa using (div_eq_iff hden).mp hdiv
-    apply (eq_div_iff hp0).2
-    change q * (p : ℝ) = 1
-    nlinarith
+    have hqp : q * (p : ℝ) = 1 := by nlinarith
+    simpa only [one_div] using (eq_div_iff hp0).2 hqp
   · intro hqeq
     rw [hqeq]
     field_simp [hp0, hp1]
@@ -151,7 +151,8 @@ theorem branchDefect_eq_zero_iff_criticalDisplacement_eq_zero
     branchDefect p sigma = 0 ↔ criticalDisplacement sigma = 0 := by
   rw [branchDefect, sub_eq_zero]
   rw [branchNormSq_eq_one_iff p hp hsigma]
-  simp [criticalDisplacement]
+  unfold criticalDisplacement
+  constructor <;> intro h <;> linarith
 
 /--
 Interface da ponte ainda aberta entre zeros Genuine e saturacao do ramo.
