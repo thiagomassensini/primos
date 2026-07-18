@@ -10,6 +10,8 @@ cardinalidade e cobertura residual, que serao adicionados separadamente.
 
 namespace CPFormal.Genuine.Cp
 
+noncomputable section
+
 /-- Semialcance da camera prima. -/
 def halfRange (p : ℕ) : ℕ :=
   (p - 1) / 2
