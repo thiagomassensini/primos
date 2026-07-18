@@ -257,6 +257,41 @@ A caracterizacao direta da pre-imagem alinhada por desigualdades e residuos
 continua sendo um alvo finito independente, mas nao bloqueia os pesos ja
 formalizados.
 
+A primeira abertura finita da carta Cp tambem foi verificada. Definindo o
+bloco completo com o offset zero recolocado, o kernel provou
+
+```text
+centerBlock(p,f,c) = legSum(p,f,c) + f(c),
+bracket(p,f,c) = centerBlock(p,f,c) - p*f(c).
+```
+
+Para os centros `p,2p,...,Mp`, segue sem limites
+
+```text
+finiteChart(p,M,f)
+  = blockPrefix(p,M,f)
+    - p * sum_{k<M} f(p(k+1)).
+```
+
+O proximo lema finito deve identificar `blockPrefix` com a soma literal no
+intervalo positivo `1 <= n <= pM+halfRange(p)`. Somente depois entra a
+especializacao `f(n)=n^(-s)`.
+
+O gargalo Green foi decomposto numa interface mais informativa que a ponte
+final. `SignedGreenCertificate` exige separadamente
+
+```text
+flux = 2*(sigma-1/2)*radialEnergy + boundary,
+radialEnergy > 0,
+genuine(s)=0 -> flux(s)=0,
+genuine(s)=0 -> boundary(s)=0.
+```
+
+O kernel verificou que esses quatro fatos implicam `sigma=1/2`, anulam todo
+tilt Cp e constroem uma `GenuineBranchBridge` para cada primo. Nenhum
+certificado concreto foi construido: o traco de fluxo e o fechamento da cauda
+continuam sendo a obrigacao analitica aberta.
+
 ## Fase 3 — pesos, series e caudas
 
 Objetos:
@@ -291,6 +326,15 @@ Teoremas-alvo:
 
 O arquivo `Analytic/Chart.lean` contem apenas a logica abstrata
 `chart = factor * genuine`; a instancia CP concreta ainda deve ser construida.
+
+Ordem local atual para essa instancia:
+
+1. provar que os blocos completos ladrilham exatamente o prefixo inteiro;
+2. especializar a identidade finita em potencias complexas;
+3. separar a correcao vertical como `p^(1-s)` vezes o prefixo menor;
+4. provar convergencia/cauda na regiao declarada;
+5. construir o traco Green usando o mesmo ledger de bordo, sem trocar o
+   escalar Genuine por uma amplitude modelada.
 
 ## Fase 5 — Hilbert ponderado e projecao
 

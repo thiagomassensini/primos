@@ -139,3 +139,17 @@ tilt multirramo e a seta de saturacao da norma para anulacao do tilt.
 Foram elaborados pelo kernel o pareamento exato das pernas `±a`, a escrita do
 tilt como soma de segundas diferencas centradas, os dois regimes de sinal e a
 construcao canonica de `TiltRigidityAt` para centros fora da camera.
+
+## Checkpoint da carta finita e do criterio Green
+
+- commit: `e9b8c3d9cd3e13b7085db35b9947743204fcf5b1`;
+- run: `29648404437`;
+- job: `88090470740`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+O kernel elaborou a abertura do bracket como bloco completo menos `p` copias
+do centro, a identidade da carta finita em todos os primeiros `M` centros e o
+teorema que converte um `SignedGreenCertificate` concreto em deslocamento
+critico nulo, tilt nulo e `GenuineBranchBridge`. O run nao construiu o
+certificado concreto nem provou a RH.

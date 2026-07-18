@@ -14,6 +14,7 @@ importada automaticamente como teorema Lean.
 | `Library/Lean/OperatorNorm.lean` | antecedente C2 da massa dominante e do criterio de saturacao; auditado, mas a formula Cp foi derivada novamente |
 | `Library/Lean/Tilt.lean` | antecedentes de anulacao e sinal do tilt de duas pernas; somente a parte estrutural foi reaproveitada nesta etapa |
 | `Library/GENUINE_FIRST/cp_branch_tilt_operator.py` | especificacao Cp do ramo puro, energia por perna, profundidade inicial e tilt multirramo |
+| `C2_GREEN_HARDY_BOUNDARY_RELATION.md` | registra que continuidade Green nao fornece por si so o traco de fluxo; usado para manter o certificado concreto aberto |
 
 Correspondencia atualmente formalizada a partir do resumo Genuine:
 
@@ -53,6 +54,11 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | rigidez canonica do tilt fora da camera | `Analytic.Cp.tiltRigidityAt_of_halfRange_lt_center` |
 | zeros do tilt exatamente na meia abscissa | `Analytic.Cp.cpTiltAtSigma_eq_zero_iff_half` |
 | equivalencia entre defeito da norma e tilt no centro admissivel | `Analytic.Cp.branchDefect_eq_zero_iff_cpTiltAtSigma_eq_zero_of_admissible_center` |
+| bloco completo = pernas + centro | `Genuine.Cp.centerBlock_eq_legSum_add_center` |
+| bracket Cp = bloco completo menos `p` centros | `Genuine.Cp.bracket_eq_centerBlock_sub_p_mul_center` |
+| carta finita = prefixo por blocos menos correcao vertical | `Genuine.Cp.finiteChart_eq_blockPrefix_sub_p_mul_centerSum` |
+| identidade Green assinada, energia positiva e bordo fechado implicam `delta=0` | `Analytic.Cp.SignedGreenCertificate.criticalDisplacement_eq_zero_of_genuine_zero` |
+| certificado Green concreto produz a ponte Genuine--ramo | `Analytic.Cp.SignedGreenCertificate.toGenuineBranchBridge` |
 | ponte ainda aberta de zeros Genuine para a norma | `Analytic.Cp.GenuineBranchBridge` (sem instancia) |
 
 Observacao: `GEOMETRIA_C2_CP_DECOMPOSICAO_POR_CARRY(1).md` chegou vazio na

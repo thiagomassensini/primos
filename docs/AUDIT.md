@@ -212,3 +212,22 @@ cpTiltAtSigma p sigma center = 0  <->  sigma = 1/2
 para primo impar, `sigma>0` e `center>halfRange(p)`. No mesmo dominio, o zero
 do tilt foi identificado com o zero do defeito da norma de ramo. Esse
 checkpoint nao fornece uma instancia de `GenuineBranchBridge`.
+
+## Checkpoint da carta finita Cp e do criterio Green
+
+- commit certificado: `e9b8c3d9cd3e13b7085db35b9947743204fcf5b1`;
+- workflow run: `29648404437` (`Lean kernel audit`, run number 75);
+- job: `88090470740` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novos alvos compilados: `CPFormal.Genuine.CpFiniteChart` e
+  `CPFormal.Analytic.CpGreenBridge`.
+
+O kernel verificou, para qualquer anel comutativo, a decomposicao de cada
+bracket Cp como bloco completo menos `p` copias do centro e sua soma nos
+primeiros `M` centros. Tambem verificou que uma identidade Green assinada com
+energia positiva, fluxo Genuine nulo e bordo nulo produz a ponte para a norma
+do ramo.
+
+`SignedGreenCertificate` nao possui uma instancia concreta neste checkpoint.
+Em particular, fluxo, cauda, convergencia, identidade infinita da carta e RH
+permanecem fora da conclusao certificada.

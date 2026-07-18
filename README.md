@@ -47,8 +47,14 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
   `sigma=1/2`, nulo em `sigma=1/2` e positivo acima;
 - rigidez canonica `tilt = 0 <-> sigma = 1/2` no semiplano `sigma>0`, e
   equivalencia entre tilt nulo e defeito nulo da norma;
-- interface explicita, ainda sem instancia, para a ponte
-  `zero Genuine -> saturacao do ramo`;
+- abertura finita da carta Cp: cada bracket e um bloco completo de `p`
+  posicoes menos `p` copias do centro;
+- identidade exata `finiteChart = blockPrefix - verticalCorrection`, antes de
+  qualquer limite ou potencia complexa;
+- criterio Green assinado que transforma um certificado concreto de
+  fluxo--energia--bordo numa ponte `zero Genuine -> saturacao do ramo`;
+- interface Green explicita ainda sem certificado concreto: o fluxo e o traco
+  de cauda permanecem obrigacoes abertas, nao instancias presumidas;
 - ledger de afirmacoes, mapa de dependencias e caixa de ideias.
 
 Os modulos projetivo e Hilbert--Polya permanecem preservados em
@@ -89,8 +95,8 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 marcadas como abertas no ledger.
 
 O checkpoint mais recente do nucleo ativo passou por essa verificacao no
-commit `4ed11cfed623a94982a7ba3316f5a290c16fb4c9`, workflow run
-`29647362054`. A certificacao cobre os imports de `CPFormal.lean`;
+commit `e9b8c3d9cd3e13b7085db35b9947743204fcf5b1`, workflow run
+`29648404437`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
 ## Ordem de leitura
@@ -98,7 +104,7 @@ commit `4ed11cfed623a94982a7ba3316f5a290c16fb4c9`, workflow run
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
 3. `docs/CLAIM_LEDGER.md`
-4. `docs/RELEASE_0.10.0.md`
+4. `docs/RELEASE_0.11.0.md`
 5. `docs/VISION_INBOX.md`
 6. `CPFormal/Genuine/FiniteCancellation.lean`
 7. `CPFormal/Genuine/C2.lean`
@@ -116,3 +122,5 @@ commit `4ed11cfed623a94982a7ba3316f5a290c16fb4c9`, workflow run
 19. `CPFormal/Analytic/CpBranchNorm.lean`
 20. `CPFormal/Analytic/CpTilt.lean`
 21. `CPFormal/Analytic/CpTiltRigidity.lean`
+22. `CPFormal/Genuine/CpFiniteChart.lean`
+23. `CPFormal/Analytic/CpGreenBridge.lean`
