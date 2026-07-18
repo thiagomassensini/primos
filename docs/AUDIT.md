@@ -294,3 +294,32 @@ O objeto `genuineDirichlet` e a soma da serie positiva definida dentro do
 projeto. O checkpoint nao prova que ele coincide, por um teorema separado,
 com a zeta de Riemann da Mathlib; tambem nao trata `Re(s)<=1`, continuacao
 analitica, equivalencia de zeros, certificado Green concreto ou RH.
+
+## Checkpoint da carta Cp bracketada em `Re(s)>-1`
+
+- commit certificado: `af30c410ed6c68f4f4d9a35a4d88435a592b55c8`;
+- workflow run: `29662384450` (`Lean kernel audit`, run number 102);
+- job: `88127131010` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novos alvos compilados: `CPFormal.Analytic.CenteredSecondDifferenceBound`,
+  `CPFormal.Analytic.DirichletSecondDifference`,
+  `CPFormal.Genuine.CpBracketPairing` e
+  `CPFormal.Analytic.CpBracketConvergence`.
+
+O kernel verificou a cota quadratica abstrata da segunda diferenca, as duas
+derivadas de `x^(-s)`, o majorante explicito de cada bloco e a somabilidade
+absoluta da serie bracketada para `Re(s)>-1`. Para primo impar, tambem
+verificou a identidade puramente finita
+
+```text
+Genuine.Cp.bracket = saturatedBracket
+```
+
+e, portanto, que os proprios prefixos `Genuine.Cp.finiteChart` convergem para
+`bracketedDirichletChart`. No semiplano comum `Re(s)>1`, a unicidade do limite
+identifica essa carta com `(1-p^(1-s))*genuineDirichlet(s)`.
+
+Este checkpoint prova convergencia absoluta pontual, nao convergencia
+localmente uniforme. Assim, ainda nao certifica holomorfia do `tsum`,
+continuacao analitica pelo teorema de identidade, equivalencia de zeros,
+certificado Green concreto ou RH.
