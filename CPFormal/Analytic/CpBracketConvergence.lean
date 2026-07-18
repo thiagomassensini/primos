@@ -1,5 +1,6 @@
 import CPFormal.Analytic.DirichletSecondDifference
-import CPFormal.Finite.Bracket
+import CPFormal.Analytic.CpDirichletLimit
+import CPFormal.Genuine.CpBracketPairing
 
 /-!
 # Convergencia da carta Cp bracketada em `re(s)>-1`
@@ -9,10 +10,10 @@ camera e comparada com a p-serie
 
 `(k+1)^(-re(s)-2)`.
 
-O resultado deste modulo e a somabilidade absoluta dos blocos bracketados.
-A identificacao finita deste bloco simetrico com `Genuine.Cp.bracket` e a
-identidade analitica prolongada com o canal Genuine ficam em modulos
-separados, para que convergencia e continuacao nao sejam misturadas.
+O modulo prova a somabilidade absoluta dos blocos bracketados, identifica
+cada prefixo com `Genuine.Cp.finiteChart` e usa a unicidade do limite para
+recuperar o fator Genuine no semiplano comum `re(s)>1`. Holomorfia e
+continuacao analitica permanecem deliberadamente fora deste checkpoint.
 -/
 
 open scoped BigOperators
@@ -56,6 +57,19 @@ theorem realCpSaturatedBracket_eq_saturatedBracket
   apply Finset.sum_congr rfl
   intro radius hradius
   exact realCpPairBracket_eq_centeredSecondDifference p radius k s
+
+/-!
+Ponte finita entre as duas linguagens: o bloco analitico por segundas
+diferencas e exatamente o `Genuine.Cp.bracket` no mesmo centro.
+-/
+theorem realCpSaturatedBracket_eq_genuineBracket
+    (p k : ℕ) (hp : Nat.Prime p) (hpodd : Odd p) (s : ℂ) :
+    realCpSaturatedBracket p k s =
+      CPFormal.Genuine.Cp.bracket p (dirichletTerm s)
+        (alignedCenter p k) := by
+  rw [realCpSaturatedBracket_eq_saturatedBracket]
+  exact (CPFormal.Genuine.Cp.bracket_eq_saturatedBracket
+    p hp hpodd (dirichletTerm s) (alignedCenter p k)).symm
 
 /-- Constante finita produzida pelas pernas de uma camera Cp. -/
 def cpBracketMajorantConstant (p : ℕ) (s : ℂ) : ℝ :=
@@ -196,6 +210,21 @@ def finiteBracketedDirichletChart (p M : ℕ) (s : ℂ) : ℂ :=
   CPFormal.Genuine.Cp.seedSum p (dirichletTerm s) +
     ∑ k ∈ Finset.range M, realCpSaturatedBracket p k s
 
+/-!
+Os prefixos bracketados analiticos nao sao uma aproximacao diferente: em
+cada corte `M`, eles sao literalmente a carta `Genuine.Cp.finiteChart`.
+-/
+theorem finiteBracketedDirichletChart_eq_finiteChart
+    (p M : ℕ) (hp : Nat.Prime p) (hpodd : Odd p) (s : ℂ) :
+    finiteBracketedDirichletChart p M s =
+      CPFormal.Genuine.Cp.finiteChart p M (dirichletTerm s) := by
+  unfold finiteBracketedDirichletChart CPFormal.Genuine.Cp.finiteChart
+  apply congrArg (fun tail : ℂ ↦
+    CPFormal.Genuine.Cp.seedSum p (dirichletTerm s) + tail)
+  apply Finset.sum_congr rfl
+  intro k hk
+  exact realCpSaturatedBracket_eq_genuineBracket p k hp hpodd s
+
 /-- Passagem ao limite dos prefixos bracketados no dominio `re(s)>-1`. -/
 theorem finiteBracketedDirichletChart_tendsto
     (p : ℕ) (hp : Nat.Prime p)
@@ -205,6 +234,37 @@ theorem finiteBracketedDirichletChart_tendsto
   have hsum := (summable_realCpSaturatedBracket p hp hs).tendsto_sum_tsum_nat
   simpa [finiteBracketedDirichletChart, bracketedDirichletChart] using
     tendsto_const_nhds.add hsum
+
+/-!
+A mesma passagem ao limite, agora escrita diretamente para os prefixos
+`Genuine.Cp.finiteChart`. Esta e a identificacao solicitada entre a camera
+finita Genuine e a carta bracketada convergente.
+-/
+theorem finiteChart_dirichlet_tendsto_bracketedDirichletChart
+    (p : ℕ) (hp : Nat.Prime p) (hpodd : Odd p)
+    {s : ℂ} (hs : -1 < s.re) :
+    Filter.Tendsto
+      (fun M : ℕ ↦
+        CPFormal.Genuine.Cp.finiteChart p M (dirichletTerm s))
+      Filter.atTop (nhds (bracketedDirichletChart p s)) := by
+  exact (finiteBracketedDirichletChart_tendsto p hp hs).congr'
+    (Filter.Eventually.of_forall fun M ↦
+      finiteBracketedDirichletChart_eq_finiteChart p M hp hpodd s)
+
+/-!
+No semiplano comum `re(s)>1`, os dois limites ja construidos partem da mesma
+sequencia finita. A unicidade do limite identifica a carta bracketada com o
+fator Genuine. Isto ainda nao invoca continuacao analitica.
+-/
+theorem bracketedDirichletChart_eq_genuine_factor
+    (p : ℕ) (hp : Nat.Prime p) (hpodd : Odd p)
+    {s : ℂ} (hs : 1 < s.re) :
+    bracketedDirichletChart p s =
+      (1 - (p : ℂ) ^ (1 - s)) * genuineDirichlet s := by
+  exact tendsto_nhds_unique
+    (finiteChart_dirichlet_tendsto_bracketedDirichletChart
+      p hp hpodd (by linarith [hs]))
+    (finiteChart_dirichlet_tendsto_genuine_factor p hp hpodd hs)
 
 end
 
