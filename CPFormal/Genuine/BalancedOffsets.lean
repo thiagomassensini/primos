@@ -29,4 +29,5 @@ theorem mem_balancedOffsets_iff {p : ℕ} {a : ℤ} :
       a ≠ 0 ∧ (-(halfRange p : ℤ) ≤ a ∧ a ≤ (halfRange p : ℤ)) := by
   simp [balancedOffsets]
 
+end
 end CPFormal.Genuine.Cp
