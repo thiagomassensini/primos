@@ -63,6 +63,16 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
   termos e convergencia dos prefixos verificadas em `Re(s)>1`;
 - passagem ao limite da identidade finita, para primo impar e `Re(s)>1`:
   `finiteChart_p,M(s) -> (1-p^(1-s)) * genuineDirichlet(s)`;
+- cota quadratica da segunda diferenca por `2*C*r^2` e especializacao
+  explicita a `x^(-s)`, com ganho de duas potencias;
+- identidade finita, para primo impar,
+  `Genuine.Cp.bracket = saturatedBracket`, valida em qualquer anel
+  comutativo;
+- somabilidade absoluta da serie bracketada em `Re(s)>-1` e passagem ao
+  limite dos proprios prefixos `Genuine.Cp.finiteChart` para a carta
+  bracketada;
+- identificacao por unicidade do limite, no semiplano comum `Re(s)>1`,
+  `bracketedDirichletChart = (1-p^(1-s))*genuineDirichlet`;
 - criterio Green assinado que transforma um certificado concreto de
   fluxo--energia--bordo numa ponte `zero Genuine -> saturacao do ramo`;
 - interface Green explicita ainda sem certificado concreto: o fluxo e o traco
@@ -107,8 +117,8 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 marcadas como abertas no ledger.
 
 O checkpoint mais recente do nucleo ativo passou por essa verificacao no
-commit `44a539e2c432f88d1bda4670ff3daba1a287819e`, workflow run
-`29656769332`. A certificacao cobre os imports de `CPFormal.lean`;
+commit `af30c410ed6c68f4f4d9a35a4d88435a592b55c8`, workflow run
+`29662384450`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
 ## Ordem de leitura
@@ -116,7 +126,7 @@ commit `44a539e2c432f88d1bda4670ff3daba1a287819e`, workflow run
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
 3. `docs/CLAIM_LEDGER.md`
-4. `docs/RELEASE_0.14.0.md`
+4. `docs/RELEASE_0.15.0.md`
 5. `docs/VISION_INBOX.md`
 6. `CPFormal/Genuine/FiniteCancellation.lean`
 7. `CPFormal/Genuine/C2.lean`
@@ -137,4 +147,8 @@ commit `44a539e2c432f88d1bda4670ff3daba1a287819e`, workflow run
 22. `CPFormal/Genuine/CpFiniteChart.lean`
 23. `CPFormal/Analytic/CpFiniteDirichletChart.lean`
 24. `CPFormal/Analytic/CpDirichletLimit.lean`
-25. `CPFormal/Analytic/CpGreenBridge.lean`
+25. `CPFormal/Analytic/CenteredSecondDifferenceBound.lean`
+26. `CPFormal/Analytic/DirichletSecondDifference.lean`
+27. `CPFormal/Genuine/CpBracketPairing.lean`
+28. `CPFormal/Analytic/CpBracketConvergence.lean`
+29. `CPFormal/Analytic/CpGreenBridge.lean`
