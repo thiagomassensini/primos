@@ -24,6 +24,8 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | residuos nao nulos correspondem aos offsets balanceados Cp | `Carry.Cp.balancedOffsetEquivNonzeroResidue` |
 | camera Cp possui `p-1` pernas | `Carry.Cp.card_balancedOffsets` |
 | cada perna Cp nao multipla possui centro e offset balanceado unicos | `Carry.Cp.nonmultipleEquivIncidence`, `Carry.Cp.existsUnique_incidence` |
+| somente o offset canonico da carta Cp produz carry | `Carry.Cp.dvd_sub_iff_eq_offset` |
+| profundidade efetiva Cp e a profundidade do centro canonico | `Carry.Cp.effectiveDepth_eq_centerDepth` |
 
 Observacao: `GEOMETRIA_C2_CP_DECOMPOSICAO_POR_CARRY(1).md` chegou vazio na
 copia de trabalho desta versao e, portanto, nao foi usado para afirmacoes.
