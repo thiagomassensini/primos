@@ -110,7 +110,7 @@ Cp.finite_genuine_cancellation
 Esses endpoints estao `KERNEL_CHECKED`; nao usam resultados analiticos como
 hipoteses.
 
-Ponte de carry C2 implementada como enunciado Lean:
+Ponte de carry C2 implementada e verificada pelo kernel:
 
 ```text
 OddLeg = {n : Nat // 3 <= n e n impar}
@@ -122,7 +122,7 @@ O codominio inclui a perna, e nao apenas o centro: cada centro possui duas
 pernas. Essa e a bijecao correta que permite reindexar uma soma sem perder
 multiplicidade.
 
-A igualdade de profundidades tambem foi enunciada em Lean:
+A igualdade de profundidades tambem foi verificada pelo kernel:
 
 ```text
 effectiveDepth(n)
@@ -130,11 +130,11 @@ effectiveDepth(n)
   = v_2(adjacentCenter(n)).
 ```
 
-Ela e a justificativa formal para transportar o mesmo peso `2^(-k)` do canal
-direto para o bracket correspondente. A identidade de somas ponderadas e o
-proximo endpoint.
+Ela e a justificativa formal para transportar qualquer funcao de peso da
+profundidade do canal direto para o bracket correspondente.
 
-O endpoint de reindexacao agora esta enunciado com bordo assinado explicito:
+O endpoint de reindexacao esta verificado pelo kernel com bordo assinado
+explicito:
 
 ```text
 direct(legs)
