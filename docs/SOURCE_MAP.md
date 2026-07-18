@@ -26,6 +26,9 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | cada perna Cp nao multipla possui centro e offset balanceado unicos | `Carry.Cp.nonmultipleEquivIncidence`, `Carry.Cp.existsUnique_incidence` |
 | somente o offset canonico da carta Cp produz carry | `Carry.Cp.dvd_sub_iff_eq_offset` |
 | profundidade efetiva Cp e a profundidade do centro canonico | `Carry.Cp.effectiveDepth_eq_centerDepth` |
+| soma ponderada Cp preserva o peso do carry sob a bijecao | `Carry.Cp.weighted_reindex` |
+| caixa Cp arbitraria possui bordo assinado `extras - faltantes` | `Carry.Cp.weighted_reindex_with_boundary` |
+| cobertura Cp exata elimina o bordo | `Carry.Cp.weighted_reindex_of_exact_cover` |
 
 Observacao: `GEOMETRIA_C2_CP_DECOMPOSICAO_POR_CARRY(1).md` chegou vazio na
 copia de trabalho desta versao e, portanto, nao foi usado para afirmacoes.
