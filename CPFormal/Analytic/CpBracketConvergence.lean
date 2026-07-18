@@ -1,4 +1,5 @@
 import CPFormal.Analytic.DirichletSecondDifference
+import CPFormal.Finite.Bracket
 
 /-!
 # Convergencia da carta Cp bracketada em `re(s)>-1`
@@ -74,7 +75,8 @@ theorem natCast_add_one_le_alignedCenter_sub_radius
   have hpone : 1 ≤ p := hp.one_le
   have hponeReal : (1 : ℝ) ≤ (p : ℝ) := by exact_mod_cast hpone
   have hpnonneg : 0 ≤ (p : ℝ) - 1 := sub_nonneg.mpr hponeReal
-  have hk : 1 ≤ ((k + 1 : ℕ) : ℝ) := by positivity
+  have hkNat : 1 ≤ k + 1 := Nat.succ_le_succ (Nat.zero_le k)
+  have hk : 1 ≤ ((k + 1 : ℕ) : ℝ) := by exact_mod_cast hkNat
   have hradiusRealNat : (radius : ℝ) ≤ ((p - 1 : ℕ) : ℝ) := by
     exact_mod_cast hradius'
   have hpCast : ((p - 1 : ℕ) : ℝ) = (p : ℝ) - 1 := by
@@ -95,8 +97,10 @@ theorem norm_realCpPairBracket_le
     ‖realCpPairBracket p radius k s‖ ≤
       (2 * ‖s * (s + 1)‖ * (radius : ℝ) ^ 2) *
         ((k + 1 : ℕ) : ℝ) ^ (-s.re - 2) := by
+  have hradiusUpper : radius ≤ halfRange p :=
+    (Finset.mem_Icc.mp hradius).2
   have hleftLower :=
-    natCast_add_one_le_alignedCenter_sub_radius hp hradius.2
+    natCast_add_one_le_alignedCenter_sub_radius hp hradiusUpper
   have hkpos : 0 < ((k + 1 : ℕ) : ℝ) := by positivity
   have hleft :
       0 < (p : ℝ) * ((k + 1 : ℕ) : ℝ) - (radius : ℝ) :=
