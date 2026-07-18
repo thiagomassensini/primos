@@ -43,6 +43,15 @@ def incidenceTerm {R : Type*} [Mul R]
       depthWeight (effectiveDepth n.1) * value n.1
   rw [effectiveDepth_eq_centerDepth n.2.1 n.2.2]
 
+/-- The same transport lemma through the named equivalence. -/
+@[simp] theorem incidenceTerm_oddLegEquivIncidence
+    {R : Type*} [Mul R] (depthWeight : ℕ → R) (value : ℕ → R)
+    (n : OddLeg) :
+    incidenceTerm depthWeight value (oddLegEquivIncidence n) =
+      oddLegTerm depthWeight value n := by
+  simpa [oddLegEquivIncidence] using
+    incidenceTerm_incidenceOfOddLeg depthWeight value n
+
 /-- Reindexacao exata de qualquer caixa finita de pernas. -/
 theorem weighted_reindex
     {R : Type*} [CommRing R]
@@ -54,30 +63,46 @@ theorem weighted_reindex
   simp [incidenceImage]
 
 /-- Incidencias presentes no canal direto mas fora da caixa de brackets. -/
-def extraIncidences (legs : Finset OddLeg) (expected : Finset Incidence) :
-    Finset Incidence :=
-  incidenceImage legs \ expected
+noncomputable def extraIncidences
+    (legs : Finset OddLeg) (expected : Finset Incidence) : Finset Incidence := by
+  classical
+  exact incidenceImage legs \ expected
 
 /-- Incidencias exigidas pela caixa de brackets mas ausentes no canal direto. -/
-def missingIncidences (legs : Finset OddLeg) (expected : Finset Incidence) :
-    Finset Incidence :=
-  expected \ incidenceImage legs
+noncomputable def missingIncidences
+    (legs : Finset OddLeg) (expected : Finset Incidence) : Finset Incidence := by
+  classical
+  exact expected \ incidenceImage legs
 
 /--
 Identidade abstrata de bordo para duas caixas finitas. Ela e independente da
 origem dos termos somados.
 -/
 theorem finset_sum_eq_expected_add_boundary
-    {α R : Type*} [CommRing R]
+    {α R : Type*} [DecidableEq α] [CommRing R]
     (actual expected : Finset α) (term : α → R) :
     (∑ x ∈ actual, term x) =
       (∑ x ∈ expected, term x) +
         ((∑ x ∈ actual \ expected, term x) -
           ∑ x ∈ expected \ actual, term x) := by
-  classical
-  rw [← actual.sum_inter_add_sum_sdiff expected]
-  rw [← expected.sum_inter_add_sum_sdiff actual]
-  rw [Finset.inter_comm expected actual]
+  have hactual :
+      (∑ x ∈ actual, term x) =
+        (∑ x ∈ actual ∩ expected, term x) +
+          ∑ x ∈ actual \ expected, term x := by
+    exact (actual.sum_inter_add_sum_sdiff expected term).symm
+  have hexpected :
+      (∑ x ∈ expected, term x) =
+        (∑ x ∈ actual ∩ expected, term x) +
+          ∑ x ∈ expected \ actual, term x := by
+    calc
+      (∑ x ∈ expected, term x) =
+          (∑ x ∈ expected ∩ actual, term x) +
+            ∑ x ∈ expected \ actual, term x :=
+        (expected.sum_inter_add_sum_sdiff actual term).symm
+      _ = (∑ x ∈ actual ∩ expected, term x) +
+            ∑ x ∈ expected \ actual, term x := by
+        rw [Finset.inter_comm expected actual]
+  rw [hactual, hexpected]
   abel
 
 /--
