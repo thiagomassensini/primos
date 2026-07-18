@@ -134,6 +134,18 @@ Ela e a justificativa formal para transportar o mesmo peso `2^(-k)` do canal
 direto para o bracket correspondente. A identidade de somas ponderadas e o
 proximo endpoint.
 
+O endpoint de reindexacao agora esta enunciado com bordo assinado explicito:
+
+```text
+direct(legs)
+  = expected(bracket incidences)
+    + extra direct incidences
+    - missing bracket incidences.
+```
+
+Para uma cobertura exata, os dois termos de bordo desaparecem. O proximo
+passo e construir caixas aritmeticas concretas cuja cobertura seja exata.
+
 ## Fase 3 — pesos, series e caudas
 
 Objetos:
