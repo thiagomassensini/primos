@@ -10,6 +10,7 @@ import CPFormal.Carry.CpBalancedResidue
 import CPFormal.Carry.CpGlobalIncidence
 import CPFormal.Carry.CpDepth
 import CPFormal.Carry.CpWeightedReindex
+import CPFormal.Carry.CpAlignedBox
 import CPFormal.Genuine.BalancedOffsets
 import CPFormal.Genuine.FiniteCancellation
 import CPFormal.Genuine.C2
