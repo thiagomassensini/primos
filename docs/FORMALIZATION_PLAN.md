@@ -209,8 +209,35 @@ bijecao global Cp. Aplicar a bijecao de volta recupera literalmente a caixa
 esperada; portanto extras e faltantes sao ambos vazios e a igualdade
 ponderada nao possui termo de bordo.
 
-O proximo alvo finito e caracterizar essa pre-imagem diretamente por
-desigualdades aritmeticas e residuos, analogamente ao intervalo impar C2.
+O peso concreto do operador de ramo tambem foi ligado a essa infraestrutura.
+Na meia abscissa, a profundidade `k` recebe massa `p^(-k)` e amplitude
+`p^(-k/2)`. O kernel verificou `amplitude^2 = massa` e especializou a
+reindexacao alinhada para esses pesos, sem bordo. Portanto o indice de
+profundidade usado pelo ramo e a profundidade de carry ja provada pela camera.
+
+A primeira passagem infinita controlada tambem foi verificada. Para primo
+impar `p` e `sigma > 0`, a norma quadratica pura foi definida pela serie
+
+```text
+(p-1) * sum_{k>=1} p^(-2 k sigma)
+```
+
+e depois somada geometricamente. O kernel provou
+
+```text
+branchNormSq(p,sigma) = 1  <->  sigma = 1/2.
+```
+
+O tilt Cp de todas as pernas foi definido separadamente. Sua anulacao em
+`delta = sigma-1/2 = 0` e a implicacao `defeito da norma = 0 -> tilt = 0`
+estao verificadas. A volta `tilt = 0 -> delta = 0` foi isolada como
+`TiltRigidityAt`; uma prova uniforme por convexidade/concavidade ainda deve
+ser portada. A ponte `zero Genuine -> saturacao do ramo` permanece uma
+interface sem instancia.
+
+A caracterizacao direta da pre-imagem alinhada por desigualdades e residuos
+continua sendo um alvo finito independente, mas nao bloqueia os pesos ja
+formalizados.
 
 ## Fase 3 — pesos, series e caudas
 
