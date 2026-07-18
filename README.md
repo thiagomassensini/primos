@@ -35,6 +35,16 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
   de cobertura exata;
 - caixas Cp alinhadas nos centros `p,2p,...,Mp`, com todas as `p-1` pernas
   balanceadas de cada centro, cardinalidade `M(p-1)` e bordo vazio;
+- peso critico de carry `p^(-k)`, amplitude `p^(-k/2)` e identidade
+  `amplitude^2 = massa`, transportados sem bordo pela bijecao Cp;
+- massa quadratica do operador de ramo definida pela serie
+  `(p-1) * sum_{k>=1} p^(-2 k sigma)`;
+- forma fechada da serie e criterio exato, para `sigma > 0`,
+  `branchNormSq p sigma = 1 <-> sigma = 1/2`;
+- tilt transversal de todas as `p-1` pernas da carta Cp, sua anulacao em
+  `sigma = 1/2` e a implicacao `defeito da norma = 0 -> tilt = 0`;
+- interfaces explicitas, ainda sem instancias, para a rigidez reciproca do
+  tilt e para a ponte `zero Genuine -> saturacao do ramo`;
 - ledger de afirmacoes, mapa de dependencias e caixa de ideias.
 
 Os modulos projetivo e Hilbert--Polya permanecem preservados em
@@ -75,8 +85,8 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 marcadas como abertas no ledger.
 
 O checkpoint mais recente do nucleo ativo passou por essa verificacao no
-commit `49f8d226f1f9718fb15d76b89c5934f9852e8303`, workflow run
-`29642943076`. A certificacao cobre os imports de `CPFormal.lean`;
+commit `aec9140c36ed5274a8eb7e8a919ef86c0971c5e9`, workflow run
+`29644692098`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
 ## Ordem de leitura
@@ -84,7 +94,7 @@ commit `49f8d226f1f9718fb15d76b89c5934f9852e8303`, workflow run
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
 3. `docs/CLAIM_LEDGER.md`
-4. `docs/RELEASE_0.8.0.md`
+4. `docs/RELEASE_0.9.0.md`
 5. `docs/VISION_INBOX.md`
 6. `CPFormal/Genuine/FiniteCancellation.lean`
 7. `CPFormal/Genuine/C2.lean`
@@ -98,3 +108,6 @@ commit `49f8d226f1f9718fb15d76b89c5934f9852e8303`, workflow run
 15. `CPFormal/Carry/CpDepth.lean`
 16. `CPFormal/Carry/CpWeightedReindex.lean`
 17. `CPFormal/Carry/CpAlignedBox.lean`
+18. `CPFormal/Carry/CpBranchWeight.lean`
+19. `CPFormal/Analytic/CpBranchNorm.lean`
+20. `CPFormal/Analytic/CpTilt.lean`
