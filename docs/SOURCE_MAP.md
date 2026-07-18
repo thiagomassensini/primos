@@ -20,6 +20,8 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | bracket Cp deixa `(p-1) f(c)` | `Genuine.Cp.local_genuine_cancellation` |
 | `k_eff(n)=max(v_2(n-1),v_2(n+1))` | `Carry.C2.effectiveDepth` |
 | peso efetivo e peso do centro escolhido | `Carry.C2.effectiveDepth_eq_centerDepth` |
+| residuos nao nulos correspondem aos offsets balanceados Cp | `Carry.Cp.balancedOffsetEquivNonzeroResidue` |
+| camera Cp possui `p-1` pernas | `Carry.Cp.card_balancedOffsets` |
 
 Observacao: `GEOMETRIA_C2_CP_DECOMPOSICAO_POR_CARRY(1).md` chegou vazio na
 copia de trabalho desta versao e, portanto, nao foi usado para afirmacoes.
