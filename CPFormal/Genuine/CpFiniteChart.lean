@@ -91,6 +91,58 @@ theorem centerBlock_eq_legSum_add_center
     (zero_mem_fullOffsets p)
   simpa [centerBlock, legSum] using hsum.symm
 
+/-- Transladar os offsets completos produz o intervalo inteiro do bloco. -/
+theorem centerBlock_eq_sum_Icc
+    (p : ℕ) (f : ℤ → R) (center : ℤ) :
+    centerBlock p f center =
+      ∑ n ∈ Finset.Icc
+        (center - (halfRange p : ℤ))
+        (center + (halfRange p : ℤ)), f n := by
+  classical
+  unfold centerBlock fullOffsets
+  apply Finset.sum_bijective (fun a : ℤ => center + a)
+  · constructor
+    · intro a b hab
+      omega
+    · intro n
+      exact ⟨n - center, by ring⟩
+  · intro a
+    simp only [Finset.mem_Icc]
+    constructor <;> intro ha <;> constructor <;> omega
+  · intro a ha
+    rfl
+
+/-- Soma sobre dois intervalos inteiros adjacentes. -/
+theorem sum_Icc_split_adjacent
+    (f : ℤ → R) {left middle right : ℤ}
+    (hleft : left ≤ middle) (hright : middle < right) :
+    (∑ n ∈ Finset.Icc left right, f n) =
+      (∑ n ∈ Finset.Icc left middle, f n) +
+        ∑ n ∈ Finset.Icc (middle + 1) right, f n := by
+  classical
+  have hdisjoint :
+      Disjoint (Finset.Icc left middle) (Finset.Icc (middle + 1) right) := by
+    rw [Finset.disjoint_left]
+    intro n hnleft hnright
+    simp only [Finset.mem_Icc] at hnleft hnright
+    omega
+  have hunion :
+      Finset.Icc left middle ∪ Finset.Icc (middle + 1) right =
+        Finset.Icc left right := by
+    ext n
+    simp only [Finset.mem_union, Finset.mem_Icc]
+    omega
+  rw [← hunion, Finset.sum_union hdisjoint]
+
+/-- Acrescentar um centro acrescenta exatamente seu bloco completo. -/
+theorem blockPrefix_succ
+    (p M : ℕ) (f : ℤ → R) :
+    blockPrefix p (M + 1) f =
+      blockPrefix p M f + centerBlock p f (alignedCenter p M) := by
+  unfold blockPrefix
+  rw [Finset.sum_range_succ]
+  ring
+
 /-
 O coeficiente `p-1` do bracket, junto da copia central que faltava nas
 pernas, produz exatamente a correcao `p * f(center)`.
@@ -132,6 +184,73 @@ theorem finiteChart_eq_blockPrefix_sub_p_mul_centerSum
         (p : R) * ∑ k ∈ Finset.range M, f (alignedCenter p k) := by
   rw [finiteChart_eq_blockPrefix_sub_verticalCorrection p hp]
   rw [verticalCorrection_eq_p_mul_centerSum]
+
+/-!
+Ladrilhamento minimo necessario para ligar a carta por blocos ao prefixo
+literal dos inteiros positivos.
+-/
+theorem blockPrefix_eq_positiveIntervalSum
+    (p : ℕ) (hp : Nat.Prime p) (hpodd : Odd p)
+    (M : ℕ) (f : ℤ → R) :
+    blockPrefix p M f =
+      ∑ n ∈ Finset.Icc (1 : ℤ)
+        ((p : ℤ) * (M : ℤ) + (halfRange p : ℤ)), f n := by
+  induction M with
+  | zero =>
+      simp [blockPrefix, seedSum]
+  | succ M ih =>
+      rw [blockPrefix_succ, ih, centerBlock_eq_sum_Icc]
+      have hpformNat := CPFormal.Carry.Cp.two_mul_halfRange_add_one hpodd
+      have hpformInt :
+          (p : ℤ) = 2 * (halfRange p : ℤ) + 1 := by
+        exact_mod_cast hpformNat.symm
+      have hlower :
+          alignedCenter p M - (halfRange p : ℤ) =
+            (p : ℤ) * (M : ℤ) + (halfRange p : ℤ) + 1 := by
+        unfold alignedCenter
+        push_cast
+        rw [hpformInt]
+        ring
+      have hupper :
+          alignedCenter p M + (halfRange p : ℤ) =
+            (p : ℤ) * ((M + 1 : ℕ) : ℤ) + (halfRange p : ℤ) := by
+        rfl
+      rw [hlower, hupper]
+      have hhNat : 1 ≤ halfRange p := by
+        have hpgt := hp.one_lt
+        omega
+      have hhInt : (1 : ℤ) ≤ (halfRange p : ℤ) := by
+        exact_mod_cast hhNat
+      have hnonneg : 0 ≤ (p : ℤ) * (M : ℤ) := by
+        positivity
+      have hleft :
+          (1 : ℤ) ≤
+            (p : ℤ) * (M : ℤ) + (halfRange p : ℤ) := by
+        omega
+      have hpIntPos : 0 < (p : ℤ) := by
+        exact_mod_cast hp.pos
+      have hstep :
+          (p : ℤ) * ((M + 1 : ℕ) : ℤ) + (halfRange p : ℤ) =
+            ((p : ℤ) * (M : ℤ) + (halfRange p : ℤ)) + (p : ℤ) := by
+        push_cast
+        ring
+      have hright :
+          (p : ℤ) * (M : ℤ) + (halfRange p : ℤ) <
+            (p : ℤ) * ((M + 1 : ℕ) : ℤ) + (halfRange p : ℤ) := by
+        rw [hstep]
+        exact lt_add_of_pos_right _ hpIntPos
+      exact (sum_Icc_split_adjacent f hleft hright).symm
+
+/-- Carta finita escrita diretamente no prefixo positivo literal. -/
+theorem finiteChart_eq_positiveIntervalSum_sub_p_mul_centerSum
+    (p : ℕ) (hp : Nat.Prime p) (hpodd : Odd p)
+    (M : ℕ) (f : ℤ → R) :
+    finiteChart p M f =
+      (∑ n ∈ Finset.Icc (1 : ℤ)
+        ((p : ℤ) * (M : ℤ) + (halfRange p : ℤ)), f n) -
+          (p : R) * ∑ k ∈ Finset.range M, f (alignedCenter p k) := by
+  rw [finiteChart_eq_blockPrefix_sub_p_mul_centerSum p hp]
+  rw [blockPrefix_eq_positiveIntervalSum p hp hpodd]
 
 end
 
