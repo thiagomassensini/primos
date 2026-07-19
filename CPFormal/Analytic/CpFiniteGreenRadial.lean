@@ -140,6 +140,7 @@ theorem finitePhaseNormalizedCpGreenFlux_eq_radialDifference_mul_pairing
       rw [phaseNormalizedCpBlockGradient_eq_radial_mul p hp,
         phaseNormalizedCpBlockGradient_reflected_eq_radial_mul p hp]
       simp only [map_mul, Complex.conj_ofReal]
+      push_cast
       ring
     _ = ((((p : ℝ) ^ (-criticalDisplacement s.re) -
             (p : ℝ) ^ (criticalDisplacement s.re) : ℝ) : ℂ) *
