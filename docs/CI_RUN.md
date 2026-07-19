@@ -374,3 +374,23 @@ na faixa critica.
 O run nao certifica a anulacao ou o limite do fluxo de bulk acoplado, o limite
 de energia, uma instancia concreta de `SignedGreenCertificate`, operador
 Hilbert--Polya ou RH.
+
+## Checkpoint da caracterizacao do fluxo Green acoplado
+
+- commit: `3fcb6d5a05a2395bcdf3d58d94ef6a7a0afd1f38`;
+- run: `29706939780`;
+- job: `88245427884`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+O kernel elaborou a formula de sucessor do pareamento refletido, sua
+monotonicidade real, a decomposicao do fluxo acoplado e sua fatoracao radial.
+Em zeros Genuine, elaborou a equivalencia
+
+```text
+coupledFlux_M -> 0  <->  Re(s)=1/2.
+```
+
+O run nao prova a direcao `zero Genuine -> fluxo nulo`; ele identifica essa
+direcao como a ponte ainda aberta. Nao constroi os tracos `Phi/Psi`, uma
+instancia concreta de `SignedGreenCertificate`, operador Hilbert--Polya ou RH.
