@@ -126,8 +126,14 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
   fornecido pelo primeiro corte;
 - nos zeros Genuine, equivalencia exata entre anulacao assintotica do fluxo
   acoplado e `Re(s)=1/2`;
-- a lei de porta que deve fazer o Genuine impor a anulacao do fluxo permanece
-  aberta, nao uma instancia presumida;
+- porta angular canonica finita definida independentemente como corrente de
+  gradientes com pesos residuais `1,2,0`;
+- identidade exata
+  `finiteBracketedChart_3,M=finiteAngularTrace_M+(3M+1)^(-s)`;
+- para `Re(s)>0`, o bordo angular externo desaparece e o traco converge para
+  a carta bracketada; em zeros Genuine na faixa, o traco converge a zero;
+- a construcao independente de `Psi` e a identidade Wronskiana que devem fazer
+  o Genuine impor a anulacao do fluxo permanecem abertas;
 - ledger de afirmacoes, mapa de dependencias e caixa de ideias.
 
 Os modulos projetivo e Hilbert--Polya permanecem preservados em
@@ -168,8 +174,8 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 marcadas como abertas no ledger.
 
 O checkpoint matematico mais recente do nucleo ativo passou por essa
-verificacao no commit `3fcb6d5a05a2395bcdf3d58d94ef6a7a0afd1f38`, workflow
-run `29706939780`. A certificacao cobre os imports de `CPFormal.lean`;
+verificacao no commit `995e0943697b74cc522d965231e90339f52b94fb`, workflow
+run `29708436603`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
 ## Ordem de leitura
@@ -177,7 +183,7 @@ run `29706939780`. A certificacao cobre os imports de `CPFormal.lean`;
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
 3. `docs/CLAIM_LEDGER.md`
-4. `docs/RELEASE_0.24.0.md`
+4. `docs/RELEASE_0.25.0.md`
 5. `docs/VISION_INBOX.md`
 6. `CPFormal/Genuine/FiniteCancellation.lean`
 7. `CPFormal/Genuine/C2.lean`
@@ -212,4 +218,5 @@ run `29706939780`. A certificacao cobre os imports de `CPFormal.lean`;
 36. `CPFormal/Analytic/CpFiniteGreenPositivity.lean`
 37. `CPFormal/Analytic/CpBracketGreenBoundary.lean`
 38. `CPFormal/Analytic/CpBracketGreenFlux.lean`
-39. `CPFormal/Analytic/CpGreenBridge.lean`
+39. `CPFormal/Analytic/CpAngularPort.lean`
+40. `CPFormal/Analytic/CpGreenBridge.lean`
