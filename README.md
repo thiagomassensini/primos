@@ -100,9 +100,11 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
 - identidade Green finita com bordo literal, autovetor exato
   `B_p g_s=p^(-s)g_s` e fatoracao exata do fluxo refletido em cortes finitos;
 - endpoint externo refletido igual a `1/(M+1)` e portanto nulo no limite;
-- interface Green explicita ainda sem certificado concreto: normalizacao
-  radial, positividade e identificacao do endpoint interno com o traco
-  bracketado permanecem obrigacoes abertas, nao instancias presumidas;
+- certificado Green Cp complexo e concreto em corte finito, com fluxo total,
+  energia refletida e bordo fechado `1/(M+1)-1`;
+- interface Green real assinada ainda sem certificado concreto: normalizacao
+  radial, positividade e cancelamento do endpoint interno pelo traco bracketado
+  permanecem obrigacoes abertas, nao instancias presumidas;
 - ledger de afirmacoes, mapa de dependencias e caixa de ideias.
 
 Os modulos projetivo e Hilbert--Polya permanecem preservados em
@@ -143,8 +145,8 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 marcadas como abertas no ledger.
 
 O checkpoint mais recente do nucleo ativo passou por essa verificacao no
-commit `7b1275cf6af93a3c03be53e80f780127b42c7b6c`, workflow run
-`29670152564`. A certificacao cobre os imports de `CPFormal.lean`;
+commit `b0b47a87a64acfd129fbeb4f0cac148ccc4114ae`, workflow run
+`29671533493`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
 ## Ordem de leitura
@@ -152,7 +154,7 @@ commit `7b1275cf6af93a3c03be53e80f780127b42c7b6c`, workflow run
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
 3. `docs/CLAIM_LEDGER.md`
-4. `docs/RELEASE_0.19.0.md`
+4. `docs/RELEASE_0.20.0.md`
 5. `docs/VISION_INBOX.md`
 6. `CPFormal/Genuine/FiniteCancellation.lean`
 7. `CPFormal/Genuine/C2.lean`
@@ -182,4 +184,5 @@ commit `7b1275cf6af93a3c03be53e80f780127b42c7b6c`, workflow run
 31. `CPFormal/Analytic/CpGenuineCompatibility.lean`
 32. `CPFormal/Analytic/CpFiniteGreen.lean`
 33. `CPFormal/Analytic/CpReflectedEndpoint.lean`
-34. `CPFormal/Analytic/CpGreenBridge.lean`
+34. `CPFormal/Analytic/CpFiniteGreenCertificate.lean`
+35. `CPFormal/Analytic/CpGreenBridge.lean`

@@ -98,6 +98,8 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | bloco Cp atua em `g_s` pelo autovalor exato `p^(-s)` | `Analytic.Cp.cpBlockGradient_eq_eigenvalue_mul` |
 | fluxo Cp finito fatora pela diferenca dos autovalores refletidos | `Analytic.Cp.finiteCpGreenFlux_eq_eigenvalueDifference_mul_pairing` |
 | endpoint externo refletido e `1/(M+1)` e tende a zero | `Analytic.Cp.finiteReflectedOuterEndpoint_eq_inv`, `Analytic.Cp.finiteReflectedOuterEndpoint_tendsto_zero` |
+| certificado Green complexo finito deriva `flux=coefficient*energy+boundary` de duas identidades independentes | `Analytic.Cp.FiniteComplexGreenCertificate.green_identity`, `Analytic.Cp.finiteCpGreenCertificate` |
+| bordo da instancia Cp finita e exatamente `1/(M+1)-1` | `Analytic.Cp.finiteCpGreenCertificate_boundary_eq_inv_sub_one` |
 | identidade Green assinada, energia positiva e bordo fechado implicam `delta=0` | `Analytic.Cp.SignedGreenCertificate.criticalDisplacement_eq_zero_of_genuine_zero` |
 | certificado Green concreto produz a ponte Genuine--ramo | `Analytic.Cp.SignedGreenCertificate.toGenuineBranchBridge` |
 | ponte ainda aberta de zeros Genuine para a norma | `Analytic.Cp.GenuineBranchBridge` (sem instancia) |

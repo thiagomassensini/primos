@@ -421,3 +421,22 @@ apagado: permanecem abertas sua identificacao com o traco bracketado, a
 normalizacao radial, a positividade refletida e a instancia concreta de
 `SignedGreenCertificate`. Este checkpoint nao constroi operador
 Hilbert--Polya e nao prova RH.
+
+## Checkpoint do certificado Green Cp complexo finito
+
+- commit certificado: `b0b47a87a64acfd129fbeb4f0cac148ccc4114ae`;
+- workflow run: `29671533493` (`Lean kernel audit`, run number 131);
+- job: `88151337679` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpFiniteGreenCertificate`.
+
+O kernel verificou uma estrutura finita que conserva separadamente o
+Wronskiano de bloco e a corrente de Stokes. A instancia Cp concreta deriva
+`flux=coefficient*energy+boundary`, onde o fluxo e Wronskiano mais Stokes, a
+energia e o pareamento refletido e o bordo e a diferenca literal dos
+endpoints. O mesmo certificado prova `boundary=1/(M+1)-1`.
+
+O certificado e complexo, nao o `SignedGreenCertificate` real consumido pela
+reducao final. A retirada da fase, a positividade da parte real e o
+cancelamento do endpoint interno pela porta bracketada permanecem abertos.
+Este checkpoint nao constroi operador Hilbert--Polya e nao prova RH.

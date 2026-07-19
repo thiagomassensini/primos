@@ -372,8 +372,8 @@ genuine(s)=0 -> boundary(s)=0.
 
 O kernel verificou que esses quatro fatos implicam `sigma=1/2`, anulam todo
 tilt Cp e constroem uma `GenuineBranchBridge` para cada primo. Nenhum
-certificado concreto foi construido: o traco de fluxo e o fechamento da cauda
-continuam sendo a obrigacao analitica aberta.
+certificado **real assinado** concreto foi construido: o traco de fluxo e o
+fechamento do endpoint interno continuam sendo a obrigacao analitica aberta.
 
 O primeiro nivel concreto da rota Green agora esta fechado. Em cortes finitos,
 o kernel verificou a identidade Stokes com endpoints literais, o autovetor
@@ -381,6 +381,19 @@ o kernel verificou a identidade Stokes com endpoints literais, o autovetor
 dos autovalores. Para `s#=1-conj(s)`, o endpoint externo e exatamente
 `1/(M+1)` e tende a zero. Isso nao cancela o endpoint inicial: ele deve ser
 identificado separadamente com a porta bracketada do Genuine.
+
+Esse nivel foi agora empacotado em `FiniteComplexGreenCertificate`. O fluxo
+total e definido como Wronskiano mais corrente de Stokes, a energia e o
+pareamento refletido e o bordo e formado pelos endpoints. A instancia Cp
+satisfaz
+
+```text
+flux = coefficient*energy + boundary,
+boundary = 1/(M+1)-1.
+```
+
+A formula explicita mostra que o bordo cru nao converge a zero: a porta
+bracketada precisa cancelar o `-1` do endpoint interno.
 
 ## Fase 3 — pesos, series e caudas
 
@@ -439,8 +452,8 @@ Ordem local atual para essa instancia:
    fatores regulares na faixa e provar que todos os quocientes primos
    coincidem com um unico `genuineContinuation`;
 7. **concluido:** construir o bulk Green em cortes finitos, provar o autovetor
-   do bloco Cp, fatorar o fluxo refletido e controlar exatamente o endpoint
-   externo;
+   do bloco Cp, fatorar o fluxo refletido, controlar os endpoints e construir
+   a instancia Cp concreta de `FiniteComplexGreenCertificate`;
 8. **proximo nucleo minimo:** retirar a fase comum, provar a positividade da
    parte real da energia refletida e identificar o endpoint inicial/fluxo com
    a porta bracketada de `genuineContinuation`, sem trocar o escalar Genuine

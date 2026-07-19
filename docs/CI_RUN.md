@@ -296,3 +296,18 @@ a fatoracao finita do fluxo refletido e o decaimento exato do endpoint externo
 `(M+1)^(-1) -> 0`. O run nao certifica ainda a positividade da energia
 refletida, a identificacao do endpoint interno com a porta Genuine, uma
 instancia concreta de `SignedGreenCertificate`, operador Hilbert--Polya ou RH.
+
+## Checkpoint do certificado Green Cp complexo finito
+
+- commit: `b0b47a87a64acfd129fbeb4f0cac148ccc4114ae`;
+- run: `29671533493`;
+- job: `88151337679`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+O kernel elaborou a estrutura `FiniteComplexGreenCertificate`, a corrente de
+Stokes refletida, a instancia Cp concreta e a identidade expandida entre
+fluxo, coeficiente, energia e bordo. Tambem elaborou a formula fechada
+`boundary=1/(M+1)-1`. O run nao certifica a projecao real assinada,
+positividade, cancelamento do endpoint interno, `SignedGreenCertificate`,
+operador Hilbert--Polya ou RH.
