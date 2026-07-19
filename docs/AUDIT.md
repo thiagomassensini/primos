@@ -538,3 +538,26 @@ ela prova que tal anulacao e exatamente a ponte critica. Permanecem abertos os
 tracos de porta `Phi/Psi`, uma identidade independente que forneca essa
 direcao, uma instancia concreta de `SignedGreenCertificate`, operador
 Hilbert--Polya e RH.
+
+## Checkpoint da porta angular finita canonica
+
+- commit matematico certificado: `995e0943697b74cc522d965231e90339f52b94fb`;
+- workflow run: `29708436603` (`Lean kernel audit`);
+- job: `88249048235` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpAngularPort`.
+
+O kernel verificou que a corrente angular finita da camera `p=3`, definida
+em blocos pelos pesos residuais `1,2,0`, e independente da definicao da carta.
+Abrindo os dois objetos e telescopando os endpoints, verificou para todo corte
+
+```text
+finiteBracketedChart_3,M = finiteAngularTrace_M + (3M+1)^(-s).
+```
+
+Para `Re(s)>0`, verificou que o endpoint explicito converge a zero e que o
+traco angular converge para a carta bracketada. Em zeros de
+`genuineContinuation` na faixa critica, concluiu que esse traco converge a
+zero. O checkpoint nao constroi `Psi`, nao prova a identidade Wronskiana nem a
+anulacao do fluxo acoplado, nao constroi operador Hilbert--Polya e nao prova
+RH.
