@@ -1,4 +1,4 @@
-# Ledger de afirmacoes — checkpoint 0.16.0 Genuine-first
+# Ledger de afirmacoes — checkpoint 0.17.0 Genuine-first
 
 Estados usados:
 
@@ -37,6 +37,10 @@ Estados usados:
 | GEN-CP-BRACKET-COMMON | para primo impar e `Re(s)>1`, `bracketedDirichletChart p s = (1-p^(1-s))*genuineDirichlet(s)` | KERNEL_CHECKED | GEN-CP-DIR-LIM, GEN-CP-BRACKET-LIM, unicidade do limite | conjunto de coincidencia para o principio da identidade |
 | GEN-CP-BRACKET-LOCAL | para cada `z` com `Re(z)>-1`, existe uma bola canonica e uma sequencia real somavel que domina uniformemente a norma de todo bloco em todos os pontos dessa bola | KERNEL_CHECKED | GEN-CP-BRACKET-BOUND, cota local de `||s(s+1)||`, p-serie deslocada | usado diretamente no criterio de Weierstrass; o corolario quantificado sobre compactos nao foi exportado separadamente |
 | GEN-CP-BRACKET-HOLO | a cauda por `tsum` e a carta bracketada completa sao holomorfas em `Re(s)>-1` | KERNEL_CHECKED | GEN-CP-BRACKET-LOCAL, termos inteiros, criterio de Weierstrass | usado no principio da identidade |
+| GEN-CP-FACTOR-REG | para primo `p`, `1-p^(1-s)=0` implica `Re(s)=1`; portanto o fator nao zera quando `Re(s) != 1`, em particular no interior da faixa critica | KERNEL_CHECKED | formula `||p^(1-s)||=p^(1-Re(s))`, monotonicidade estrita de `Real.rpow` | permite dividir a carta na faixa |
+| GEN-CP-QUOTIENT | para primo impar e `Re(s)>1`, `cpGenuineQuotient p s = genuineDirichlet s` | KERNEL_CHECKED | GEN-CP-BRACKET-COMMON, GEN-CP-FACTOR-REG, cancelamento em corpo | ancora o quociente na serie Genuine original |
+| GEN-CP-QUOTIENT-HOLO | para primo `p`, `cpGenuineQuotient p` e holomorfo em `0<Re(s)<1` | KERNEL_CHECKED | GEN-CP-BRACKET-HOLO, GEN-CP-FACTOR-REG, analiticidade do fator, quociente analitico | objeto Cp regular na faixa critica |
+| GEN-CP-ZERO-EQ | no interior da faixa critica, `bracketedDirichletChart p s = 0` se e somente se `cpGenuineQuotient p s = 0` | KERNEL_CHECKED | GEN-CP-FACTOR-REG, definicao do quociente | nao confundir ainda com um Genuine global independente de `p` |
 | GEN-BIJ-C2 | pernas impares `n>=3` estao em bijecao com incidencias `(centro multiplo de 4, perna)` | KERNEL_CHECKED | aritmetica modular | usar na reindexacao ponderada |
 | GEN-DEP-C2 | `max(v_2(n-1),v_2(n+1)) = v_2(adjacentCenter(n))` para `n` impar, `n>=3` | KERNEL_CHECKED | GEN-BIJ-C2, valoracao 2-adica | transportar o peso na soma finita |
 | GEN-REINDEX-C2 | soma ponderada das pernas = soma das incidencias esperadas + extras - faltantes | KERNEL_CHECKED | GEN-BIJ-C2, GEN-DEP-C2, somas finitas | reutilizar nas caixas Cp |
@@ -60,7 +64,8 @@ Estados usados:
 | BRIDGE-GEN-BRANCH | zero Genuine implica saturacao da norma do ramo | OPEN_BRIDGE | GREEN-CERT ou outra identidade analitica independente | obter pelo teorema `SignedGreenCertificate.toGenuineBranchBridge` sem postular a instancia |
 | RH-COND-CP | dada uma instancia de `GenuineBranchBridge`, todo zero no semiplano positivo possui parte real `1/2` e anula o tilt | KERNEL_CHECKED | BRIDGE-GEN-BRANCH, BRANCH-HALF-CP | teorema condicional compilado; nao confundir com uma instancia da ponte |
 | CHP-001 | a carta bracketada e a unica funcao analitica em `Re(s)>-1` que coincide com `(1-p^(1-s))*genuineDirichlet(s)` em `Re(s)>1` | KERNEL_CHECKED | GEN-CP-BRACKET-COMMON, GEN-CP-BRACKET-HOLO, preconexidade do semiplano, principio da identidade | usar na equivalencia de zeros sem pressupor holomorfia da expressao Genuine totalizada fora de `Re(s)>1` |
-| CHP-002 | o fator `1-p^(1-s)` nao zera no interior do critical strip | PAPER_ARGUMENT | modulo e parte real de `Complex.cpow` em base positiva | formalizar e combinar com CHP-001 numa equivalencia de zeros |
+| CHP-002 | o fator `1-p^(1-s)` nao zera no interior do critical strip; mais forte, todo zero do fator satisfaz `Re(s)=1` | KERNEL_CHECKED | modulo de `Complex.cpow` em base positiva e `Real.rpow` estrito | usado na construcao e zero-equivalencia do quociente Cp |
+| CHP-003 | os quocientes `cpGenuineQuotient p` construidos por cameras primas distintas coincidem na faixa, ou coincidem com uma continuacao Genuine global independente de `p` | OPEN_BRIDGE | GEN-CP-QUOTIENT, GEN-CP-QUOTIENT-HOLO, dominio conexo comum ou identificacao externa | escolher uma rota sem decretar a compatibilidade por definicao |
 | HIL-001 | sintese possui vetor de Riesz ponderado | PAPER_ARGUMENT | somabilidade dos pesos | construir espaco |
 | HIL-002 | `P_syn` e projecao ortogonal autoadjunta | PAPER_ARGUMENT | HIL-001 | formalizar API mathlib |
 | NUM-001 | dez vales nos dez primeiros gammas | NUMERICAL | truncamento intervalar | manter fora da cadeia de prova |
@@ -71,6 +76,6 @@ Estados usados:
 | RH-001 | todo zero Genuine esta na linha critica | BLOQUEADO | BRG-001 ou SPC-001+SPC-002 | nao enunciar como provado |
 
 O checkpoint mais recente do nucleo ativo foi compilado pelo GitHub Actions no
-commit `da0585ced6f3922da6b32d57b54f169910357ca7`, run `29665212572`.
+commit `26379be9ed40c9196bd85af8bcba6b2808cf2481`, run `29667470934`.
 Modulos mantidos apenas em `CPFormal.ResearchReserve` nao fazem parte dessa
 certificacao. Consulte `AUDIT.md`.
