@@ -80,6 +80,14 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | prefixo bracketado = `Genuine.Cp.finiteChart` em cada corte | `Analytic.Cp.finiteBracketedDirichletChart_eq_finiteChart` |
 | prefixos Genuine convergem para a carta bracketada em `Re(s)>-1` | `Analytic.Cp.finiteChart_dirichlet_tendsto_bracketedDirichletChart` |
 | carta bracketada = fator Genuine no semiplano comum `Re(s)>1` | `Analytic.Cp.bracketedDirichletChart_eq_genuine_factor` |
+| majorante uniforme somavel numa bola local do semiplano `Re(s)>-1` | `Analytic.Cp.norm_realCpSaturatedBracket_le_local`, `Analytic.Cp.summable_localCpBracketMajorant` |
+| holomorfia da carta bracketada em `Re(s)>-1` | `Analytic.Cp.analyticOnNhd_bracketedDirichletChart` |
+| unicidade da continuacao da identidade fator Genuine | `Analytic.Cp.bracketedDirichletChart_unique_analytic_continuation` |
+| zero do fator Cp implica `Re(s)=1` | `Analytic.Cp.cpChartFactor_zero_implies_re_eq_one` |
+| fator Cp nao zera no interior da faixa critica | `Analytic.Cp.cpChartFactor_ne_zero_on_genuineCriticalStrip` |
+| quociente Cp recupera a serie Genuine em `Re(s)>1` | `Analytic.Cp.cpGenuineQuotient_eq_genuineDirichlet` |
+| quociente Cp e holomorfo no interior da faixa | `Analytic.Cp.analyticOnNhd_cpGenuineQuotient_genuineCriticalStrip` |
+| zeros da carta equivalem aos zeros do quociente Cp na faixa | `Analytic.Cp.bracketedDirichletChart_zero_iff_cpGenuineQuotient_zero` |
 | identidade Green assinada, energia positiva e bordo fechado implicam `delta=0` | `Analytic.Cp.SignedGreenCertificate.criticalDisplacement_eq_zero_of_genuine_zero` |
 | certificado Green concreto produz a ponte Genuine--ramo | `Analytic.Cp.SignedGreenCertificate.toGenuineBranchBridge` |
 | ponte ainda aberta de zeros Genuine para a norma | `Analytic.Cp.GenuineBranchBridge` (sem instancia) |
