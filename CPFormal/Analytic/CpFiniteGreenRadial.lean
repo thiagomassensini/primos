@@ -1,4 +1,5 @@
 import CPFormal.Analytic.CpFiniteGreenCertificate
+import CPFormal.Analytic.CpBranchNorm
 
 /-!
 # Normalizacao radial do certificado Green finito
@@ -180,7 +181,8 @@ theorem cpRadialCofactor_pos
       have hdiff : cpRadialDifference p delta < 0 := by
         unfold cpRadialDifference
         linarith
-      have hden : (2 : ℝ) * delta < 0 := by positivity
+      have hden : (2 : ℝ) * delta < 0 :=
+        mul_neg_of_pos_of_neg (by norm_num) hneg
       rw [cpRadialCofactor, if_neg hdelta]
       exact div_pos_of_neg_of_neg hdiff hden
     · have hpow :
