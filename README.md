@@ -80,6 +80,12 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
 - unicidade da continuacao analitica: toda funcao analitica nesse semiplano
   que coincide com o fator Genuine em `Re(s)>1` coincide com a carta
   bracketada em todo o dominio;
+- confinamento exato dos zeros do fator Cp: `1-p^(1-s)=0` implica
+  `Re(s)=1`, logo o fator nao zera no interior da faixa critica;
+- quociente `cpGenuineQuotient = bracketedDirichletChart/cpChartFactor`,
+  holomorfo na faixa critica e igual a serie Genuine original em `Re(s)>1`;
+- equivalencia, no interior da faixa, entre zero da carta e zero do quociente
+  Genuine Cp, mantendo explicita a dependencia na camera prima;
 - criterio Green assinado que transforma um certificado concreto de
   fluxo--energia--bordo numa ponte `zero Genuine -> saturacao do ramo`;
 - interface Green explicita ainda sem certificado concreto: o fluxo e o traco
@@ -124,8 +130,8 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 marcadas como abertas no ledger.
 
 O checkpoint mais recente do nucleo ativo passou por essa verificacao no
-commit `da0585ced6f3922da6b32d57b54f169910357ca7`, workflow run
-`29665212572`. A certificacao cobre os imports de `CPFormal.lean`;
+commit `26379be9ed40c9196bd85af8bcba6b2808cf2481`, workflow run
+`29667470934`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
 ## Ordem de leitura
@@ -133,7 +139,7 @@ commit `da0585ced6f3922da6b32d57b54f169910357ca7`, workflow run
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
 3. `docs/CLAIM_LEDGER.md`
-4. `docs/RELEASE_0.16.0.md`
+4. `docs/RELEASE_0.17.0.md`
 5. `docs/VISION_INBOX.md`
 6. `CPFormal/Genuine/FiniteCancellation.lean`
 7. `CPFormal/Genuine/C2.lean`
@@ -159,4 +165,5 @@ commit `da0585ced6f3922da6b32d57b54f169910357ca7`, workflow run
 27. `CPFormal/Genuine/CpBracketPairing.lean`
 28. `CPFormal/Analytic/CpBracketConvergence.lean`
 29. `CPFormal/Analytic/CpBracketHolomorphic.lean`
-30. `CPFormal/Analytic/CpGreenBridge.lean`
+30. `CPFormal/Analytic/CpGenuineQuotient.lean`
+31. `CPFormal/Analytic/CpGreenBridge.lean`
