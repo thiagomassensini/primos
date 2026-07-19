@@ -94,8 +94,8 @@ theorem crossNormalizedChart_eq_swap
     filter_upwards [hrightMem] with s hs
     exact crossNormalizedChart_eq_swap_of_one_lt_re
       p q hp hpodd hq hqodd hs
-  exact (analyticOnNhd_crossNormalizedChart p q hp hq).
-    eqOn_of_preconnected_of_eventuallyEq
+  have hleft := analyticOnNhd_crossNormalizedChart p q hp hq
+  exact hleft.eqOn_of_preconnected_of_eventuallyEq
       (analyticOnNhd_crossNormalizedChart q p hq hp)
       isPreconnected_bracketHalfPlane
       (by norm_num [bracketHalfPlane]) heventually
@@ -120,9 +120,7 @@ theorem cpGenuineQuotient_eq_cpGenuineQuotient
   have hfactorP := cpChartFactor_ne_zero_on_genuineCriticalStrip p hp hs
   have hfactorQ := cpChartFactor_ne_zero_on_genuineCriticalStrip q hq hs
   have hcross := crossNormalizedChart_eq_swap_at
-    p q hp hpodd hq hqodd (s := s) (by
-      change -1 < s.re
-      linarith [hs.1])
+    p q hp hpodd hq hqodd (s := s) (by linarith [hs.1])
   unfold cpGenuineQuotient
   field_simp [hfactorP, hfactorQ]
   simpa [crossNormalizedChart, mul_comm] using hcross
@@ -143,8 +141,8 @@ theorem genuineContinuation_eq_genuineDirichlet
 /-- O Genuine canonico e holomorfo no interior da faixa critica. -/
 theorem analyticOnNhd_genuineContinuation_genuineCriticalStrip :
     AnalyticOnNhd ℂ genuineContinuation genuineCriticalStrip := by
-  simpa [genuineContinuation] using
-    (analyticOnNhd_cpGenuineQuotient_genuineCriticalStrip 3 (by norm_num))
+  change AnalyticOnNhd ℂ (cpGenuineQuotient 3) genuineCriticalStrip
+  exact analyticOnNhd_cpGenuineQuotient_genuineCriticalStrip 3 (by norm_num)
 
 /-- Toda camera prima impar produz o representante canonico na faixa. -/
 theorem cpGenuineQuotient_eq_genuineContinuation
