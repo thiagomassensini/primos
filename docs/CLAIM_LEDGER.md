@@ -1,4 +1,4 @@
-# Ledger de afirmacoes — checkpoint 0.23.0 Genuine-first
+# Ledger de afirmacoes — checkpoint 0.24.0 Genuine-first
 
 Estados usados:
 
@@ -57,6 +57,10 @@ Estados usados:
 | GREEN-SEED-ENDPOINT | na camera canonica `p=3`, a semente da carta bracketada e exatamente `1`, o mesmo endpoint Green interno refletido | KERNEL_CHECKED | definicoes de `seedSum`, `halfRange` e endpoint refletido | usado para acoplar o bordo sem residual artificial |
 | GREEN-BRACKET-BOUNDARY-FIN | para todo corte, `rawBoundary-trace_M=outerEndpoint-finiteBracketedChart_3,M`; a identidade vem de `finiteChart_3,M=innerEndpoint+trace_M` | KERNEL_CHECKED | GREEN-SEED-ENDPOINT, algebra finita | usado no limite do bordo em zeros Genuine |
 | GREEN-BRACKET-BOUNDARY-LIM | se `genuineContinuation(s)=0` na faixa critica, o bordo bracketado acoplado, complexo e real assinado, converge a zero | KERNEL_CHECKED | GEN-GLOBAL-ZERO-EQ, GEN-CP-BRACKET-LIM, GREEN-ENDPOINT-OUTER, GREEN-BRACKET-BOUNDARY-FIN | provar separadamente a anulacao/limite do fluxo de bulk acoplado |
+| GREEN-PAIRING-MONO | na faixa critica, a parte real do pareamento refletido cresce com o corte e, a partir de `M=1`, fica acima de um lower estritamente positivo | KERNEL_CHECKED | GREEN-EDGE-POS, formula de sucessor da soma finita | elimina a necessidade de um limite positivo da energia na reducao sequencial |
+| GREEN-COUPLED-FLUX-FACTOR | o fluxo bracketado acoplado e exatamente `Re(orientedBulkFlux)+coupledBoundary`, e tambem `radialDifference*Re(pairing)+coupledBoundary` | KERNEL_CHECKED | GREEN-FIN-SIGNED, GREEN-BRACKET-BOUNDARY-FIN, GREEN-RADIAL-COFACTOR | separar a futura lei de porta da identidade radial |
+| GREEN-COUPLED-FLUX-IFF | num zero Genuine na faixa e para primo `p`, `coupledFlux_M -> 0` se e somente se `Re(s)=1/2` | KERNEL_CHECKED | GREEN-BRACKET-BOUNDARY-LIM, GREEN-PAIRING-MONO, GREEN-COUPLED-FLUX-FACTOR | construir uma lei de porta independente que forneca a direcao `zero Genuine -> fluxo nulo` |
+| GREEN-PORT-LAW | o fluxo de bulk e um Wronskiano de tracos de porta `Phi/Psi` cuja forma se anula quando o Genuine zera | OPEN_BRIDGE | traco angular da carta, traco de corrente e identidade Green de fronteira ainda nao formalizados | comecar pela identidade finita do traco angular sem assumir a anulacao |
 | GEN-BIJ-C2 | pernas impares `n>=3` estao em bijecao com incidencias `(centro multiplo de 4, perna)` | KERNEL_CHECKED | aritmetica modular | usar na reindexacao ponderada |
 | GEN-DEP-C2 | `max(v_2(n-1),v_2(n+1)) = v_2(adjacentCenter(n))` para `n` impar, `n>=3` | KERNEL_CHECKED | GEN-BIJ-C2, valoracao 2-adica | transportar o peso na soma finita |
 | GEN-REINDEX-C2 | soma ponderada das pernas = soma das incidencias esperadas + extras - faltantes | KERNEL_CHECKED | GEN-BIJ-C2, GEN-DEP-C2, somas finitas | reutilizar nas caixas Cp |
@@ -76,8 +80,8 @@ Estados usados:
 | TILT-CP-SIGN | para primo impar, centro `c>halfRange(p)` e `sigma>0`, o tilt e negativo abaixo de `1/2` e positivo acima de `1/2` | KERNEL_CHECKED | TILT-CP-PAIR, convexidade/concavidade estritas de `x^(-delta)` | usado na rigidez |
 | TILT-CP-RIGID | para primo impar, `sigma>0` e `c>halfRange(p)`, `tilt=0 <-> sigma=1/2`; nesse dominio, tilt nulo equivale a defeito nulo da norma | KERNEL_CHECKED | TILT-CP-SIGN, TILT-CP-ANN, BRANCH-HALF-CP | usar na ponte Genuine--ramo |
 | GREEN-REDUCTION | uma identidade `flux = 2 delta energy + boundary`, com energia positiva e anulacao de fluxo e bordo nos zeros Genuine, implica `delta=0`, tilt nulo e uma instancia de `GenuineBranchBridge` | KERNEL_CHECKED | BRANCH-HALF-CP, TILT-CP-ANN, algebra real | construir os quatro campos para o Genuine concreto |
-| GREEN-CERT | existe um `SignedGreenCertificate` concreto para a carta Genuine | OPEN_BRIDGE | GREEN-FIN-SIGNED, GREEN-FIN-ENERGY-POS e GREEN-BRACKET-BOUNDARY-LIM estao fechados; faltam anulacao/controle limite do fluxo de bulk acoplado e o limite de energia apropriado | fechar o fluxo sem o definir como residual e montar o certificado concreto |
-| BRIDGE-GEN-BRANCH | zero Genuine implica saturacao da norma do ramo | OPEN_BRIDGE | GREEN-CERT ou outra identidade analitica independente | obter pelo teorema `SignedGreenCertificate.toGenuineBranchBridge` sem postular a instancia |
+| GREEN-CERT | existe um `SignedGreenCertificate` concreto para a carta Genuine | OPEN_BRIDGE | a rota sequencial GREEN-COUPLED-FLUX-IFF evita exigir um limite positivo da energia; ainda falta GREEN-PORT-LAW para fornecer a anulacao do fluxo | decidir depois da lei de porta se convem adaptar a API sequencial ou montar o certificado funcional |
+| BRIDGE-GEN-BRANCH | zero Genuine implica saturacao da norma do ramo | OPEN_BRIDGE | GREEN-PORT-LAW junto de GREEN-COUPLED-FLUX-IFF, ou GREEN-CERT | obter sem postular a anulacao do fluxo |
 | RH-COND-CP | dada uma instancia de `GenuineBranchBridge`, todo zero no semiplano positivo possui parte real `1/2` e anula o tilt | KERNEL_CHECKED | BRIDGE-GEN-BRANCH, BRANCH-HALF-CP | teorema condicional compilado; nao confundir com uma instancia da ponte |
 | CHP-001 | a carta bracketada e a unica funcao analitica em `Re(s)>-1` que coincide com `(1-p^(1-s))*genuineDirichlet(s)` em `Re(s)>1` | KERNEL_CHECKED | GEN-CP-BRACKET-COMMON, GEN-CP-BRACKET-HOLO, preconexidade do semiplano, principio da identidade | usar na equivalencia de zeros sem pressupor holomorfia da expressao Genuine totalizada fora de `Re(s)>1` |
 | CHP-002 | o fator `1-p^(1-s)` nao zera no interior do critical strip; mais forte, todo zero do fator satisfaz `Re(s)=1` | KERNEL_CHECKED | modulo de `Complex.cpow` em base positiva e `Real.rpow` estrito | usado na construcao e zero-equivalencia do quociente Cp |
@@ -92,7 +96,7 @@ Estados usados:
 | RH-001 | todo zero Genuine esta na linha critica | BLOQUEADO | BRG-001 ou SPC-001+SPC-002 | nao enunciar como provado |
 
 O checkpoint matematico mais recente do nucleo ativo foi compilado pelo GitHub
-Actions no commit `d082847d71a26257045de7fb056403ed0c1d02cf`, run
-`29706219224`, job `88243582695`.
+Actions no commit `3fcb6d5a05a2395bcdf3d58d94ef6a7a0afd1f38`, run
+`29706939780`, job `88245427884`.
 Modulos mantidos apenas em `CPFormal.ResearchReserve` nao fazem parte dessa
 certificacao. Consulte `AUDIT.md`.
