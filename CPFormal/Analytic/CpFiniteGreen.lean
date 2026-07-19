@@ -27,7 +27,7 @@ noncomputable section
 /-- Soma telescopica abstrata de diferencas consecutivas. -/
 theorem sum_range_forwardDifference
     {R : Type*} [CommRing R] (f : ℕ → R) (start length : ℕ) :
-    (∑ r in Finset.range length,
+    (∑ r ∈ Finset.range length,
       (f (start + r + 1) - f (start + r))) =
         f (start + length) - f start := by
   induction length with
@@ -40,7 +40,7 @@ theorem sum_range_forwardDifference
 /-- Bulk da formula de Green discreta em um corte `0,...,M`. -/
 def finiteGreenBulk
     {R : Type*} [CommRing R] (u v : ℕ → R) (M : ℕ) : R :=
-  ∑ n in Finset.range M,
+  ∑ n ∈ Finset.range M,
     ((u (n + 1) - u n) * v (n + 1) +
       u n * (v (n + 1) - v n))
 
@@ -74,7 +74,7 @@ def positiveDirichletGradient (s : ℂ) (n : ℕ) : ℂ :=
 
 /-- Soma dos `p` gradientes consecutivos no bloco que comeca em `p(n+1)`. -/
 def cpBlockGradient (p : ℕ) (s : ℂ) (n : ℕ) : ℂ :=
-  ∑ r in Finset.range p,
+  ∑ r ∈ Finset.range p,
     (natDirichletTerm s (p * (n + 1) + r + 1) -
       natDirichletTerm s (p * (n + 1) + r))
 
@@ -107,13 +107,13 @@ def reflectedParameter (s : ℂ) : ℂ :=
 
 /-- Pareamento refletido finito dos gradientes. -/
 def finiteReflectedGradientPairing (M : ℕ) (s : ℂ) : ℂ :=
-  ∑ n in Finset.range M,
+  ∑ n ∈ Finset.range M,
     (starRingEnd ℂ) (positiveDirichletGradient s n) *
       positiveDirichletGradient (reflectedParameter s) n
 
 /-- Forma de Green finita produzida pelos dois blocos Cp refletidos. -/
 def finiteCpGreenFlux (p M : ℕ) (s : ℂ) : ℂ :=
-  ∑ n in Finset.range M,
+  ∑ n ∈ Finset.range M,
     ((starRingEnd ℂ) (cpBlockGradient p s n) *
         positiveDirichletGradient (reflectedParameter s) n -
       (starRingEnd ℂ) (positiveDirichletGradient s n) *
@@ -131,12 +131,12 @@ theorem finiteCpGreenFlux_eq_eigenvalueDifference_mul_pairing
         finiteReflectedGradientPairing M s := by
   unfold finiteCpGreenFlux finiteReflectedGradientPairing
   calc
-    (∑ n in Finset.range M,
+    (∑ n ∈ Finset.range M,
       ((starRingEnd ℂ) (cpBlockGradient p s n) *
           positiveDirichletGradient (reflectedParameter s) n -
         (starRingEnd ℂ) (positiveDirichletGradient s n) *
           cpBlockGradient p (reflectedParameter s) n)) =
-        ∑ n in Finset.range M,
+        ∑ n ∈ Finset.range M,
           (((starRingEnd ℂ) (natDirichletTerm s p) -
               natDirichletTerm (reflectedParameter s) p) *
             ((starRingEnd ℂ) (positiveDirichletGradient s n) *
@@ -149,7 +149,7 @@ theorem finiteCpGreenFlux_eq_eigenvalueDifference_mul_pairing
       ring
     _ = ((starRingEnd ℂ) (natDirichletTerm s p) -
           natDirichletTerm (reflectedParameter s) p) *
-        ∑ n in Finset.range M,
+        ∑ n ∈ Finset.range M,
           ((starRingEnd ℂ) (positiveDirichletGradient s n) *
             positiveDirichletGradient (reflectedParameter s) n) := by
       rw [Finset.mul_sum]
