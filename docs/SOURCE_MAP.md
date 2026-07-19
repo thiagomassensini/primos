@@ -105,6 +105,14 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | Wronskiano normalizado fatora por `p^(-delta)-p^delta` | `Analytic.Cp.finitePhaseNormalizedCpGreenFlux_eq_radialDifference_mul_pairing` |
 | diferenca radial e `2*delta` vezes cofator primo positivo | `Analytic.Cp.cpRadialDifference_eq_two_mul_delta_mul_cofactor`, `Analytic.Cp.cpRadialCofactor_pos` |
 | identidade Green real assinada em corte finito e bordo literal | `Analytic.Cp.finiteSignedCpGreen_identity` |
+| cada aresta refletida possui parte real positiva em `0<Re(s)<1` | `Analytic.Cp.finiteReflectedGradientEdge_re_pos` |
+| pareamento refletido de todo corte nao vazio possui parte real positiva | `Analytic.Cp.finiteReflectedGradientPairing_re_pos` |
+| energia radial Green finita e positiva para todo primo e corte nao vazio | `Analytic.Cp.finiteRadialGreenEnergy_pos` |
+| a semente da carta canonica `p=3` e o endpoint Green interno `1` | `Analytic.Cp.seedSum_three_dirichlet_eq_one`, `Analytic.Cp.seedSum_three_eq_reflectedInnerEndpoint` |
+| carta finita canonica = endpoint interno + traco bracketado finito | `Analytic.Cp.finiteBracketedDirichletChart_three_eq_inner_add_trace` |
+| bordo Green acoplado = endpoint externo - carta bracketada finita | `Analytic.Cp.finiteBracketCoupledBoundary_eq_outer_sub_finiteChart` |
+| identidade Green finita permanece exata depois de acoplar o mesmo traco ao fluxo e ao bordo | `Analytic.Cp.finiteBracketCoupledCpGreen_identity` |
+| num zero Genuine, o bordo bracketado complexo e real converge a zero | `Analytic.Cp.finiteBracketCoupledBoundary_tendsto_zero_of_genuine_zero`, `Analytic.Cp.finiteBracketCoupledSignedBoundary_tendsto_zero_of_genuine_zero` |
 | identidade Green assinada, energia positiva e bordo fechado implicam `delta=0` | `Analytic.Cp.SignedGreenCertificate.criticalDisplacement_eq_zero_of_genuine_zero` |
 | certificado Green concreto produz a ponte Genuine--ramo | `Analytic.Cp.SignedGreenCertificate.toGenuineBranchBridge` |
 | ponte ainda aberta de zeros Genuine para a norma | `Analytic.Cp.GenuineBranchBridge` (sem instancia) |
