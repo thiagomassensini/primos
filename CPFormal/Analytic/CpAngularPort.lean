@@ -101,7 +101,7 @@ theorem realCpSaturatedBracket_three_eq_values
   norm_num [CPFormal.saturatedBracket, CPFormal.centeredSecondDifference,
     CPFormal.Genuine.Cp.halfRange]
   rw [hleft, hright, hcenter]
-  simp [natDirichletTerm, two_smul]
+  simp [natDirichletTerm]
 
 /-- Acrescentar um centro acrescenta exatamente seu bracket. -/
 theorem finiteBracketedDirichletChart_three_succ (M : ℕ) (s : ℂ) :
@@ -153,8 +153,12 @@ theorem canonicalAngularOuterValue_tendsto_zero
     exact
       (tendsto_natCast_atTop_atTop :
         Tendsto ((↑) : ℕ → ℝ) atTop atTop).comp hnat
-  have hrpow := (_root_.tendsto_rpow_neg_atTop hs).comp hreal
-  simpa only [norm_positiveDirichletValue, Function.comp_apply] using hrpow
+  have hrpow :
+      Tendsto (fun M : ℕ ↦ (((3 * M + 1 : ℕ) : ℝ)) ^ (-s.re))
+        atTop (nhds 0) := by
+    simpa only [Function.comp_def] using
+      ((_root_.tendsto_rpow_neg_atTop hs).comp hreal)
+  simpa only [norm_positiveDirichletValue] using hrpow
 
 /-- Passagem ao limite da porta angular para a carta bracketada. -/
 theorem finiteCanonicalAngularTrace_tendsto
