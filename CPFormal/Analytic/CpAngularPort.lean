@@ -100,7 +100,7 @@ theorem realCpSaturatedBracket_three_eq_values
   rw [realCpSaturatedBracket_eq_saturatedBracket]
   norm_num [CPFormal.saturatedBracket, CPFormal.centeredSecondDifference,
     CPFormal.Genuine.Cp.halfRange]
-  rw [hleft, hcenter, hright]
+  rw [hleft, hright, hcenter]
   simp [natDirichletTerm, two_smul]
 
 /-- Acrescentar um centro acrescenta exatamente seu bracket. -/
@@ -154,7 +154,7 @@ theorem canonicalAngularOuterValue_tendsto_zero
       (tendsto_natCast_atTop_atTop :
         Tendsto ((↑) : ℕ → ℝ) atTop atTop).comp hnat
   have hrpow := (_root_.tendsto_rpow_neg_atTop hs).comp hreal
-  simpa only [norm_positiveDirichletValue] using hrpow
+  simpa only [norm_positiveDirichletValue, Function.comp_apply] using hrpow
 
 /-- Passagem ao limite da porta angular para a carta bracketada. -/
 theorem finiteCanonicalAngularTrace_tendsto
