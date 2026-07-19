@@ -113,6 +113,10 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | bordo Green acoplado = endpoint externo - carta bracketada finita | `Analytic.Cp.finiteBracketCoupledBoundary_eq_outer_sub_finiteChart` |
 | identidade Green finita permanece exata depois de acoplar o mesmo traco ao fluxo e ao bordo | `Analytic.Cp.finiteBracketCoupledCpGreen_identity` |
 | num zero Genuine, o bordo bracketado complexo e real converge a zero | `Analytic.Cp.finiteBracketCoupledBoundary_tendsto_zero_of_genuine_zero`, `Analytic.Cp.finiteBracketCoupledSignedBoundary_tendsto_zero_of_genuine_zero` |
+| adicionar uma aresta adiciona seu somador e torna monotona a parte real do pareamento | `Analytic.Cp.finiteReflectedGradientPairing_succ`, `Analytic.Cp.finiteReflectedGradientPairing_re_monotone` |
+| fluxo acoplado = bulk orientado + bordo bracketado | `Analytic.Cp.finiteBracketCoupledCpGreenFlux_eq_oriented_add_boundary` |
+| fatoracao radial exata do fluxo acoplado | `Analytic.Cp.finiteBracketCoupledCpGreenFlux_eq_radialDifference_mul_pairing` |
+| em zeros Genuine, fluxo acoplado tende a zero exatamente na linha critica | `Analytic.Cp.coupledFlux_tendsto_zero_iff_criticalDisplacement_eq_zero` |
 | identidade Green assinada, energia positiva e bordo fechado implicam `delta=0` | `Analytic.Cp.SignedGreenCertificate.criticalDisplacement_eq_zero_of_genuine_zero` |
 | certificado Green concreto produz a ponte Genuine--ramo | `Analytic.Cp.SignedGreenCertificate.toGenuineBranchBridge` |
 | ponte ainda aberta de zeros Genuine para a norma | `Analytic.Cp.GenuineBranchBridge` (sem instancia) |
