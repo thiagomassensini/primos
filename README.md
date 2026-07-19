@@ -109,9 +109,19 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
   estritamente positivo para toda base prima;
 - identidade Green real assinada em corte finito, com fluxo, energia e bordo
   definidos explicitamente antes da igualdade;
-- positividade da parte real do pareamento refletido e cancelamento do endpoint
-  interno pelo traco bracketado permanecem obrigacoes abertas, nao instancias
-  presumidas;
+- positividade termo a termo: cada aresta do pareamento refletido possui parte
+  real estritamente positiva em `0<Re(s)<1`, uniformemente na altura;
+- para todo corte nao vazio, a parte real do pareamento refletido e a energia
+  radial Green finita completa sao estritamente positivas;
+- na camera canonica `p=3`, a semente da carta bracketada e literalmente o
+  endpoint Green interno `1`;
+- identidade finita independente
+  `rawBoundary-trace_M=outerEndpoint-finiteChart_M`, sem definir o bordo como
+  residual da igualdade desejada;
+- em todo zero de `genuineContinuation` na faixa critica, o bordo bracketado
+  acoplado, complexo e real assinado, converge a zero;
+- a anulacao ou o controle limite do fluxo de bulk acoplado permanece uma
+  obrigacao aberta, nao uma instancia presumida;
 - ledger de afirmacoes, mapa de dependencias e caixa de ideias.
 
 Os modulos projetivo e Hilbert--Polya permanecem preservados em
@@ -152,8 +162,8 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 marcadas como abertas no ledger.
 
 O checkpoint matematico mais recente do nucleo ativo passou por essa
-verificacao no commit `3326ae95321c9e3e3f0477f347a0ccf6f3ca8c02`, workflow
-run `29673514330`. A certificacao cobre os imports de `CPFormal.lean`;
+verificacao no commit `d082847d71a26257045de7fb056403ed0c1d02cf`, workflow
+run `29706219224`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
 ## Ordem de leitura
@@ -161,7 +171,7 @@ run `29673514330`. A certificacao cobre os imports de `CPFormal.lean`;
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
 3. `docs/CLAIM_LEDGER.md`
-4. `docs/RELEASE_0.21.0.md`
+4. `docs/RELEASE_0.23.0.md`
 5. `docs/VISION_INBOX.md`
 6. `CPFormal/Genuine/FiniteCancellation.lean`
 7. `CPFormal/Genuine/C2.lean`
@@ -193,4 +203,6 @@ run `29673514330`. A certificacao cobre os imports de `CPFormal.lean`;
 33. `CPFormal/Analytic/CpReflectedEndpoint.lean`
 34. `CPFormal/Analytic/CpFiniteGreenCertificate.lean`
 35. `CPFormal/Analytic/CpFiniteGreenRadial.lean`
-36. `CPFormal/Analytic/CpGreenBridge.lean`
+36. `CPFormal/Analytic/CpFiniteGreenPositivity.lean`
+37. `CPFormal/Analytic/CpBracketGreenBoundary.lean`
+38. `CPFormal/Analytic/CpGreenBridge.lean`
