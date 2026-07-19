@@ -129,9 +129,9 @@ theorem differentiable_cpChartFactor
     exact_mod_cast hp.ne_zero
   letI : NeZero (p : ℂ) := ⟨hpComplex⟩
   change Differentiable ℂ (fun s : ℂ ↦ 1 - (p : ℂ) ^ (1 - s))
-  exact differentiable_const.sub
+  exact (differentiable_const (c := (1 : ℂ))).sub
     ((differentiable_const_cpow_of_neZero (p : ℂ)).comp
-      (differentiable_const.sub differentiable_id))
+      ((differentiable_const (c := (1 : ℂ))).sub differentiable_id))
 
 /-- Quociente Cp que recupera o canal Genuine onde o fator e regular. -/
 def cpGenuineQuotient (p : ℕ) (s : ℂ) : ℂ :=
@@ -146,7 +146,9 @@ theorem cpGenuineQuotient_eq_genuineDirichlet
   have hfactor := cpChartFactor_ne_zero_of_one_lt_re p hp hs
   rw [cpGenuineQuotient,
     bracketedDirichletChart_eq_genuine_factor p hp hpodd hs]
-  simp [cpChartFactor, hfactor]
+  change (cpChartFactor p s * genuineDirichlet s) /
+      cpChartFactor p s = genuineDirichlet s
+  field_simp
 
 /-- No interior da faixa, a carta volta a ser fator vezes quociente. -/
 theorem bracketedDirichletChart_eq_factor_mul_cpGenuineQuotient
