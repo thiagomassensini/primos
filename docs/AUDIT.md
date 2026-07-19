@@ -508,3 +508,33 @@ Este run nao prova a anulacao ou o limite nulo do fluxo de bulk acoplado, nao
 controla o limite de energia necessario, nao constroi uma instancia concreta
 de `SignedGreenCertificate`, nao constroi operador Hilbert--Polya e nao prova
 RH.
+
+## Checkpoint da caracterizacao do fluxo Green acoplado
+
+- commit matematico certificado: `3fcb6d5a05a2395bcdf3d58d94ef6a7a0afd1f38`;
+- workflow run: `29706939780` (`Lean kernel audit`);
+- job: `88245427884` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpBracketGreenFlux`.
+
+O kernel verificou que o fluxo acoplado e a soma independente da parte real
+do bulk orientado com o bordo bracketado. Tambem preservou a fatoracao
+
+```text
+coupledFlux_M
+  = radialDifference*Re(reflectedPairing_M) + coupledBoundary_M.
+```
+
+Cada novo corte adiciona uma aresta de parte real positiva, portanto a parte
+real do pareamento e monotona e fica acima do primeiro corte estritamente
+positivo. Com o bordo ja nulo no limite em zeros Genuine, o kernel concluiu
+
+```text
+coupledFlux_M -> 0  <->  criticalDisplacement=0.
+```
+
+Essa equivalencia nao fornece a anulacao do fluxo a partir do zero Genuine;
+ela prova que tal anulacao e exatamente a ponte critica. Permanecem abertos os
+tracos de porta `Phi/Psi`, uma identidade independente que forneca essa
+direcao, uma instancia concreta de `SignedGreenCertificate`, operador
+Hilbert--Polya e RH.
