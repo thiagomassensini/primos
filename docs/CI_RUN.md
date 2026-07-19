@@ -394,3 +394,23 @@ coupledFlux_M -> 0  <->  Re(s)=1/2.
 O run nao prova a direcao `zero Genuine -> fluxo nulo`; ele identifica essa
 direcao como a ponte ainda aberta. Nao constroi os tracos `Phi/Psi`, uma
 instancia concreta de `SignedGreenCertificate`, operador Hilbert--Polya ou RH.
+
+## Checkpoint da porta angular finita canonica
+
+- commit: `995e0943697b74cc522d965231e90339f52b94fb`;
+- run: `29708436603`;
+- job: `88249048235`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+O kernel elaborou a corrente angular de pesos `1,2,0`, sua expansao por
+valores de Dirichlet e a identidade exata
+
+```text
+finiteBracketedChart_3,M = finiteAngularTrace_M + (3M+1)^(-s).
+```
+
+Elaborou tambem o desaparecimento do endpoint para `Re(s)>0`, a convergencia
+do traco para a carta bracketada e seu limite nulo em zeros Genuine da faixa
+critica. O run nao constroi `Psi`, nao prova a lei Wronskiana de porta, uma
+instancia concreta de `SignedGreenCertificate`, operador Hilbert--Polya ou RH.
