@@ -91,7 +91,7 @@ theorem constant_eq_zero_of_tendsto_mul_of_eventually_pos_lower_bound
     tendsto_const_nhds.mul hlim
   have hf : Tendsto f atTop (nhds 0) := by
     simpa [mul_assoc, hc] using hinv
-  have hlowerZero : lower ≤ 0 := le_of_tendsto hf hbound
+  have hlowerZero : lower ≤ 0 := ge_of_tendsto hf hbound
   exact (not_le_of_gt hlower) hlowerZero
 
 /-- Na linha critica, o bulk radial zera e resta somente o bordo acoplado. -/
@@ -134,9 +134,18 @@ theorem criticalDisplacement_eq_zero_of_coupledFlux_tendsto_zero
   have hproduct :
       Tendsto (fun M : ℕ ↦ c * pairingRe M) atTop (nhds 0) := by
     have hsub := hflux.sub hboundary
-    simpa only [c, pairingRe,
-      finiteBracketCoupledCpGreenFlux_eq_radialDifference_mul_pairing,
-      add_sub_cancel_right, sub_self] using hsub
+    have hfun :
+        (fun M : ℕ ↦ c * pairingRe M) =
+          (fun M : ℕ ↦
+            finiteBracketCoupledCpGreenFlux p M s -
+              finiteBracketCoupledSignedBoundary M s) := by
+      funext M
+      dsimp [c, pairingRe]
+      rw [finiteBracketCoupledCpGreenFlux_eq_radialDifference_mul_pairing
+        p M hp s]
+      ring
+    rw [hfun]
+    simpa using hsub
   have hpositive : 0 < pairingRe 1 := by
     exact finiteReflectedGradientPairing_re_pos (by norm_num) hs
   have hmonotone : Monotone pairingRe := by
