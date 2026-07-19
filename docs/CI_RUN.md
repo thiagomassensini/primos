@@ -245,3 +245,20 @@ analitica da identidade com o fator Genuine conhecida em `Re(s)>1`.
 
 O run nao certifica identificacao com `riemannZeta`, nao anulacao do fator,
 equivalencia de zeros, certificado Green concreto ou RH.
+
+## Checkpoint do fator Cp e quociente Genuine
+
+- commit: `26379be9ed40c9196bd85af8bcba6b2808cf2481`;
+- run: `29667470934`;
+- job: `88140361964`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+O kernel elaborou o confinamento dos zeros de `1-p^(1-s)` a `Re(s)=1`, a
+nao anulacao no interior da faixa critica, a analiticidade do fator e do
+quociente Cp, a recuperacao da serie Genuine em `Re(s)>1` e a equivalencia
+entre zeros da carta e do quociente dentro da faixa.
+
+O run nao certifica compatibilidade entre quocientes de primos diferentes,
+identificacao com `riemannZeta`, preservacao de multiplicidade, certificado
+Green concreto ou RH.
