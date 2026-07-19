@@ -96,7 +96,7 @@ theorem cpBlockGradient_eq_eigenvalue_mul
       natDirichletTerm s p * positiveDirichletGradient s n := by
   unfold cpBlockGradient
   rw [sum_range_forwardDifference]
-  have hend : p * (n + 1) + p = p * (n + 2) := by omega
+  have hend : p * (n + 1) + p = p * (n + 2) := by ring
   rw [hend, natDirichletTerm_mul, natDirichletTerm_mul]
   unfold positiveDirichletGradient
   ring
