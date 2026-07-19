@@ -88,6 +88,12 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | quociente Cp recupera a serie Genuine em `Re(s)>1` | `Analytic.Cp.cpGenuineQuotient_eq_genuineDirichlet` |
 | quociente Cp e holomorfo no interior da faixa | `Analytic.Cp.analyticOnNhd_cpGenuineQuotient_genuineCriticalStrip` |
 | zeros da carta equivalem aos zeros do quociente Cp na faixa | `Analytic.Cp.bracketedDirichletChart_zero_iff_cpGenuineQuotient_zero` |
+| identidade cruzada das cartas primas em `Re(s)>-1` | `Analytic.Cp.crossNormalizedChart_eq_swap` |
+| quocientes Genuine de duas cameras primas coincidem na faixa | `Analytic.Cp.cpGenuineQuotient_eq_cpGenuineQuotient` |
+| representante Genuine canonico recupera a serie em `Re(s)>1` | `Analytic.Cp.genuineContinuation_eq_genuineDirichlet` |
+| representante Genuine canonico e holomorfo na faixa | `Analytic.Cp.analyticOnNhd_genuineContinuation_genuineCriticalStrip` |
+| toda camera prima impar produz o mesmo representante Genuine | `Analytic.Cp.cpGenuineQuotient_eq_genuineContinuation` |
+| zero de qualquer carta prima equivale a zero do Genuine canonico | `Analytic.Cp.bracketedDirichletChart_zero_iff_genuineContinuation_zero` |
 | identidade Green assinada, energia positiva e bordo fechado implicam `delta=0` | `Analytic.Cp.SignedGreenCertificate.criticalDisplacement_eq_zero_of_genuine_zero` |
 | certificado Green concreto produz a ponte Genuine--ramo | `Analytic.Cp.SignedGreenCertificate.toGenuineBranchBridge` |
 | ponte ainda aberta de zeros Genuine para a norma | `Analytic.Cp.GenuineBranchBridge` (sem instancia) |

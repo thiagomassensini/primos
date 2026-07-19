@@ -377,3 +377,26 @@ O indice primo permanece parte da definicao. Este checkpoint nao prova que os
 quocientes de primos diferentes coincidem na faixa, nao identifica o objeto
 com `riemannZeta`, nao trata multiplicidades, nao constroi certificado Green
 concreto, operador Hilbert--Polya ou RH.
+
+## Checkpoint da compatibilidade Genuine entre cameras Cp
+
+- commit certificado: `a31645bbf79a2743ab14bfbd0343c30b8b6f510c`;
+- workflow run: `29668593622` (`Lean kernel audit`, run number 123);
+- job: `88143422851` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpGenuineCompatibility`.
+
+Para primos impares `p,q`, o kernel verificou em `Re(s)>1` a identidade
+cruzada entre `F_q*B_p` e `F_p*B_q`. Como ambos os produtos sao holomorfos no
+semiplano preconexo `Re(s)>-1`, o principio da identidade prolonga a igualdade
+antes de qualquer divisao. Dentro da faixa critica, os fatores sao nao nulos;
+o cancelamento prova que os quocientes de `p` e `q` coincidem.
+
+O representante `genuineContinuation`, escolhido pela camera `p=3`, e
+portanto independente da camera na faixa, e holomorfo nela e recupera a serie
+Genuine no semiplano inicial. Os zeros de qualquer carta prima impar
+equivalem aos zeros desse mesmo representante na faixa.
+
+Este checkpoint nao identifica o representante com `riemannZeta`, nao trata
+multiplicidades, nao constroi certificado Green concreto, operador
+Hilbert--Polya ou RH.

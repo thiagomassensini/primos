@@ -344,9 +344,21 @@ cpGenuineQuotient(p,s) = bracketedDirichletChart(p,s)/(1-p^(1-s))
 
 e holomorfo na faixa, coincide com a serie Genuine original em `Re(s)>1`
 para primo impar e possui os mesmos zeros da carta onde o fator nao zera.
-Ainda faltam a independencia desse quociente em relacao a `p` e/ou sua
-identificacao com uma continuacao Genuine global, alem da preservacao de
-multiplicidades.
+
+A independencia prima tambem foi fechada sem importar uma zeta externa.
+Primeiro o kernel prolongou a identidade cruzada
+
+```text
+(1-q^(1-s))*bracketedChart(p,s)
+  = (1-p^(1-s))*bracketedChart(q,s)
+```
+
+de `Re(s)>1` para `Re(s)>-1`, antes de dividir. Somente no interior da faixa,
+onde os dois fatores sao nao nulos, eles foram cancelados. Assim todos os
+quocientes de primos impares coincidem com `genuineContinuation`; qualquer
+carta prima impar possui exatamente os zeros desse mesmo objeto na faixa.
+Preservacao de multiplicidades permanece separada e nao bloqueia a proxima
+ponte Genuine--Green.
 
 O gargalo Green foi decomposto numa interface mais informativa que a ponte
 final. `SignedGreenCertificate` exige separadamente
@@ -398,7 +410,8 @@ Teoremas-alvo:
 O arquivo `Analytic/Chart.lean` contem a logica abstrata
 `chart = factor * genuine`; a instancia Cp concreta de continuacao esta em
 `Analytic/CpBracketHolomorphic.lean`, e o fator regular e o quociente Cp estao
-em `Analytic/CpGenuineQuotient.lean`.
+em `Analytic/CpGenuineQuotient.lean`. A compatibilidade entre cameras e o
+representante Genuine canonico estao em `Analytic/CpGenuineCompatibility.lean`.
 
 Ordem local atual para essa instancia:
 
@@ -415,12 +428,16 @@ Ordem local atual para essa instancia:
 5. **concluido:** o fator so pode zerar em `Re(s)=1`; o quociente Cp e
    holomorfo na faixa, recupera a serie em `Re(s)>1` e seus zeros equivalem aos
    zeros da carta na faixa;
-6. **proximo nucleo minimo:** provar que os quocientes de duas cameras primas
-   coincidem no dominio comum, ou identifica-los com uma unica continuacao
-   Genuine independente de `p`;
-7. depois, tratar multiplicidades e construir o traco Green usando o mesmo
-   ledger de bordo, sem trocar o
-   escalar Genuine por uma amplitude modelada.
+6. **concluido:** prolongar a identidade cruzada antes da divisao, cancelar
+   fatores regulares na faixa e provar que todos os quocientes primos
+   coincidem com um unico `genuineContinuation`;
+7. **proximo nucleo minimo:** construir em cortes finitos o fluxo e o bordo do
+   certificado Green para esse Genuine canonico, usando o mesmo ledger de
+   `extras - faltantes` e sem trocar o escalar Genuine por uma amplitude
+   modelada;
+8. depois, controlar a cauda do certificado. Multiplicidades ficam como
+   refinamento posterior, pois nao bloqueiam a implicacao simples sobre a
+   localizacao dos zeros.
 
 ## Fase 5 — Hilbert ponderado e projecao
 

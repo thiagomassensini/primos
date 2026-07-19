@@ -86,6 +86,15 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
   holomorfo na faixa critica e igual a serie Genuine original em `Re(s)>1`;
 - equivalencia, no interior da faixa, entre zero da carta e zero do quociente
   Genuine Cp, mantendo explicita a dependencia na camera prima;
+- identidade cruzada holomorfa
+  `F_q * bracketedChart_p = F_p * bracketedChart_q` em `Re(s)>-1`, obtida
+  pelo principio da identidade antes de qualquer divisao;
+- independencia da camera: os quocientes `cpGenuineQuotient p` de quaisquer
+  primos impares coincidem no interior da faixa critica;
+- representante `genuineContinuation`, holomorfo na faixa, igual a serie
+  Genuine original em `Re(s)>1` e independente da carta prima escolhida;
+- equivalencia global, na faixa, entre zero de qualquer carta prima impar e
+  zero do mesmo `genuineContinuation`;
 - criterio Green assinado que transforma um certificado concreto de
   fluxo--energia--bordo numa ponte `zero Genuine -> saturacao do ramo`;
 - interface Green explicita ainda sem certificado concreto: o fluxo e o traco
@@ -130,8 +139,8 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 marcadas como abertas no ledger.
 
 O checkpoint mais recente do nucleo ativo passou por essa verificacao no
-commit `26379be9ed40c9196bd85af8bcba6b2808cf2481`, workflow run
-`29667470934`. A certificacao cobre os imports de `CPFormal.lean`;
+commit `a31645bbf79a2743ab14bfbd0343c30b8b6f510c`, workflow run
+`29668593622`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
 ## Ordem de leitura
@@ -139,7 +148,7 @@ commit `26379be9ed40c9196bd85af8bcba6b2808cf2481`, workflow run
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
 3. `docs/CLAIM_LEDGER.md`
-4. `docs/RELEASE_0.17.0.md`
+4. `docs/RELEASE_0.18.0.md`
 5. `docs/VISION_INBOX.md`
 6. `CPFormal/Genuine/FiniteCancellation.lean`
 7. `CPFormal/Genuine/C2.lean`
@@ -166,4 +175,5 @@ commit `26379be9ed40c9196bd85af8bcba6b2808cf2481`, workflow run
 28. `CPFormal/Analytic/CpBracketConvergence.lean`
 29. `CPFormal/Analytic/CpBracketHolomorphic.lean`
 30. `CPFormal/Analytic/CpGenuineQuotient.lean`
-31. `CPFormal/Analytic/CpGreenBridge.lean`
+31. `CPFormal/Analytic/CpGenuineCompatibility.lean`
+32. `CPFormal/Analytic/CpGreenBridge.lean`

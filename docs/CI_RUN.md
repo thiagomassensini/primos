@@ -262,3 +262,23 @@ entre zeros da carta e do quociente dentro da faixa.
 O run nao certifica compatibilidade entre quocientes de primos diferentes,
 identificacao com `riemannZeta`, preservacao de multiplicidade, certificado
 Green concreto ou RH.
+
+## Checkpoint da compatibilidade Genuine entre cameras Cp
+
+- commit: `a31645bbf79a2743ab14bfbd0343c30b8b6f510c`;
+- run: `29668593622`;
+- job: `88143422851`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+O kernel elaborou a identidade cruzada entre duas cartas primas no semiplano
+`Re(s)>1`, sua extensao a `Re(s)>-1` pelo principio da identidade e o
+cancelamento dos dois fatores somente dentro da faixa critica, onde sua nao
+anulacao ja estava provada. Como consequencia, os quocientes de quaisquer
+primos impares coincidem na faixa e definem um unico representante
+`genuineContinuation`; os zeros de toda carta prima impar sao exatamente os
+zeros desse representante.
+
+O run nao identifica `genuineContinuation` com `riemannZeta`, nao trata
+multiplicidades, nao constroi o certificado Green concreto, nao constroi um
+operador Hilbert--Polya e nao prova RH.
