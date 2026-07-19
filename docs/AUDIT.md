@@ -348,3 +348,32 @@ prova a nao anulacao do fator, equivalencia de zeros, certificado Green
 concreto, operador Hilbert--Polya ou RH. Tambem nao exporta um teorema separado
 quantificado sobre compactos; o majorante local em bolas e o endpoint usado
 para certificar a holomorfia.
+
+## Checkpoint do fator regular e quociente Genuine Cp
+
+- commit certificado: `26379be9ed40c9196bd85af8bcba6b2808cf2481`;
+- workflow run: `29667470934` (`Lean kernel audit`, run number 118);
+- job: `88140361964` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpGenuineQuotient`.
+
+O kernel verificou a identidade de modulo
+
+```text
+||p^(1-s)|| = p^(1-Re(s))
+```
+
+para primo `p`. A monotonicidade estrita de `Real.rpow` mostra que esse modulo
+e maior que um abaixo de `Re(s)=1` e menor que um acima. Consequentemente,
+`1-p^(1-s)=0` implica `Re(s)=1`, e o fator nao zera no interior da faixa
+critica.
+
+Foi definido `cpGenuineQuotient` como carta dividida pelo fator. O kernel
+verificou que ele e holomorfo em `0<Re(s)<1`, coincide com a serie
+`genuineDirichlet` em `Re(s)>1` para primo impar e tem zeros equivalentes aos
+da carta dentro da faixa.
+
+O indice primo permanece parte da definicao. Este checkpoint nao prova que os
+quocientes de primos diferentes coincidem na faixa, nao identifica o objeto
+com `riemannZeta`, nao trata multiplicidades, nao constroi certificado Green
+concreto, operador Hilbert--Polya ou RH.
