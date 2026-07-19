@@ -326,8 +326,27 @@ identidade prova a unicidade da continuacao a partir de `Re(s)>1`.
 
 Foi exportada a forma local em bolas, que e suficiente para holomorfia; nao
 foi criado um corolario redundante quantificando separadamente sobre todo
-compacto. Ainda faltam a identificacao com a zeta da Mathlib, a nao anulacao
-formal do fator no critical strip e as consequencias sobre zeros.
+compacto.
+
+O fator da carta tambem foi fechado. O kernel verificou
+
+```text
+||p^(1-s)|| = p^(1-Re(s))
+```
+
+e concluiu que `1-p^(1-s)=0` so pode ocorrer em `Re(s)=1`. No interior da
+faixa critica, a divisao e portanto regular. O objeto explicitamente
+dependente da camera
+
+```text
+cpGenuineQuotient(p,s) = bracketedDirichletChart(p,s)/(1-p^(1-s))
+```
+
+e holomorfo na faixa, coincide com a serie Genuine original em `Re(s)>1`
+para primo impar e possui os mesmos zeros da carta onde o fator nao zera.
+Ainda faltam a independencia desse quociente em relacao a `p` e/ou sua
+identificacao com uma continuacao Genuine global, alem da preservacao de
+multiplicidades.
 
 O gargalo Green foi decomposto numa interface mais informativa que a ponte
 final. `SignedGreenCertificate` exige separadamente
@@ -378,7 +397,8 @@ Teoremas-alvo:
 
 O arquivo `Analytic/Chart.lean` contem a logica abstrata
 `chart = factor * genuine`; a instancia Cp concreta de continuacao esta em
-`Analytic/CpBracketHolomorphic.lean`.
+`Analytic/CpBracketHolomorphic.lean`, e o fator regular e o quociente Cp estao
+em `Analytic/CpGenuineQuotient.lean`.
 
 Ordem local atual para essa instancia:
 
@@ -392,10 +412,14 @@ Ordem local atual para essa instancia:
 4. **concluido:** majorante uniforme numa bola canonica em torno de cada ponto,
    holomorfia da carta bracketada e unicidade da continuacao pelo principio da
    identidade;
-5. **proximo nucleo minimo:** provar que `1-p^(1-s)` nao zera no interior do
-   critical strip e formular a equivalencia de zeros que realmente decorre da
-   carta continuada;
-6. depois, construir o traco Green usando o mesmo ledger de bordo, sem trocar o
+5. **concluido:** o fator so pode zerar em `Re(s)=1`; o quociente Cp e
+   holomorfo na faixa, recupera a serie em `Re(s)>1` e seus zeros equivalem aos
+   zeros da carta na faixa;
+6. **proximo nucleo minimo:** provar que os quocientes de duas cameras primas
+   coincidem no dominio comum, ou identifica-los com uma unica continuacao
+   Genuine independente de `p`;
+7. depois, tratar multiplicidades e construir o traco Green usando o mesmo
+   ledger de bordo, sem trocar o
    escalar Genuine por uma amplitude modelada.
 
 ## Fase 5 — Hilbert ponderado e projecao
