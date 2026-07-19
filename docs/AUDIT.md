@@ -461,3 +461,50 @@ parte real do pareamento refletido e positiva; portanto a positividade da
 energia completa permanece aberta. Tambem permanecem abertos o cancelamento
 do endpoint interno pelo bracket Genuine, a passagem ao limite, uma instancia
 concreta de `SignedGreenCertificate`, um operador Hilbert--Polya e RH.
+
+## Checkpoint da positividade Green Cp termo a termo
+
+- commit matematico certificado: `1fc3d26f66eff2a4772d6ad5f073b923f6c1156f`;
+- workflow run: `29705176557` (`Lean kernel audit`);
+- job: `88240845070` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpFiniteGreenPositivity`.
+
+O kernel verificou a expansao de cada aresta refletida em dois diagonais
+menos dois termos cruzados, as normas exatas desses cruzados e a desigualdade
+real estrita valida em toda a faixa `0<Re(s)<1`. Como consequencia, cada
+aresta tem parte real positiva, todo corte `M>0` possui pareamento refletido
+positivo e a energia radial Green finita e positiva para toda base prima.
+
+Naquele checkpoint permaneceram abertos a identificacao do endpoint interno
+com o bracket Genuine, a anulacao do fluxo em zeros Genuine, a passagem ao
+limite, uma instancia concreta de `SignedGreenCertificate`, um operador
+Hilbert--Polya e RH. O checkpoint seguinte fecha apenas a componente de bordo.
+
+## Checkpoint da porta bracketada e do bordo Green canonico
+
+- commit matematico certificado: `d082847d71a26257045de7fb056403ed0c1d02cf`;
+- workflow run: `29706219224` (`Lean kernel audit`);
+- job: `88243582695` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpBracketGreenBoundary`.
+
+O kernel verificou que a semente da camera canonica `p=3` e exatamente o
+endpoint Green interno refletido `1`. A partir de definicoes independentes,
+verificou em cada corte a identidade
+
+```text
+rawBoundary_M - canonicalBracketTrace_M
+  = outerEndpoint_M - finiteBracketedChart_3,M.
+```
+
+Tambem verificou que a mesma porta pode ser subtraida do fluxo e do bordo sem
+alterar a identidade Green assinada finita. Em todo zero de
+`genuineContinuation` na faixa critica, a carta finita e o endpoint externo
+convergem a zero; portanto o bordo acoplado converge a zero, tanto em `Complex`
+quanto em sua parte real assinada.
+
+Este run nao prova a anulacao ou o limite nulo do fluxo de bulk acoplado, nao
+controla o limite de energia necessario, nao constroi uma instancia concreta
+de `SignedGreenCertificate`, nao constroi operador Hilbert--Polya e nao prova
+RH.
