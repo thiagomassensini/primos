@@ -31,3 +31,4 @@ import CPFormal.Analytic.CpBracketHolomorphic
 import CPFormal.Analytic.CpGenuineQuotient
 import CPFormal.Analytic.CpGenuineCompatibility
 import CPFormal.Analytic.CpFiniteGreen
+import CPFormal.Analytic.CpReflectedEndpoint
