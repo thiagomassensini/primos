@@ -327,3 +327,50 @@ fatoracao `p^delta-p^(-delta)=2*delta*A_p(delta)`; a positividade de
 finito. O run nao certifica a positividade da parte real do pareamento, o
 cancelamento do bordo interno pelo bracket Genuine, a passagem ao limite,
 `SignedGreenCertificate`, operador Hilbert--Polya ou RH.
+
+## Checkpoint da positividade Green Cp termo a termo
+
+- commit: `1fc3d26f66eff2a4772d6ad5f073b923f6c1156f`;
+- run: `29705176557`;
+- job: `88240845070`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+O kernel elaborou a identidade exata de uma aresta refletida, as normas dos
+termos cruzados e a margem
+
+```text
+(1-r^(-sigma))*(1-r^(sigma-1)) > 0
+```
+
+para `r>1` e `0<sigma<1`. Disso seguem a positividade estrita de cada aresta,
+da parte real do pareamento em todo corte `M>0` e da energia radial Green
+finita para todo primo `p`.
+
+O run nao liga ainda fluxo ou endpoint interno ao bracket Genuine, nao passa
+ao limite, nao constroi `SignedGreenCertificate`, operador Hilbert--Polya ou
+RH.
+
+## Checkpoint da porta bracketada e do bordo Green canonico
+
+- commit: `d082847d71a26257045de7fb056403ed0c1d02cf`;
+- run: `29706219224`;
+- job: `88243582695`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+O kernel elaborou a igualdade entre a semente da camera `p=3` e o endpoint
+interno `1`, a decomposicao da carta finita como endpoint mais traco e a
+identidade
+
+```text
+rawBoundary_M - trace_M = outerEndpoint_M - finiteChart_3,M.
+```
+
+Tambem elaborou a identidade Green assinada depois do acoplamento e a
+convergencia a zero dos bordos acoplados complexo e real em todo zero Genuine
+na faixa critica.
+
+O run nao certifica a anulacao ou o limite do fluxo de bulk acoplado, o limite
+de energia, uma instancia concreta de `SignedGreenCertificate`, operador
+Hilbert--Polya ou RH.
