@@ -117,6 +117,10 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | fluxo acoplado = bulk orientado + bordo bracketado | `Analytic.Cp.finiteBracketCoupledCpGreenFlux_eq_oriented_add_boundary` |
 | fatoracao radial exata do fluxo acoplado | `Analytic.Cp.finiteBracketCoupledCpGreenFlux_eq_radialDifference_mul_pairing` |
 | em zeros Genuine, fluxo acoplado tende a zero exatamente na linha critica | `Analytic.Cp.coupledFlux_tendsto_zero_iff_criticalDisplacement_eq_zero` |
+| bloco angular canonico usa os pesos residuais `1,2,0` do traco `n mod 3` | `Analytic.Cp.canonicalAngularGradientBlock`, `Analytic.Cp.canonicalAngularWeight_eq_globalResidue` |
+| carta bracketada finita `p=3` = traco angular finito + endpoint `(3M+1)^(-s)` | `Analytic.Cp.finiteBracketedDirichletChart_three_eq_angularTrace_add_outer` |
+| para `Re(s)>0`, o traco angular finito converge para a carta bracketada | `Analytic.Cp.finiteCanonicalAngularTrace_tendsto` |
+| em zeros Genuine da faixa, o traco angular finito converge a zero | `Analytic.Cp.finiteCanonicalAngularTrace_tendsto_zero_of_genuine_zero` |
 | identidade Green assinada, energia positiva e bordo fechado implicam `delta=0` | `Analytic.Cp.SignedGreenCertificate.criticalDisplacement_eq_zero_of_genuine_zero` |
 | certificado Green concreto produz a ponte Genuine--ramo | `Analytic.Cp.SignedGreenCertificate.toGenuineBranchBridge` |
 | ponte ainda aberta de zeros Genuine para a norma | `Analytic.Cp.GenuineBranchBridge` (sem instancia) |
