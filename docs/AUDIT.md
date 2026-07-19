@@ -440,3 +440,24 @@ O certificado e complexo, nao o `SignedGreenCertificate` real consumido pela
 reducao final. A retirada da fase, a positividade da parte real e o
 cancelamento do endpoint interno pela porta bracketada permanecem abertos.
 Este checkpoint nao constroi operador Hilbert--Polya e nao prova RH.
+
+## Checkpoint da normalizacao radial Green Cp finita
+
+- commit matematico certificado: `3326ae95321c9e3e3f0477f347a0ccf6f3ca8c02`;
+- workflow run: `29673514330` (`Lean kernel audit`);
+- job: `88156612420` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpFiniteGreenRadial`.
+
+O kernel verificou que a normalizacao `p^(1/2+i Im(s))`, aplicada a cada
+bloco antes do Wronskiano, transforma os autovalores de `s` e
+`1-conj(s)` nos escalares reais `p^(-delta)` e `p^delta`. O fluxo orientado
+fatora por `p^delta-p^(-delta)`, e essa diferenca e exatamente `2*delta`
+vezes um cofator estritamente positivo para toda base prima.
+
+Ao tomar partes reais e recombinar a corrente de Stokes, o kernel elaborou a
+identidade Green assinada finita com bordo literal. Nao foi provado que a
+parte real do pareamento refletido e positiva; portanto a positividade da
+energia completa permanece aberta. Tambem permanecem abertos o cancelamento
+do endpoint interno pelo bracket Genuine, a passagem ao limite, uma instancia
+concreta de `SignedGreenCertificate`, um operador Hilbert--Polya e RH.

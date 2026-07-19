@@ -100,6 +100,11 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | endpoint externo refletido e `1/(M+1)` e tende a zero | `Analytic.Cp.finiteReflectedOuterEndpoint_eq_inv`, `Analytic.Cp.finiteReflectedOuterEndpoint_tendsto_zero` |
 | certificado Green complexo finito deriva `flux=coefficient*energy+boundary` de duas identidades independentes | `Analytic.Cp.FiniteComplexGreenCertificate.green_identity`, `Analytic.Cp.finiteCpGreenCertificate` |
 | bordo da instancia Cp finita e exatamente `1/(M+1)-1` | `Analytic.Cp.finiteCpGreenCertificate_boundary_eq_inv_sub_one` |
+| normalizador de fase transforma o autovalor Cp em `p^(-delta)` real | `Analytic.Cp.cpPhaseNormalizer_mul_eigenvalue`, `Analytic.Cp.phaseNormalizedCpBlockGradient_eq_radial_mul` |
+| o bloco refletido normalizado possui autovalor real `p^delta` | `Analytic.Cp.phaseNormalizedCpBlockGradient_reflected_eq_radial_mul` |
+| Wronskiano normalizado fatora por `p^(-delta)-p^delta` | `Analytic.Cp.finitePhaseNormalizedCpGreenFlux_eq_radialDifference_mul_pairing` |
+| diferenca radial e `2*delta` vezes cofator primo positivo | `Analytic.Cp.cpRadialDifference_eq_two_mul_delta_mul_cofactor`, `Analytic.Cp.cpRadialCofactor_pos` |
+| identidade Green real assinada em corte finito e bordo literal | `Analytic.Cp.finiteSignedCpGreen_identity` |
 | identidade Green assinada, energia positiva e bordo fechado implicam `delta=0` | `Analytic.Cp.SignedGreenCertificate.criticalDisplacement_eq_zero_of_genuine_zero` |
 | certificado Green concreto produz a ponte Genuine--ramo | `Analytic.Cp.SignedGreenCertificate.toGenuineBranchBridge` |
 | ponte ainda aberta de zeros Genuine para a norma | `Analytic.Cp.GenuineBranchBridge` (sem instancia) |

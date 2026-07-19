@@ -102,9 +102,16 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
 - endpoint externo refletido igual a `1/(M+1)` e portanto nulo no limite;
 - certificado Green Cp complexo e concreto em corte finito, com fluxo total,
   energia refletida e bordo fechado `1/(M+1)-1`;
-- interface Green real assinada ainda sem certificado concreto: normalizacao
-  radial, positividade e cancelamento do endpoint interno pelo traco bracketado
-  permanecem obrigacoes abertas, nao instancias presumidas;
+- normalizacao de fase aplicada ao bloco antes do Wronskiano, convertendo os
+  autovalores refletidos em escalares reais `p^(-delta)` e `p^delta`;
+- fatoracao radial exata
+  `p^delta-p^(-delta)=2*delta*cpRadialCofactor(p,delta)`, com cofator
+  estritamente positivo para toda base prima;
+- identidade Green real assinada em corte finito, com fluxo, energia e bordo
+  definidos explicitamente antes da igualdade;
+- positividade da parte real do pareamento refletido e cancelamento do endpoint
+  interno pelo traco bracketado permanecem obrigacoes abertas, nao instancias
+  presumidas;
 - ledger de afirmacoes, mapa de dependencias e caixa de ideias.
 
 Os modulos projetivo e Hilbert--Polya permanecem preservados em
@@ -144,9 +151,9 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 `KERNEL_CHECKED`; ele nao promove automaticamente pontes matematicas ainda
 marcadas como abertas no ledger.
 
-O checkpoint mais recente do nucleo ativo passou por essa verificacao no
-commit `b0b47a87a64acfd129fbeb4f0cac148ccc4114ae`, workflow run
-`29671533493`. A certificacao cobre os imports de `CPFormal.lean`;
+O checkpoint matematico mais recente do nucleo ativo passou por essa
+verificacao no commit `3326ae95321c9e3e3f0477f347a0ccf6f3ca8c02`, workflow
+run `29673514330`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
 ## Ordem de leitura
@@ -154,7 +161,7 @@ commit `b0b47a87a64acfd129fbeb4f0cac148ccc4114ae`, workflow run
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
 3. `docs/CLAIM_LEDGER.md`
-4. `docs/RELEASE_0.20.0.md`
+4. `docs/RELEASE_0.21.0.md`
 5. `docs/VISION_INBOX.md`
 6. `CPFormal/Genuine/FiniteCancellation.lean`
 7. `CPFormal/Genuine/C2.lean`
@@ -185,4 +192,5 @@ commit `b0b47a87a64acfd129fbeb4f0cac148ccc4114ae`, workflow run
 32. `CPFormal/Analytic/CpFiniteGreen.lean`
 33. `CPFormal/Analytic/CpReflectedEndpoint.lean`
 34. `CPFormal/Analytic/CpFiniteGreenCertificate.lean`
-35. `CPFormal/Analytic/CpGreenBridge.lean`
+35. `CPFormal/Analytic/CpFiniteGreenRadial.lean`
+36. `CPFormal/Analytic/CpGreenBridge.lean`

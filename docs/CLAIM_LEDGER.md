@@ -1,4 +1,4 @@
-# Ledger de afirmacoes — checkpoint 0.20.0 Genuine-first
+# Ledger de afirmacoes — checkpoint 0.21.0 Genuine-first
 
 Estados usados:
 
@@ -45,10 +45,13 @@ Estados usados:
 | GEN-GENUINE-CANON | na faixa critica, todos os `cpGenuineQuotient p` de primos impares coincidem com um representante `genuineContinuation`, holomorfo na faixa e igual a serie Genuine em `Re(s)>1` | KERNEL_CHECKED | GEN-CP-CROSS, GEN-CP-FACTOR-REG, GEN-CP-QUOTIENT-HOLO | usar este unico escalar no certificado Green concreto |
 | GEN-GLOBAL-ZERO-EQ | na faixa critica, os zeros de qualquer carta prima impar sao exatamente os zeros de `genuineContinuation` | KERNEL_CHECKED | GEN-GENUINE-CANON, GEN-CP-ZERO-EQ | formular o traco Green sem dependencia espuria da camera |
 | GREEN-FIN-STOKES | o bulk discreto finito telescopa para o endpoint externo menos o endpoint inicial, com bordo definido literalmente e nao como residual | KERNEL_CHECKED | algebra em anel comutativo, soma finita | instanciar no traco bracketado |
-| GREEN-CP-EIGEN-FIN | o somador de um bloco Cp completo satisfaz `B_p g_s = p^(-s) g_s` exatamente | KERNEL_CHECKED | telescopagem, multiplicatividade de `Complex.cpow` em naturais positivos | retirar a fase comum |
-| GREEN-CP-FLUX-FIN | o Wronskiano finito Cp e a diferenca dos autovalores refletidos vezes o pareamento refletido finito, sem erro de bulk | KERNEL_CHECKED | GREEN-CP-EIGEN-FIN, linearidade de soma finita | tomar parte real e provar positividade |
+| GREEN-CP-EIGEN-FIN | o somador de um bloco Cp completo satisfaz `B_p g_s = p^(-s) g_s` exatamente | KERNEL_CHECKED | telescopagem, multiplicatividade de `Complex.cpow` em naturais positivos | usado na normalizacao radial |
+| GREEN-CP-FLUX-FIN | o Wronskiano finito Cp e a diferenca dos autovalores refletidos vezes o pareamento refletido finito, sem erro de bulk | KERNEL_CHECKED | GREEN-CP-EIGEN-FIN, linearidade de soma finita | usado no certificado complexo e no radial |
 | GREEN-ENDPOINT-OUTER | para `s#=1-conj(s)`, o produto refletido no endpoint `M+1` e exatamente `(M+1)^(-1)` e tende a zero | KERNEL_CHECKED | conjugacao de `Complex.cpow`, soma de expoentes, limite do inverso natural | identificar e cancelar separadamente o endpoint inicial |
-| GREEN-FIN-CERT | existe uma instancia Cp concreta de `FiniteComplexGreenCertificate`; seu fluxo total e Wronskiano mais Stokes, sua energia e o pareamento refletido e seu bordo e `1/(M+1)-1` | KERNEL_CHECKED | GREEN-FIN-STOKES, GREEN-CP-FLUX-FIN, GREEN-ENDPOINT-OUTER | retirar a fase e projetar a identidade para uma forma real assinada |
+| GREEN-FIN-CERT | existe uma instancia Cp concreta de `FiniteComplexGreenCertificate`; seu fluxo total e Wronskiano mais Stokes, sua energia e o pareamento refletido e seu bordo e `1/(M+1)-1` | KERNEL_CHECKED | GREEN-FIN-STOKES, GREEN-CP-FLUX-FIN, GREEN-ENDPOINT-OUTER | usado como certificado exato anterior a parte real |
+| GREEN-PHASE-RADIAL | multiplicar cada bloco por `p^(1/2+i Im(s))` antes de formar o Wronskiano transforma os autovalores de `s` e `1-conj(s)` nos reais `p^(-delta)` e `p^delta` | KERNEL_CHECKED | GREEN-CP-EIGEN-FIN, identidades de `Complex.cpow` | usado na fatoracao radial do fluxo |
+| GREEN-RADIAL-COFACTOR | `p^delta-p^(-delta)=2*delta*A_p(delta)`, onde `A_p(0)=log p`, e `A_p(delta)>0` para todo primo `p` e todo `delta` real | KERNEL_CHECKED | monotonicidade estrita de `Real.rpow`, `log p>0` | usado na energia radial finita |
+| GREEN-FIN-SIGNED | o fluxo Green real finito orientado satisfaz `flux=2*delta*finiteRadialGreenEnergy+boundary`, com todos os termos definidos explicitamente | KERNEL_CHECKED | GREEN-FIN-STOKES, GREEN-PHASE-RADIAL, GREEN-RADIAL-COFACTOR | provar positividade da parte real do pareamento refletido e ligar o bordo ao bracket Genuine |
 | GEN-BIJ-C2 | pernas impares `n>=3` estao em bijecao com incidencias `(centro multiplo de 4, perna)` | KERNEL_CHECKED | aritmetica modular | usar na reindexacao ponderada |
 | GEN-DEP-C2 | `max(v_2(n-1),v_2(n+1)) = v_2(adjacentCenter(n))` para `n` impar, `n>=3` | KERNEL_CHECKED | GEN-BIJ-C2, valoracao 2-adica | transportar o peso na soma finita |
 | GEN-REINDEX-C2 | soma ponderada das pernas = soma das incidencias esperadas + extras - faltantes | KERNEL_CHECKED | GEN-BIJ-C2, GEN-DEP-C2, somas finitas | reutilizar nas caixas Cp |
@@ -68,7 +71,7 @@ Estados usados:
 | TILT-CP-SIGN | para primo impar, centro `c>halfRange(p)` e `sigma>0`, o tilt e negativo abaixo de `1/2` e positivo acima de `1/2` | KERNEL_CHECKED | TILT-CP-PAIR, convexidade/concavidade estritas de `x^(-delta)` | usado na rigidez |
 | TILT-CP-RIGID | para primo impar, `sigma>0` e `c>halfRange(p)`, `tilt=0 <-> sigma=1/2`; nesse dominio, tilt nulo equivale a defeito nulo da norma | KERNEL_CHECKED | TILT-CP-SIGN, TILT-CP-ANN, BRANCH-HALF-CP | usar na ponte Genuine--ramo |
 | GREEN-REDUCTION | uma identidade `flux = 2 delta energy + boundary`, com energia positiva e anulacao de fluxo e bordo nos zeros Genuine, implica `delta=0`, tilt nulo e uma instancia de `GenuineBranchBridge` | KERNEL_CHECKED | BRANCH-HALF-CP, TILT-CP-ANN, algebra real | construir os quatro campos para o Genuine concreto |
-| GREEN-CERT | existe um `SignedGreenCertificate` concreto para a carta Genuine | OPEN_BRIDGE | GREEN-FIN-CERT esta fechado; faltam normalizacao radial, positividade e identificacao/cancelamento do endpoint interno pelo traco | formalizar a porta Green bracketada sem absorver o bordo por definicao |
+| GREEN-CERT | existe um `SignedGreenCertificate` concreto para a carta Genuine | OPEN_BRIDGE | GREEN-FIN-SIGNED esta fechado; faltam positividade uniforme/limite, anulacao do fluxo em zeros e identificacao/cancelamento do endpoint interno pelo traco | provar primeiro a positividade finita sem absorver o bordo por definicao |
 | BRIDGE-GEN-BRANCH | zero Genuine implica saturacao da norma do ramo | OPEN_BRIDGE | GREEN-CERT ou outra identidade analitica independente | obter pelo teorema `SignedGreenCertificate.toGenuineBranchBridge` sem postular a instancia |
 | RH-COND-CP | dada uma instancia de `GenuineBranchBridge`, todo zero no semiplano positivo possui parte real `1/2` e anula o tilt | KERNEL_CHECKED | BRIDGE-GEN-BRANCH, BRANCH-HALF-CP | teorema condicional compilado; nao confundir com uma instancia da ponte |
 | CHP-001 | a carta bracketada e a unica funcao analitica em `Re(s)>-1` que coincide com `(1-p^(1-s))*genuineDirichlet(s)` em `Re(s)>1` | KERNEL_CHECKED | GEN-CP-BRACKET-COMMON, GEN-CP-BRACKET-HOLO, preconexidade do semiplano, principio da identidade | usar na equivalencia de zeros sem pressupor holomorfia da expressao Genuine totalizada fora de `Re(s)>1` |
@@ -83,7 +86,8 @@ Estados usados:
 | SPC-002 | `H_CP` e autoadjunto em dominio fixo | OPEN_BRIDGE | SPC-001 | indices de deficiencia/fronteira |
 | RH-001 | todo zero Genuine esta na linha critica | BLOQUEADO | BRG-001 ou SPC-001+SPC-002 | nao enunciar como provado |
 
-O checkpoint mais recente do nucleo ativo foi compilado pelo GitHub Actions no
-commit `b0b47a87a64acfd129fbeb4f0cac148ccc4114ae`, run `29671533493`.
+O checkpoint matematico mais recente do nucleo ativo foi compilado pelo GitHub
+Actions no commit `3326ae95321c9e3e3f0477f347a0ccf6f3ca8c02`, run
+`29673514330`, job `88156612420`.
 Modulos mantidos apenas em `CPFormal.ResearchReserve` nao fazem parte dessa
 certificacao. Consulte `AUDIT.md`.

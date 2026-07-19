@@ -311,3 +311,19 @@ fluxo, coeficiente, energia e bordo. Tambem elaborou a formula fechada
 `boundary=1/(M+1)-1`. O run nao certifica a projecao real assinada,
 positividade, cancelamento do endpoint interno, `SignedGreenCertificate`,
 operador Hilbert--Polya ou RH.
+
+## Checkpoint da normalizacao radial Green Cp finita
+
+- commit matematico: `3326ae95321c9e3e3f0477f347a0ccf6f3ca8c02`;
+- run: `29673514330`;
+- job: `88156612420`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+O kernel elaborou a retirada de fase no nivel do bloco, antes da conjugacao
+sesquilinear; os autovalores radiais reais `p^(-delta)` e `p^delta`; a
+fatoracao `p^delta-p^(-delta)=2*delta*A_p(delta)`; a positividade de
+`A_p(delta)` para primo `p`; e a identidade Green real assinada em corte
+finito. O run nao certifica a positividade da parte real do pareamento, o
+cancelamento do bordo interno pelo bracket Genuine, a passagem ao limite,
+`SignedGreenCertificate`, operador Hilbert--Polya ou RH.

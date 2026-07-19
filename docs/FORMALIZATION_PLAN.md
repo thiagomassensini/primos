@@ -454,11 +454,17 @@ Ordem local atual para essa instancia:
 7. **concluido:** construir o bulk Green em cortes finitos, provar o autovetor
    do bloco Cp, fatorar o fluxo refletido, controlar os endpoints e construir
    a instancia Cp concreta de `FiniteComplexGreenCertificate`;
-8. **proximo nucleo minimo:** retirar a fase comum, provar a positividade da
-   parte real da energia refletida e identificar o endpoint inicial/fluxo com
-   a porta bracketada de `genuineContinuation`, sem trocar o escalar Genuine
-   por uma amplitude modelada;
-9. depois, montar o `SignedGreenCertificate` concreto. Multiplicidades ficam
+8. **concluido:** retirar a fase dentro do bloco antes do Wronskiano, obter os
+   autovalores reais `p^(-delta)` e `p^delta`, fatorar sua diferenca como
+   `2*delta` vezes um cofator positivo e projetar a identidade finita para uma
+   forma real assinada;
+9. **proximo nucleo minimo:** provar a positividade da parte real da energia
+   refletida finita, com hipoteses exatas e sem deduzi-la apenas da positividade
+   do cofator radial;
+10. identificar o endpoint inicial e a anulacao do fluxo com a porta
+    bracketada de `genuineContinuation`, preservando o bordo literal;
+11. controlar o limite e montar o `SignedGreenCertificate` concreto.
+    Multiplicidades ficam
    como refinamento posterior, pois nao bloqueiam a implicacao simples sobre a
    localizacao dos zeros.
 
