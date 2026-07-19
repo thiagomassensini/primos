@@ -167,10 +167,10 @@ theorem reflected_rpow_cross_sum_lt_inv_sum
       apply mul_lt_mul_of_pos_left
       · linarith
       · exact inv_pos.mpr hx
-  _ = y⁻¹ + x⁻¹ := by
-    rw [Real.rpow_neg_one, hyr]
-    field_simp [ne_of_gt hx, ne_of_gt hrpos]
-    ring
+    _ = y⁻¹ + x⁻¹ := by
+      rw [Real.rpow_neg_one, hyr]
+      field_simp [ne_of_gt hx, ne_of_gt hrpos]
+      ring
 
 /-- Cada aresta refletida tem parte real estritamente positiva na faixa. -/
 theorem finiteReflectedGradientEdge_re_pos
