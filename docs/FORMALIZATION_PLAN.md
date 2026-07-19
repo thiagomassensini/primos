@@ -372,15 +372,16 @@ genuine(s)=0 -> boundary(s)=0.
 
 O kernel verificou que esses quatro fatos implicam `sigma=1/2`, anulam todo
 tilt Cp e constroem uma `GenuineBranchBridge` para cada primo. Nenhum
-certificado **real assinado** concreto foi construido: o traco de fluxo e o
-fechamento do endpoint interno continuam sendo a obrigacao analitica aberta.
+certificado **real assinado** concreto foi construido. O fechamento do bordo
+bracketado agora esta verificado; a anulacao do fluxo de bulk acoplado e o
+controle de limite da energia continuam sendo as obrigacoes analiticas
+abertas.
 
 O primeiro nivel concreto da rota Green agora esta fechado. Em cortes finitos,
 o kernel verificou a identidade Stokes com endpoints literais, o autovetor
 `B_p g_s=p^(-s)g_s` e a fatoracao exata do Wronskiano refletido pela diferenca
 dos autovalores. Para `s#=1-conj(s)`, o endpoint externo e exatamente
-`1/(M+1)` e tende a zero. Isso nao cancela o endpoint inicial: ele deve ser
-identificado separadamente com a porta bracketada do Genuine.
+`1/(M+1)` e tende a zero.
 
 Esse nivel foi agora empacotado em `FiniteComplexGreenCertificate`. O fluxo
 total e definido como Wronskiano mais corrente de Stokes, a energia e o
@@ -392,8 +393,33 @@ flux = coefficient*energy + boundary,
 boundary = 1/(M+1)-1.
 ```
 
-A formula explicita mostra que o bordo cru nao converge a zero: a porta
-bracketada precisa cancelar o `-1` do endpoint interno.
+A formula explicita mostra que o bordo cru nao converge a zero. A porta
+bracketada canonica agora foi identificada independentemente: para `p=3`, sua
+semente e literalmente o mesmo endpoint interno `1`. Se `trace_M` e a soma
+dos primeiros `M` brackets, o kernel verificou
+
+```text
+finiteChart_3,M = innerEndpoint + trace_M,
+rawBoundary - trace_M = outerEndpoint - finiteChart_3,M.
+```
+
+Num zero de `genuineContinuation` na faixa critica, a carta finita converge a
+zero e o endpoint externo tambem converge a zero. Logo o bordo acoplado,
+complexo e real assinado, converge a zero. Esse resultado fecha somente a
+porta de bordo: nao afirma que o fluxo de bulk acoplado se anula.
+
+A obrigacao de sinal finita tambem esta fechada. Cada aresta do pareamento
+refletido foi expandida em dois termos diagonais menos dois cruzados. Para
+`x=n+1`, `y=n+2`, `r=y/x` e `sigma=Re(s)`, a margem estrita e controlada por
+
+```text
+(1-r^(-sigma))*(1-r^(sigma-1)) > 0
+```
+
+quando `0<sigma<1`. Portanto todo corte `M>0` possui pareamento refletido com
+parte real positiva e, multiplicando pelo cofator radial positivo, energia
+Green radial finita estritamente positiva. Nao ha uniformidade em `M` nem
+passagem ao limite embutida nesse resultado.
 
 ## Fase 3 — pesos, series e caudas
 
@@ -458,15 +484,18 @@ Ordem local atual para essa instancia:
    autovalores reais `p^(-delta)` e `p^delta`, fatorar sua diferenca como
    `2*delta` vezes um cofator positivo e projetar a identidade finita para uma
    forma real assinada;
-9. **proximo nucleo minimo:** provar a positividade da parte real da energia
-   refletida finita, com hipoteses exatas e sem deduzi-la apenas da positividade
-   do cofator radial;
-10. identificar o endpoint inicial e a anulacao do fluxo com a porta
-    bracketada de `genuineContinuation`, preservando o bordo literal;
-11. controlar o limite e montar o `SignedGreenCertificate` concreto.
-    Multiplicidades ficam
-   como refinamento posterior, pois nao bloqueiam a implicacao simples sobre a
-   localizacao dos zeros.
+9. **concluido:** expandir cada aresta, provar sua parte real estritamente
+   positiva em `0<Re(s)<1`, somar em todo corte nao vazio e concluir a
+   positividade da energia radial finita;
+10. **concluido:** identificar a semente da camera canonica com o endpoint
+    interno, provar a identidade finita do bordo acoplado e mostrar que seus
+    valores complexo e real assinado convergem a zero nos zeros Genuine;
+11. **proximo nucleo minimo:** provar a anulacao ou o limite nulo do fluxo de
+    bulk acoplado nos zeros Genuine, sem defini-lo como residual da identidade;
+12. controlar o limite de energia apropriado e montar o
+    `SignedGreenCertificate` concreto. Multiplicidades ficam como refinamento
+    posterior, pois nao bloqueiam a implicacao simples sobre a localizacao dos
+    zeros.
 
 ## Fase 5 — Hilbert ponderado e projecao
 
