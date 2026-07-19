@@ -373,9 +373,8 @@ genuine(s)=0 -> boundary(s)=0.
 O kernel verificou que esses quatro fatos implicam `sigma=1/2`, anulam todo
 tilt Cp e constroem uma `GenuineBranchBridge` para cada primo. Nenhum
 certificado **real assinado** concreto foi construido. O fechamento do bordo
-bracketado agora esta verificado; a anulacao do fluxo de bulk acoplado e o
-controle de limite da energia continuam sendo as obrigacoes analiticas
-abertas.
+bracketado agora esta verificado. A anulacao do fluxo de bulk acoplado por uma
+lei de porta independente continua sendo a obrigacao analitica aberta.
 
 O primeiro nivel concreto da rota Green agora esta fechado. Em cortes finitos,
 o kernel verificou a identidade Stokes com endpoints literais, o autovetor
@@ -420,6 +419,29 @@ quando `0<sigma<1`. Portanto todo corte `M>0` possui pareamento refletido com
 parte real positiva e, multiplicando pelo cofator radial positivo, energia
 Green radial finita estritamente positiva. Nao ha uniformidade em `M` nem
 passagem ao limite embutida nesse resultado.
+
+A reducao sequencial do fluxo agora tambem esta fechada. O fluxo acoplado foi
+reaberto como
+
+```text
+coupledFlux_M
+  = Re(orientedBulkFlux_M) + coupledBoundary_M
+  = radialDifference*Re(reflectedPairing_M) + coupledBoundary_M.
+```
+
+A parte real do pareamento e monotona no corte e, desde `M=1`, permanece
+acima de uma constante estritamente positiva. Portanto nao e necessario
+provar primeiro a convergencia da energia para obter rigidez: num zero
+Genuine, onde o bordo acoplado ja tende a zero, o kernel verificou
+
+```text
+coupledFlux_M -> 0  <->  Re(s)=1/2.
+```
+
+Essa equivalencia nao fornece a direcao dificil por si mesma. Ela mostra que
+provar a anulacao do fluxo a partir do zero Genuine e exatamente a ponte
+critica, e que essa direcao deve vir de uma identidade de tracos de porta
+`Phi/Psi`, nao da fatoracao radial usada para concluir a linha.
 
 ## Fase 3 — pesos, series e caudas
 
@@ -490,12 +512,16 @@ Ordem local atual para essa instancia:
 10. **concluido:** identificar a semente da camera canonica com o endpoint
     interno, provar a identidade finita do bordo acoplado e mostrar que seus
     valores complexo e real assinado convergem a zero nos zeros Genuine;
-11. **proximo nucleo minimo:** provar a anulacao ou o limite nulo do fluxo de
-    bulk acoplado nos zeros Genuine, sem defini-lo como residual da identidade;
-12. controlar o limite de energia apropriado e montar o
-    `SignedGreenCertificate` concreto. Multiplicidades ficam como refinamento
-    posterior, pois nao bloqueiam a implicacao simples sobre a localizacao dos
-    zeros.
+11. **concluido:** separar o fluxo acoplado em bulk orientado e bordo, provar a
+    monotonicidade/lower do pareamento e caracterizar sua anulacao assintotica
+    nos zeros Genuine como equivalente a `Re(s)=1/2`;
+12. **proximo nucleo minimo:** construir o traco angular finito `Phi`, o traco
+    de corrente `Psi` e uma identidade de porta independente que force o fluxo
+    a zero quando o Genuine zera;
+13. depois da lei de porta, decidir entre adaptar a API para um certificado
+    sequencial ou montar o `SignedGreenCertificate` funcional. Multiplicidades
+    ficam como refinamento posterior, pois nao bloqueiam a implicacao simples
+    sobre a localizacao dos zeros.
 
 ## Fase 5 — Hilbert ponderado e projecao
 
