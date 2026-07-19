@@ -1,4 +1,4 @@
-# Ledger de afirmacoes — checkpoint 0.24.0 Genuine-first
+# Ledger de afirmacoes — checkpoint 0.25.0 Genuine-first
 
 Estados usados:
 
@@ -60,7 +60,9 @@ Estados usados:
 | GREEN-PAIRING-MONO | na faixa critica, a parte real do pareamento refletido cresce com o corte e, a partir de `M=1`, fica acima de um lower estritamente positivo | KERNEL_CHECKED | GREEN-EDGE-POS, formula de sucessor da soma finita | elimina a necessidade de um limite positivo da energia na reducao sequencial |
 | GREEN-COUPLED-FLUX-FACTOR | o fluxo bracketado acoplado e exatamente `Re(orientedBulkFlux)+coupledBoundary`, e tambem `radialDifference*Re(pairing)+coupledBoundary` | KERNEL_CHECKED | GREEN-FIN-SIGNED, GREEN-BRACKET-BOUNDARY-FIN, GREEN-RADIAL-COFACTOR | separar a futura lei de porta da identidade radial |
 | GREEN-COUPLED-FLUX-IFF | num zero Genuine na faixa e para primo `p`, `coupledFlux_M -> 0` se e somente se `Re(s)=1/2` | KERNEL_CHECKED | GREEN-BRACKET-BOUNDARY-LIM, GREEN-PAIRING-MONO, GREEN-COUPLED-FLUX-FACTOR | construir uma lei de porta independente que forneca a direcao `zero Genuine -> fluxo nulo` |
-| GREEN-PORT-LAW | o fluxo de bulk e um Wronskiano de tracos de porta `Phi/Psi` cuja forma se anula quando o Genuine zera | OPEN_BRIDGE | traco angular da carta, traco de corrente e identidade Green de fronteira ainda nao formalizados | comecar pela identidade finita do traco angular sem assumir a anulacao |
+| GREEN-ANGULAR-PORT-FIN | a porta angular `Phi_M`, definida como corrente de gradientes com pesos `1,2,0`, satisfaz `finiteBracketedChart_3,M=Phi_M+(3M+1)^(-s)` | KERNEL_CHECKED | telescopagem dos gradientes e expansao do bracket `p=3` | passar ao limite sem definir um residual |
+| GREEN-ANGULAR-PORT-LIM | para `Re(s)>0`, `Phi_M` converge para a carta bracketada; num zero Genuine da faixa critica, `Phi_M -> 0` | KERNEL_CHECKED | GREEN-ANGULAR-PORT-FIN, limite de `x^(-Re(s))`, GEN-GLOBAL-ZERO-EQ | usar como traco de valor na futura identidade de porta |
+| GREEN-PORT-LAW | o fluxo de bulk e um Wronskiano de tracos de porta `Phi/Psi` cuja forma se anula quando o Genuine zera | OPEN_BRIDGE | `Phi` finito e seu limite estao fechados; `Psi` independente e a identidade Green de fronteira ainda nao | construir primeiro `Psi_M` no retorno finito/TFVD preservando proveniencia |
 | GEN-BIJ-C2 | pernas impares `n>=3` estao em bijecao com incidencias `(centro multiplo de 4, perna)` | KERNEL_CHECKED | aritmetica modular | usar na reindexacao ponderada |
 | GEN-DEP-C2 | `max(v_2(n-1),v_2(n+1)) = v_2(adjacentCenter(n))` para `n` impar, `n>=3` | KERNEL_CHECKED | GEN-BIJ-C2, valoracao 2-adica | transportar o peso na soma finita |
 | GEN-REINDEX-C2 | soma ponderada das pernas = soma das incidencias esperadas + extras - faltantes | KERNEL_CHECKED | GEN-BIJ-C2, GEN-DEP-C2, somas finitas | reutilizar nas caixas Cp |
