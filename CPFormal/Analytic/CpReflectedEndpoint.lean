@@ -42,22 +42,26 @@ theorem finiteReflectedOuterEndpoint_eq_inv
     finiteReflectedOuterEndpoint M s = (((M + 1 : ℕ) : ℂ))⁻¹ := by
   let x : ℂ := ((M + 1 : ℕ) : ℂ)
   have hx : x ≠ 0 := by
-    simp [x]
+    dsimp [x]
+    exact_mod_cast (Nat.succ_ne_zero M)
+  have hargzero : x.arg = 0 := by
+    simpa [x] using (Complex.natCast_arg (n := M + 1))
   have harg : x.arg ≠ Real.pi := by
-    simp [x, Real.pi_ne_zero]
-  have hxconj : Complex.conj x = x := by
+    rw [hargzero]
+    exact Real.pi_ne_zero.symm
+  have hxconj : (starRingEnd ℂ) x = x := by
     simp [x]
   have hconj :
-      Complex.conj (x ^ (-s)) = x ^ (-Complex.conj s) := by
+      (starRingEnd ℂ) (x ^ (-s)) = x ^ (-(starRingEnd ℂ) s) := by
     have h := (Complex.cpow_conj x (-s) harg).symm
     rw [hxconj] at h
     simpa using h
   unfold finiteReflectedOuterEndpoint positiveDirichletValue reflectedParameter
   change
-    Complex.conj (x ^ (-s)) * x ^ (-(1 - Complex.conj s)) = x⁻¹
+    (starRingEnd ℂ) (x ^ (-s)) * x ^ (-(1 - (starRingEnd ℂ) s)) = x⁻¹
   rw [hconj, ← Complex.cpow_add _ _ hx]
   have hexponent :
-      -Complex.conj s + -(1 - Complex.conj s) = (-1 : ℂ) := by
+      -(starRingEnd ℂ) s + -(1 - (starRingEnd ℂ) s) = (-1 : ℂ) := by
     ring
   rw [hexponent, Complex.cpow_neg_one]
 
