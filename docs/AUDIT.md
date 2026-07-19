@@ -400,3 +400,24 @@ equivalem aos zeros desse mesmo representante na faixa.
 Este checkpoint nao identifica o representante com `riemannZeta`, nao trata
 multiplicidades, nao constroi certificado Green concreto, operador
 Hilbert--Polya ou RH.
+
+## Checkpoint Green Cp finito e endpoint refletido
+
+- commit certificado: `7b1275cf6af93a3c03be53e80f780127b42c7b6c`;
+- workflow run: `29670152564` (`Lean kernel audit`, run number 129);
+- job: `88147549171` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novos alvos compilados: `CPFormal.Analytic.CpFiniteGreen` e
+  `CPFormal.Analytic.CpReflectedEndpoint`.
+
+O kernel verificou a telescopagem Green finita com endpoints literais, a
+relacao de autovetor `B_p g_s=p^(-s)g_s`, a fatoracao exata do Wronskiano
+finito pela diferenca dos autovalores refletidos e a ligacao dos cortes da
+carta ao Genuine canonico em `Re(s)>1`.
+
+Tambem verificou, para `s#=1-conj(s)`, que o produto refletido no endpoint
+externo e exatamente `(M+1)^(-1)` e tende a zero. O endpoint inicial nao foi
+apagado: permanecem abertas sua identificacao com o traco bracketado, a
+normalizacao radial, a positividade refletida e a instancia concreta de
+`SignedGreenCertificate`. Este checkpoint nao constroi operador
+Hilbert--Polya e nao prova RH.

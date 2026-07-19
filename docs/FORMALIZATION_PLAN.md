@@ -375,6 +375,13 @@ tilt Cp e constroem uma `GenuineBranchBridge` para cada primo. Nenhum
 certificado concreto foi construido: o traco de fluxo e o fechamento da cauda
 continuam sendo a obrigacao analitica aberta.
 
+O primeiro nivel concreto da rota Green agora esta fechado. Em cortes finitos,
+o kernel verificou a identidade Stokes com endpoints literais, o autovetor
+`B_p g_s=p^(-s)g_s` e a fatoracao exata do Wronskiano refletido pela diferenca
+dos autovalores. Para `s#=1-conj(s)`, o endpoint externo e exatamente
+`1/(M+1)` e tende a zero. Isso nao cancela o endpoint inicial: ele deve ser
+identificado separadamente com a porta bracketada do Genuine.
+
 ## Fase 3 — pesos, series e caudas
 
 Objetos:
@@ -431,12 +438,15 @@ Ordem local atual para essa instancia:
 6. **concluido:** prolongar a identidade cruzada antes da divisao, cancelar
    fatores regulares na faixa e provar que todos os quocientes primos
    coincidem com um unico `genuineContinuation`;
-7. **proximo nucleo minimo:** construir em cortes finitos o fluxo e o bordo do
-   certificado Green para esse Genuine canonico, usando o mesmo ledger de
-   `extras - faltantes` e sem trocar o escalar Genuine por uma amplitude
-   modelada;
-8. depois, controlar a cauda do certificado. Multiplicidades ficam como
-   refinamento posterior, pois nao bloqueiam a implicacao simples sobre a
+7. **concluido:** construir o bulk Green em cortes finitos, provar o autovetor
+   do bloco Cp, fatorar o fluxo refletido e controlar exatamente o endpoint
+   externo;
+8. **proximo nucleo minimo:** retirar a fase comum, provar a positividade da
+   parte real da energia refletida e identificar o endpoint inicial/fluxo com
+   a porta bracketada de `genuineContinuation`, sem trocar o escalar Genuine
+   por uma amplitude modelada;
+9. depois, montar o `SignedGreenCertificate` concreto. Multiplicidades ficam
+   como refinamento posterior, pois nao bloqueiam a implicacao simples sobre a
    localizacao dos zeros.
 
 ## Fase 5 — Hilbert ponderado e projecao

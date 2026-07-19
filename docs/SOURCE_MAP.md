@@ -94,6 +94,10 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | representante Genuine canonico e holomorfo na faixa | `Analytic.Cp.analyticOnNhd_genuineContinuation_genuineCriticalStrip` |
 | toda camera prima impar produz o mesmo representante Genuine | `Analytic.Cp.cpGenuineQuotient_eq_genuineContinuation` |
 | zero de qualquer carta prima equivale a zero do Genuine canonico | `Analytic.Cp.bracketedDirichletChart_zero_iff_genuineContinuation_zero` |
+| identidade Green discreta finita com endpoints literais | `Analytic.Cp.finiteGreenBulk_eq_boundary` |
+| bloco Cp atua em `g_s` pelo autovalor exato `p^(-s)` | `Analytic.Cp.cpBlockGradient_eq_eigenvalue_mul` |
+| fluxo Cp finito fatora pela diferenca dos autovalores refletidos | `Analytic.Cp.finiteCpGreenFlux_eq_eigenvalueDifference_mul_pairing` |
+| endpoint externo refletido e `1/(M+1)` e tende a zero | `Analytic.Cp.finiteReflectedOuterEndpoint_eq_inv`, `Analytic.Cp.finiteReflectedOuterEndpoint_tendsto_zero` |
 | identidade Green assinada, energia positiva e bordo fechado implicam `delta=0` | `Analytic.Cp.SignedGreenCertificate.criticalDisplacement_eq_zero_of_genuine_zero` |
 | certificado Green concreto produz a ponte Genuine--ramo | `Analytic.Cp.SignedGreenCertificate.toGenuineBranchBridge` |
 | ponte ainda aberta de zeros Genuine para a norma | `Analytic.Cp.GenuineBranchBridge` (sem instancia) |

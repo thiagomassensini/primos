@@ -282,3 +282,17 @@ zeros desse representante.
 O run nao identifica `genuineContinuation` com `riemannZeta`, nao trata
 multiplicidades, nao constroi o certificado Green concreto, nao constroi um
 operador Hilbert--Polya e nao prova RH.
+
+## Checkpoint Green Cp finito e endpoint refletido
+
+- commit: `7b1275cf6af93a3c03be53e80f780127b42c7b6c`;
+- run: `29670152564`;
+- job: `88147549171`;
+- comando decisivo: `lake build --wfail`;
+- conclusao: `success`.
+
+O kernel elaborou a identidade Green finita, o autovetor exato do bloco Cp,
+a fatoracao finita do fluxo refletido e o decaimento exato do endpoint externo
+`(M+1)^(-1) -> 0`. O run nao certifica ainda a positividade da energia
+refletida, a identificacao do endpoint interno com a porta Genuine, uma
+instancia concreta de `SignedGreenCertificate`, operador Hilbert--Polya ou RH.
