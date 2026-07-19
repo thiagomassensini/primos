@@ -175,7 +175,7 @@ theorem finiteBracketCoupledSignedBoundary_tendsto_zero_of_genuine_zero
     finiteBracketCoupledBoundary_tendsto_zero_of_genuine_zero hs hzero
   have hreal := Complex.continuous_re.continuousAt.tendsto.comp hcomplex
   simpa only [finiteBracketCoupledSignedBoundary_eq_re,
-    Complex.zero_re] using hreal
+    Function.comp_apply, Complex.zero_re] using hreal
 
 end
 
