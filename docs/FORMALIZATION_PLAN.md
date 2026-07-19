@@ -515,10 +515,13 @@ Ordem local atual para essa instancia:
 11. **concluido:** separar o fluxo acoplado em bulk orientado e bordo, provar a
     monotonicidade/lower do pareamento e caracterizar sua anulacao assintotica
     nos zeros Genuine como equivalente a `Re(s)=1/2`;
-12. **proximo nucleo minimo:** construir o traco angular finito `Phi`, o traco
-    de corrente `Psi` e uma identidade de porta independente que force o fluxo
-    a zero quando o Genuine zera;
-13. depois da lei de porta, decidir entre adaptar a API para um certificado
+12. **concluido:** construir o traco angular finito `Phi` com pesos residuais,
+    provar sua identidade com a carta bracketada ate o endpoint externo
+    explicito e passar ao limite em `Re(s)>0`;
+13. **proximo nucleo minimo:** construir o traco de corrente `Psi_M` a partir
+    do retorno finito/TFVD independente, preservando as coordenadas de
+    proveniencia, e provar a identidade Wronskiana de porta antes do limite;
+14. depois da lei de porta, decidir entre adaptar a API para um certificado
     sequencial ou montar o `SignedGreenCertificate` funcional. Multiplicidades
     ficam como refinamento posterior, pois nao bloqueiam a implicacao simples
     sobre a localizacao dos zeros.
