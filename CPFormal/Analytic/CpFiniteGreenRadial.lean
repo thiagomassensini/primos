@@ -64,7 +64,10 @@ theorem cpPhaseNormalizer_mul_eigenvalue
   have hexponent :
       (1 : ℂ) / 2 + Complex.I * s.im + (-s) =
         ((-criticalDisplacement s.re : ℝ) : ℂ) := by
-    apply Complex.ext <;> simp [criticalDisplacement] <;> ring
+    apply Complex.ext
+    · simp [criticalDisplacement]
+      ring
+    · simp
   unfold cpPhaseNormalizer natDirichletTerm dirichletTerm
   change
     (p : ℂ) ^ ((1 : ℂ) / 2 + Complex.I * s.im) *
@@ -136,8 +139,7 @@ theorem finitePhaseNormalizedCpGreenFlux_eq_radialDifference_mul_pairing
       intro n hn
       rw [phaseNormalizedCpBlockGradient_eq_radial_mul p hp,
         phaseNormalizedCpBlockGradient_reflected_eq_radial_mul p hp]
-      simp only [map_mul, map_ofReal]
-      push_cast
+      simp only [map_mul, Complex.conj_ofReal]
       ring
     _ = ((((p : ℝ) ^ (-criticalDisplacement s.re) -
             (p : ℝ) ^ (criticalDisplacement s.re) : ℝ) : ℂ) *
@@ -243,13 +245,11 @@ theorem finiteSignedCpGreen_identity
   unfold finiteSignedCpGreenFlux finiteRadialGreenEnergy
     finiteSignedCpGreenBoundary
   rw [hbulk, finiteReflectedStokesFlux_eq_endpoints]
-  change
-    (cpRadialDifference p (criticalDisplacement s.re) *
-        (finiteReflectedGradientPairing M s).re) +
-      (finiteReflectedOuterEndpoint M s -
-        finiteReflectedOuterEndpoint 0 s).re = _
+  unfold finiteReflectedBoundary
+  simp only [Complex.mul_re, Complex.ofReal_re, Complex.ofReal_im,
+    zero_mul, sub_zero]
   rw [hradial]
-  rfl
+  ring
 
 end
 
