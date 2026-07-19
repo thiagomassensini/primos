@@ -174,8 +174,13 @@ theorem finiteBracketCoupledSignedBoundary_tendsto_zero_of_genuine_zero
   have hcomplex :=
     finiteBracketCoupledBoundary_tendsto_zero_of_genuine_zero hs hzero
   have hreal := Complex.continuous_re.continuousAt.tendsto.comp hcomplex
-  simpa only [finiteBracketCoupledSignedBoundary_eq_re,
-    Function.comp_apply, Complex.zero_re] using hreal
+  change Tendsto
+    (fun M : ℕ ↦ (finiteBracketCoupledBoundary M s).re)
+    atTop (nhds 0)
+  change Tendsto
+    (fun M : ℕ ↦ (finiteBracketCoupledBoundary M s).re)
+    atTop (nhds 0) at hreal
+  exact hreal
 
 end
 
