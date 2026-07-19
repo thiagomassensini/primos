@@ -77,7 +77,6 @@ theorem finiteReflectedGradientEdge_eq_diagonal_sub_cross
           (starRingEnd ℂ) (positiveDirichletValue s n) *
             positiveDirichletValue (reflectedParameter s) (n + 1)) := by
       rw [hy, hx]
-      simp only [Nat.add_assoc]
 
 /-- Norma do primeiro termo cruzado. -/
 theorem norm_reflectedGradientCross_forward (n : ℕ) (s : ℂ) :
@@ -120,8 +119,9 @@ theorem reflected_rpow_cross_sum_lt_inv_sum
     field_simp [ne_of_gt hx]
   have hxcombine :
       x ^ (-sigma) * x ^ (sigma - 1) = x⁻¹ := by
-    rw [← Real.rpow_add hx]
-    convert Real.rpow_neg_one x using 1 <;> ring
+    rw [← Real.rpow_add hx, ← Real.rpow_neg_one x]
+    congr 1
+    ring
   have hforward :
       y ^ (-sigma) * x ^ (sigma - 1) =
         x⁻¹ * r ^ (-sigma) := by
@@ -154,7 +154,7 @@ theorem reflected_rpow_cross_sum_lt_inv_sum
       1 + r ^ (-1 : ℝ) -
           (r ^ (-sigma) + r ^ (sigma - 1)) =
         (1 - r ^ (-sigma)) * (1 - r ^ (sigma - 1)) := by
-          rw [hab]
+          rw [← hab]
           ring
       _ > 0 := mul_pos (sub_pos.mpr ha) (sub_pos.mpr hb)
   calc
@@ -214,14 +214,34 @@ theorem finiteReflectedGradientEdge_re_pos
     exact norm_reflectedGradientCross_backward n s
   rw [hforwardNorm] at hforwardRe
   rw [hbackwardNorm] at hbackwardRe
-  norm_num at *
+  have hdiagForward :
+      (((n + 2 : ℕ) : ℂ)⁻¹).re = (((n + 2 : ℕ) : ℝ))⁻¹ := by
+    norm_cast
+  have hdiagBackward :
+      (((n + 1 : ℕ) : ℂ)⁻¹).re = (((n + 1 : ℕ) : ℝ))⁻¹ := by
+    norm_cast
+  rw [hdiagForward, hdiagBackward]
   linarith
+
+/-- A parte real, vista como homomorfismo aditivo. -/
+def complexRealPartAddHom : ℂ →+ ℝ where
+  toFun z := z.re
+  map_zero' := rfl
+  map_add' _ _ := rfl
+
+@[simp] theorem complexRealPartAddHom_apply (z : ℂ) :
+    complexRealPartAddHom z = z.re := rfl
 
 /-- O pareamento refletido finito possui parte real positiva em corte nao vazio. -/
 theorem finiteReflectedGradientPairing_re_pos
     {M : ℕ} (hM : 0 < M) {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
     0 < (finiteReflectedGradientPairing M s).re := by
   unfold finiteReflectedGradientPairing
+  change 0 < complexRealPartAddHom
+    (∑ n ∈ Finset.range M,
+      (starRingEnd ℂ) (positiveDirichletGradient s n) *
+        positiveDirichletGradient (reflectedParameter s) n)
+  rw [map_sum]
   change 0 < ∑ n ∈ Finset.range M, (finiteReflectedGradientEdge n s).re
   apply Finset.sum_pos
   · intro n hn
