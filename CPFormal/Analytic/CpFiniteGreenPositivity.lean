@@ -167,10 +167,10 @@ theorem reflected_rpow_cross_sum_lt_inv_sum
       apply mul_lt_mul_of_pos_left
       · linarith
       · exact inv_pos.mpr hx
-    _ = y⁻¹ + x⁻¹ := by
-      rw [Real.rpow_neg_one, hyr]
-      field_simp [ne_of_gt hx, ne_of_gt hrpos]
-      <;> ring
+  _ = y⁻¹ + x⁻¹ := by
+    rw [Real.rpow_neg_one, hyr]
+    field_simp [ne_of_gt hx, ne_of_gt hrpos]
+    ring
 
 /-- Cada aresta refletida tem parte real estritamente positiva na faixa. -/
 theorem finiteReflectedGradientEdge_re_pos
@@ -216,10 +216,16 @@ theorem finiteReflectedGradientEdge_re_pos
   rw [hbackwardNorm] at hbackwardRe
   have hdiagForward :
       (((n + 2 : ℕ) : ℂ)⁻¹).re = (((n + 2 : ℕ) : ℝ))⁻¹ := by
-    norm_cast
+    change ((↑(((n + 2 : ℕ) : ℝ)) : ℂ)⁻¹).re =
+      (((n + 2 : ℕ) : ℝ))⁻¹
+    rw [← Complex.ofReal_inv]
+    rfl
   have hdiagBackward :
       (((n + 1 : ℕ) : ℂ)⁻¹).re = (((n + 1 : ℕ) : ℝ))⁻¹ := by
-    norm_cast
+    change ((↑(((n + 1 : ℕ) : ℝ)) : ℂ)⁻¹).re =
+      (((n + 1 : ℕ) : ℝ))⁻¹
+    rw [← Complex.ofReal_inv]
+    rfl
   rw [hdiagForward, hdiagBackward]
   linarith
 
