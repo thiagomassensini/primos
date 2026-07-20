@@ -19,8 +19,9 @@ O termo externo e literalmente `(3M+1)^(-s)`. Para `Re(s)>0` ele desaparece,
 e o traco angular converge para a carta bracketada. Em particular, num zero
 Genuine dentro da faixa critica, o traco angular converge a zero.
 
-Nenhum retorno `Psi` e definido aqui: ele deve nascer de dados independentes
-antes que uma identidade de Wronskiano possa ser usada.
+A segunda parte constroi um candidato finito a `Psi` a partir do campo
+log-pesado, independentemente de `Phi` e do Green. A identidade Wronskiana
+entre essa corrente e o fluxo Green permanece uma obrigacao separada.
 -/
 
 open scoped BigOperators Topology
@@ -194,6 +195,158 @@ theorem finiteCanonicalAngularTrace_tendsto_zero_of_genuine_zero
     (bracketedDirichletChart_zero_iff_genuineContinuation_zero
       3 (by norm_num) (by norm_num) hs).2 hzero
   simpa only [hchart] using htrace
+
+/-!
+## Log-jet finito independente
+
+Construimos agora o candidato finito a corrente `Psi` antes de qualquer
+identidade de Green. O campo de vertices e obtido aplicando o gerador de
+escala ao monomio de Dirichlet:
+
+`log(n+1) * (n+1)^(-s)`.
+
+Em linguagem analitica, esse e o coeficiente de `-d/ds`; aqui, porem, a
+definicao e puramente finita e nao usa derivadas, zeros, Wronskianos ou um
+residuo escolhido a posteriori. Os mesmos pesos angulares `1, 2, 0` da porta
+`Phi` sao aplicados aos gradientes desse novo campo.
+
+Ainda nao se afirma que esse traco e o retorno TFVD enriquecido, nem que seu
+Wronskiano com `Phi` coincide com o fluxo Green ja formalizado. Essas
+identificacoes exigem pontes tipadas adicionais.
+-/
+
+/-- Campo de Dirichlet vestido pelo gerador logaritmico no vertice `n+1`. -/
+def positiveLogDirichletValue (s : ℂ) (n : ℕ) : ℂ :=
+  (Real.log (((n + 1 : ℕ) : ℝ)) : ℂ) * positiveDirichletValue s n
+
+/-- A semente em `1` desaparece porque `log 1 = 0`. -/
+@[simp] theorem positiveLogDirichletValue_zero (s : ℂ) :
+    positiveLogDirichletValue s 0 = 0 := by
+  simp [positiveLogDirichletValue]
+
+/-- Gradiente consecutivo do campo de Dirichlet log-pesado. -/
+def positiveLogDirichletGradient (s : ℂ) (n : ℕ) : ℂ :=
+  positiveLogDirichletValue s (n + 1) - positiveLogDirichletValue s n
+
+/-- Bloco log-jet independente, com os pesos angulares canonicos `1, 2, 0`. -/
+def canonicalAngularLogJetBlock (m : ℕ) (s : ℂ) : ℂ :=
+  -∑ r ∈ Finset.range 3,
+    ((((r + 1) % 3 : ℕ) : ℂ) *
+      positiveLogDirichletGradient s (3 * m + r))
+
+/-- Forma de duas arestas do bloco log-jet; a terceira tem peso zero. -/
+theorem canonicalAngularLogJetBlock_eq_two_edges
+    (m : ℕ) (s : ℂ) :
+    canonicalAngularLogJetBlock m s =
+      -(positiveLogDirichletGradient s (3 * m) +
+        2 * positiveLogDirichletGradient s (3 * m + 1)) := by
+  norm_num [canonicalAngularLogJetBlock, Finset.sum_range_succ]
+
+/-- O bloco log-jet aberto em seus tres valores consecutivos. -/
+theorem canonicalAngularLogJetBlock_eq_values
+    (m : ℕ) (s : ℂ) :
+    canonicalAngularLogJetBlock m s =
+      positiveLogDirichletValue s (3 * m) +
+        positiveLogDirichletValue s (3 * m + 1) -
+          2 * positiveLogDirichletValue s (3 * m + 2) := by
+  rw [canonicalAngularLogJetBlock_eq_two_edges]
+  simp [positiveLogDirichletGradient]
+  ring
+
+/-- Soma dos primeiros `M` blocos da corrente log-jet canonica. -/
+def finiteCanonicalAngularLogJetTrace (M : ℕ) (s : ℂ) : ℂ :=
+  ∑ m ∈ Finset.range M, canonicalAngularLogJetBlock m s
+
+/-- Acrescentar um centro acrescenta exatamente seu bloco log-jet. -/
+theorem finiteCanonicalAngularLogJetTrace_succ (M : ℕ) (s : ℂ) :
+    finiteCanonicalAngularLogJetTrace (M + 1) s =
+      finiteCanonicalAngularLogJetTrace M s +
+        canonicalAngularLogJetBlock M s := by
+  unfold finiteCanonicalAngularLogJetTrace
+  rw [Finset.sum_range_succ]
+
+/-- Segunda diferenca bracketada do campo log-pesado no centro `3m+3`. -/
+def canonicalLogBracketBlock (m : ℕ) (s : ℂ) : ℂ :=
+  positiveLogDirichletValue s (3 * m + 1) -
+    2 * positiveLogDirichletValue s (3 * m + 2) +
+      positiveLogDirichletValue s (3 * m + 3)
+
+/-- Carta bracketada log-pesada ate o corte `M`; sua semente e zero. -/
+def finiteCanonicalLogBracketChart (M : ℕ) (s : ℂ) : ℂ :=
+  ∑ m ∈ Finset.range M, canonicalLogBracketBlock m s
+
+/-- Recorrencia de um passo da carta bracketada log-pesada. -/
+theorem finiteCanonicalLogBracketChart_succ (M : ℕ) (s : ℂ) :
+    finiteCanonicalLogBracketChart (M + 1) s =
+      finiteCanonicalLogBracketChart M s + canonicalLogBracketBlock M s := by
+  unfold finiteCanonicalLogBracketChart
+  rw [Finset.sum_range_succ]
+
+/-!
+Identidade finita central: `Psi_M` nao e definido como o termo faltante.
+Depois de ambos os lados terem sido construidos independentemente, os pesos
+`1,2,0` telescopam e deixam somente o vertice externo `3M+1`.
+-/
+theorem finiteCanonicalLogBracketChart_eq_logJetTrace_add_outer
+    (M : ℕ) (s : ℂ) :
+    finiteCanonicalLogBracketChart M s =
+      finiteCanonicalAngularLogJetTrace M s +
+        positiveLogDirichletValue s (3 * M) := by
+  induction M with
+  | zero =>
+      simp [finiteCanonicalLogBracketChart,
+        finiteCanonicalAngularLogJetTrace]
+  | succ M ih =>
+      rw [finiteCanonicalLogBracketChart_succ,
+        finiteCanonicalAngularLogJetTrace_succ, ih,
+        canonicalLogBracketBlock,
+        canonicalAngularLogJetBlock_eq_values]
+      have houter : 3 * (M + 1) = 3 * M + 3 := by omega
+      rw [houter]
+      ring
+
+/-- Norma exata de um vertice log-pesado. -/
+theorem norm_positiveLogDirichletValue (s : ℂ) (n : ℕ) :
+    ‖positiveLogDirichletValue s n‖ =
+      Real.log (((n + 1 : ℕ) : ℝ)) *
+        (((n + 1 : ℕ) : ℝ)) ^ (-s.re) := by
+  have hlog : 0 ≤ Real.log (((n + 1 : ℕ) : ℝ)) :=
+    Real.log_nonneg (by positivity)
+  simp [positiveLogDirichletValue, norm_positiveDirichletValue,
+    abs_of_nonneg hlog]
+
+/-- O unico bordo externo logaritmico desaparece para `Re(s)>0`. -/
+theorem canonicalAngularLogJetOuter_tendsto_zero
+    {s : ℂ} (hs : 0 < s.re) :
+    Tendsto (fun M : ℕ ↦ positiveLogDirichletValue s (3 * M))
+      atTop (nhds 0) := by
+  rw [tendsto_zero_iff_norm_tendsto_zero]
+  have hnat : Tendsto (fun M : ℕ ↦ 3 * M + 1) atTop atTop := by
+    apply tendsto_atTop.2
+    intro b
+    filter_upwards [eventually_ge_atTop b] with M hM
+    omega
+  have hreal :
+      Tendsto (fun M : ℕ ↦ (((3 * M + 1 : ℕ) : ℝ))) atTop atTop := by
+    exact
+      (tendsto_natCast_atTop_atTop :
+        Tendsto ((↑) : ℕ → ℝ) atTop atTop).comp hnat
+  have hratio :
+      Tendsto
+        (fun M : ℕ ↦
+          Real.log (((3 * M + 1 : ℕ) : ℝ)) /
+            (((3 * M + 1 : ℕ) : ℝ)) ^ s.re)
+        atTop (nhds 0) := by
+    exact
+      ((isLittleO_log_rpow_atTop hs).tendsto_div_nhds_zero).comp hreal
+  have hpoint : ∀ M : ℕ,
+      ‖positiveLogDirichletValue s (3 * M)‖ =
+        Real.log (((3 * M + 1 : ℕ) : ℝ)) /
+          (((3 * M + 1 : ℕ) : ℝ)) ^ s.re := by
+    intro M
+    rw [norm_positiveLogDirichletValue]
+    rw [Real.rpow_neg (by positivity), div_eq_mul_inv]
+  simpa only [hpoint] using hratio
 
 end
 
