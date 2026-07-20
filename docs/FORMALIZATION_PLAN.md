@@ -522,10 +522,17 @@ Ordem local atual para essa instancia:
     partir do campo independente `log(n+1)*(n+1)^(-s)`, provar sua identidade
     com a carta log-bracketada e eliminar o unico bordo externo em
     `Re(s)>0`;
-14. **proximo nucleo minimo:** identificar esse log-jet escalar com o retorno
-    finito/TFVD enriquecido sem apagar proveniencia, tipar o pareamento
-    `Phi/Psi` e provar a identidade Wronskiana de porta antes do limite;
-15. depois da lei de porta, decidir entre adaptar a API para um certificado
+14. **concluido no nivel finito tipado:** codificar cada bloco por
+    `(indice,through-flow,bracket-flow)`, provar o retorno exato e recuperar
+    `Phi_M/Psi_M` por uma leitura independente antes de apagar proveniencia;
+15. **concluido como gate estrutural:** decompor o Wronskiano das sinteses
+    escalares em diagonal mais off-diagonal e provar por witness que a
+    interferencia nao zera por algebra universal;
+16. **proximo nucleo minimo:** formar o pareamento refletido diretamente no
+    portador TFVD e identificar sua diagonal, bloco a bloco, com o fluxo Green
+    finito ja existente; qualquer anulacao off-diagonal fica como gate
+    aritmetico/ortogonal separado;
+17. depois da lei de porta, decidir entre adaptar a API para um certificado
     sequencial ou montar o `SignedGreenCertificate` funcional. Multiplicidades
     ficam como refinamento posterior, pois nao bloqueiam a implicacao simples
     sobre a localizacao dos zeros.
