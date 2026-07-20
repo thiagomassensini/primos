@@ -66,9 +66,12 @@ Estados usados:
 | GREEN-ANGULAR-LOGJET-OUTER | para `Re(s)>0`, o bordo logaritmico externo do log-jet converge a zero | KERNEL_CHECKED | norma exata do monomio log-pesado, `log x=o(x^sigma)` | ainda falta a convergencia da carta log-bracketada completa |
 | GREEN-TFVD-RETURN-FIN | a coordenada `(block,through,bracket)` preserva proveniencia, a valvula recupera suas duas arestas e a leitura angular de suas portas Dirichlet/log-Dirichlet recupera exatamente `Phi_M/Psi_M` | KERNEL_CHECKED | inversao algebrica da valvula para `kappa,omega != 0`, identidades de dois gradientes | formar o pareamento antes da sintese escalar |
 | GREEN-TFVD-GREEN-DIAGONAL | a coordenada TFVD `(n,through,bracket)` que codifica o bloco Cp normalizado em fase e o gradiente horizontal possui wedge refletido bloco a bloco igual ao somando Green orientado; sua soma diagonal e exatamente `finiteOrientedCpGreenFlux` | KERNEL_CHECKED | GREEN-TFVD-RETURN-FIN, retorno exato das arestas, soma finita diagonal | construir o intertwiner tipado das coordenadas angulares/log-jet para este portador Green |
+| GREEN-TFVD-VISIBLE-INTERTWINER | o retorno da porta angular atual transporta exatamente os gradientes nos residuos `0,1 mod 3` aos portadores Green canonicos de indices `3m,3m+1` | KERNEL_CHECKED | GREEN-TFVD-RETURN-FIN, GREEN-TFVD-GREEN-DIAGONAL, autovetor Cp finito | registrar o canal de residuo 2 que o readout angular nao usa |
+| GREEN-TFVD-DORMANT-OBSTRUCTION | nao existe decodificador universal do par TFVD ordinario/log-jet atual para uma terceira aresta arbitraria; um witness com entradas identicas exige saidas `0` e `1` | KERNEL_CHECKED | igualdade definicional das entradas, `0 != 1` em `Complex` | enriquecer o portador em vez de calibrar uma reconstrucao posterior |
+| GREEN-TFVD-ENRICHED-TRIPLE | acrescentar uma unica coordenada `dormantEdge` preserva definicionalmente os readouts `Phi/Psi`, recupera as tres arestas e produz exatamente o trio Green canonico `(3m,3m+1,3m+2)` bloco a bloco | KERNEL_CHECKED | GREEN-TFVD-VISIBLE-INTERTWINER, GREEN-TFVD-DORMANT-OBSTRUCTION, retorno TFVD | reagrupar os cutoffs por trios e comparar o log-jet enriquecido com o wedge Green |
 | GREEN-PORT-WRONSKI-DECOMP | o Wronskiano das sinteses escalares e exatamente a diagonal coordenada mais a soma off-diagonal explicita | KERNEL_CHECKED | distribuicao de somas finitas e conjugacao | comparar a diagonal enriquecida com o fluxo Green existente |
 | GREEN-PORT-OFFDIAG-WITNESS | existe um portador de dois blocos com off-diagonal igual a `1`; portanto Wronskiano escalar e diagonal nao coincidem universalmente | KERNEL_CHECKED | avaliacao finita direta | nao postular cancelamento de interferencia sem uma hipotese ortogonal/arimetica |
-| GREEN-PORT-LAW | a diagonal do Wronskiano TFVD angular/log-jet `Phi/Psi` e transportada ao portador TFVD Green e sua forma relevante se anula quando o Genuine zera | OPEN_BRIDGE | GREEN-TFVD-GREEN-DIAGONAL fecha o alvo depois do transporte; ainda faltam o intertwiner angular--Green e a lei de anulacao | construir o intertwiner sem apagar proveniencia e tratar separadamente a interferencia escalar |
+| GREEN-PORT-LAW | o Wronskiano do portador angular/log-jet enriquecido coincide com a forma Green relevante e se anula quando o Genuine zera | OPEN_BRIDGE | GREEN-TFVD-ENRICHED-TRIPLE fecha o transporte local dos tres gradientes; ainda faltam a identidade log-jet--wedge, o reagrupamento de cutoff e a lei de anulacao | comparar bloco a bloco o log-jet enriquecido com o wedge Green antes da sintese escalar |
 | GEN-BIJ-C2 | pernas impares `n>=3` estao em bijecao com incidencias `(centro multiplo de 4, perna)` | KERNEL_CHECKED | aritmetica modular | usar na reindexacao ponderada |
 | GEN-DEP-C2 | `max(v_2(n-1),v_2(n+1)) = v_2(adjacentCenter(n))` para `n` impar, `n>=3` | KERNEL_CHECKED | GEN-BIJ-C2, valoracao 2-adica | transportar o peso na soma finita |
 | GEN-REINDEX-C2 | soma ponderada das pernas = soma das incidencias esperadas + extras - faltantes | KERNEL_CHECKED | GEN-BIJ-C2, GEN-DEP-C2, somas finitas | reutilizar nas caixas Cp |
@@ -104,7 +107,7 @@ Estados usados:
 | RH-001 | todo zero Genuine esta na linha critica | BLOQUEADO | BRG-001 ou SPC-001+SPC-002 | nao enunciar como provado |
 
 O checkpoint matematico mais recente do nucleo ativo foi compilado pelo GitHub
-Actions no commit `42bc0ce6d4d64502005a1cef4500a9df36c4f4c5`, run
-`29714351088`, job `88264360190`.
+Actions no commit `ef39ed4ec05e97ec449422a524537c2c570907d6`, run
+`29715936088`, job `88269139110`.
 Modulos mantidos apenas em `CPFormal.ResearchReserve` nao fazem parte dessa
 certificacao. Consulte `AUDIT.md`.
