@@ -283,11 +283,20 @@ theorem canonicalEnrichedTfvdReflectedLogJetWedgeTriple_eq_green_add_defect
 theorem canonicalReflectedLogJetEdgeWedge_zero_zero :
     canonicalReflectedLogJetEdgeWedge 0 0 =
       -((Real.log 2 : ℝ) : ℂ) / 2 := by
-  norm_num [canonicalReflectedLogJetEdgeWedge,
-    reflectedLogJetEdgeWedge, positiveLogDirichletGradient,
-    positiveLogDirichletValue, positiveDirichletGradient,
-    natDirichletTerm, dirichletTerm, reflectedParameter,
-    Complex.cpow_neg_one]
+  have hphi : positiveDirichletGradient (0 : ℂ) 0 = 0 := by
+    norm_num [positiveDirichletGradient, natDirichletTerm, dirichletTerm]
+  have hpsi : positiveLogDirichletGradient (0 : ℂ) 0 =
+      ((Real.log 2 : ℝ) : ℂ) := by
+    norm_num [positiveLogDirichletGradient,
+      positiveLogDirichletValue, positiveDirichletValue]
+  have hphiSharp :
+      positiveDirichletGradient (reflectedParameter (0 : ℂ)) 0 =
+        -(1 : ℂ) / 2 := by
+    norm_num [positiveDirichletGradient, natDirichletTerm,
+      dirichletTerm, reflectedParameter, Complex.cpow_neg_one]
+  unfold canonicalReflectedLogJetEdgeWedge reflectedLogJetEdgeWedge
+  rw [hphi, hpsi, hphiSharp]
+  simp
 
 /-- Para `s=0`, toda aresta Green ordinaria e nula. -/
 theorem canonicalOrientedCpGreenEdge_zero
@@ -319,7 +328,7 @@ theorem canonicalReflectedLogJetEdgeWedge_ne_green_at_zero
     ne_of_gt (Real.log_pos (by norm_num))
   have hlogComplex : ((Real.log (2 : ℝ) : ℝ) : ℂ) ≠ 0 := by
     exact_mod_cast hlog
-  exact neg_ne_zero.mpr (div_ne_zero hlogComplex (by norm_num))
+  exact div_ne_zero (neg_ne_zero.mpr hlogComplex) (by norm_num)
 
 end
 
