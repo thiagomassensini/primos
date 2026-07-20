@@ -1,4 +1,4 @@
-# Ledger de afirmacoes — checkpoint 0.27.0 Genuine-first
+# Ledger de afirmacoes — checkpoint 0.30.0 Genuine-first
 
 Estados usados:
 
@@ -68,10 +68,14 @@ Estados usados:
 | GREEN-TFVD-GREEN-DIAGONAL | a coordenada TFVD `(n,through,bracket)` que codifica o bloco Cp normalizado em fase e o gradiente horizontal possui wedge refletido bloco a bloco igual ao somando Green orientado; sua soma diagonal e exatamente `finiteOrientedCpGreenFlux` | KERNEL_CHECKED | GREEN-TFVD-RETURN-FIN, retorno exato das arestas, soma finita diagonal | construir o intertwiner tipado das coordenadas angulares/log-jet para este portador Green |
 | GREEN-TFVD-VISIBLE-INTERTWINER | o retorno da porta angular atual transporta exatamente os gradientes nos residuos `0,1 mod 3` aos portadores Green canonicos de indices `3m,3m+1` | KERNEL_CHECKED | GREEN-TFVD-RETURN-FIN, GREEN-TFVD-GREEN-DIAGONAL, autovetor Cp finito | registrar o canal de residuo 2 que o readout angular nao usa |
 | GREEN-TFVD-DORMANT-OBSTRUCTION | nao existe decodificador universal do par TFVD ordinario/log-jet atual para uma terceira aresta arbitraria; um witness com entradas identicas exige saidas `0` e `1` | KERNEL_CHECKED | igualdade definicional das entradas, `0 != 1` em `Complex` | enriquecer o portador em vez de calibrar uma reconstrucao posterior |
-| GREEN-TFVD-ENRICHED-TRIPLE | acrescentar uma unica coordenada `dormantEdge` preserva definicionalmente os readouts `Phi/Psi`, recupera as tres arestas e produz exatamente o trio Green canonico `(3m,3m+1,3m+2)` bloco a bloco | KERNEL_CHECKED | GREEN-TFVD-VISIBLE-INTERTWINER, GREEN-TFVD-DORMANT-OBSTRUCTION, retorno TFVD | reagrupar os cutoffs por trios e comparar o log-jet enriquecido com o wedge Green |
+| GREEN-TFVD-ENRICHED-TRIPLE | acrescentar uma unica coordenada `dormantEdge` preserva definicionalmente os readouts `Phi/Psi`, recupera as tres arestas e produz exatamente o trio Green canonico `(3m,3m+1,3m+2)` bloco a bloco | KERNEL_CHECKED | GREEN-TFVD-VISIBLE-INTERTWINER, GREEN-TFVD-DORMANT-OBSTRUCTION, retorno TFVD | usado no wedge log-jet enriquecido |
+| GREEN-TFVD-LOGJET-TRIPLE | o wedge refletido das quatro portas TFVD enriquecidas `Phi/Psi` em `s` e `1-conj(s)` recupera exatamente os tres wedges por aresta nos indices `3m,3m+1,3m+2` | KERNEL_CHECKED | GREEN-TFVD-ENRICHED-TRIPLE, retorno exato, pesos nao nulos | reagrupar os cutoffs por trios sem sintese escalar prematura |
+| GREEN-LOGJET-VERTEX-FLUX | cada wedge log-jet por aresta e exatamente o salto `log(n+2)-log(n+1)` vezes o fluxo cruzado dos dois vertices consecutivos | KERNEL_CHECKED | expansao dos gradientes ordinario/log-pesado, cancelamento algebrico dos termos diagonais | comparar o canal de vertices com o gerador radial Cp |
+| GREEN-LOGJET-GREEN-DEFECT | bloco a bloco, inclusive na aresta dormente, o trio log-jet e exatamente `trioGreen + trioDefeito`, onde o defeito e a diferenca entre o fluxo de vertices independente e o wedge Green radial | KERNEL_CHECKED | GREEN-TFVD-LOGJET-TRIPLE, GREEN-LOGJET-VERTEX-FLUX, GREEN-TFVD-GREEN-DIAGONAL | identificar o defeito como comutador, cobordo de cutoff ou canal adicional |
+| GREEN-LOGJET-GREEN-OBSTRUCTION | a igualdade direta log-jet--Green nao e universal: em `n=0,s=0`, o wedge log-jet vale `-log(2)/2 != 0` e o wedge Green vale zero para todo `p` | KERNEL_CHECKED | calculo finito canonico, `log(2)>0` | o witness esta fora da faixa critica; testar separadamente identidades restritas ou renormalizadas |
 | GREEN-PORT-WRONSKI-DECOMP | o Wronskiano das sinteses escalares e exatamente a diagonal coordenada mais a soma off-diagonal explicita | KERNEL_CHECKED | distribuicao de somas finitas e conjugacao | comparar a diagonal enriquecida com o fluxo Green existente |
 | GREEN-PORT-OFFDIAG-WITNESS | existe um portador de dois blocos com off-diagonal igual a `1`; portanto Wronskiano escalar e diagonal nao coincidem universalmente | KERNEL_CHECKED | avaliacao finita direta | nao postular cancelamento de interferencia sem uma hipotese ortogonal/arimetica |
-| GREEN-PORT-LAW | o Wronskiano do portador angular/log-jet enriquecido coincide com a forma Green relevante e se anula quando o Genuine zera | OPEN_BRIDGE | GREEN-TFVD-ENRICHED-TRIPLE fecha o transporte local dos tres gradientes; ainda faltam a identidade log-jet--wedge, o reagrupamento de cutoff e a lei de anulacao | comparar bloco a bloco o log-jet enriquecido com o wedge Green antes da sintese escalar |
+| GREEN-PORT-LAW | uma porta enriquecida fornece a forma Green relevante e sua anulacao em zeros Genuine sem apagar o canal log-jet de vertices | OPEN_BRIDGE | GREEN-LOGJET-GREEN-OBSTRUCTION refuta a igualdade universal direta; GREEN-LOGJET-GREEN-DEFECT isola a diferenca exata | formalizar o comutador log-jet Cp e decidir se o defeito telescopa, vira cutoff ou exige um canal adicional |
 | GEN-BIJ-C2 | pernas impares `n>=3` estao em bijecao com incidencias `(centro multiplo de 4, perna)` | KERNEL_CHECKED | aritmetica modular | usar na reindexacao ponderada |
 | GEN-DEP-C2 | `max(v_2(n-1),v_2(n+1)) = v_2(adjacentCenter(n))` para `n` impar, `n>=3` | KERNEL_CHECKED | GEN-BIJ-C2, valoracao 2-adica | transportar o peso na soma finita |
 | GEN-REINDEX-C2 | soma ponderada das pernas = soma das incidencias esperadas + extras - faltantes | KERNEL_CHECKED | GEN-BIJ-C2, GEN-DEP-C2, somas finitas | reutilizar nas caixas Cp |
@@ -107,7 +111,7 @@ Estados usados:
 | RH-001 | todo zero Genuine esta na linha critica | BLOQUEADO | BRG-001 ou SPC-001+SPC-002 | nao enunciar como provado |
 
 O checkpoint matematico mais recente do nucleo ativo foi compilado pelo GitHub
-Actions no commit `ef39ed4ec05e97ec449422a524537c2c570907d6`, run
-`29715936088`, job `88269139110`.
+Actions no commit `946d8579cb6a2557721e72be2e51676f1899d629`, run
+`29717563536`, job `88273712912`.
 Modulos mantidos apenas em `CPFormal.ResearchReserve` nao fazem parte dessa
 certificacao. Consulte `AUDIT.md`.
