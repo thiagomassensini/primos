@@ -615,3 +615,31 @@ ser identificada universalmente com o fluxo Green diagonal. O checkpoint nao
 prova a identidade diagonal TFVD--Green, nao prova cancelamento aritmetico da
 interferencia, nao prova a anulacao do fluxo em zeros Genuine, nao constroi
 operador Hilbert--Polya e nao prova RH.
+
+## Checkpoint do pullback diagonal TFVD--Green
+
+- commit matematico certificado: `42bc0ce6d4d64502005a1cef4500a9df36c4f4c5`;
+- workflow run: `29714351088` (`Lean kernel audit`);
+- job: `88264360190` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- alvo compilado: `CPFormal.Analytic.CpFinitePortWronskian`.
+
+O kernel verificou uma forma Green refletida fixa no portador TFVD, definida
+pelo retorno local das duas arestas e nao por um residual. A coordenada Green
+canonica preserva literalmente o indice `n` e codifica o bloco Cp normalizado
+em fase junto do gradiente horizontal no mesmo registro.
+
+A identificacao foi provada primeiro coordenada por coordenada e depois
+somada somente na diagonal:
+
+```text
+finiteTfvdCpGreenDiagonal(p,M,s)
+  = finiteOrientedCpGreenFlux(p,M,s).
+```
+
+A igualdade nao usa hipotese de zero, passagem ao limite, calibracao ou
+cancelamento off-diagonal. Ela fecha o pullback TFVD do portador Green, mas
+nao identifica as coordenadas angulares/log-jet que recuperam `Phi_M/Psi_M`
+com esse portador. O intertwiner angular--Green e o cancelamento da
+interferencia escalar permanecem gates separados. Nao foram provados
+`Green-to-zero`, operador Hilbert--Polya ou RH.
