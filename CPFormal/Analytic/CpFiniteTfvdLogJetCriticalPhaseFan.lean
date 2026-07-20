@@ -169,12 +169,11 @@ theorem positiveReal_criticalCpowCross_eq_sine
   have hz₂im : z₂.im = t * (Real.log y - Real.log x) := by
     simp [z₂, criticalLineParameter]
     ring
-  nth_rewrite 2 [Complex.exp_eq_exp_re_mul_sin_add_cos]
-  nth_rewrite 1 [Complex.exp_eq_exp_re_mul_sin_add_cos]
-  rw [hz₁re, hz₁im, hz₂re, hz₂im]
-  rw [Real.sin_neg, Real.cos_neg]
-  push_cast
-  ring
+  apply Complex.ext
+  · simp [Complex.exp_re, hz₁re, hz₁im, hz₂re, hz₂im,
+      Real.cos_neg] <;> ring
+  · simp [Complex.exp_im, hz₁re, hz₁im, hz₂re, hz₂im,
+      Real.sin_neg] <;> ring
 
 /-- Forma local exata do cross-flux como seno real orientado. -/
 theorem reflectedDirichletVertexCrossFlux_criticalLine_eq_sine
