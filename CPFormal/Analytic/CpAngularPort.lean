@@ -316,7 +316,7 @@ theorem norm_positiveLogDirichletValue (s : ℂ) (n : ℕ) :
     Real.log_nonneg hone
   unfold positiveLogDirichletValue
   rw [norm_mul, norm_positiveDirichletValue]
-  rw [Real.norm_of_nonneg hlog]
+  rw [Complex.norm_real, Real.norm_of_nonneg hlog]
 
 /-- O unico bordo externo logaritmico desaparece para `Re(s)>0`. -/
 theorem canonicalAngularLogJetOuter_tendsto_zero
