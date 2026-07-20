@@ -156,6 +156,8 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | observavel angular escalar converge em todo o strip, sem hipotese de zero | `Analytic.Cp.finiteCanonicalAngularScalarPairing_tendsto` |
 | defeito fechado = observavel escalar menos crescimento Green | `Analytic.Cp.finiteCanonicalAngularClosedBulkDefect_eq_scalar_sub_mul_green` |
 | parte real do defeito fechado tende a menos infinito em todo o strip | `Analytic.Cp.finiteCanonicalAngularClosedBulkDefect_re_tendsto_atBot` |
+| defeito fechado normalizado fica eventualmente abaixo de menos metade da primeira energia Green | `Analytic.Cp.eventually_normalizedClosedBulkDefect_re_lt_neg_half` |
+| defeito fechado dividido pelo corte nao converge a zero no strip | `Analytic.Cp.normalizedClosedBulkDefect_not_tendsto_zero` |
 
 Observacao: `GEOMETRIA_C2_CP_DECOMPOSICAO_POR_CARRY(1).md` chegou vazio na
 copia de trabalho desta versao e, portanto, nao foi usado para afirmacoes.
