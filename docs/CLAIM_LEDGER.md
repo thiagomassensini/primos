@@ -1,4 +1,4 @@
-# Ledger de afirmacoes — checkpoint 0.25.0 Genuine-first
+# Ledger de afirmacoes — checkpoint 0.26.0 Genuine-first
 
 Estados usados:
 
@@ -62,7 +62,9 @@ Estados usados:
 | GREEN-COUPLED-FLUX-IFF | num zero Genuine na faixa e para primo `p`, `coupledFlux_M -> 0` se e somente se `Re(s)=1/2` | KERNEL_CHECKED | GREEN-BRACKET-BOUNDARY-LIM, GREEN-PAIRING-MONO, GREEN-COUPLED-FLUX-FACTOR | construir uma lei de porta independente que forneca a direcao `zero Genuine -> fluxo nulo` |
 | GREEN-ANGULAR-PORT-FIN | a porta angular `Phi_M`, definida como corrente de gradientes com pesos `1,2,0`, satisfaz `finiteBracketedChart_3,M=Phi_M+(3M+1)^(-s)` | KERNEL_CHECKED | telescopagem dos gradientes e expansao do bracket `p=3` | passar ao limite sem definir um residual |
 | GREEN-ANGULAR-PORT-LIM | para `Re(s)>0`, `Phi_M` converge para a carta bracketada; num zero Genuine da faixa critica, `Phi_M -> 0` | KERNEL_CHECKED | GREEN-ANGULAR-PORT-FIN, limite de `x^(-Re(s))`, GEN-GLOBAL-ZERO-EQ | usar como traco de valor na futura identidade de porta |
-| GREEN-PORT-LAW | o fluxo de bulk e um Wronskiano de tracos de porta `Phi/Psi` cuja forma se anula quando o Genuine zera | OPEN_BRIDGE | `Phi` finito e seu limite estao fechados; `Psi` independente e a identidade Green de fronteira ainda nao | construir primeiro `Psi_M` no retorno finito/TFVD preservando proveniencia |
+| GREEN-ANGULAR-LOGJET-FIN | o log-jet escalar `Psi_M`, definido independentemente sobre `log(n+1)*(n+1)^(-s)` com pesos `1,2,0`, satisfaz `finiteLogBracketChart_M=Psi_M+log(3M+1)*(3M+1)^(-s)` | KERNEL_CHECKED | telescopagem finita dos gradientes log-pesados | ligar o objeto escalar ao retorno enriquecido sem o definir como residual |
+| GREEN-ANGULAR-LOGJET-OUTER | para `Re(s)>0`, o bordo logaritmico externo do log-jet converge a zero | KERNEL_CHECKED | norma exata do monomio log-pesado, `log x=o(x^sigma)` | ainda falta a convergencia da carta log-bracketada completa |
+| GREEN-PORT-LAW | o fluxo de bulk e um Wronskiano de tracos de porta `Phi/Psi` cuja forma se anula quando o Genuine zera | OPEN_BRIDGE | `Phi` e o log-jet escalar finito estao fechados; a identificacao TFVD tipada e a identidade Green de fronteira ainda nao | provar primeiro a ponte finita entre o log-jet escalar, o retorno enriquecido e o fluxo Green |
 | GEN-BIJ-C2 | pernas impares `n>=3` estao em bijecao com incidencias `(centro multiplo de 4, perna)` | KERNEL_CHECKED | aritmetica modular | usar na reindexacao ponderada |
 | GEN-DEP-C2 | `max(v_2(n-1),v_2(n+1)) = v_2(adjacentCenter(n))` para `n` impar, `n>=3` | KERNEL_CHECKED | GEN-BIJ-C2, valoracao 2-adica | transportar o peso na soma finita |
 | GEN-REINDEX-C2 | soma ponderada das pernas = soma das incidencias esperadas + extras - faltantes | KERNEL_CHECKED | GEN-BIJ-C2, GEN-DEP-C2, somas finitas | reutilizar nas caixas Cp |
@@ -98,7 +100,7 @@ Estados usados:
 | RH-001 | todo zero Genuine esta na linha critica | BLOQUEADO | BRG-001 ou SPC-001+SPC-002 | nao enunciar como provado |
 
 O checkpoint matematico mais recente do nucleo ativo foi compilado pelo GitHub
-Actions no commit `3fcb6d5a05a2395bcdf3d58d94ef6a7a0afd1f38`, run
-`29706939780`, job `88245427884`.
+Actions no commit `de6715e04877994629747455ebfc6cc2c54f8ab0`, run
+`29710050913`, job `88252649077`.
 Modulos mantidos apenas em `CPFormal.ResearchReserve` nao fazem parte dessa
 certificacao. Consulte `AUDIT.md`.
