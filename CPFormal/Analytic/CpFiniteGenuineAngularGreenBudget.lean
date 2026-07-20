@@ -146,7 +146,8 @@ theorem canonicalAngularPairingEntry_self_eq_greenEnergy_add_correction
   rw [canonicalAngularGradientBlock_eq_two_edges,
     canonicalAngularGradientBlock_eq_two_edges]
   simp only [map_neg, map_add, map_mul]
-  have htwo : (starRingEnd ℂ) (2 : ℂ) = 2 := by norm_num
+  have htwo : (starRingEnd ℂ) (2 : ℂ) = 2 := by
+    exact Complex.conj_ofNat 2
   rw [htwo]
   ring
 
@@ -236,7 +237,7 @@ theorem finiteCanonicalAngularScalarPairing_tendsto_zero_of_genuine_zero_pair
         (fun M : ℕ ↦
           (starRingEnd ℂ) (finiteCanonicalAngularTrace M s))
         atTop (nhds 0) := by
-    simpa only [Function.comp_apply] using
+    simpa [Function.comp_def] using
       (Complex.continuous_conj.tendsto 0).comp hphi
   have hproduct := hconj.mul hphiSharp
   simpa only [finiteCanonicalAngularScalarPairing_eq_product,
@@ -334,8 +335,7 @@ theorem GenuineAngularGreenCancellationBridge.criticalDisplacement_eq_zero
         atTop (nhds 0) := by
     have hre :=
       Complex.continuous_re.continuousAt.tendsto.comp hpairingComplex
-    simpa only [Function.comp_apply, Complex.mul_re,
-      Complex.ofReal_re, Complex.ofReal_im, zero_mul, sub_zero] using hre
+    simpa [Function.comp_def, Complex.mul_re] using hre
   have hpositive :
       0 < (finiteReflectedGradientPairing 1 s).re :=
     finiteReflectedGradientPairing_re_pos (by norm_num) hs
