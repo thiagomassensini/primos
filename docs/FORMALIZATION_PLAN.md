@@ -518,10 +518,14 @@ Ordem local atual para essa instancia:
 12. **concluido:** construir o traco angular finito `Phi` com pesos residuais,
     provar sua identidade com a carta bracketada ate o endpoint externo
     explicito e passar ao limite em `Re(s)>0`;
-13. **proximo nucleo minimo:** construir o traco de corrente `Psi_M` a partir
-    do retorno finito/TFVD independente, preservando as coordenadas de
-    proveniencia, e provar a identidade Wronskiana de porta antes do limite;
-14. depois da lei de porta, decidir entre adaptar a API para um certificado
+13. **concluido no nivel escalar finito:** construir o log-jet `Psi_M` a
+    partir do campo independente `log(n+1)*(n+1)^(-s)`, provar sua identidade
+    com a carta log-bracketada e eliminar o unico bordo externo em
+    `Re(s)>0`;
+14. **proximo nucleo minimo:** identificar esse log-jet escalar com o retorno
+    finito/TFVD enriquecido sem apagar proveniencia, tipar o pareamento
+    `Phi/Psi` e provar a identidade Wronskiana de porta antes do limite;
+15. depois da lei de porta, decidir entre adaptar a API para um certificado
     sequencial ou montar o `SignedGreenCertificate` funcional. Multiplicidades
     ficam como refinamento posterior, pois nao bloqueiam a implicacao simples
     sobre a localizacao dos zeros.
