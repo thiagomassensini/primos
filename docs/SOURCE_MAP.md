@@ -145,6 +145,13 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | off-diagonal e determinado pelo setor fechado e pela diagonal | `Analytic.Cp.finiteOffDiagonalPortWronskian_synthesis_ledger` |
 | traco angular = sintese finita das segundas diferencas menos endpoint externo | `Analytic.Cp.finiteCanonicalAngularTrace_eq_secondDifferenceSynthesis_sub_outer` |
 | ledger angular Green separa energia, correcao local e kernel da sintese | `Analytic.Cp.finiteCanonicalAngularScalarPairing_synthesis_green_ledger`, `Analytic.Cp.finiteCanonicalAngularGreenCorrection_synthesis_ledger` |
+| primitiva do kernel = prefixo parcial escalado menos observavel completo | `Analytic.Cp.finitePortSynthesisKernelPrefix_eq_scaled_prefix_sub_cutoff`, `Analytic.Cp.finiteCanonicalAngularKernelPrefix_eq_centered_traces` |
+| somacao por partes do setor fechado nao deixa endpoints | `Analytic.Cp.finitePortSynthesisKernelPairing_summation_by_parts` |
+| pareamento do kernel = tamanho do corte vezes bulk fechado | `Analytic.Cp.finitePortSynthesisKernelPairing_eq_mul_closedBulk`, `Analytic.Cp.finiteCanonicalAngularSynthesisKernelPairing_eq_mul_closedBulk` |
+| correcao angular = crescimento Green mais defeito local--bulk fechado | `Analytic.Cp.finiteCanonicalAngularGreenCorrection_eq_diagonalGrowth_add_closedBulkDefect` |
+| observavel escalar = `M * Green + defeito fechado` | `Analytic.Cp.finiteCanonicalAngularScalarPairing_eq_mul_green_add_closedBulkDefect` |
+| zero Genuine fecha exatamente o novo orcamento de bulk | `Analytic.Cp.finiteCanonicalAngularMulGreenAddClosedBulkDefect_tendsto_zero_of_genuine_zero`, `Analytic.Cp.finiteCanonicalAngularRadialClosedBulkBudget_tendsto_zero_of_genuine_zero` |
+| o cancelamento local--bulk nao e identidade universal | `Analytic.Cp.finiteCanonicalAngularClosedBulkDefect_one_two_ne_zero` |
 
 Observacao: `GEOMETRIA_C2_CP_DECOMPOSICAO_POR_CARRY(1).md` chegou vazio na
 copia de trabalho desta versao e, portanto, nao foi usado para afirmacoes.
