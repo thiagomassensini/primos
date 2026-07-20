@@ -137,9 +137,15 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
 - identidade exata entre a carta log-bracketada, o traco log-jet e um unico
   bordo externo `log(3M+1)*(3M+1)^(-s)`;
 - para `Re(s)>0`, esse bordo logaritmico desaparece;
-- a identificacao desse log-jet escalar com o retorno TFVD enriquecido e a
-  identidade Wronskiana que devem fazer o Genuine impor a anulacao do fluxo
-  permanecem abertas;
+- coordenada TFVD finita enriquecida por indice de bloco, through-flow e
+  bracket-flow, com retorno exato das duas arestas;
+- leitura TFVD independente que recupera literalmente `Phi_M` e o log-jet
+  `Psi_M`, para quaisquer pesos de curvatura nao nulos;
+- decomposicao exata do Wronskiano das sinteses escalares em diagonal mais
+  interferencia off-diagonal explicita;
+- witness kernel-checked mostrando que a interferencia pode ser nao nula, de
+  modo que a identificacao da diagonal TFVD com o fluxo Green e sua futura
+  lei de anulacao permanecem pontes abertas;
 - ledger de afirmacoes, mapa de dependencias e caixa de ideias.
 
 Os modulos projetivo e Hilbert--Polya permanecem preservados em
@@ -180,8 +186,8 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 marcadas como abertas no ledger.
 
 O checkpoint matematico mais recente do nucleo ativo passou por essa
-verificacao no commit `de6715e04877994629747455ebfc6cc2c54f8ab0`, workflow
-run `29710050913`. A certificacao cobre os imports de `CPFormal.lean`;
+verificacao no commit `60d8885e8959066a1f035651e7a573cc2c80edb0`, workflow
+run `29711460431`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
 ## Ordem de leitura
@@ -189,7 +195,7 @@ run `29710050913`. A certificacao cobre os imports de `CPFormal.lean`;
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
 3. `docs/CLAIM_LEDGER.md`
-4. `docs/RELEASE_0.26.0.md`
+4. `docs/RELEASE_0.27.0.md`
 5. `docs/VISION_INBOX.md`
 6. `CPFormal/Genuine/FiniteCancellation.lean`
 7. `CPFormal/Genuine/C2.lean`
