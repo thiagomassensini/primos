@@ -383,6 +383,77 @@ theorem criticalLine_completeTraces_tendsto_nonzero
   exact ⟨htraces.1, htraces.2.1, htraces.2.2.1,
     reflectedLogJetVertexFluxSeries_criticalLine_ne_zero ht0 ht1⟩
 
+/-!
+## Reencontro formal do detector de carry dentro do Green
+
+O residual critico acima nao precisa desaparecer. Para confinar zeros, o
+detector relevante continua sendo transversal: a diferenca radial do Green
+e o defeito quadratico do ramo possuem exatamente o mesmo zero.
+-/
+
+/-- Para uma base prima, a diferenca radial se anula exatamente em `delta=0`. -/
+theorem cpRadialDifference_eq_zero_iff
+    (p : ℕ) (hp : Nat.Prime p) (delta : ℝ) :
+    cpRadialDifference p delta = 0 ↔ delta = 0 := by
+  constructor
+  · intro hzero
+    have hfactor :=
+      cpRadialDifference_eq_two_mul_delta_mul_cofactor p delta
+    have hcofactor := cpRadialCofactor_pos p hp delta
+    rw [hfactor] at hzero
+    rcases mul_eq_zero.mp hzero with htwoDelta | hcofactorZero
+    · exact (mul_eq_zero.mp htwoDelta).resolve_left (by norm_num)
+    · exact (ne_of_gt hcofactor hcofactorZero).elim
+  · rintro rfl
+    simp [cpRadialDifference]
+
+/-- A saturacao antiga do ramo e o detector radial atual sao o mesmo locus. -/
+theorem branchDefect_eq_zero_iff_cpRadialDifference_eq_zero
+    (p : ℕ) (hp : Nat.Prime p) {sigma : ℝ} (hsigma : 0 < sigma) :
+    branchDefect p sigma = 0 ↔
+      cpRadialDifference p (criticalDisplacement sigma) = 0 := by
+  rw [branchDefect_eq_zero_iff_criticalDisplacement_eq_zero p hp hsigma,
+    cpRadialDifference_eq_zero_iff p hp]
+
+/-- Num zero Genuine do strip, fechar o fluxo acoplado e saturar o ramo sao
+literalmente a mesma obrigacao. Nenhuma das duas direcoes e postulada aqui. -/
+theorem branchDefect_eq_zero_iff_coupledFlux_tendsto_zero_of_genuine_zero
+    (p : ℕ) (hp : Nat.Prime p) {s : ℂ}
+    (hs : s ∈ genuineCriticalStrip)
+    (hzero : genuineContinuation s = 0) :
+    branchDefect p s.re = 0 ↔
+      Tendsto (fun M : ℕ ↦ finiteBracketCoupledCpGreenFlux p M s)
+        atTop (nhds 0) := by
+  have hre : 0 < s.re := by linarith [hs.1]
+  rw [branchDefect_eq_zero_iff_criticalDisplacement_eq_zero p hp hre]
+  exact
+    (coupledFlux_tendsto_zero_iff_criticalDisplacement_eq_zero
+      p hp hs hzero).symm
+
+/--
+Interface minima e concreta da unica seta ainda ausente. Construir uma
+instancia exige provar que zeros Genuine fecham o fluxo acoplado; nenhuma
+instancia e declarada neste checkpoint.
+-/
+structure GenuineCarryFluxBridge (p : ℕ) : Prop where
+  flux_closes_at_zero :
+    ∀ {s : ℂ}, genuineContinuation s = 0 →
+      s ∈ genuineCriticalStrip →
+      Tendsto (fun M : ℕ ↦ finiteBracketCoupledCpGreenFlux p M s)
+        atTop (nhds 0)
+
+/-- Uma instancia concreta da ponte minima transporta o zero ate a meia reta. -/
+theorem GenuineCarryFluxBridge.re_eq_half_of_genuine_zero
+    {p : ℕ} (hp : Nat.Prime p) (bridge : GenuineCarryFluxBridge p)
+    {s : ℂ} (hzero : genuineContinuation s = 0)
+    (hs : s ∈ genuineCriticalStrip) :
+    s.re = (1 : ℝ) / 2 := by
+  have hdelta :=
+    criticalDisplacement_eq_zero_of_coupledFlux_tendsto_zero
+      p hp hs hzero (bridge.flux_closes_at_zero hzero hs)
+  unfold criticalDisplacement at hdelta
+  linarith
+
 end
 
 end CPFormal.Analytic.Cp
