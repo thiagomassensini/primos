@@ -171,9 +171,13 @@ theorem positiveReal_criticalCpowCross_eq_sine
     ring
   apply Complex.ext
   · simp [Complex.exp_re, hz₁re, hz₁im, hz₂re, hz₂im,
-      Real.cos_neg] <;> ring
+      Real.cos_neg, Complex.exp_ofReal_re, Complex.exp_ofReal_im,
+      Complex.sin_ofReal_re, Complex.sin_ofReal_im,
+      Complex.cos_ofReal_re, Complex.cos_ofReal_im] <;> ring
   · simp [Complex.exp_im, hz₁re, hz₁im, hz₂re, hz₂im,
-      Real.sin_neg] <;> ring
+      Real.sin_neg, Complex.exp_ofReal_re, Complex.exp_ofReal_im,
+      Complex.sin_ofReal_re, Complex.sin_ofReal_im,
+      Complex.cos_ofReal_re, Complex.cos_ofReal_im] <;> ring
 
 /-- Forma local exata do cross-flux como seno real orientado. -/
 theorem reflectedDirichletVertexCrossFlux_criticalLine_eq_sine
