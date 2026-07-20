@@ -591,3 +591,27 @@ Esse log-jet e um candidato escalar finito a `Psi`. O run nao o identifica
 com o retorno TFVD enriquecido, nao prova a identidade Wronskiana com `Phi`,
 nao prova a anulacao do fluxo Green em zeros Genuine, nao constroi operador
 Hilbert--Polya e nao prova RH.
+
+## Checkpoint da ponte TFVD finita e do termo off-diagonal
+
+- commit matematico certificado: `60d8885e8959066a1f035651e7a573cc2c80edb0`;
+- workflow run: `29711460431` (`Lean kernel audit`);
+- job: `88255906393` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- alvos compilados: `CPFormal.Analytic.CpFiniteTfvdBridge` e
+  `CPFormal.Analytic.CpFinitePortWronskian`.
+
+O kernel verificou a codificacao TFVD tipada com indice de bloco, through-flow
+e bracket-flow, sua inversao local exata e a especializacao da escala a
+`sqrt(2)`. Verificou tambem que a leitura linear independente das duas
+coordenadas recupera os pesos angulares `1,2`. Somada sobre os blocos, essa
+leitura recupera literalmente as portas finitas `Phi_M` e `Psi_M` para toda
+familia de pesos de curvatura nao nulos.
+
+O Wronskiano das sinteses escalares foi expandido numa matriz de pares de
+blocos e separado em diagonal mais off-diagonal explicito. Um witness de dois
+blocos com off-diagonal igual a `1` prova que a compressao escalar nao pode
+ser identificada universalmente com o fluxo Green diagonal. O checkpoint nao
+prova a identidade diagonal TFVD--Green, nao prova cancelamento aritmetico da
+interferencia, nao prova a anulacao do fluxo em zeros Genuine, nao constroi
+operador Hilbert--Polya e nao prova RH.
