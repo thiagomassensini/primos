@@ -141,6 +141,52 @@ O resultado distingue agora os dois canais no limite: o Green radial e o
 comutador desaparecem na linha crítica, enquanto o residual triangular
 possui uma faixa explícita em que sobrevive.
 
+## Reencontro do carry dentro do Green
+
+O não-anulamento acima mostra que o confinamento não deve exigir
+`B(1/2+it)=0`: a parte imaginária triangular pode sobreviver na própria linha
+crítica. O detector necessário é transversal.
+
+Para uma base prima, o kernel agora dá nome à identificação exata
+
+```text
+cpRadialDifference(p,delta)=0  <->  delta=0
+```
+
+e compõe isso com a interface antiga do operador de ramo. No semiplano
+`sigma>0`, resulta
+
+```text
+branchDefect(p,sigma)=0
+  <-> cpRadialDifference(p,sigma-1/2)=0.
+```
+
+Portanto a saturação quadrática preparada por `GenuineBranchBridge` e o
+fechamento radial desenvolvido pela rota Green são dois detectores do mesmo
+locus crítico.
+
+Mais precisamente, se `s` é um zero de `genuineContinuation` no strip, o
+kernel prova a equivalência
+
+```text
+branchDefect(p,Re(s))=0
+  <-> finiteBracketCoupledCpGreenFlux(p,M,s) -> 0.
+```
+
+Esta equivalência não prova nenhum de seus lados a partir do zero Genuine.
+Ela localiza a única seta que falta e impede circularidade: o fechamento do
+fluxo precisa ser derivado independentemente da conclusão `Re(s)=1/2`.
+
+Para registrar essa obrigação sem escondê-la, o módulo introduz
+`GenuineCarryFluxBridge`. Seu único campo é exatamente
+
+```text
+zero Genuine no strip -> fluxo acoplado fecha.
+```
+
+Uma instância concreta dessa estrutura já implica, por composição formal,
+`Re(s)=1/2`. Nenhuma instância é postulada neste checkpoint.
+
 ## O que a triangulação significa aqui
 
 O objeto formalizado é o leque local
@@ -163,9 +209,10 @@ Este checkpoint ainda não:
 - liga `B(1/2+it)` a zeros Genuine;
 - prova não-anulamento para todo `t != 0`;
 - afirma que um zero Genuine anule ou preserve o residual triangular;
+- constrói uma instância de `GenuineCarryFluxBridge`;
+- deriva o fechamento do fluxo acoplado total de `genuineContinuation s = 0`;
 - constrói o complexo simplicial multibase completo ou seu operador de bordo;
 - identifica área orientada com defeito triangular de transporte;
-- cancela o endpoint interno da porta bracket--Green;
 - prova somabilidade absoluta dos incrementos já reagrupados do bulk;
 - prova cancelamento do off-diagonal aritmético;
 - identifica o Genuine com `riemannZeta`;
@@ -174,16 +221,33 @@ Este checkpoint ainda não:
 
 ## Próximo núcleo mínimo
 
-Transportar a separação do limite de volta aos cutoffs finitos: de
-`Trace(M) -> B(s(t)) != 0`, extrair um limiar `M_0` após o qual os traços
-residual e de defeito permanecem não nulos. Depois disso, uma extensão
-natural é ampliar a câmara de sinal usando a cota ótima `g_n<=log 2` e só
-então tipar uma verdadeira aresta de retorno para faces TFVD fechadas.
+Construir, sem usar previamente `Re(s)=1/2`, uma instância concreta de
+`GenuineCarryFluxBridge`. A obrigação analítica mínima é mostrar que, num
+zero Genuine, os canais não radiais não produzem uma parte real capaz de
+cancelar o bulk
+
+```text
+cpRadialDifference(p,delta) * positivePairing(M,s).
+```
+
+A triangulação passa a ter uma função cirúrgica: organizar termos
+off-diagonal como circulação de faces, cancelar arestas internas por
+orientações opostas e reduzir a parte real restante ao bordo externo, que já
+fecha nos zeros Genuine. Se essa redução for provada, a composição final já
+está pronta:
+
+```text
+zero Genuine -> fluxo fecha -> branchDefect=0 -> Re(s)=1/2.
+```
+
+O não-anulamento de `B` na linha crítica deixa de ser um obstáculo: ele prova
+justamente que não devemos exigir o desaparecimento do residual complexo
+inteiro.
 
 ## Evidência do kernel
 
-- commit matemático: `133edecd9d290d948c923bfc92b8ba84eb82c752`;
-- workflow run: `29727693258` (`Lean kernel audit`);
-- job: `88304489097` (`Build CPFormal`);
+- commit matemático: `bb14de3866035e27e051ca958e042faa73a824cc`;
+- workflow run: `29729958305` (`Lean kernel audit`);
+- job: `88311846035` (`Build CPFormal`);
 - resultado: `success` em auditoria estática e `lake build --wfail`;
 - nenhum `sorry`, `admit` ou axioma local.
