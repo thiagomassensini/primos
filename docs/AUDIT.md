@@ -643,3 +643,32 @@ nao identifica as coordenadas angulares/log-jet que recuperam `Phi_M/Psi_M`
 com esse portador. O intertwiner angular--Green e o cancelamento da
 interferencia escalar permanecem gates separados. Nao foram provados
 `Green-to-zero`, operador Hilbert--Polya ou RH.
+
+## Checkpoint da aresta dormente e do intertwiner angular--Green
+
+- commit matematico certificado: `ef39ed4ec05e97ec449422a524537c2c570907d6`;
+- workflow run: `29715936088` (`Lean kernel audit`);
+- job: `88269139110` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado:
+  `CPFormal.Analytic.CpFiniteTfvdAngularGreenIntertwiner`.
+
+O kernel verificou que o portador TFVD angular atual recupera e transporta
+exatamente os gradientes nos residuos `0,1 mod 3` para os dois portadores
+Green canonicos correspondentes. A terceira aresta do bloco possui peso
+angular zero, mas continua sendo consumida pelo Green.
+
+Um witness tipado provou que nenhum mapa universal do par de coordenadas
+TFVD ordinaria/log-jet atual pode reconstruir uma terceira aresta arbitraria:
+as mesmas entradas seriam obrigadas a produzir `0` e `1`.
+
+Foi entao adicionado somente o campo `dormantEdge`. O retorno enriquecido
+recupera as tres arestas, enquanto esquecer esse campo devolve
+definicionalmente as portas anteriores e preserva literalmente os readouts
+`Phi/Psi`. O teorema central verificou bloco por bloco que os dois canais
+visiveis e o dormente produzem exatamente o trio Green canonico nos indices
+`3m`, `3m+1` e `3m+2`.
+
+O checkpoint nao identifica ainda o Wronskiano do log-jet enriquecido com a
+forma Green, nao trata a soma off-diagonal, nao prova `Green-to-zero`, nao
+passa ao limite, nao constroi operador Hilbert--Polya e nao prova RH.
