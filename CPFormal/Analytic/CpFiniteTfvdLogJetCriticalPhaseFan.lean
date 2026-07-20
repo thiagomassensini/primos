@@ -169,15 +169,28 @@ theorem positiveReal_criticalCpowCross_eq_sine
   have hz₂im : z₂.im = t * (Real.log y - Real.log x) := by
     simp [z₂, criticalLineParameter]
     ring
+  have hrhsRe :
+      (((-2 * Real.exp (-((Real.log x + Real.log y) / 2)) *
+          Real.sin (t * (Real.log y - Real.log x)) : ℝ) : ℂ) *
+        Complex.I).re = 0 := by
+    simp only [Complex.mul_re, Complex.ofReal_re, Complex.I_re,
+      Complex.ofReal_im, Complex.I_im, mul_zero, zero_mul, mul_one,
+      sub_zero]
+  have hrhsIm :
+      (((-2 * Real.exp (-((Real.log x + Real.log y) / 2)) *
+          Real.sin (t * (Real.log y - Real.log x)) : ℝ) : ℂ) *
+        Complex.I).im =
+        -2 * Real.exp (-((Real.log x + Real.log y) / 2)) *
+          Real.sin (t * (Real.log y - Real.log x)) := by
+    simp only [Complex.mul_im, Complex.ofReal_re, Complex.I_im,
+      Complex.ofReal_im, Complex.I_re, mul_one, mul_zero, add_zero]
   apply Complex.ext
-  · simp [Complex.exp_re, hz₁re, hz₁im, hz₂re, hz₂im,
-      Real.cos_neg, Complex.exp_ofReal_re, Complex.exp_ofReal_im,
-      Complex.sin_ofReal_re, Complex.sin_ofReal_im,
-      Complex.cos_ofReal_re, Complex.cos_ofReal_im] <;> ring
-  · simp [Complex.exp_im, hz₁re, hz₁im, hz₂re, hz₂im,
-      Real.sin_neg, Complex.exp_ofReal_re, Complex.exp_ofReal_im,
-      Complex.sin_ofReal_re, Complex.sin_ofReal_im,
-      Complex.cos_ofReal_re, Complex.cos_ofReal_im] <;> ring
+  · rw [Complex.sub_re, Complex.exp_re, Complex.exp_re, hrhsRe,
+      hz₁re, hz₁im, hz₂re, hz₂im, Real.cos_neg]
+    ring
+  · rw [Complex.sub_im, Complex.exp_im, Complex.exp_im, hrhsIm,
+      hz₁re, hz₁im, hz₂re, hz₂im, Real.sin_neg]
+    ring
 
 /-- Forma local exata do cross-flux como seno real orientado. -/
 theorem reflectedDirichletVertexCrossFlux_criticalLine_eq_sine
