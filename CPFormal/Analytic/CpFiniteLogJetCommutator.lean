@@ -92,6 +92,8 @@ theorem cpLogBlockGradient_eq_eigenvalue_mul_logJet_add_logScale
     ← positiveDirichletValue_eq_natDirichletTerm s n]
   unfold positiveLogDirichletGradient positiveDirichletGradient
     cpLogScaleCoefficient
+  rw [← positiveDirichletValue_eq_natDirichletTerm s (n + 1),
+    ← positiveDirichletValue_eq_natDirichletTerm s n]
   ring
 
 /-- Diferenca entre transportar o log-jet pelo bloco e pelo autovalor Cp. -/
