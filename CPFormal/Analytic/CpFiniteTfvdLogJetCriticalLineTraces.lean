@@ -251,7 +251,9 @@ theorem criticalLine_completeTraces_tendsto
 @[simp] theorem finiteReflectedLogJetVertexFlux_one_half_eq_zero (N : ℕ) :
     finiteReflectedLogJetVertexFlux N ((1 / 2 : ℝ) : ℂ) = 0 := by
   unfold finiteReflectedLogJetVertexFlux
-  simp
+  apply Finset.sum_eq_zero
+  intro n hn
+  exact reflectedLogJetVertexFlux_one_half_eq_zero n
 
 /-- No ponto central, o traco residual inteiro e zero em todo corte. -/
 @[simp] theorem finiteCanonicalLogJetCommutatorResidualTrace_one_half_eq_zero
@@ -260,7 +262,7 @@ theorem criticalLine_completeTraces_tendsto
         ((1 / 2 : ℝ) : ℂ) = 0 := by
   rw [finiteCanonicalLogJetCommutatorResidualTrace_eq_vertex_of_re_eq_half
     p hp M (by norm_num)]
-  simp
+  exact finiteReflectedLogJetVertexFlux_one_half_eq_zero (3 * M)
 
 /-- No ponto central, o traco do comutador inteiro e zero em todo corte. -/
 @[simp] theorem finiteCanonicalCpLogJetCommutatorWedgeTrace_one_half_eq_zero
@@ -277,7 +279,7 @@ theorem criticalLine_completeTraces_tendsto
         ((1 / 2 : ℝ) : ℂ) = 0 := by
   rw [finiteCanonicalLogJetGreenDefectTrace_eq_vertex_of_re_eq_half
     p hp M (by norm_num)]
-  simp
+  exact finiteReflectedLogJetVertexFlux_one_half_eq_zero (3 * M)
 
 end
 
