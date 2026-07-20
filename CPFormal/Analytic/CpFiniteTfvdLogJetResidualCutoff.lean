@@ -43,8 +43,8 @@ theorem sum_range_forwardDifference_mul_eq_cutoff_add_bulk
           simp
           ring
       | succ N =>
+          simp only [Nat.add_sub_cancel]
           rw [Finset.sum_range_succ]
-          simp only [Nat.succ_sub_one]
           ring
 
 /-- Peso logaritmico no vertice positivo `n+1`. -/
@@ -309,7 +309,6 @@ theorem finiteReflectedLogJetCrossBulk_three_zero :
     reflectedDirichletVertexCrossFlux_zero_zero,
     reflectedDirichletVertexCrossFlux_one_zero,
     reflectedDirichletVertexCrossFlux_two_zero]
-  push_cast
   ring
 
 /-!
