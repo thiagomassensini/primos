@@ -561,3 +561,33 @@ traco angular converge para a carta bracketada. Em zeros de
 zero. O checkpoint nao constroi `Psi`, nao prova a identidade Wronskiana nem a
 anulacao do fluxo acoplado, nao constroi operador Hilbert--Polya e nao prova
 RH.
+
+## Checkpoint do log-jet finito da porta angular
+
+- commit matematico certificado: `de6715e04877994629747455ebfc6cc2c54f8ab0`;
+- workflow run: `29710050913` (`Lean kernel audit`);
+- job: `88252649077` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- alvo compilado: `CPFormal.Analytic.CpAngularPort`.
+
+O kernel verificou a construcao independente do campo log-pesado
+
+```text
+L_s(n)=log(n+1)*(n+1)^(-s)
+```
+
+e do traco angular obtido de seus gradientes com pesos `1,2,0`. A carta
+log-bracketada foi definida separadamente; a telescopagem finita forneceu
+
+```text
+finiteLogBracketChart_M = finiteLogJetTrace_M + L_s(3M).
+```
+
+Tambem foram verificadas a norma exata de `L_s(n)` e a convergencia
+`L_s(3M)->0` para `Re(s)>0`, usando a dominacao assintotica do logaritmo por
+potencias positivas.
+
+Esse log-jet e um candidato escalar finito a `Psi`. O run nao o identifica
+com o retorno TFVD enriquecido, nao prova a identidade Wronskiana com `Phi`,
+nao prova a anulacao do fluxo Green em zeros Genuine, nao constroi operador
+Hilbert--Polya e nao prova RH.
