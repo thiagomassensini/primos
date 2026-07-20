@@ -672,3 +672,36 @@ visiveis e o dormente produzem exatamente o trio Green canonico nos indices
 O checkpoint nao identifica ainda o Wronskiano do log-jet enriquecido com a
 forma Green, nao trata a soma off-diagonal, nao prova `Green-to-zero`, nao
 passa ao limite, nao constroi operador Hilbert--Polya e nao prova RH.
+
+## Checkpoint do wedge log-jet enriquecido e do defeito Green
+
+- commit matematico certificado: `946d8579cb6a2557721e72be2e51676f1899d629`;
+- workflow run: `29717563536` (`Lean kernel audit`);
+- job: `88273712912` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado:
+  `CPFormal.Analytic.CpFiniteTfvdLogJetGreenComparison`.
+
+O kernel verificou que o wedge refletido das quatro portas TFVD
+enriquecidas recupera e pareia separadamente os tres residuos do bloco,
+inclusive a aresta dormente. Coordenada por coordenada, o wedge log-jet foi
+reduzido a um salto de logaritmo multiplicado pelo fluxo cruzado dos dois
+vertices consecutivos.
+
+Esse fluxo de vertices foi comparado com o wedge Green radial, construido
+independentemente. O resultado exato e uma decomposicao tipada
+
+```text
+logJetWedgeTriple = cpGreenWedgeTriple + defectTriple.
+```
+
+Um witness canonico verificou que, na primeira aresta e em `s=0`, o wedge
+log-jet vale `-log(2)/2`, enquanto o wedge Green vale zero para toda base
+`p`. Portanto a igualdade direta nao e uma identidade algebrica universal e
+o canal de defeito nao pode ser apagado. O witness esta fora da faixa
+critica e nao exclui uma identidade adicional restrita ou renormalizada.
+
+Este checkpoint nao prova que o defeito telescopa ou se anula, nao formaliza
+ainda o comutador log-jet do bloco Cp, nao trata a soma off-diagonal, nao
+prova `Green-to-zero`, nao passa ao limite, nao constroi operador
+Hilbert--Polya e nao prova RH.
