@@ -130,5 +130,16 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | o fluxo Genuine orientado e a diagonal TFVD sao o mesmo objeto | `Analytic.Cp.finiteOrientedGenuineCpGreenFlux_eq_tfvdDiagonal` |
 | fluxo acoplado = parte real do Green Genuine orientado + bordo bracketado | `Analytic.Cp.finiteBracketCoupledCpGreenFlux_eq_genuineOriented_add_boundary` |
 
+| bracket local C2 = segunda diferenca centrada de raio 1 | `Genuine.C2.bracket_eq_centeredSecondDifference`, `Genuine.C2.bracket_operator_eq_centeredSecondDifference` |
+| bracket Cp de primo impar = soma saturada das segundas diferencas admissiveis | `Genuine.Cp.bracket_operator_eq_saturatedBracket` |
+| camera local p=3 = stencil C2 de raio 1 | `Genuine.Cp.bracket_three_eq_centeredSecondDifference`, `Genuine.Cp.bracket_three_eq_c2Bracket` |
+| cada par do tilt = segunda diferenca do perfil transversal | `Analytic.Cp.cpPairTilt_eq_centeredSecondDifference` |
+| tilt Cp = bracket Genuine aplicado ao perfil transversal | `Analytic.Cp.cpTilt_eq_genuineBracket`, `Analytic.Cp.cpTilt_eq_saturatedBracket` |
+| carta bracketada = semente + serie universal de segundas diferencas | `Analytic.Cp.bracketedDirichletChart_eq_centeredSecondDifferenceSeries` |
+| quociente Genuine = serie de segundas diferencas normalizada pelo fator da camera | `Analytic.Cp.cpGenuineQuotient_eq_centeredSecondDifferenceSeries` |
+| formula explicita p=3 do Genuine continuado | `Analytic.Cp.genuineContinuation_eq_centeredSecondDifferenceSeries` |
+| cortes finitos de qualquer camera convergem ao fator vezes o Genuine canonico no strip | `Analytic.Cp.finiteChart_dirichlet_tendsto_factor_mul_genuineContinuation_on_strip` |
+| zero Genuine no strip = cancelamento da semente 1 pela serie de segundas diferencas | `Analytic.Cp.genuineContinuation_zero_iff_centeredSecondDifferenceSeries_eq_neg_one` |
+
 Observacao: `GEOMETRIA_C2_CP_DECOMPOSICAO_POR_CARRY(1).md` chegou vazio na
 copia de trabalho desta versao e, portanto, nao foi usado para afirmacoes.
