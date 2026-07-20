@@ -63,6 +63,14 @@ theorem reflectedDirichletVertexCrossFlux_eq_cpow_cross
     conj_positiveDirichletValue_eq_cpow]
   simp [positiveDirichletValue, reflectedParameter, Nat.add_assoc]
 
+/-- No endpoint `s=0`, a corrente e uma diferenca estrita de inversos. -/
+theorem reflectedDirichletVertexCrossFlux_zero_eq_inv_sub_inv
+    (n : ℕ) :
+    reflectedDirichletVertexCrossFlux n 0 =
+      (((n + 2 : ℕ) : ℂ))⁻¹ - (((n + 1 : ℕ) : ℂ))⁻¹ := by
+  norm_num [reflectedDirichletVertexCrossFlux,
+    positiveDirichletValue, reflectedParameter, Complex.cpow_neg_one]
+
 /-!
 ## Cota uniforme da corrente no strip fechado
 -/
@@ -355,6 +363,92 @@ theorem finiteReflectedLogJetCrossBulk_three_mul_tendsto_series
     filter_upwards [eventually_ge_atTop b] with M hM
     omega
   exact (finiteReflectedLogJetCrossBulk_tendsto_series hs0 hs1).comp hthree
+
+/-!
+## Persistencia no endpoint `s=0`
+-/
+
+/-- Cada somador do fluxo residual possui parte real estritamente negativa
+em `s=0`. -/
+theorem reflectedLogJetVertexFlux_zero_re_neg (n : ℕ) :
+    (reflectedLogJetVertexFlux n 0).re < 0 := by
+  let x : ℝ := ((n + 1 : ℕ) : ℝ)
+  let y : ℝ := ((n + 2 : ℕ) : ℝ)
+  have hx : 0 < x := by positivity
+  have hy : 0 < y := by positivity
+  have hxy : x < y := by
+    dsimp [x, y]
+    exact_mod_cast Nat.lt_succ_self (n + 1)
+  have hratio : 1 < y / x :=
+    (lt_div_iff₀ hx).2 (by simpa using hxy)
+  have hlogEq : Real.log y - Real.log x = Real.log (y / x) := by
+    rw [Real.log_div hy.ne' hx.ne']
+  have hgapPos : 0 < Real.log y - Real.log x := by
+    rw [hlogEq]
+    exact Real.log_pos hratio
+  have hinv : y⁻¹ < x⁻¹ := by
+    simpa [one_div] using one_div_lt_one_div_of_lt hx hxy
+  have hcrossNeg : y⁻¹ - x⁻¹ < 0 := sub_neg.mpr hinv
+  have hflux :
+      reflectedLogJetVertexFlux n 0 =
+        (((Real.log y - Real.log x) * (y⁻¹ - x⁻¹) : ℝ) : ℂ) := by
+    rw [reflectedLogJetVertexFlux_eq_gap_mul_crossFlux,
+      reflectedDirichletVertexCrossFlux_zero_eq_inv_sub_inv]
+    apply Complex.ext <;> simp [positiveLogGap, x, y]
+  rw [hflux]
+  exact mul_neg_of_pos_of_neg hgapPos hcrossNeg
+
+/-- O limite do bulk em `s=0` e estritamente negativo na parte real. -/
+theorem reflectedLogJetVertexFluxSeries_zero_re_neg :
+    (reflectedLogJetVertexFluxSeries 0).re < 0 := by
+  have hsumComplex :
+      Summable (fun n : ℕ ↦ reflectedLogJetVertexFlux n (0 : ℂ)) :=
+    summable_reflectedLogJetVertexFlux (s := (0 : ℂ))
+      (by norm_num) (by norm_num)
+  have hsumReal :
+      Summable (fun n : ℕ ↦
+        (reflectedLogJetVertexFlux n (0 : ℂ)).re) :=
+    (Complex.hasSum_re hsumComplex.hasSum).summable
+  have hsumNeg :
+      Summable (fun n : ℕ ↦
+        -(reflectedLogJetVertexFlux n (0 : ℂ)).re) :=
+    hsumReal.neg
+  have hpositive :
+      0 < ∑' n : ℕ, -(reflectedLogJetVertexFlux n (0 : ℂ)).re :=
+    hsumNeg.tsum_pos
+      (fun n ↦ neg_nonneg.mpr
+        (le_of_lt (reflectedLogJetVertexFlux_zero_re_neg n)))
+      0
+      (neg_pos.mpr (reflectedLogJetVertexFlux_zero_re_neg 0))
+  have hnegative :
+      (∑' n : ℕ, (reflectedLogJetVertexFlux n (0 : ℂ)).re) < 0 := by
+    rw [tsum_neg] at hpositive
+    linarith
+  unfold reflectedLogJetVertexFluxSeries
+  rw [Complex.re_tsum hsumComplex]
+  exact hnegative
+
+/-- Portanto o limite do bulk no endpoint nao e zero. -/
+theorem reflectedLogJetVertexFluxSeries_zero_ne_zero :
+    reflectedLogJetVertexFluxSeries 0 ≠ 0 := by
+  intro hzero
+  have hre := congrArg Complex.re hzero
+  simp only [Complex.zero_re] at hre
+  linarith [reflectedLogJetVertexFluxSeries_zero_re_neg]
+
+/-- Nos cutoffs TFVD completos, o bulk converge mas nao converge a zero em
+`s=0`: ele persiste como um limite nao nulo. -/
+theorem finiteReflectedLogJetCrossBulk_three_mul_zero_not_tendsto_zero :
+    ¬ Tendsto
+      (fun M : ℕ ↦ finiteReflectedLogJetCrossBulk (3 * M) 0)
+      atTop (nhds 0) := by
+  intro hzero
+  have hseries :=
+    finiteReflectedLogJetCrossBulk_three_mul_tendsto_series
+      (s := (0 : ℂ)) (by norm_num) (by norm_num)
+  have heq : reflectedLogJetVertexFluxSeries 0 = 0 :=
+    tendsto_nhds_unique hseries hzero
+  exact reflectedLogJetVertexFluxSeries_zero_ne_zero heq
 
 end
 
