@@ -61,8 +61,7 @@ theorem reflectedDirichletVertexCrossFlux_eq_cpow_cross
   unfold reflectedDirichletVertexCrossFlux
   rw [conj_positiveDirichletValue_eq_cpow,
     conj_positiveDirichletValue_eq_cpow]
-  simp only [positiveDirichletValue, reflectedParameter]
-  congr 1 <;> congr 1 <;> omega
+  simp [positiveDirichletValue, reflectedParameter, Nat.add_assoc]
 
 /-!
 ## Cota uniforme da corrente no strip fechado
@@ -91,12 +90,12 @@ theorem reflected_rpow_cross_each_le_inv
   · calc
       y ^ (-sigma) * x ^ (sigma - 1) ≤
           x ^ (-sigma) * x ^ (sigma - 1) :=
-        mul_le_mul_of_nonneg_right hpowNeg (Real.rpow_nonneg x _)
+        mul_le_mul_of_nonneg_right hpowNeg (Real.rpow_nonneg hx.le _)
       _ = x⁻¹ := hcombine
   · calc
       x ^ (-sigma) * y ^ (sigma - 1) ≤
           x ^ (-sigma) * x ^ (sigma - 1) :=
-        mul_le_mul_of_nonneg_left hpowSub (Real.rpow_nonneg x _)
+        mul_le_mul_of_nonneg_left hpowSub (Real.rpow_nonneg hx.le _)
       _ = x⁻¹ := hcombine
 
 /-- A corrente cruzada decai ao menos como `2/(n+1)` no strip fechado. -/
@@ -155,11 +154,14 @@ theorem norm_positiveLogGap_le_inv (n : ℕ) :
   have hdiff : y / x - 1 = x⁻¹ := by
     dsimp [x, y]
     field_simp
+    push_cast
     ring
+  have hlogDiv : Real.log y - Real.log x = Real.log (y / x) := by
+    rw [Real.log_div hy.ne' hx.ne']
   have hgap :
       positiveLogGap n = ((Real.log (y / x) : ℝ) : ℂ) := by
     apply Complex.ext
-    · simp [positiveLogGap, x, y, Real.log_div hy.ne' hx.ne']
+    · simpa [positiveLogGap, x, y] using hlogDiv
     · simp [positiveLogGap]
   rw [hgap, Complex.norm_real, Real.norm_eq_abs,
     abs_of_nonneg hlogNonneg]
@@ -241,8 +243,10 @@ theorem norm_reflectedLogJetMovingCutoff_succ_le
     ‖reflectedLogJetMovingCutoff (N + 1) s‖ ≤
       4 * Real.log (((N + 2 : ℕ) : ℝ)) /
         (((N + 2 : ℕ) : ℝ)) := by
+  have hone : (1 : ℝ) ≤ (((N + 2 : ℕ) : ℝ)) := by
+    exact_mod_cast (show 1 ≤ N + 2 by omega)
   have hlog : 0 ≤ Real.log (((N + 2 : ℕ) : ℝ)) :=
-    Real.log_nonneg (by norm_num)
+    Real.log_nonneg hone
   have hcross :=
     norm_reflectedDirichletVertexCrossFlux_le_two_mul_inv hs0 hs1 N
   have hratio :
@@ -251,7 +255,7 @@ theorem norm_reflectedLogJetMovingCutoff_succ_le
     rw [← div_eq_mul_inv, ← div_eq_mul_inv]
     apply (div_le_div_iff₀ (by positivity) (by positivity)).2
     norm_num
-    ring
+    nlinarith [show (0 : ℝ) ≤ (N : ℝ) by positivity]
   have hweight :
       ‖positiveLogVertexWeight (N + 1)‖ =
         Real.log (((N + 2 : ℕ) : ℝ)) := by
@@ -294,8 +298,8 @@ theorem reflectedLogJetMovingCutoff_tendsto_zero
           Real.log (((N + 2 : ℕ) : ℝ)) /
             (((N + 2 : ℕ) : ℝ)) ^ (1 : ℝ))
         atTop (nhds 0) :=
-    ((isLittleO_log_rpow_atTop (by norm_num : (0 : ℝ) < 1)).
-      tendsto_div_nhds_zero).comp hreal
+    ((isLittleO_log_rpow_atTop (by norm_num : (0 : ℝ) < 1)).tendsto_div_nhds_zero).comp
+      hreal
   have hmajorant :
       Tendsto
         (fun N : ℕ ↦
