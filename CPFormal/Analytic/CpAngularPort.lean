@@ -312,8 +312,9 @@ theorem norm_positiveLogDirichletValue (s : ℂ) (n : ℕ) :
         (((n + 1 : ℕ) : ℝ)) ^ (-s.re) := by
   have hlog : 0 ≤ Real.log (((n + 1 : ℕ) : ℝ)) :=
     Real.log_nonneg (by positivity)
-  simp [positiveLogDirichletValue, norm_positiveDirichletValue,
-    abs_of_nonneg hlog]
+  unfold positiveLogDirichletValue
+  rw [norm_mul, norm_positiveDirichletValue]
+  rw [Complex.norm_real, abs_of_nonneg hlog]
 
 /-- O unico bordo externo logaritmico desaparece para `Re(s)>0`. -/
 theorem canonicalAngularLogJetOuter_tendsto_zero
