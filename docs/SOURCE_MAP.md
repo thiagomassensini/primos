@@ -129,7 +129,6 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | a forma Green finita existente e exatamente a forma Green Genuine normalizada | `Analytic.Cp.finiteGenuineCpGreenFlux_eq_finiteCpGreenFlux` |
 | o fluxo Genuine orientado e a diagonal TFVD sao o mesmo objeto | `Analytic.Cp.finiteOrientedGenuineCpGreenFlux_eq_tfvdDiagonal` |
 | fluxo acoplado = parte real do Green Genuine orientado + bordo bracketado | `Analytic.Cp.finiteBracketCoupledCpGreenFlux_eq_genuineOriented_add_boundary` |
-
 | bracket local C2 = segunda diferenca centrada de raio 1 | `Genuine.C2.bracket_eq_centeredSecondDifference`, `Genuine.C2.bracket_operator_eq_centeredSecondDifference` |
 | bracket Cp de primo impar = soma saturada das segundas diferencas admissiveis | `Genuine.Cp.bracket_operator_eq_saturatedBracket` |
 | camera local p=3 = stencil C2 de raio 1 | `Genuine.Cp.bracket_three_eq_centeredSecondDifference`, `Genuine.Cp.bracket_three_eq_c2Bracket` |
@@ -140,6 +139,12 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | formula explicita p=3 do Genuine continuado | `Analytic.Cp.genuineContinuation_eq_centeredSecondDifferenceSeries` |
 | cortes finitos de qualquer camera convergem ao fator vezes o Genuine canonico no strip | `Analytic.Cp.finiteChart_dirichlet_tendsto_factor_mul_genuineContinuation_on_strip` |
 | zero Genuine no strip = cancelamento da semente 1 pela serie de segundas diferencas | `Analytic.Cp.genuineContinuation_zero_iff_centeredSecondDifferenceSeries_eq_neg_one` |
+| kernel escalado da sintese tem soma zero e primitiva com endpoints nulos | `Analytic.Cp.finitePortSynthesisKernelValue_sum_eq_zero`, `Analytic.Cp.finitePortSynthesisKernelPrefix_cutoff` |
+| observavel escalar mais setor fechado recuperam o pareamento diagonal | `Analytic.Cp.finitePortSynthesis_pairing_ledger` |
+| ledger Wronskiano exato `M W_scalar + W_kernel = M^2 W_diagonal` | `Analytic.Cp.finiteScalarPortWronskian_synthesis_ledger` |
+| off-diagonal e determinado pelo setor fechado e pela diagonal | `Analytic.Cp.finiteOffDiagonalPortWronskian_synthesis_ledger` |
+| traco angular = sintese finita das segundas diferencas menos endpoint externo | `Analytic.Cp.finiteCanonicalAngularTrace_eq_secondDifferenceSynthesis_sub_outer` |
+| ledger angular Green separa energia, correcao local e kernel da sintese | `Analytic.Cp.finiteCanonicalAngularScalarPairing_synthesis_green_ledger`, `Analytic.Cp.finiteCanonicalAngularGreenCorrection_synthesis_ledger` |
 
 Observacao: `GEOMETRIA_C2_CP_DECOMPOSICAO_POR_CARRY(1).md` chegou vazio na
 copia de trabalho desta versao e, portanto, nao foi usado para afirmacoes.
