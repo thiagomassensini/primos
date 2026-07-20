@@ -94,6 +94,9 @@ theorem finiteCanonicalAngularPairingDiagonal_eq_sum
   simp [finiteCanonicalAngularPairingDiagonal,
     finiteDiagonalPortWronskian, finitePortWedgeEntry,
     canonicalAngularPairingEntry]
+  apply Finset.sum_congr rfl
+  intro m hm
+  rw [if_pos (Finset.mem_range.mp hm)]
 
 /-!
 ## Correcao local do trio
@@ -142,7 +145,9 @@ theorem canonicalAngularPairingEntry_self_eq_greenEnergy_add_correction
     canonicalAngularLocalGreenCorrection finiteReflectedGradientEdge
   rw [canonicalAngularGradientBlock_eq_two_edges,
     canonicalAngularGradientBlock_eq_two_edges]
-  simp only [map_neg, map_add, map_mul, Complex.conj_ofReal]
+  simp only [map_neg, map_add, map_mul]
+  have htwo : (starRingEnd ℂ) (2 : ℂ) = 2 := by norm_num
+  rw [htwo]
   ring
 
 /-- Agrupar as arestas em trios nao altera o pareamento Green. -/
@@ -231,7 +236,8 @@ theorem finiteCanonicalAngularScalarPairing_tendsto_zero_of_genuine_zero_pair
         (fun M : ℕ ↦
           (starRingEnd ℂ) (finiteCanonicalAngularTrace M s))
         atTop (nhds 0) := by
-    simpa using (Complex.continuous_conj.tendsto 0).comp hphi
+    simpa only [Function.comp_apply] using
+      (Complex.continuous_conj.tendsto 0).comp hphi
   have hproduct := hconj.mul hphiSharp
   simpa only [finiteCanonicalAngularScalarPairing_eq_product,
     zero_mul] using hproduct
@@ -328,7 +334,8 @@ theorem GenuineAngularGreenCancellationBridge.criticalDisplacement_eq_zero
         atTop (nhds 0) := by
     have hre :=
       Complex.continuous_re.continuousAt.tendsto.comp hpairingComplex
-    simpa [Complex.mul_re] using hre
+    simpa only [Function.comp_apply, Complex.mul_re,
+      Complex.ofReal_re, Complex.ofReal_im, zero_mul, sub_zero] using hre
   have hpositive :
       0 < (finiteReflectedGradientPairing 1 s).re :=
     finiteReflectedGradientPairing_re_pos (by norm_num) hs
