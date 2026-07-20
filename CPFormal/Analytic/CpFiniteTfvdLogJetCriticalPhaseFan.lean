@@ -327,9 +327,41 @@ theorem reflectedLogJetVertexFluxSeries_criticalLine_ne_zero
 
 /-- Witness canonico simples fora do centro: `t=1`. -/
 theorem reflectedLogJetVertexFluxSeries_one_half_add_I_ne_zero :
-    reflectedLogJetVertexFluxSeries (criticalLineParameter 1) ≠ 0 := by
-  exact reflectedLogJetVertexFluxSeries_criticalLine_ne_zero
-    (by norm_num) (by norm_num)
+    reflectedLogJetVertexFluxSeries
+      (((1 / 2 : ℝ) : ℂ) + Complex.I) ≠ 0 := by
+  simpa [criticalLineParameter] using
+    (reflectedLogJetVertexFluxSeries_criticalLine_ne_zero
+      (t := (1 : ℝ)) (by norm_num) (by norm_num))
+
+/-!
+## Retorno aos tracos completos
+-/
+
+/-- Na faixa `0<t<=1`, os tracos residual e de defeito convergem para o
+mesmo limite agora provadamente nao nulo; o comutador continua convergindo
+para zero. -/
+theorem criticalLine_completeTraces_tendsto_nonzero
+    (p : ℕ) (hp : Nat.Prime p) {t : ℝ}
+    (ht0 : 0 < t) (ht1 : t ≤ 1) :
+    Tendsto (fun M : ℕ ↦
+        finiteCanonicalLogJetCommutatorResidualTrace p M
+          (criticalLineParameter t))
+        Filter.atTop
+        (nhds (reflectedLogJetVertexFluxSeries (criticalLineParameter t))) ∧
+      Tendsto (fun M : ℕ ↦
+        finiteCanonicalCpLogJetCommutatorWedgeTrace p M
+          (criticalLineParameter t))
+        Filter.atTop (nhds 0) ∧
+      Tendsto (fun M : ℕ ↦
+        finiteCanonicalLogJetGreenDefectTrace p M
+          (criticalLineParameter t))
+        Filter.atTop
+        (nhds (reflectedLogJetVertexFluxSeries (criticalLineParameter t))) ∧
+      reflectedLogJetVertexFluxSeries (criticalLineParameter t) ≠ 0 := by
+  have htraces := criticalLine_completeTraces_tendsto
+    p hp (criticalLineParameter_re t)
+  exact ⟨htraces.1, htraces.2.1, htraces.2.2.1,
+    reflectedLogJetVertexFluxSeries_criticalLine_ne_zero ht0 ht1⟩
 
 end
 
