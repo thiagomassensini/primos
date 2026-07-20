@@ -174,7 +174,7 @@ theorem positiveReal_criticalCpowCross_eq_sine
           Real.sin (t * (Real.log y - Real.log x)) : ℝ) : ℂ) *
         Complex.I).re = 0 := by
     simp only [Complex.mul_re, Complex.ofReal_re, Complex.I_re,
-      Complex.ofReal_im, Complex.I_im, mul_zero, zero_mul, mul_one,
+      Complex.ofReal_im, Complex.I_im, mul_zero, mul_one,
       sub_zero]
   have hrhsIm :
       (((-2 * Real.exp (-((Real.log x + Real.log y) / 2)) *
