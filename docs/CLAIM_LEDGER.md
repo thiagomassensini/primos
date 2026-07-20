@@ -1,4 +1,4 @@
-# Ledger de afirmacoes — checkpoint 0.26.0 Genuine-first
+# Ledger de afirmacoes — checkpoint 0.27.0 Genuine-first
 
 Estados usados:
 
@@ -64,7 +64,10 @@ Estados usados:
 | GREEN-ANGULAR-PORT-LIM | para `Re(s)>0`, `Phi_M` converge para a carta bracketada; num zero Genuine da faixa critica, `Phi_M -> 0` | KERNEL_CHECKED | GREEN-ANGULAR-PORT-FIN, limite de `x^(-Re(s))`, GEN-GLOBAL-ZERO-EQ | usar como traco de valor na futura identidade de porta |
 | GREEN-ANGULAR-LOGJET-FIN | o log-jet escalar `Psi_M`, definido independentemente sobre `log(n+1)*(n+1)^(-s)` com pesos `1,2,0`, satisfaz `finiteLogBracketChart_M=Psi_M+log(3M+1)*(3M+1)^(-s)` | KERNEL_CHECKED | telescopagem finita dos gradientes log-pesados | ligar o objeto escalar ao retorno enriquecido sem o definir como residual |
 | GREEN-ANGULAR-LOGJET-OUTER | para `Re(s)>0`, o bordo logaritmico externo do log-jet converge a zero | KERNEL_CHECKED | norma exata do monomio log-pesado, `log x=o(x^sigma)` | ainda falta a convergencia da carta log-bracketada completa |
-| GREEN-PORT-LAW | o fluxo de bulk e um Wronskiano de tracos de porta `Phi/Psi` cuja forma se anula quando o Genuine zera | OPEN_BRIDGE | `Phi` e o log-jet escalar finito estao fechados; a identificacao TFVD tipada e a identidade Green de fronteira ainda nao | provar primeiro a ponte finita entre o log-jet escalar, o retorno enriquecido e o fluxo Green |
+| GREEN-TFVD-RETURN-FIN | a coordenada `(block,through,bracket)` preserva proveniencia, a valvula recupera suas duas arestas e a leitura angular de suas portas Dirichlet/log-Dirichlet recupera exatamente `Phi_M/Psi_M` | KERNEL_CHECKED | inversao algebrica da valvula para `kappa,omega != 0`, identidades de dois gradientes | formar o pareamento antes da sintese escalar |
+| GREEN-PORT-WRONSKI-DECOMP | o Wronskiano das sinteses escalares e exatamente a diagonal coordenada mais a soma off-diagonal explicita | KERNEL_CHECKED | distribuicao de somas finitas e conjugacao | comparar a diagonal enriquecida com o fluxo Green existente |
+| GREEN-PORT-OFFDIAG-WITNESS | existe um portador de dois blocos com off-diagonal igual a `1`; portanto Wronskiano escalar e diagonal nao coincidem universalmente | KERNEL_CHECKED | avaliacao finita direta | nao postular cancelamento de interferencia sem uma hipotese ortogonal/arimetica |
+| GREEN-PORT-LAW | a diagonal do Wronskiano TFVD `Phi/Psi` coincide com o fluxo de bulk e sua forma relevante se anula quando o Genuine zera | OPEN_BRIDGE | ponte TFVD finita fechada; a compressao escalar possui off-diagonal genuino | provar coordenada a coordenada a identidade diagonal TFVD--Green e tratar separadamente a interferencia |
 | GEN-BIJ-C2 | pernas impares `n>=3` estao em bijecao com incidencias `(centro multiplo de 4, perna)` | KERNEL_CHECKED | aritmetica modular | usar na reindexacao ponderada |
 | GEN-DEP-C2 | `max(v_2(n-1),v_2(n+1)) = v_2(adjacentCenter(n))` para `n` impar, `n>=3` | KERNEL_CHECKED | GEN-BIJ-C2, valoracao 2-adica | transportar o peso na soma finita |
 | GEN-REINDEX-C2 | soma ponderada das pernas = soma das incidencias esperadas + extras - faltantes | KERNEL_CHECKED | GEN-BIJ-C2, GEN-DEP-C2, somas finitas | reutilizar nas caixas Cp |
