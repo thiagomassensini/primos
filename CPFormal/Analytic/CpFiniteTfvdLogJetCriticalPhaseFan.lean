@@ -22,6 +22,8 @@ open scoped BigOperators Topology
 
 namespace CPFormal.Analytic.Cp
 
+open Filter
+
 noncomputable section
 
 /-!
@@ -110,7 +112,8 @@ theorem positiveRealLogGap_le_one (n : ℕ) :
     exact_mod_cast Nat.succ_le_succ (Nat.zero_le n)
   have hinv : (((n + 1 : ℕ) : ℝ))⁻¹ ≤ 1 := by
     rw [inv_le_one₀]
-    exact hone
+    · exact hone
+    · positivity
   exact hgap.trans hinv
 
 /-- Modulo radial comum aos dois transportes orientados da face. -/
@@ -166,9 +169,9 @@ theorem positiveReal_criticalCpowCross_eq_sine
   have hz₂im : z₂.im = t * (Real.log y - Real.log x) := by
     simp [z₂, criticalLineParameter]
     ring
-  rw [Complex.exp_eq_exp_re_mul_sin_add_cos,
-    Complex.exp_eq_exp_re_mul_sin_add_cos,
-    hz₁re, hz₁im, hz₂re, hz₂im]
+  nth_rewrite 2 [Complex.exp_eq_exp_re_mul_sin_add_cos]
+  nth_rewrite 1 [Complex.exp_eq_exp_re_mul_sin_add_cos]
+  rw [hz₁re, hz₁im, hz₂re, hz₂im]
   rw [Real.sin_neg, Real.cos_neg]
   push_cast
   ring
@@ -251,7 +254,6 @@ theorem reflectedLogJetVertexFluxSeries_criticalLine_eq_sineSeries
 @[simp] theorem criticalPhaseSineFlux_neg (n : ℕ) (t : ℝ) :
     criticalPhaseSineFlux n (-t) = -criticalPhaseSineFlux n t := by
   simp [criticalPhaseSineFlux]
-  ring
 
 /-- O perfil critico e impar no parametro vertical. -/
 theorem reflectedLogJetVertexFluxSeries_criticalLine_neg
@@ -285,7 +287,9 @@ theorem criticalPhaseSineFlux_neg_of_pos_of_le_one
     Real.sin_pos_of_pos_of_lt_pi harg0 hargPi
   unfold criticalPhaseSineFlux
   have hamp := criticalPhaseAmplitude_pos n
-  nlinarith
+  exact mul_neg_of_neg_of_pos
+    (mul_neg_of_neg_of_pos
+      (mul_neg_of_neg_of_pos (by norm_num) hgap0) hamp) hsin
 
 /-- A serie residual possui parte imaginaria estritamente negativa em toda a
 faixa `0<t<=1`. -/
