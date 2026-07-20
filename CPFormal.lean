@@ -53,3 +53,4 @@ import CPFormal.Analytic.CpFiniteTfvdLogJetCriticalPhaseFan
 import CPFormal.Analytic.CpFiniteGenuineAngularGreenBudget
 import CPFormal.Analytic.CpFiniteGenuineOneSidedGreenBudget
 import CPFormal.Analytic.CpGenuineSecondDifferenceIdentity
+import CPFormal.Analytic.CpFiniteScalarSynthesis
