@@ -42,7 +42,7 @@ theorem reflectedParameter_eq_self_of_re_eq_half
     {s : ℂ} (hs : s.re = 1 / 2) :
     reflectedParameter s = s := by
   apply Complex.ext
-  · simp [reflectedParameter, hs]
+  · norm_num [reflectedParameter, hs]
   · simp [reflectedParameter]
 
 /-- O salto de logaritmo e real e, portanto, fixo por conjugacao. -/
@@ -57,7 +57,8 @@ theorem reflectedDirichletVertexCrossFlux_reflectedParameter
       -(starRingEnd ℂ) (reflectedDirichletVertexCrossFlux n s) := by
   unfold reflectedDirichletVertexCrossFlux
   rw [reflectedParameter_reflectedParameter]
-  simp only [map_sub, map_mul, star_star]
+  simp only [map_sub, map_mul]
+  simp
   ring
 
 /-- O fluxo log-jet de cada aresta herda a mesma anti-Hermiticidade. -/
@@ -154,7 +155,7 @@ theorem re_eq_zero_of_eq_neg_conj
     {z : ℂ} (hz : z = -(starRingEnd ℂ) z) :
     z.re = 0 := by
   have hreal := congrArg Complex.re hz
-  simp only [neg_re, conj_re] at hreal
+  simp only [Complex.neg_re, Complex.conj_re] at hreal
   linarith
 
 /-- Cada cutoff do bulk e puramente imaginario na linha critica. -/
@@ -194,7 +195,7 @@ theorem finiteReflectedLogJetCrossBulk_three_mul_tendsto_criticalLine
     (n : ℕ) :
     reflectedDirichletVertexCrossFlux n (1 / 2 : ℂ) = 0 := by
   rw [reflectedDirichletVertexCrossFlux_eq_cpow_cross]
-  norm_num
+  simp
   ring
 
 /-- Cada aresta residual se anula no ponto central. -/
