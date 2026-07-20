@@ -4,12 +4,17 @@ import CPFormal.Analytic.CpGenuineCompatibility
 # Identidade Green finita para os gradientes Cp
 
 Este modulo fecha apenas o bulk finito que antecede o certificado Green
-infinito. Ha duas identidades independentes:
+infinito. Neste ponto da cadeia aparecem duas identidades finitas:
 
 1. uma formula de Green discreta em qualquer anel comutativo, cujo bordo sao
    literalmente os dois endpoints;
 2. a telescopagem de um bloco Cp de gradientes de Dirichlet, que produz o
    autovalor exato `p^(-s)` e fatora a forma de Green finita.
+
+A segunda expressao nao define um operador aritmetico separado. O modulo
+`CpGenuineGreenIntertwiner`, colocado depois desta infraestrutura na ordem de
+imports, prova que ela e exatamente o residual do bracket Genuine
+diferenciado entre centros Cp consecutivos e normalizado pelo tamanho `p`.
 
 O arquivo nao identifica ainda o endpoint de fluxo com o traco do Genuine e
 nao declara que o bordo infinito se anula. Essas sao as obrigacoes seguintes;
@@ -72,7 +77,11 @@ def natDirichletTerm (s : ℂ) (n : ℕ) : ℂ :=
 def positiveDirichletGradient (s : ℂ) (n : ℕ) : ℂ :=
   natDirichletTerm s (n + 2) - natDirichletTerm s (n + 1)
 
-/-- Soma dos `p` gradientes consecutivos no bloco que comeca em `p(n+1)`. -/
+/--
+Soma dos `p` gradientes consecutivos no bloco que comeca em `p(n+1)`.
+Sua identificacao exata com o residual Genuine diferenciado e provada em
+`CpGenuineGreenIntertwiner`.
+-/
 def cpBlockGradient (p : ℕ) (s : ℂ) (n : ℕ) : ℂ :=
   ∑ r ∈ Finset.range p,
     (natDirichletTerm s (p * (n + 1) + r + 1) -
