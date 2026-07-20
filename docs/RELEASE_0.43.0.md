@@ -194,4 +194,11 @@ Build completed successfully (8713 jobs).
 - axiomas reportados: somente `propext`, `Classical.choice` e `Quot.sound`;
 - nenhum `sorry`, `admit` ou axioma local.
 
-A evidencia remota sera registrada depois do workflow final do PR.
+## Evidencia remota
+
+- commit matematico: `4c34215d4c895f74e0a1ec936eb8f5255aeaad8b`;
+- head auditado: `7c4ce66fa89ab1bb45a426a280683b9a4cb9e2b6`;
+- workflow run: `29745679888` (`Lean kernel audit`);
+- job: `88362934292` (`Build CPFormal`);
+- auditoria estatica: **success**;
+- elaboracao pelo kernel: **success**.
