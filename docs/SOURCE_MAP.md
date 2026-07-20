@@ -124,6 +124,11 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | identidade Green assinada, energia positiva e bordo fechado implicam `delta=0` | `Analytic.Cp.SignedGreenCertificate.criticalDisplacement_eq_zero_of_genuine_zero` |
 | certificado Green concreto produz a ponte Genuine--ramo | `Analytic.Cp.SignedGreenCertificate.toGenuineBranchBridge` |
 | ponte ainda aberta de zeros Genuine para a norma | `Analytic.Cp.GenuineBranchBridge` (sem instancia) |
+| diferenciar `bracket = centerBlock - p*center` resolve `p` vezes o gradiente central | `Analytic.Cp.cpGenuineResolvedGradient_eq_p_mul_alignedCenterGradient` |
+| o residual Genuine diferenciado e normalizado e literalmente `cpBlockGradient` | `Analytic.Cp.cpGenuineGreenGradient_eq_cpBlockGradient` |
+| a forma Green finita existente e exatamente a forma Green Genuine normalizada | `Analytic.Cp.finiteGenuineCpGreenFlux_eq_finiteCpGreenFlux` |
+| o fluxo Genuine orientado e a diagonal TFVD sao o mesmo objeto | `Analytic.Cp.finiteOrientedGenuineCpGreenFlux_eq_tfvdDiagonal` |
+| fluxo acoplado = parte real do Green Genuine orientado + bordo bracketado | `Analytic.Cp.finiteBracketCoupledCpGreenFlux_eq_genuineOriented_add_boundary` |
 
 Observacao: `GEOMETRIA_C2_CP_DECOMPOSICAO_POR_CARRY(1).md` chegou vazio na
 copia de trabalho desta versao e, portanto, nao foi usado para afirmacoes.
