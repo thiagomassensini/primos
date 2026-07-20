@@ -152,6 +152,10 @@ Correspondencia atualmente formalizada a partir do resumo Genuine:
 | observavel escalar = `M * Green + defeito fechado` | `Analytic.Cp.finiteCanonicalAngularScalarPairing_eq_mul_green_add_closedBulkDefect` |
 | zero Genuine fecha exatamente o novo orcamento de bulk | `Analytic.Cp.finiteCanonicalAngularMulGreenAddClosedBulkDefect_tendsto_zero_of_genuine_zero`, `Analytic.Cp.finiteCanonicalAngularRadialClosedBulkBudget_tendsto_zero_of_genuine_zero` |
 | o cancelamento local--bulk nao e identidade universal | `Analytic.Cp.finiteCanonicalAngularClosedBulkDefect_one_two_ne_zero` |
+| bloco angular = bracket Genuine local mais cobordo dos vertices externos | `Analytic.Cp.canonicalAngularGradientBlock_eq_bracket_add_coboundary` |
+| observavel angular escalar converge em todo o strip, sem hipotese de zero | `Analytic.Cp.finiteCanonicalAngularScalarPairing_tendsto` |
+| defeito fechado = observavel escalar menos crescimento Green | `Analytic.Cp.finiteCanonicalAngularClosedBulkDefect_eq_scalar_sub_mul_green` |
+| parte real do defeito fechado tende a menos infinito em todo o strip | `Analytic.Cp.finiteCanonicalAngularClosedBulkDefect_re_tendsto_atBot` |
 
 Observacao: `GEOMETRIA_C2_CP_DECOMPOSICAO_POR_CARRY(1).md` chegou vazio na
 copia de trabalho desta versao e, portanto, nao foi usado para afirmacoes.
