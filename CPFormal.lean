@@ -40,6 +40,7 @@ import CPFormal.Analytic.CpBracketGreenFlux
 import CPFormal.Analytic.CpAngularPort
 import CPFormal.Analytic.CpFiniteTfvdBridge
 import CPFormal.Analytic.CpFinitePortWronskian
+import CPFormal.Analytic.CpGenuineGreenIntertwiner
 import CPFormal.Analytic.CpFiniteTfvdAngularGreenIntertwiner
 import CPFormal.Analytic.CpFiniteTfvdLogJetGreenComparison
 import CPFormal.Analytic.CpFiniteLogJetCommutator
