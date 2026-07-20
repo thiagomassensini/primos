@@ -48,3 +48,4 @@ import CPFormal.Analytic.CpFiniteTfvdLogJetResidualCutoff
 import CPFormal.Analytic.CpFiniteTfvdLogJetResidualAsymptotics
 import CPFormal.Analytic.CpFiniteTfvdLogJetResidualReflection
 import CPFormal.Analytic.CpFiniteTfvdLogJetCriticalLineTraces
+import CPFormal.Analytic.CpFiniteTfvdLogJetCriticalPhaseFan
