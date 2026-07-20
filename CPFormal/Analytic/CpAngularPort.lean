@@ -310,11 +310,13 @@ theorem norm_positiveLogDirichletValue (s : ℂ) (n : ℕ) :
     ‖positiveLogDirichletValue s n‖ =
       Real.log (((n + 1 : ℕ) : ℝ)) *
         (((n + 1 : ℕ) : ℝ)) ^ (-s.re) := by
+  have hone : (1 : ℝ) ≤ (((n + 1 : ℕ) : ℝ)) := by
+    exact_mod_cast Nat.succ_le_succ (Nat.zero_le n)
   have hlog : 0 ≤ Real.log (((n + 1 : ℕ) : ℝ)) :=
-    Real.log_nonneg (by positivity)
+    Real.log_nonneg hone
   unfold positiveLogDirichletValue
   rw [norm_mul, norm_positiveDirichletValue]
-  rw [Complex.norm_real, abs_of_nonneg hlog]
+  rw [Real.norm_of_nonneg hlog]
 
 /-- O unico bordo externo logaritmico desaparece para `Re(s)>0`. -/
 theorem canonicalAngularLogJetOuter_tendsto_zero
