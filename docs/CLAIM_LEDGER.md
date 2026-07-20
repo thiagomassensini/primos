@@ -65,9 +65,10 @@ Estados usados:
 | GREEN-ANGULAR-LOGJET-FIN | o log-jet escalar `Psi_M`, definido independentemente sobre `log(n+1)*(n+1)^(-s)` com pesos `1,2,0`, satisfaz `finiteLogBracketChart_M=Psi_M+log(3M+1)*(3M+1)^(-s)` | KERNEL_CHECKED | telescopagem finita dos gradientes log-pesados | ligar o objeto escalar ao retorno enriquecido sem o definir como residual |
 | GREEN-ANGULAR-LOGJET-OUTER | para `Re(s)>0`, o bordo logaritmico externo do log-jet converge a zero | KERNEL_CHECKED | norma exata do monomio log-pesado, `log x=o(x^sigma)` | ainda falta a convergencia da carta log-bracketada completa |
 | GREEN-TFVD-RETURN-FIN | a coordenada `(block,through,bracket)` preserva proveniencia, a valvula recupera suas duas arestas e a leitura angular de suas portas Dirichlet/log-Dirichlet recupera exatamente `Phi_M/Psi_M` | KERNEL_CHECKED | inversao algebrica da valvula para `kappa,omega != 0`, identidades de dois gradientes | formar o pareamento antes da sintese escalar |
+| GREEN-TFVD-GREEN-DIAGONAL | a coordenada TFVD `(n,through,bracket)` que codifica o bloco Cp normalizado em fase e o gradiente horizontal possui wedge refletido bloco a bloco igual ao somando Green orientado; sua soma diagonal e exatamente `finiteOrientedCpGreenFlux` | KERNEL_CHECKED | GREEN-TFVD-RETURN-FIN, retorno exato das arestas, soma finita diagonal | construir o intertwiner tipado das coordenadas angulares/log-jet para este portador Green |
 | GREEN-PORT-WRONSKI-DECOMP | o Wronskiano das sinteses escalares e exatamente a diagonal coordenada mais a soma off-diagonal explicita | KERNEL_CHECKED | distribuicao de somas finitas e conjugacao | comparar a diagonal enriquecida com o fluxo Green existente |
 | GREEN-PORT-OFFDIAG-WITNESS | existe um portador de dois blocos com off-diagonal igual a `1`; portanto Wronskiano escalar e diagonal nao coincidem universalmente | KERNEL_CHECKED | avaliacao finita direta | nao postular cancelamento de interferencia sem uma hipotese ortogonal/arimetica |
-| GREEN-PORT-LAW | a diagonal do Wronskiano TFVD `Phi/Psi` coincide com o fluxo de bulk e sua forma relevante se anula quando o Genuine zera | OPEN_BRIDGE | ponte TFVD finita fechada; a compressao escalar possui off-diagonal genuino | provar coordenada a coordenada a identidade diagonal TFVD--Green e tratar separadamente a interferencia |
+| GREEN-PORT-LAW | a diagonal do Wronskiano TFVD angular/log-jet `Phi/Psi` e transportada ao portador TFVD Green e sua forma relevante se anula quando o Genuine zera | OPEN_BRIDGE | GREEN-TFVD-GREEN-DIAGONAL fecha o alvo depois do transporte; ainda faltam o intertwiner angular--Green e a lei de anulacao | construir o intertwiner sem apagar proveniencia e tratar separadamente a interferencia escalar |
 | GEN-BIJ-C2 | pernas impares `n>=3` estao em bijecao com incidencias `(centro multiplo de 4, perna)` | KERNEL_CHECKED | aritmetica modular | usar na reindexacao ponderada |
 | GEN-DEP-C2 | `max(v_2(n-1),v_2(n+1)) = v_2(adjacentCenter(n))` para `n` impar, `n>=3` | KERNEL_CHECKED | GEN-BIJ-C2, valoracao 2-adica | transportar o peso na soma finita |
 | GEN-REINDEX-C2 | soma ponderada das pernas = soma das incidencias esperadas + extras - faltantes | KERNEL_CHECKED | GEN-BIJ-C2, GEN-DEP-C2, somas finitas | reutilizar nas caixas Cp |
@@ -103,7 +104,7 @@ Estados usados:
 | RH-001 | todo zero Genuine esta na linha critica | BLOQUEADO | BRG-001 ou SPC-001+SPC-002 | nao enunciar como provado |
 
 O checkpoint matematico mais recente do nucleo ativo foi compilado pelo GitHub
-Actions no commit `de6715e04877994629747455ebfc6cc2c54f8ab0`, run
-`29710050913`, job `88252649077`.
+Actions no commit `42bc0ce6d4d64502005a1cef4500a9df36c4f4c5`, run
+`29714351088`, job `88264360190`.
 Modulos mantidos apenas em `CPFormal.ResearchReserve` nao fazem parte dessa
 certificacao. Consulte `AUDIT.md`.
