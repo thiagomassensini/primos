@@ -310,7 +310,7 @@ theorem reflectedLogJetMovingCutoff_tendsto_zero
         Tendsto (fun _ : ℕ ↦ (4 : ℝ)) atTop (nhds 4) :=
       tendsto_const_nhds
     have hmul := hfour.mul hratio
-    simpa [Real.rpow_one] using hmul
+    simpa [Real.rpow_one, mul_div_assoc] using hmul
   have hshift :
       Tendsto
         (fun N : ℕ ↦ reflectedLogJetMovingCutoff (N + 1) s)
