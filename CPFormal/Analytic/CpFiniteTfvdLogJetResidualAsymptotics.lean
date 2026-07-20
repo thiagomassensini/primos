@@ -70,7 +70,6 @@ theorem reflectedDirichletVertexCrossFlux_zero_eq_inv_sub_inv
       (((n + 2 : ℕ) : ℂ))⁻¹ - (((n + 1 : ℕ) : ℂ))⁻¹ := by
   norm_num [reflectedDirichletVertexCrossFlux,
     positiveDirichletValue, reflectedParameter, Complex.cpow_neg_one]
-  push_cast
   ring
 
 /-!
