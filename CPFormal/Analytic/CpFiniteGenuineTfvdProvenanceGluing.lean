@@ -69,6 +69,7 @@ theorem enrichedAngularTfvdCoordinateToCpGreenTriple_encode
   unfold enrichedAngularTfvdCoordinateToCpGreenTriple
   rw [enrichedAngularTfvdDecode_encode block hkappa homega
     first second dormant]
+  simp only [enrichedAngularTfvdEncode_visible_block]
 
 /-- Na entrada aritmetica canonica, o transporte e o trio Green canonico. -/
 theorem enrichedAngularTfvdCoordinateToCpGreenTriple_eq_canonical
@@ -126,7 +127,7 @@ theorem finiteCanonicalAngularBracketCoupledBoundary_tendsto_neg_chart
     3 (by norm_num) hs
   simpa only
       [finiteCanonicalAngularBracketCoupledBoundary_eq_outer_sub_finiteChart,
-        zero_sub] using houter.sub hchart
+        zero_sub, Function.comp_apply] using houter.sub hchart
 
 /-- Num zero Genuine, tambem o bordo com cutoffs alinhados desaparece. -/
 theorem finiteCanonicalAngularBracketCoupledBoundary_tendsto_zero_of_genuine_zero
@@ -159,7 +160,8 @@ theorem finiteCanonicalAngularBracketCoupledSignedBoundary_tendsto_zero_of_genui
     finiteCanonicalAngularBracketCoupledBoundary_tendsto_zero_of_genuine_zero
       hs hzero
   have hreal := Complex.continuous_re.continuousAt.tendsto.comp hcomplex
-  simpa [finiteCanonicalAngularBracketCoupledSignedBoundary] using hreal
+  simpa [finiteCanonicalAngularBracketCoupledSignedBoundary,
+    Function.comp_def] using hreal
 
 /-- Fluxo Genuine e bordo bracketado no mesmo cutoff angular. -/
 def finiteCanonicalAngularBracketCoupledGenuineGreenFlux
