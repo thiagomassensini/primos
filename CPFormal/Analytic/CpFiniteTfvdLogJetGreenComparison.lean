@@ -296,11 +296,8 @@ theorem canonicalReflectedLogJetEdgeWedge_zero_zero :
       dirichletTerm, reflectedParameter, Complex.cpow_neg_one]
   unfold canonicalReflectedLogJetEdgeWedge reflectedLogJetEdgeWedge
   rw [hphi, hpsi, hphiSharp]
-  have hlogReal :
-      Complex.log (2 : ℂ) = ((Real.log 2 : ℝ) : ℂ) := by
-    norm_num
-  rw [hlogReal]
-  simp
+  simp only [Complex.conj_ofReal, map_zero, zero_mul, sub_zero]
+  ring
 
 /-- Para `s=0`, toda aresta Green ordinaria e nula. -/
 theorem canonicalOrientedCpGreenEdge_zero
