@@ -193,29 +193,35 @@ theorem finiteReflectedLogJetCrossBulk_three_mul_tendsto_criticalLine
 /-- No ponto central real, os dois produtos cruzados coincidem. -/
 @[simp] theorem reflectedDirichletVertexCrossFlux_one_half_eq_zero
     (n : ℕ) :
-    reflectedDirichletVertexCrossFlux n (1 / 2 : ℂ) = 0 := by
+    reflectedDirichletVertexCrossFlux n ((1 / 2 : ℝ) : ℂ) = 0 := by
   rw [reflectedDirichletVertexCrossFlux_eq_cpow_cross]
-  simp
+  simp only [Complex.conj_ofReal]
+  norm_num
   ring
 
 /-- Cada aresta residual se anula no ponto central. -/
 @[simp] theorem reflectedLogJetVertexFlux_one_half_eq_zero (n : ℕ) :
-    reflectedLogJetVertexFlux n (1 / 2 : ℂ) = 0 := by
+    reflectedLogJetVertexFlux n ((1 / 2 : ℝ) : ℂ) = 0 := by
   rw [reflectedLogJetVertexFlux_eq_gap_mul_crossFlux,
     reflectedDirichletVertexCrossFlux_one_half_eq_zero]
   simp
 
 /-- O bulk finito inteiro se anula no ponto central. -/
 @[simp] theorem finiteReflectedLogJetCrossBulk_one_half_eq_zero (N : ℕ) :
-    finiteReflectedLogJetCrossBulk N (1 / 2 : ℂ) = 0 := by
+    finiteReflectedLogJetCrossBulk N ((1 / 2 : ℝ) : ℂ) = 0 := by
   unfold finiteReflectedLogJetCrossBulk
-  simp
+  apply Finset.sum_eq_zero
+  intro n hn
+  rw [reflectedDirichletVertexCrossFlux_one_half_eq_zero,
+    reflectedDirichletVertexCrossFlux_one_half_eq_zero]
+  ring
 
 /-- O limite residual se anula exatamente no ponto central real. -/
 @[simp] theorem reflectedLogJetVertexFluxSeries_one_half_eq_zero :
-    reflectedLogJetVertexFluxSeries (1 / 2 : ℂ) = 0 := by
+    reflectedLogJetVertexFluxSeries ((1 / 2 : ℝ) : ℂ) = 0 := by
   unfold reflectedLogJetVertexFluxSeries
-  simp
+  simp_rw [reflectedLogJetVertexFlux_one_half_eq_zero]
+  exact tsum_zero
 
 /-- Anti-Hermiticidade isolada nao implica anulacao: `I` e um witness nao
 nulo que satisfaz a mesma equacao. -/
