@@ -175,5 +175,16 @@ um zero escalar com anulacao coordenada.
 
 ## Validacao
 
-O modulo nao contem lacunas de prova nem axiomas locais. A auditoria integral
-e a evidencia remota serao registradas depois do build e do workflow final.
+```text
+lake build --wfail
+Build completed successfully (8712 jobs).
+```
+
+- commit matematico: `e1f438ec52eb4ff57cfaa0b7fdfb1a3fe23bf050`;
+- head auditado: `edc53ac83da08155c9344f7ec24391557dc73eef`;
+- workflow run: `29742838986` (`Lean kernel audit`);
+- job: `88353460970` (`Build CPFormal`);
+- auditoria estatica: **success**;
+- elaboracao pelo kernel: **success**;
+- axiomas reportados: somente `propext`, `Classical.choice` e `Quot.sound`;
+- nenhum `sorry`, `admit` ou axioma local.
