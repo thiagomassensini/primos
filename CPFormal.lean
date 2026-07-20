@@ -44,3 +44,4 @@ import CPFormal.Analytic.CpFiniteTfvdAngularGreenIntertwiner
 import CPFormal.Analytic.CpFiniteTfvdLogJetGreenComparison
 import CPFormal.Analytic.CpFiniteLogJetCommutator
 import CPFormal.Analytic.CpFiniteTfvdLogJetCommutatorDefect
+import CPFormal.Analytic.CpFiniteTfvdLogJetResidualCutoff
