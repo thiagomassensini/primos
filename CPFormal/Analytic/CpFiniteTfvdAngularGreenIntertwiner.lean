@@ -249,6 +249,16 @@ structure CpGreenTfvdTriple where
   first : TfvdCoordinate
   second : TfvdCoordinate
   dormant : TfvdCoordinate
+/-- Extensionalidade explicita do trio Green tipado. -/
+theorem CpGreenTfvdTriple.ext
+    {x y : CpGreenTfvdTriple}
+    (hfirst : x.first = y.first)
+    (hsecond : x.second = y.second)
+    (hdormant : x.dormant = y.dormant) :
+    x = y := by
+  cases x
+  cases y
+  simp_all
 
 /-- Intertwiner local completo depois do enriquecimento minimo. -/
 def enrichedAngularTfvdToCpGreenTriple
