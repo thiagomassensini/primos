@@ -163,6 +163,114 @@ theorem finiteCanonicalAngularClosedBulkDefect_re_tendsto_atBot
     ring
   simpa only [hpoint] using hsum
 
+/-!
+## Guardrail normalizado
+
+A divergencia linear acima nao e um artefato da escala absoluta. Depois de
+dividir o corte `M+1` por seu tamanho, o termo escalar desaparece, enquanto
+o Green conserva pelo menos metade da margem positiva da primeira aresta.
+Logo o defeito normalizado permanece estritamente no semiplano real negativo
+e, em particular, nao pode convergir a zero.
+-/
+
+/-- Eventualmente a parte real do defeito normalizado fica abaixo de menos
+metade da primeira energia Green. -/
+theorem eventually_normalizedClosedBulkDefect_re_lt_neg_half
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
+    ∀ᶠ M : ℕ in atTop,
+      ((((M + 1 : ℕ) : ℂ))⁻¹ *
+          finiteCanonicalAngularClosedBulkDefect (M + 1) s).re <
+        -((finiteReflectedGradientPairing 1 s).re / 2) := by
+  let scalarLimit : ℂ :=
+    (starRingEnd ℂ) (bracketedDirichletChart 3 s) *
+      bracketedDirichletChart 3 (reflectedParameter s)
+  have hscalar :
+      Tendsto
+        (fun M : ℕ ↦ finiteCanonicalAngularScalarPairing M s)
+        atTop (nhds scalarLimit) := by
+    simpa only [scalarLimit] using
+      finiteCanonicalAngularScalarPairing_tendsto hs
+  have hscalarShift :
+      Tendsto
+        (fun M : ℕ ↦ finiteCanonicalAngularScalarPairing (M + 1) s)
+        atTop (nhds scalarLimit) :=
+    hscalar.comp (tendsto_add_atTop_nat 1)
+  have hinv :
+      Tendsto (fun M : ℕ ↦ (((M + 1 : ℕ) : ℂ))⁻¹)
+        atTop (nhds 0) :=
+    (tendsto_inv_atTop_nhds_zero_nat (𝕜 := ℂ)).comp
+      (tendsto_add_atTop_nat 1)
+  have hscaledScalarComplex :
+      Tendsto
+        (fun M : ℕ ↦
+          (((M + 1 : ℕ) : ℂ))⁻¹ *
+            finiteCanonicalAngularScalarPairing (M + 1) s)
+        atTop (nhds 0) := by
+    simpa only [zero_mul] using hinv.mul hscalarShift
+  have hscaledScalarReal :
+      Tendsto
+        (fun M : ℕ ↦
+          ((((M + 1 : ℕ) : ℂ))⁻¹ *
+            finiteCanonicalAngularScalarPairing (M + 1) s).re)
+        atTop (nhds 0) := by
+    simpa [Function.comp_def] using
+      Complex.continuous_re.continuousAt.tendsto.comp hscaledScalarComplex
+  have hc : 0 < (finiteReflectedGradientPairing 1 s).re :=
+    finiteReflectedGradientPairing_re_pos (by norm_num) hs
+  have hscalarSmall :
+      ∀ᶠ M : ℕ in atTop,
+        ((((M + 1 : ℕ) : ℂ))⁻¹ *
+          finiteCanonicalAngularScalarPairing (M + 1) s).re <
+            (finiteReflectedGradientPairing 1 s).re / 2 :=
+    hscaledScalarReal.eventually (Iio_mem_nhds (half_pos hc))
+  have hgreenMonotone := finiteReflectedGradientPairing_re_monotone hs
+  filter_upwards [hscalarSmall] with M hsmall
+  let N : ℕ := M + 1
+  have hN : (N : ℂ) ≠ 0 := by
+    exact_mod_cast (show N ≠ 0 by omega)
+  have hnormalized :
+      (N : ℂ)⁻¹ * finiteCanonicalAngularClosedBulkDefect N s =
+        (N : ℂ)⁻¹ * finiteCanonicalAngularScalarPairing N s -
+          finiteReflectedGradientPairing (3 * N) s := by
+    rw [finiteCanonicalAngularClosedBulkDefect_eq_scalar_sub_mul_green]
+    field_simp [hN]
+  have hgreenLower :
+      (finiteReflectedGradientPairing 1 s).re ≤
+        (finiteReflectedGradientPairing (3 * N) s).re :=
+    hgreenMonotone (by omega)
+  change
+    (((N : ℂ)⁻¹ * finiteCanonicalAngularClosedBulkDefect N s).re <
+      -((finiteReflectedGradientPairing 1 s).re / 2))
+  rw [hnormalized, Complex.sub_re]
+  linarith
+
+/-- Guardrail linear: o defeito fechado dividido pelo tamanho do corte nao
+converge a zero em nenhum ponto do strip critico. -/
+theorem normalizedClosedBulkDefect_not_tendsto_zero
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
+    ¬ Tendsto
+      (fun M : ℕ ↦
+        (((M + 1 : ℕ) : ℂ))⁻¹ *
+          finiteCanonicalAngularClosedBulkDefect (M + 1) s)
+      atTop (nhds 0) := by
+  intro hzero
+  have hreal :
+      Tendsto
+        (fun M : ℕ ↦
+          ((((M + 1 : ℕ) : ℂ))⁻¹ *
+            finiteCanonicalAngularClosedBulkDefect (M + 1) s).re)
+        atTop (nhds 0) := by
+    simpa [Function.comp_def] using
+      Complex.continuous_re.continuousAt.tendsto.comp hzero
+  have hnegative :=
+    eventually_normalizedClosedBulkDefect_re_lt_neg_half hs
+  have hlimitUpper :
+      (0 : ℝ) ≤ -((finiteReflectedGradientPairing 1 s).re / 2) :=
+    le_of_tendsto hreal (hnegative.mono fun _ h ↦ le_of_lt h)
+  have hc : 0 < (finiteReflectedGradientPairing 1 s).re :=
+    finiteReflectedGradientPairing_re_pos (by norm_num) hs
+  linarith
+
 end
 
 end CPFormal.Analytic.Cp
