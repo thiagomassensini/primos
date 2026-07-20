@@ -55,3 +55,4 @@ import CPFormal.Analytic.CpFiniteGenuineOneSidedGreenBudget
 import CPFormal.Analytic.CpGenuineSecondDifferenceIdentity
 import CPFormal.Analytic.CpFiniteScalarSynthesis
 import CPFormal.Analytic.CpFiniteScalarSynthesisSummationByParts
+import CPFormal.Analytic.CpFiniteScalarSynthesisClosedDefectObstruction
