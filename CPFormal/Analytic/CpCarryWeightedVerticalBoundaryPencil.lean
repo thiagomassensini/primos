@@ -146,15 +146,19 @@ theorem carryWeightedVerticalBoundaryRelation_eq_top
     (q : ℝ) (hqpos : 0 < q) (hq1 : q < 1) :
     (carryWeightedVerticalBoundaryPencil q).relation = ⊤ := by
   apply le_antisymm le_top
-  intro boundary hboundary
+  intro boundary _
   rcases boundary with ⟨a, b⟩
   change (a, b) ∈ LinearMap.range
     ((carryWeightedVerticalBoundaryPencil q).valueTrace.prod
       (carryWeightedVerticalBoundaryPencil q).fluxTrace)
   refine ⟨carryWeightedVerticalReturn q hqpos.le hq1 (a, b), ?_⟩
   apply Prod.ext
-  · simp
-  · simp
+  · simpa [carryWeightedVerticalBoundaryPencil] using
+      carryWeightedVerticalBoundaryValueTrace_return
+        q hqpos hq1 (a, b)
+  · simpa [carryWeightedVerticalBoundaryPencil] using
+      carryWeightedVerticalBoundaryFluxTrace_return
+        q hqpos hq1 (a, b)
 
 /-- A relacao livre e fechada. -/
 theorem carryWeightedVerticalBoundaryRelation_isClosed
@@ -162,20 +166,23 @@ theorem carryWeightedVerticalBoundaryRelation_isClosed
     IsClosed
       ((carryWeightedVerticalBoundaryPencil q).relation : Set (ℂ × ℂ)) := by
   rw [carryWeightedVerticalBoundaryRelation_eq_top q hqpos hq1]
-  simpa using (isClosed_univ : IsClosed (Set.univ : Set (ℂ × ℂ)))
+  exact isClosed_univ
 
 /-- Antes da colagem aritmetica, todo `lambda` e caracteristico. -/
 theorem carryWeightedVerticalBoundaryPencil_everyValue_isCharacteristic
     (q : ℝ) (hqpos : 0 < q) (hq1 : q < 1) (lambda : ℂ) :
     (carryWeightedVerticalBoundaryPencil q).IsCharacteristicValue lambda := by
   refine ⟨carryWeightedVerticalBoundaryMode q hqpos.le hq1 lambda, ?_, ?_⟩
-  · simp
+  · rw [carryWeightedVerticalBoundaryMode_valueTrace q hqpos hq1 lambda]
+    norm_num
   · change
       (carryWeightedVerticalBoundaryPencil q).fluxTrace
           (carryWeightedVerticalBoundaryMode q hqpos.le hq1 lambda) -
         lambda •
           (carryWeightedVerticalBoundaryPencil q).valueTrace
             (carryWeightedVerticalBoundaryMode q hqpos.le hq1 lambda) = 0
+    rw [carryWeightedVerticalBoundaryMode_fluxTrace q hqpos hq1 lambda,
+      carryWeightedVerticalBoundaryMode_valueTrace q hqpos hq1 lambda]
     simp
 
 /-- A identidade TFVD reescrita diretamente pelos dois tracos do pencil. -/
@@ -189,7 +196,8 @@ theorem carryWeightedVerticalTfvd_reconstruction_via_boundaryPencil
             (carryWeightedVerticalBoundaryPencil q).fluxTrace x) =
       x := by
   rw [carryWeightedVerticalBoundaryTrace_pair]
-  exact carryWeightedVerticalTfvd_apply q hqpos hq1 x
+  ext n
+  exact carryWeightedVerticalTfvd_apply q hqpos hq1 x n
 
 /-- Pencil livre especializado na base material `p`. -/
 def primeCarryWeightedVerticalBoundaryPencil (p : ℕ) :
