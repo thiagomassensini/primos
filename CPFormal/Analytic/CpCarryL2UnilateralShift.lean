@@ -81,10 +81,37 @@ theorem carryVerticalL2BackwardShift_norm_le_one (r : ℕ) :
   change ‖carryVerticalL2BackwardShiftLinear r x‖ ≤ 1 * ‖x‖
   simpa using carryVerticalL2BackwardShiftLinear_norm_le r x
 
+/-- O tail-shift leva o vetor elementar `e_k` a `e_(k-r)` quando esse indice
+existe, e a zero caso contrario. -/
+theorem carryVerticalL2BackwardShift_single (r k : ℕ) :
+    carryVerticalL2BackwardShift r (lp.single 2 k (1 : ℂ)) =
+      if r ≤ k then lp.single 2 (k - r) (1 : ℂ) else 0 := by
+  ext n
+  by_cases hrk : r ≤ k
+  · have hiff : n + r = k ↔ n = k - r := by omega
+    simp [carryVerticalL2BackwardShift_apply, lp.single_apply, hrk, hiff]
+  · have hne : n + r ≠ k := by omega
+    simp [carryVerticalL2BackwardShift_apply, lp.single_apply, hrk, hne]
+
 /-- Shift unilateral causal, definido como adjunto do tail-shift. -/
 def carryVerticalL2UnilateralShift (r : ℕ) :
     CarryVerticalL2 →L[ℂ] CarryVerticalL2 :=
   ContinuousLinearMap.adjoint (carryVerticalL2BackwardShift r)
+
+/-- Formula coordenada do shift unilateral: insere `r` zeros no inicio. -/
+@[simp] theorem carryVerticalL2UnilateralShift_apply
+    (r : ℕ) (x : CarryVerticalL2) (n : ℕ) :
+    carryVerticalL2UnilateralShift r x n =
+      if r ≤ n then x (n - r) else 0 := by
+  have hinner :
+      inner ℂ (lp.single 2 n (1 : ℂ))
+          (carryVerticalL2UnilateralShift r x) =
+        inner ℂ
+          (carryVerticalL2BackwardShift r (lp.single 2 n (1 : ℂ))) x := by
+    exact ContinuousLinearMap.adjoint_inner_right
+      (carryVerticalL2BackwardShift r) (lp.single 2 n (1 : ℂ)) x
+  simpa [carryVerticalL2UnilateralShift,
+    carryVerticalL2BackwardShift_single, lp.inner_single_left] using hinner
 
 /-- O shift unilateral e contrativo; de fato, o adjunto preserva a norma de
 operador. -/
