@@ -51,6 +51,7 @@ import CPFormal.Analytic.CpGenuineCarrySaturationTransport
 import CPFormal.Analytic.CpGenuineTiltProductRule
 import CPFormal.Analytic.CpTfvdGenuineCarryIdentification
 import CPFormal.Analytic.CpSeededTfvdSameSBoundary
+import CPFormal.Analytic.CpFiniteSeededTfvdGreenIdentity
 import CPFormal.Analytic.CpFiniteTfvdLogJetResidualAsymptotics
 import CPFormal.Analytic.CpFiniteTfvdLogJetResidualReflection
 import CPFormal.Analytic.CpFiniteTfvdLogJetCriticalLineTraces
