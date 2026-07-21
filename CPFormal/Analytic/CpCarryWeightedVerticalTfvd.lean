@@ -66,11 +66,14 @@ theorem carryVerticalL2WeightedGreen_apply
           carryWeightedVerticalGreenTerm carryVerticalL2ShiftFamily q r) = _
   rw [(carryVerticalL2OperatorCoordinate x n).map_tsum hsum]
   rw [tsum_eq_sum (s := Finset.range (n + 1)) (fun r hr => by
+    have hrge : n + 1 ≤ r := by
+      simpa only [Finset.mem_range, not_lt] using hr
     have hrnot : ¬r ≤ n := by omega
     simp [carryWeightedVerticalGreenTerm, carryVerticalL2ShiftFamily,
       carryVerticalL2UnilateralShift_apply, hrnot])]
   apply Finset.sum_congr rfl
   intro r hr
+  have hrlt : r < n + 1 := Finset.mem_range.mp hr
   have hrle : r ≤ n := by omega
   simp [carryWeightedVerticalGreenTerm, carryVerticalL2ShiftFamily,
     carryVerticalL2UnilateralShift_apply, hrle]
