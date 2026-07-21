@@ -38,10 +38,10 @@ def nativeGpreFiniteBoundaryValueLift
   toFun x c := nativeGpreBoundaryValueLift x c.1
   map_add' x y := by
     funext c
-    simp
+    ring
   map_smul' a x := by
     funext c
-    simp
+    ring
 
 /-- Traco de fluxo numero restrito ao mesmo atlas. -/
 def nativeGpreFiniteBoundaryNumberFluxLift
@@ -50,10 +50,10 @@ def nativeGpreFiniteBoundaryNumberFluxLift
   toFun x c := nativeGpreBoundaryNumberFluxLift x c.1
   map_add' x y := by
     funext c
-    simp
+    ring
   map_smul' a x := by
     funext c
-    simp
+    ring
 
 @[simp] theorem nativeGpreFiniteBoundaryValueLift_apply
     (S : Finset NativeGpreBoundaryContext)
