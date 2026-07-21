@@ -89,9 +89,11 @@ theorem carryVerticalL2BackwardShift_single (r k : ℕ) :
   ext n
   by_cases hrk : r ≤ k
   · have hiff : n + r = k ↔ n = k - r := by omega
-    simp [carryVerticalL2BackwardShift_apply, lp.single_apply, hrk, hiff]
+    simp [carryVerticalL2BackwardShift_apply, lp.single_apply,
+      Pi.single_apply, hrk, hiff]
   · have hne : n + r ≠ k := by omega
-    simp [carryVerticalL2BackwardShift_apply, lp.single_apply, hrk, hne]
+    simp [carryVerticalL2BackwardShift_apply, lp.single_apply,
+      Pi.single_apply, hrk, hne]
 
 /-- Shift unilateral causal, definido como adjunto do tail-shift. -/
 def carryVerticalL2UnilateralShift (r : ℕ) :
@@ -110,8 +112,11 @@ def carryVerticalL2UnilateralShift (r : ℕ) :
           (carryVerticalL2BackwardShift r (lp.single 2 n (1 : ℂ))) x := by
     exact ContinuousLinearMap.adjoint_inner_right
       (carryVerticalL2BackwardShift r) (lp.single 2 n (1 : ℂ)) x
-  simpa [carryVerticalL2UnilateralShift,
-    carryVerticalL2BackwardShift_single, lp.inner_single_left] using hinner
+  by_cases hrn : r ≤ n
+  · simpa [carryVerticalL2UnilateralShift,
+      carryVerticalL2BackwardShift_single, hrn, lp.inner_single_left] using hinner
+  · simpa [carryVerticalL2UnilateralShift,
+      carryVerticalL2BackwardShift_single, hrn, lp.inner_single_left] using hinner
 
 /-- O shift unilateral e contrativo; de fato, o adjunto preserva a norma de
 operador. -/
