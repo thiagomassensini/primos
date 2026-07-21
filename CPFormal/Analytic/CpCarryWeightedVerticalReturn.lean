@@ -119,6 +119,9 @@ theorem carryWeightedVerticalCenteredBracket_comp_return
   | zero => simp
   | succ n =>
       have hqC : (q : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr hqpos.ne'
+      change
+        carryWeightedVerticalCenteredBracket q
+            (carryWeightedVerticalReturn q hqpos.le hq1 (a, b)) (n + 1) = 0
       rw [carryWeightedVerticalCenteredBracket_succ]
       simp only [carryWeightedVerticalReturn_apply]
       simp only [pow_succ]
