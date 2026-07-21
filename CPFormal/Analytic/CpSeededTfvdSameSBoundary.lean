@@ -56,7 +56,8 @@ def canonicalSeededEnrichedTfvdGenuinePort
     SeededEnrichedTfvdPort :=
   {
     seed := 1
-    blocks := canonicalEnrichedAngularTfvdCoordinate kappa omega · s
+    blocks := fun m ↦
+      canonicalEnrichedAngularTfvdCoordinate kappa omega m s
   }
 
 /-- Porta log-jet canonica: a semente e `log(1) = 0`. -/
@@ -65,7 +66,8 @@ def canonicalSeededEnrichedTfvdLogJetPort
     SeededEnrichedTfvdPort :=
   {
     seed := 0
-    blocks := canonicalEnrichedLogJetTfvdCoordinate kappa omega · s
+    blocks := fun m ↦
+      canonicalEnrichedLogJetTfvdCoordinate kappa omega m s
   }
 
 @[simp] theorem canonicalSeededEnrichedTfvdGenuinePort_seed
