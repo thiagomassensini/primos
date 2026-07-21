@@ -64,7 +64,7 @@ def infiniteRealSpectralMaximalDomain :
           (fun n => (infiniteRealSpectralFrequency n : ℂ) * x n) +
             fun n => (infiniteRealSpectralFrequency n : ℂ) * y n := by
       funext n
-      rw [lp.coeFn_add, Pi.add_apply, mul_add]
+      simp only [lp.coeFn_add, Pi.add_apply, mul_add]
     rw [hfun]
     exact hx.add hy
   smul_mem' c x hx := by
