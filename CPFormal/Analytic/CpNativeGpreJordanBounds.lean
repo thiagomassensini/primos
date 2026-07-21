@@ -65,8 +65,9 @@ theorem nativeGpreJordanArithmetic_prime_pow_nonneg
   | succ i =>
       rw [nativeGpreJordanArithmetic_prime_pow_succ p tau i hp]
       apply sub_nonneg.mpr
-      gcongr
-      exact_mod_cast Nat.pow_le_pow_left hp.one_le (Nat.le_succ i)
+      norm_cast
+      exact Nat.pow_le_pow_left
+        ((Nat.pow_le_pow_iff_right hp.one_lt).2 (Nat.le_succ i)) (2 * tau)
 
 end
 
