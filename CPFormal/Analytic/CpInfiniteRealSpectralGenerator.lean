@@ -48,7 +48,7 @@ def infiniteRealSpectralMaximalDomain :
     {x | Memℓp (fun n => (infiniteRealSpectralFrequency n : ℂ) * x n) 2}
   zero_mem' := by
     simpa using (zero_memℓp : Memℓp (0 : ℕ → ℂ) 2)
-  add_mem' x y hx hy := by
+  add_mem' {x y} hx hy := by
     simpa [mul_add] using hx.add hy
   smul_mem' c x hx := by
     simpa [mul_assoc, mul_left_comm] using hx.const_smul c
@@ -59,26 +59,39 @@ def infiniteRealSpectralGenerator :
   domain := infiniteRealSpectralMaximalDomain
   toFun :=
     { toFun := fun x =>
-        ⟨fun n => (infiniteRealSpectralFrequency n : ℂ) * x n, x.2⟩
+        ⟨fun n => (infiniteRealSpectralFrequency n : ℂ) * x.1 n, x.2⟩
       map_add' := by
         intro x y
-        ext n
-        simp [mul_add]
+        apply lp.ext
+        funext n
+        change (infiniteRealSpectralFrequency n : ℂ) *
+            (x.1 n + y.1 n) =
+          (infiniteRealSpectralFrequency n : ℂ) * x.1 n +
+            (infiniteRealSpectralFrequency n : ℂ) * y.1 n
+        ring
       map_smul' := by
         intro c x
-        ext n
-        simp [mul_assoc, mul_left_comm] }
+        apply lp.ext
+        funext n
+        change (infiniteRealSpectralFrequency n : ℂ) * (c * x.1 n) =
+          c * ((infiniteRealSpectralFrequency n : ℂ) * x.1 n)
+        ring }
+
+@[simp] theorem infiniteRealSpectralGenerator_domain_eq :
+    infiniteRealSpectralGenerator.domain =
+      infiniteRealSpectralMaximalDomain := rfl
 
 @[simp] theorem infiniteRealSpectralGenerator_apply
     (x : infiniteRealSpectralGenerator.domain) (n : ℕ) :
     infiniteRealSpectralGenerator x n =
-      (infiniteRealSpectralFrequency n : ℂ) * x n := rfl
+      (infiniteRealSpectralFrequency n : ℂ) * x.1 n := rfl
 
 @[simp] theorem mem_infiniteRealSpectralGenerator_domain
     (x : InfiniteRealSpectralHilbert) :
     x ∈ infiniteRealSpectralGenerator.domain ↔
-      Memℓp (fun n => (infiniteRealSpectralFrequency n : ℂ) * x n) 2 :=
-  Iff.rfl
+      Memℓp (fun n => (infiniteRealSpectralFrequency n : ℂ) * x n) 2 := by
+  rw [infiniteRealSpectralGenerator_domain_eq]
+  rfl
 
 /-- Vetor canonico concentrado numa unica frequencia. -/
 def infiniteRealSpectralBasisVector (n : ℕ) :
@@ -88,6 +101,7 @@ def infiniteRealSpectralBasisVector (n : ℕ) :
 /-- Todo vetor canonico pertence ao dominio maximal. -/
 theorem infiniteRealSpectralBasisVector_mem_domain (n : ℕ) :
     infiniteRealSpectralBasisVector n ∈ infiniteRealSpectralGenerator.domain := by
+  rw [infiniteRealSpectralGenerator_domain_eq]
   change Memℓp
     (fun m => (infiniteRealSpectralFrequency m : ℂ) *
       infiniteRealSpectralBasisVector n m) 2
@@ -112,7 +126,8 @@ theorem infiniteRealSpectralGenerator_basisVector (n : ℕ) :
         infiniteRealSpectralBasisVector_mem_domain n⟩ =
       (infiniteRealSpectralFrequency n : ℂ) •
         infiniteRealSpectralBasisVector n := by
-  ext m
+  apply lp.ext
+  funext m
   by_cases h : m = n
   · subst m
     simp [infiniteRealSpectralBasisVector]
@@ -125,7 +140,10 @@ def infiniteRealSpectralHilbertBasis :
 
 @[simp] theorem infiniteRealSpectralHilbertBasis_apply (n : ℕ) :
     infiniteRealSpectralHilbertBasis n =
-      infiniteRealSpectralBasisVector n := rfl
+      infiniteRealSpectralBasisVector n := by
+  change (LinearIsometryEquiv.refl ℂ InfiniteRealSpectralHilbert).symm
+      (lp.single 2 n 1) = lp.single 2 n 1
+  rfl
 
 /-- O dominio maximal e denso porque contem a base canonica. -/
 theorem infiniteRealSpectralGenerator_dense_domain :
@@ -155,14 +173,17 @@ theorem infiniteRealSpectralGenerator_isFormalAdjoint :
   rw [lp.inner_eq_tsum, lp.inner_eq_tsum]
   apply tsum_congr
   intro n
-  simp [infiniteRealSpectralGenerator_apply, RCLike.inner_apply,
-    mul_assoc, mul_left_comm, mul_comm]
+  change inner ℂ
+      ((infiniteRealSpectralFrequency n : ℂ) * x.1 n) (y.1 n) =
+    inner ℂ (x.1 n)
+      ((infiniteRealSpectralFrequency n : ℂ) * y.1 n)
+  simp [RCLike.inner_apply, mul_assoc, mul_left_comm, mul_comm]
 
 /-- O adjunto age pela mesma formula coordenada a coordenada. -/
 theorem infiniteRealSpectralGenerator_adjoint_apply
     (y : infiniteRealSpectralGenerator.adjoint.domain) (n : ℕ) :
     infiniteRealSpectralGenerator.adjoint y n =
-      (infiniteRealSpectralFrequency n : ℂ) * y n := by
+      (infiniteRealSpectralFrequency n : ℂ) * y.1 n := by
   have h :=
     (LinearPMap.adjoint_isFormalAdjoint
       (T := infiniteRealSpectralGenerator)
@@ -185,6 +206,7 @@ theorem infiniteRealSpectralGenerator_adjoint_domain_le :
     infiniteRealSpectralGenerator.adjoint.domain ≤
       infiniteRealSpectralGenerator.domain := by
   intro y hy
+  rw [infiniteRealSpectralGenerator_domain_eq]
   change Memℓp
     (fun n => (infiniteRealSpectralFrequency n : ℂ) * y n) 2
   let z : InfiniteRealSpectralHilbert :=
@@ -204,12 +226,18 @@ theorem infiniteRealSpectralGenerator_isSelfAdjoint :
   apply le_antisymm
   · refine ⟨infiniteRealSpectralGenerator_adjoint_domain_le, ?_⟩
     intro x y hxy
-    ext n
-    rw [infiniteRealSpectralGenerator_adjoint_apply,
-      infiniteRealSpectralGenerator_apply]
-    exact congrArg
-      (fun z : InfiniteRealSpectralHilbert =>
-        (infiniteRealSpectralFrequency n : ℂ) * z n) hxy
+    apply lp.ext
+    funext n
+    calc
+      infiniteRealSpectralGenerator.adjoint x n =
+          (infiniteRealSpectralFrequency n : ℂ) * x.1 n :=
+        infiniteRealSpectralGenerator_adjoint_apply x n
+      _ = (infiniteRealSpectralFrequency n : ℂ) * y.1 n :=
+        congrArg
+          (fun z : InfiniteRealSpectralHilbert =>
+            (infiniteRealSpectralFrequency n : ℂ) * z n) hxy
+      _ = infiniteRealSpectralGenerator y n :=
+        (infiniteRealSpectralGenerator_apply y n).symm
   · exact
       infiniteRealSpectralGenerator_isFormalAdjoint.le_adjoint
         infiniteRealSpectralGenerator_dense_domain
