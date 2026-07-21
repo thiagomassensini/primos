@@ -46,7 +46,7 @@ noncomputable def finiteRealSpectralGenerator (N : ℕ) :
     simp [mul_add]
   map_smul' a x := by
     ext n
-    simp [mul_assoc, mul_left_comm, mul_comm]
+    simp [mul_left_comm]
 
 @[simp] theorem finiteRealSpectralGenerator_apply
     (N : ℕ) (x : FiniteRealSpectralHilbert N) (n : Fin N) :
@@ -60,7 +60,7 @@ theorem finiteRealSpectralGenerator_isSymmetric (N : ℕ) :
   rw [PiLp.inner_apply, PiLp.inner_apply]
   apply Finset.sum_congr rfl
   intro n hn
-  simp [finiteRealSpectralGenerator_apply, mul_assoc, mul_left_comm, mul_comm]
+  simp [finiteRealSpectralGenerator_apply, mul_assoc, mul_left_comm]
 
 /-- Versao auto-adjunta e continua do gerador em cada corte finito. -/
 noncomputable def finiteRealSpectralSelfAdjointGenerator (N : ℕ) :
@@ -102,8 +102,6 @@ theorem finiteRealSpectralPhase_add {N : ℕ} (t u : ℝ) (n : Fin N) :
   rw [← Complex.exp_conj]
   congr 1
   simp
-  push_cast
-  ring
 
 /-- Equivalencia linear dada pela rotacao coordenada a coordenada. -/
 noncomputable def finiteRealSpectralEvolutionLinearEquiv
@@ -116,13 +114,17 @@ noncomputable def finiteRealSpectralEvolutionLinearEquiv
     simp [mul_add]
   map_smul' a x := by
     ext n
-    simp [mul_assoc, mul_left_comm, mul_comm]
+    simp [mul_left_comm]
   left_inv x := by
     ext n
-    simp [mul_assoc]
+    change finiteRealSpectralPhase (-t) n *
+      (finiteRealSpectralPhase t n * x n) = x n
+    rw [← mul_assoc, finiteRealSpectralPhase_neg_mul, one_mul]
   right_inv x := by
     ext n
-    simp [mul_assoc]
+    change finiteRealSpectralPhase t n *
+      (finiteRealSpectralPhase (-t) n * x n) = x n
+    rw [← mul_assoc, finiteRealSpectralPhase_mul_neg, one_mul]
 
 @[simp] theorem finiteRealSpectralEvolutionLinearEquiv_apply
     (N : ℕ) (t : ℝ) (x : FiniteRealSpectralHilbert N) (n : Fin N) :
@@ -137,8 +139,15 @@ noncomputable def finiteRealSpectralEvolution (N : ℕ) (t : ℝ) :
     rw [PiLp.inner_apply, PiLp.inner_apply]
     apply Finset.sum_congr rfl
     intro n hn
-    simp [finiteRealSpectralEvolutionLinearEquiv_apply,
-      conj_finiteRealSpectralPhase, mul_assoc])
+    simp only [finiteRealSpectralEvolutionLinearEquiv_apply,
+      RCLike.inner_apply, map_mul, conj_finiteRealSpectralPhase]
+    calc
+      finiteRealSpectralPhase t n *
+          (y n * (finiteRealSpectralPhase (-t) n * (starRingEnd ℂ) (x n))) =
+        (finiteRealSpectralPhase t n * finiteRealSpectralPhase (-t) n) *
+          (y n * (starRingEnd ℂ) (x n)) := by ring
+      _ = y n * (starRingEnd ℂ) (x n) := by
+        rw [finiteRealSpectralPhase_mul_neg, one_mul])
 
 @[simp] theorem finiteRealSpectralEvolution_apply
     (N : ℕ) (t : ℝ) (x : FiniteRealSpectralHilbert N) (n : Fin N) :
