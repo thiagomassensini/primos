@@ -98,11 +98,8 @@ theorem carryWeightedVerticalGreenKernel_summable
     hgeom.mul_left C
   refine hmajor.of_norm_bounded_eventually_nat ?_
   filter_upwards [hC.bound] with n hn
-  have hk0 : 0 ≤ carryWeightedVerticalGreenKernel q n :=
-    carryWeightedVerticalGreenKernel_nonneg hq0 n
-  have han0 : 0 ≤ a ^ n := pow_nonneg ha0 n
   simpa [carryWeightedVerticalGreenKernel, Real.norm_eq_abs,
-    abs_of_nonneg hk0, abs_of_nonneg han0] using hn
+    abs_of_nonneg hq0, abs_of_nonneg ha0] using hn
 
 /-- Uma realizacao vertical e uma familia de shifts que nao aumentam norma.
 A lei de semigrupo sera adicionada somente quando for necessaria para a
@@ -129,17 +126,19 @@ theorem carryWeightedVerticalGreenTerm_norm_le
   have hk0 : 0 ≤ carryWeightedVerticalGreenKernel q r :=
     carryWeightedVerticalGreenKernel_nonneg hq0 r
   calc
-    ‖carryWeightedVerticalGreenTerm S q r‖ =
-        carryWeightedVerticalGreenKernel q r * ‖S.shift r‖ := by
-      simp [carryWeightedVerticalGreenTerm, abs_of_nonneg hk0]
+    ‖carryWeightedVerticalGreenTerm S q r‖ ≤
+        ‖(carryWeightedVerticalGreenKernel q r : ℂ)‖ * ‖S.shift r‖ := by
+      rw [carryWeightedVerticalGreenTerm]
+      exact norm_smul_le _ _
+    _ = carryWeightedVerticalGreenKernel q r * ‖S.shift r‖ := by
+      simp [abs_of_nonneg hk0]
     _ ≤ carryWeightedVerticalGreenKernel q r * 1 :=
       mul_le_mul_of_nonneg_left (S.norm_shift_le_one r) hk0
     _ = carryWeightedVerticalGreenKernel q r := by ring
 
-variable [CompleteSpace H]
-
 /-- A serie de operadores converge absolutamente sempre que `q < 1`. -/
 theorem carryWeightedVerticalGreenTerm_summable
+    [CompleteSpace H]
     (S : CarryVerticalShiftFamily H) {q : ℝ}
     (hq0 : 0 ≤ q) (hq1 : q < 1) :
     Summable (fun r : ℕ => carryWeightedVerticalGreenTerm S q r) :=
