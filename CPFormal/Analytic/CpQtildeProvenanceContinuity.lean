@@ -242,7 +242,7 @@ def NativeGpreTowerLiftCertificate.completionExtension
 -/
 
 variable {𝕜₀ H0 Hminus : Type*}
-variable [IsROrC 𝕜₀]
+variable [RCLike 𝕜₀]
 variable [NormedAddCommGroup H0] [InnerProductSpace 𝕜₀ H0]
 variable [NormedAddCommGroup Hminus] [InnerProductSpace 𝕜₀ Hminus]
 
@@ -297,8 +297,11 @@ theorem firstCellReducedGreenForm_delta_four_delta_two :
 coincidir com a forma Green inteira no core: o lado do grafo zera
 identicamente, mas o witness Green vale `1/2`. -/
 theorem qtildeNumberGraph_cannot_represent_firstCellGreen
-    (numberOperator : H0 →ₗᵢ[ℝ] Hminus)
-    (arithmeticLift : NativeGreenVertexCore →ₗ[ℝ] H0) :
+    {H0R HminusR : Type*}
+    [NormedAddCommGroup H0R] [InnerProductSpace ℝ H0R]
+    [NormedAddCommGroup HminusR] [InnerProductSpace ℝ HminusR]
+    (numberOperator : H0R →ₗᵢ[ℝ] HminusR)
+    (arithmeticLift : NativeGreenVertexCore →ₗ[ℝ] H0R) :
     ¬ ∀ x y : NativeGreenVertexCore,
       qtildeNumberGraphBoundaryForm numberOperator
           (arithmeticLift x) (arithmeticLift y) =
