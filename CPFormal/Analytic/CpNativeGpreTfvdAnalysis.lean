@@ -223,10 +223,18 @@ theorem nativeGpreFiniteTfvdAnalysis_injective
     (S : Finset NativeGpreBoundaryContext) :
     Function.Injective (nativeGpreFiniteTfvdAnalysis q S) := by
   intro x y hxy
-  have h := congrArg
-    (fun data => nativeGpreFiniteTfvdReconstruction q hqpos.le hq1 S data)
-    hxy
-  simpa using h
+  calc
+    x = nativeGpreFiniteTfvdReconstruction q hqpos.le hq1 S
+          (nativeGpreFiniteTfvdAnalysis q S x) :=
+      (nativeGpreFiniteTfvdReconstruction_analysis q hqpos hq1 S x).symm
+    _ = nativeGpreFiniteTfvdReconstruction q hqpos.le hq1 S
+          (nativeGpreFiniteTfvdAnalysis q S y) :=
+      congrArg
+        (fun data =>
+          nativeGpreFiniteTfvdReconstruction q hqpos.le hq1 S data)
+        hxy
+    _ = y :=
+      nativeGpreFiniteTfvdReconstruction_analysis q hqpos hq1 S y
 
 /-- Projecao continua sobre os dados compativeis com um estado vertical. -/
 noncomputable def nativeGpreFiniteTfvdAnalysisProjection
@@ -254,7 +262,14 @@ theorem nativeGpreFiniteTfvdAnalysisProjection_idempotent
       nativeGpreFiniteTfvdAnalysisProjection q hqpos.le hq1 S := by
   apply ContinuousLinearMap.ext
   intro data
-  simp [nativeGpreFiniteTfvdAnalysisProjection]
+  change
+    nativeGpreFiniteTfvdAnalysis q S
+        (nativeGpreFiniteTfvdReconstruction q hqpos.le hq1 S
+          (nativeGpreFiniteTfvdAnalysis q S
+            (nativeGpreFiniteTfvdReconstruction q hqpos.le hq1 S data))) =
+      nativeGpreFiniteTfvdAnalysis q S
+        (nativeGpreFiniteTfvdReconstruction q hqpos.le hq1 S data)
+  rw [nativeGpreFiniteTfvdReconstruction_analysis q hqpos hq1 S]
 
 /-- O range da analise e exatamente o locus fixo da projecao continua. -/
 theorem nativeGpreFiniteTfvdAnalysis_range_eq_eqLocus
@@ -269,10 +284,11 @@ theorem nativeGpreFiniteTfvdAnalysis_range_eq_eqLocus
   constructor
   · rintro ⟨x, rfl⟩
     change
-      nativeGpreFiniteTfvdAnalysisProjection q hqpos.le hq1 S
-          (nativeGpreFiniteTfvdAnalysis q S x) =
+      nativeGpreFiniteTfvdAnalysis q S
+          (nativeGpreFiniteTfvdReconstruction q hqpos.le hq1 S
+            (nativeGpreFiniteTfvdAnalysis q S x)) =
         nativeGpreFiniteTfvdAnalysis q S x
-    simp [nativeGpreFiniteTfvdAnalysisProjection]
+    rw [nativeGpreFiniteTfvdReconstruction_analysis q hqpos hq1 S]
   · intro hfixed
     refine ⟨nativeGpreFiniteTfvdReconstruction q hqpos.le hq1 S data, ?_⟩
     change
