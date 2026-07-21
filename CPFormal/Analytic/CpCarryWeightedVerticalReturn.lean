@@ -98,7 +98,8 @@ theorem carryWeightedVerticalTrace_comp_return
     carryWeightedVerticalTrace q ∘L
         carryWeightedVerticalReturn q hqpos.le hq1 =
       ContinuousLinearMap.id ℂ (ℂ × ℂ) := by
-  ext boundary
+  apply ContinuousLinearMap.ext
+  intro boundary
   rcases boundary with ⟨a, b⟩
   have hqC : (q : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr hqpos.ne'
   apply Prod.ext
@@ -110,8 +111,10 @@ theorem carryWeightedVerticalCenteredBracket_comp_return
     (q : ℝ) (hqpos : 0 < q) (hq1 : q < 1) :
     carryWeightedVerticalCenteredBracket q ∘L
         carryWeightedVerticalReturn q hqpos.le hq1 = 0 := by
-  ext boundary n
+  apply ContinuousLinearMap.ext
+  intro boundary
   rcases boundary with ⟨a, b⟩
+  ext n
   cases n with
   | zero => simp
   | succ n =>
@@ -148,7 +151,7 @@ theorem primeCarryWeightedVerticalTrace_comp_return
       ContinuousLinearMap.id ℂ (ℂ × ℂ) := by
   exact carryWeightedVerticalTrace_comp_return
     (primeCarryAmplitudeRatio p)
-    (primeCarryAmplitudeRatio_pos p (le_trans Nat.one_le_two hp))
+    (primeCarryAmplitudeRatio_pos p (by omega))
     (primeCarryAmplitudeRatio_lt_one p hp)
 
 /-- Na base material, o bracket aniquila o retorno. -/
@@ -158,7 +161,7 @@ theorem primeCarryWeightedVerticalCenteredBracket_comp_return
         primeCarryWeightedVerticalReturn p hp = 0 := by
   exact carryWeightedVerticalCenteredBracket_comp_return
     (primeCarryAmplitudeRatio p)
-    (primeCarryAmplitudeRatio_pos p (le_trans Nat.one_le_two hp))
+    (primeCarryAmplitudeRatio_pos p (by omega))
     (primeCarryAmplitudeRatio_lt_one p hp)
 
 end
