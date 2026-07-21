@@ -53,7 +53,7 @@ theorem carryVerticalL2WeightedGreen_apply
     (q : ℝ) (hq0 : 0 ≤ q) (hq1 : q < 1)
     (x : CarryVerticalL2) (n : ℕ) :
     carryVerticalL2WeightedGreen q x n =
-      ∑ r in Finset.range (n + 1),
+      ∑ r ∈ Finset.range (n + 1),
         (carryWeightedVerticalGreenKernel q r : ℂ) * x (n - r) := by
   have hsum : Summable (fun r : ℕ =>
       carryWeightedVerticalGreenTerm carryVerticalL2ShiftFamily q r) :=
