@@ -75,6 +75,7 @@ import CPFormal.Analytic.CpCarryWeightedVerticalTfvdIdentity
 import CPFormal.Analytic.CpCarryWeightedVerticalBoundaryPencil
 import CPFormal.Analytic.CpNativeGpreBoundaryPencil
 import CPFormal.Analytic.CpNativeGpreTfvdGluing
+import CPFormal.Analytic.CpNativeGpreTfvdCanonicalGluing
 import CPFormal.Analytic.CpFiniteGenuineAngularGreenBudget
 import CPFormal.Analytic.CpFiniteGenuineOneSidedGreenBudget
 import CPFormal.Analytic.CpGenuineSecondDifferenceIdentity
