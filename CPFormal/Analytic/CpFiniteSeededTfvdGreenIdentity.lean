@@ -284,9 +284,8 @@ theorem finiteCanonicalSeededTfvdGreen_signed_identity
   rw [finiteCanonicalTfvdCoupledGenuineGreenFlux_re] at h
   exact h
 
-/-- O endpoint da 0.49 ja herda o fechamento Genuine certificado. A unica
-parcela nova a ser analisada no checkpoint seguinte e a projecao radial dos
-canais de proveniencia. -/
+/-- O endpoint da 0.49 ja herda o fechamento Genuine certificado. Isto nao
+implica, por si so, o fechamento da forma bilinear de bordo. -/
 theorem finiteCanonicalSeededTfvdGreenMovingEndpoint_tendsto_zero_of_genuine_zero
     {s : ℂ} (hs : s ∈ genuineCriticalStrip)
     (hzero : genuineContinuation s = 0) :
@@ -300,6 +299,94 @@ theorem finiteCanonicalSeededTfvdGreenMovingEndpoint_tendsto_zero_of_genuine_zer
   simpa only
       [finiteCanonicalSeededTfvdGreenMovingEndpoint_eq_neg_boundary,
         neg_zero] using hneg
+
+/-!
+## Interface unica do checkpoint analitico seguinte
+-/
+
+/-- Observavel radial que resta depois de separar o defeito de proveniencia
+local da forma de bordo. O nome nao afirma que ele desaparece. -/
+def finiteCanonicalSeededTfvdGreenRadialClosureObservable
+    (p M : ℕ) (kappa : ℂ) (omega : ℕ → ℂ) (s : ℂ) : ℝ :=
+  (finiteCanonicalSeededTfvdSameSBoundaryForm M kappa omega s).re -
+    (finiteCanonicalTfvdSameSGreenProvenanceDefect p M s).re
+
+/-- Forma resolvida do ledger assinado: o observavel radial e fluxo acoplado
+mais endpoint movel. -/
+theorem finiteCanonicalSeededTfvdGreenRadialClosureObservable_eq_flux_add_endpoint
+    (p : ℕ) (hp : Nat.Prime p)
+    (M : ℕ) {kappa : ℂ} (hkappa : kappa ≠ 0)
+    (omega : ℕ → ℂ) (homega : ∀ m, omega m ≠ 0) (s : ℂ) :
+    finiteCanonicalSeededTfvdGreenRadialClosureObservable
+        p M kappa omega s =
+      finiteCanonicalAngularBracketCoupledGenuineGreenFlux p M s +
+        (finiteCanonicalSeededTfvdGreenMovingEndpoint M s).re := by
+  unfold finiteCanonicalSeededTfvdGreenRadialClosureObservable
+  rw [finiteCanonicalSeededTfvdGreen_signed_identity
+    p hp M hkappa omega homega s]
+  ring
+
+/-- Proposicao pontual e unica a ser fechada na 0.50. -/
+def SeededTfvdGreenRadialClosureAt
+    (p : ℕ) (kappa : ℂ) (omega : ℕ → ℂ) (s : ℂ) : Prop :=
+  Tendsto
+    (fun M : ℕ ↦
+      finiteCanonicalSeededTfvdGreenRadialClosureObservable
+        p M kappa omega s)
+    atTop (nhds 0)
+
+/-- Num zero Genuine, o novo gate radial e equivalente ao fechamento do
+fluxo Green acoplado. O endpoint ja foi eliminado pelo teorema anterior;
+nenhuma anulacao da forma de bordo ou da proveniencia e presumida. -/
+theorem seededTfvdGreenRadialClosureAt_iff_coupledGreenFlux_tendsto_zero_of_genuine_zero
+    (p : ℕ) (hp : Nat.Prime p)
+    {kappa : ℂ} (hkappa : kappa ≠ 0)
+    (omega : ℕ → ℂ) (homega : ∀ m, omega m ≠ 0)
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip)
+    (hzero : genuineContinuation s = 0) :
+    SeededTfvdGreenRadialClosureAt p kappa omega s ↔
+      Tendsto
+        (fun M : ℕ ↦
+          finiteCanonicalAngularBracketCoupledGenuineGreenFlux p M s)
+        atTop (nhds 0) := by
+  have hendpointComplex :=
+    finiteCanonicalSeededTfvdGreenMovingEndpoint_tendsto_zero_of_genuine_zero
+      hs hzero
+  have hendpoint :
+      Tendsto
+        (fun M : ℕ ↦
+          (finiteCanonicalSeededTfvdGreenMovingEndpoint M s).re)
+        atTop (nhds 0) := by
+    have hreal :=
+      Complex.continuous_re.continuousAt.tendsto.comp hendpointComplex
+    simpa [Function.comp_def] using hreal
+  have hpoint : ∀ M : ℕ,
+      finiteCanonicalSeededTfvdGreenRadialClosureObservable
+          p M kappa omega s =
+        finiteCanonicalAngularBracketCoupledGenuineGreenFlux p M s +
+          (finiteCanonicalSeededTfvdGreenMovingEndpoint M s).re := by
+    intro M
+    exact
+      finiteCanonicalSeededTfvdGreenRadialClosureObservable_eq_flux_add_endpoint
+        p hp M hkappa omega homega s
+  constructor
+  · intro hclosure
+    have hdiff := hclosure.sub hendpoint
+    have hfun :
+        (fun M : ℕ ↦
+          finiteCanonicalAngularBracketCoupledGenuineGreenFlux p M s) =
+        (fun M : ℕ ↦
+          finiteCanonicalSeededTfvdGreenRadialClosureObservable
+              p M kappa omega s -
+            (finiteCanonicalSeededTfvdGreenMovingEndpoint M s).re) := by
+      funext M
+      rw [hpoint M]
+      ring
+    rw [hfun]
+    simpa using hdiff
+  · intro hflux
+    have hsum := hflux.add hendpoint
+    simpa only [hpoint] using hsum
 
 end
 
