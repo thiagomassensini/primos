@@ -4,8 +4,8 @@ import CPFormal.Analytic.CpNativeGpreTowerNorm
 # Cotas aritmeticas nativas para o lift G_pre
 
 Este modulo continua a construcao concreta da torre nativa. A primeira camada
-identifica o perfil de potencia inteiro com a funcao aritmetica canonica.
-Nenhuma hipotese espectral ou lei Green entra aqui.
+identifica o canal Jordan como uma funcao multiplicativa antes das estimativas
+locais. Nenhuma hipotese espectral ou lei Green entra aqui.
 -/
 
 open scoped BigOperators ArithmeticFunction.zeta ArithmeticFunction.Moebius
@@ -26,6 +26,18 @@ theorem nativeGprePowerArithmetic_eq_pow (tau : ℕ) :
   · subst n
     simp [nativeGprePowerArithmetic]
   · simp [nativeGprePowerArithmetic, ArithmeticFunction.pow_apply, hn]
+
+/-- O perfil de potencia e multiplicativo. -/
+theorem isMultiplicative_nativeGprePowerArithmetic (tau : ℕ) :
+    IsMultiplicative (nativeGprePowerArithmetic tau) := by
+  rw [nativeGprePowerArithmetic_eq_pow]
+  exact ArithmeticFunction.isMultiplicative_pow.natCast
+
+/-- O canal Jordan nativo e multiplicativo. -/
+theorem isMultiplicative_nativeGpreJordanArithmetic (tau : ℕ) :
+    IsMultiplicative (nativeGpreJordanArithmetic tau) := by
+  exact ArithmeticFunction.isMultiplicative_moebius.mul
+    (isMultiplicative_nativeGprePowerArithmetic tau)
 
 end
 
