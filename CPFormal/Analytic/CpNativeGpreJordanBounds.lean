@@ -59,6 +59,14 @@ theorem nativeGpreJordanArithmetic_prime_pow_succ
     nativeGpreJordanArithmetic tau 1 = 1 :=
   (isMultiplicative_nativeGpreJordanArithmetic tau).map_one
 
+/-- O perfil bruto cresce ao subir um nivel de uma torre prima. -/
+theorem nativeGprePrimePowerProfile_mono
+    (p tau i : ℕ) (hp : p.Prime) :
+    (((p ^ i : ℕ) : ℤ) ^ (2 * tau)) ≤
+      (((p ^ (i + 1) : ℕ) : ℤ) ^ (2 * tau)) := by
+  exact_mod_cast Nat.pow_le_pow_left
+    ((Nat.pow_le_pow_iff_right hp.one_lt).2 (Nat.le_succ i)) (2 * tau)
+
 end
 
 end CPFormal.Analytic.Cp
