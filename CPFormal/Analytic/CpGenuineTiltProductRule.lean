@@ -238,7 +238,7 @@ theorem realCpPairBracket_eq_weightedTiltPair_add_carrier
   have hright : 0 < center + (radius : ℝ) :=
     lt_of_lt_of_le hcenter (le_add_of_nonneg_right hradiusNonneg)
   simpa [realCpPairBracket, localDirichletProfile, center,
-    CPFormal.centeredSecondDifference] using
+    CPFormal.centeredSecondDifference, sub_eq_add_neg] using
     (centeredSecondDifference_localDirichletProfile_eq_weightedTilt_add_carrier
       s hleft hcenter hright)
 
@@ -273,12 +273,16 @@ theorem realCpSaturatedBracket_three_eq_weightedTilt_add_carrierRemainder
     realCpSaturatedBracket 3 k s =
       canonicalCriticalWeightedTiltBlock k s +
         canonicalCriticalCarrierRemainderBlock k s := by
-  have hpair := realCpPairBracket_eq_weightedTiltPair_add_carrier
-    3 1 k (by norm_num) (by norm_num) s
-  simpa [realCpSaturatedBracket, CPFormal.Genuine.Cp.halfRange,
-    canonicalCriticalWeightedTiltBlock,
-    canonicalCriticalCarrierRemainderBlock,
-    canonicalRealCpCenter, cpTilt_three_eq_cpPairTilt_one] using hpair
+  rw [show realCpSaturatedBracket 3 k s =
+      realCpPairBracket 3 1 k s by
+    simp [realCpSaturatedBracket, CPFormal.Genuine.Cp.halfRange]]
+  rw [realCpPairBracket_eq_weightedTiltPair_add_carrier
+    3 1 k (by norm_num)
+      (by norm_num [CPFormal.Genuine.Cp.halfRange]) s]
+  unfold canonicalCriticalWeightedTiltBlock
+    canonicalCriticalCarrierRemainderBlock canonicalRealCpCenter
+  rw [cpTilt_three_eq_cpPairTilt_one]
+  ring
 
 /-!
 ## Ledger finito e leitura de um zero Genuine
