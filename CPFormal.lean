@@ -61,6 +61,7 @@ import CPFormal.Analytic.CpFiniteTfvdLogJetResidualAsymptotics
 import CPFormal.Analytic.CpFiniteTfvdLogJetResidualReflection
 import CPFormal.Analytic.CpFiniteTfvdLogJetCriticalLineTraces
 import CPFormal.Analytic.CpFiniteTfvdLogJetCriticalPhaseFan
+import CPFormal.Analytic.CpRealSpectralOperator
 import CPFormal.Analytic.CpFiniteGenuineAngularGreenBudget
 import CPFormal.Analytic.CpFiniteGenuineOneSidedGreenBudget
 import CPFormal.Analytic.CpGenuineSecondDifferenceIdentity
