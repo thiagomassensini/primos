@@ -142,8 +142,8 @@ noncomputable def finiteRealSpectralEvolution (N : ℕ) (t : ℝ) :
     simp only [finiteRealSpectralEvolutionLinearEquiv_apply,
       RCLike.inner_apply, map_mul, conj_finiteRealSpectralPhase]
     calc
-      finiteRealSpectralPhase t n *
-          (y n * (finiteRealSpectralPhase (-t) n * (starRingEnd ℂ) (x n))) =
+      finiteRealSpectralPhase t n * y n *
+          (finiteRealSpectralPhase (-t) n * (starRingEnd ℂ) (x n)) =
         (finiteRealSpectralPhase t n * finiteRealSpectralPhase (-t) n) *
           (y n * (starRingEnd ℂ) (x n)) := by ring
       _ = y n * (starRingEnd ℂ) (x n) := by
