@@ -73,7 +73,8 @@ def nativeGpreFiniteTfvdVisibleFlux
   change
     nativeGpreFiniteTfvdVisibleReadout q hqpos.le hq1 S observer
       (nativeGpreFiniteTfvdAnalysis q S (z • x)) = z * observer x
-  rw [nativeGpreFiniteTfvdVisibleReadout_analysis]
+  rw [nativeGpreFiniteTfvdVisibleReadout_analysis
+    q hqpos hq1 S observer (z • x)]
   simpa using observer.map_smul z x
 
 /-- Pencil regular da compressao visivel de uma orbita nativa. -/
@@ -115,7 +116,8 @@ theorem nativeGpreFiniteTfvdVisible_isCharacteristicValue_iff
     change
       nativeGpreFiniteTfvdVisibleFlux q hqpos.le hq1 S observer x z -
         lambda * z = 0 at hzero
-    rw [nativeGpreFiniteTfvdVisibleFlux_apply] at hzero
+    rw [nativeGpreFiniteTfvdVisibleFlux_apply
+      q hqpos hq1 S observer x z] at hzero
     have hmul : (observer x - lambda) * z = 0 := by
       calc
         (observer x - lambda) * z =
@@ -127,11 +129,13 @@ theorem nativeGpreFiniteTfvdVisible_isCharacteristicValue_iff
   · intro hlambda
     subst lambda
     refine ⟨1, ?_, ?_⟩
-    · norm_num
+    · change (1 : ℂ) ≠ 0
+      norm_num
     · change
         nativeGpreFiniteTfvdVisibleFlux q hqpos.le hq1 S observer x 1 -
           observer x * 1 = 0
-      rw [nativeGpreFiniteTfvdVisibleFlux_apply]
+      rw [nativeGpreFiniteTfvdVisibleFlux_apply
+        q hqpos hq1 S observer x 1]
       ring
 
 /-- Zero e caracteristico exatamente quando a compressao visivel fecha. -/
@@ -159,8 +163,7 @@ theorem nativeGpreFiniteTfvdVisibleBoundaryRelation_isClosed
         q hqpos.le hq1 S observer x).toLinearBoundaryPencil.relation :
           Set (ℂ × ℂ))) :=
   ((nativeGpreFiniteTfvdVisibleBoundaryPencil
-    q hqpos.le hq1 S observer x).toLinearBoundaryPencil.relation).
-      closed_of_finiteDimensional
+    q hqpos.le hq1 S observer x).toLinearBoundaryPencil.relation).closed_of_finiteDimensional
 
 end
 
