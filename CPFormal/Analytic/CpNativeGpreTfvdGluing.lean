@@ -114,14 +114,14 @@ def nativeGpreTfvdProductBoundaryPencil (q : ℝ) :
 /-- A projecao escalar do operador de produto e o operador TFVD livre. -/
 @[simp] theorem nativeGpreTfvdProductBoundaryPencil_operator_fst
     (q : ℝ) (lambda : ℂ) (state : NativeGpreTfvdProductState) :
-    (nativeGpreTfvdProductBoundaryPencil q).operator lambda state |>.1 =
+    ((nativeGpreTfvdProductBoundaryPencil q).operator lambda state).1 =
       (carryWeightedVerticalBoundaryPencil q).operator lambda state.1 := by
   rfl
 
 /-- A projecao de proveniencia e o operador do pencil `G_pre`. -/
 @[simp] theorem nativeGpreTfvdProductBoundaryPencil_operator_snd
     (q : ℝ) (lambda : ℂ) (state : NativeGpreTfvdProductState) :
-    (nativeGpreTfvdProductBoundaryPencil q).operator lambda state |>.2 =
+    ((nativeGpreTfvdProductBoundaryPencil q).operator lambda state).2 =
       nativeGpreProvenanceBoundaryPencil.operator lambda state.2 := by
   rfl
 
@@ -172,7 +172,9 @@ theorem nativeGpreTfvdProduct_operator_eq_zero_forces_level
     lambda = (c.towerLevel.val : ℂ) := by
   have hsnd := congrArg Prod.snd hzero
   have hgpre : nativeGpreProvenanceBoundaryPencil.operator lambda state.2 = 0 := by
-    simpa using hsnd
+    change nativeGpreBoundaryNumberFluxLift state.2 -
+      lambda • nativeGpreBoundaryValueLift state.2 = 0
+    exact hsnd
   exact nativeGpreProvenanceBoundaryPencil_operator_eq_zero_forces_level
     lambda state.2 hgpre c hactive
 
