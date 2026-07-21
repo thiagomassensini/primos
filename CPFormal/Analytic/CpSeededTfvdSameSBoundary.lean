@@ -150,6 +150,7 @@ theorem finiteSeededEnrichedTfvdGenuineReadout_canonicalLogJet
     finiteEnrichedTfvdGenuineBracketReadout
     finiteCanonicalLogBracketChart
   dsimp
+  rw [zero_add]
   apply Finset.sum_congr rfl
   intro m hm
   exact enrichedTfvdGenuineBracketReadout_canonicalLogJet
