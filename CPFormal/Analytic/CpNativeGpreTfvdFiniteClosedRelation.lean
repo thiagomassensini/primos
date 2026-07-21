@@ -31,29 +31,31 @@ abbrev NativeGpreFiniteBoundaryCarrier
     (S : Finset NativeGpreBoundaryContext) :=
   (c : ↥S) → ℂ
 
+/-- Restricao linear do carrier integral ao atlas finito `S`. -/
+def nativeGpreFiniteBoundaryRestriction
+    (S : Finset NativeGpreBoundaryContext) :
+    NativeGpreBoundaryCarrier →ₗ[ℂ] NativeGpreFiniteBoundaryCarrier S where
+  toFun y c := y c.1
+  map_add' _ _ := rfl
+  map_smul' _ _ := rfl
+
+@[simp] theorem nativeGpreFiniteBoundaryRestriction_apply
+    (S : Finset NativeGpreBoundaryContext)
+    (y : NativeGpreBoundaryCarrier) (c : ↥S) :
+    nativeGpreFiniteBoundaryRestriction S y c = y c.1 := rfl
+
 /-- Traco de valor `G_pre` restrito ao atlas `S`. -/
 def nativeGpreFiniteBoundaryValueLift
     (S : Finset NativeGpreBoundaryContext) :
-    NativeGpreComplexEdgeCore →ₗ[ℂ] NativeGpreFiniteBoundaryCarrier S where
-  toFun x c := nativeGpreBoundaryValueLift x c.1
-  map_add' x y := by
-    funext c
-    ring
-  map_smul' a x := by
-    funext c
-    ring
+    NativeGpreComplexEdgeCore →ₗ[ℂ] NativeGpreFiniteBoundaryCarrier S :=
+  (nativeGpreFiniteBoundaryRestriction S).comp nativeGpreBoundaryValueLift
 
 /-- Traco de fluxo numero restrito ao mesmo atlas. -/
 def nativeGpreFiniteBoundaryNumberFluxLift
     (S : Finset NativeGpreBoundaryContext) :
-    NativeGpreComplexEdgeCore →ₗ[ℂ] NativeGpreFiniteBoundaryCarrier S where
-  toFun x c := nativeGpreBoundaryNumberFluxLift x c.1
-  map_add' x y := by
-    funext c
-    ring
-  map_smul' a x := by
-    funext c
-    ring
+    NativeGpreComplexEdgeCore →ₗ[ℂ] NativeGpreFiniteBoundaryCarrier S :=
+  (nativeGpreFiniteBoundaryRestriction S).comp
+    nativeGpreBoundaryNumberFluxLift
 
 @[simp] theorem nativeGpreFiniteBoundaryValueLift_apply
     (S : Finset NativeGpreBoundaryContext)
