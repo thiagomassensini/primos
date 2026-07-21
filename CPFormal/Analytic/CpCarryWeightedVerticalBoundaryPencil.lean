@@ -153,12 +153,16 @@ theorem carryWeightedVerticalBoundaryRelation_eq_top
       (carryWeightedVerticalBoundaryPencil q).fluxTrace)
   refine ⟨carryWeightedVerticalReturn q hqpos.le hq1 (a, b), ?_⟩
   apply Prod.ext
-  · simpa [carryWeightedVerticalBoundaryPencil] using
-      carryWeightedVerticalBoundaryValueTrace_return
-        q hqpos hq1 (a, b)
-  · simpa [carryWeightedVerticalBoundaryPencil] using
-      carryWeightedVerticalBoundaryFluxTrace_return
-        q hqpos hq1 (a, b)
+  · change
+      carryWeightedVerticalBoundaryValueTrace q
+          (carryWeightedVerticalReturn q hqpos.le hq1 (a, b)) = a
+    exact carryWeightedVerticalBoundaryValueTrace_return
+      q hqpos hq1 (a, b)
+  · change
+      carryWeightedVerticalBoundaryFluxTrace q
+          (carryWeightedVerticalReturn q hqpos.le hq1 (a, b)) = b
+    exact carryWeightedVerticalBoundaryFluxTrace_return
+      q hqpos hq1 (a, b)
 
 /-- A relacao livre e fechada. -/
 theorem carryWeightedVerticalBoundaryRelation_isClosed
