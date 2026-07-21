@@ -217,7 +217,11 @@ theorem finiteCanonicalSeededTfvdSameSBoundaryForm_eq_green_add_provenance
         (∑ n ∈ Finset.range (3 * M),
           canonicalOrientedCpGreenEdge p n s) +
           finiteCanonicalTfvdSameSGreenProvenanceDefect p M s := by
-      rw [sum_range_threeBlocks_eq_range]
+      apply congrArg
+        (fun z : ℂ ↦
+          z + finiteCanonicalTfvdSameSGreenProvenanceDefect p M s)
+      exact sum_range_threeBlocks_eq_range
+        (fun n ↦ canonicalOrientedCpGreenEdge p n s) M
     _ = finiteOrientedCpGreenFlux p (3 * M) s +
           finiteCanonicalTfvdSameSGreenProvenanceDefect p M s := by
       rw [sum_range_canonicalOrientedCpGreenEdge_eq_finiteOrientedCpGreenFlux]
@@ -276,8 +280,9 @@ theorem finiteCanonicalSeededTfvdGreen_signed_identity
   have h := congrArg Complex.re
     (finiteCanonicalSeededTfvdGreen_identity
       p hp M hkappa omega homega s)
+  simp only [Complex.add_re] at h
   rw [finiteCanonicalTfvdCoupledGenuineGreenFlux_re] at h
-  simpa only [Complex.add_re] using h
+  exact h
 
 /-- O endpoint da 0.49 ja herda o fechamento Genuine certificado. A unica
 parcela nova a ser analisada no checkpoint seguinte e a projecao radial dos
