@@ -74,9 +74,12 @@ def carryWeightedVerticalCenteredBracketCore (q : ℝ) :
     carryWeightedVerticalCenteredBracketCore q x n =
       (q : ℂ)⁻¹ * x (n + 1) - 2 * x n +
         (q : ℂ) * (if 1 ≤ n then x (n - 1) else 0) := by
-  by_cases hn : 1 ≤ n
-  · simp [carryWeightedVerticalCenteredBracketCore, hn]
-  · simp [carryWeightedVerticalCenteredBracketCore, hn]
+  change
+    (q : ℂ)⁻¹ * x (n + 1) - 2 * x n +
+        (q : ℂ) * (carryVerticalL2UnilateralShift 1 x n) =
+      (q : ℂ)⁻¹ * x (n + 1) - 2 * x n +
+        (q : ℂ) * (if 1 ≤ n then x (n - 1) else 0)
+  rw [carryVerticalL2UnilateralShift_apply]
 
 /-- Bracket vestido: a coordenada zero pertence ao reservatorio de bordo e o
 interior comeca na primeira camada positiva. -/
