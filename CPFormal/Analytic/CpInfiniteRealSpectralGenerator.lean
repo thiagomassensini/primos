@@ -59,7 +59,15 @@ def infiniteRealSpectralMaximalDomain :
       (fun n => (infiniteRealSpectralFrequency n : ℂ) * y n) 2 at hy
     change Memℓp
       (fun n => (infiniteRealSpectralFrequency n : ℂ) * (x + y) n) 2
-    simpa only [lp.coeFn_add, Pi.add_apply, mul_add] using hx.add hy
+    have hfun :
+        (fun n => (infiniteRealSpectralFrequency n : ℂ) * (x + y) n) =
+          (fun n => (infiniteRealSpectralFrequency n : ℂ) * x n) +
+            fun n => (infiniteRealSpectralFrequency n : ℂ) * y n := by
+      funext n
+      rw [Pi.add_apply, lp.coeFn_add]
+      ring
+    rw [hfun]
+    exact hx.add hy
   smul_mem' c x hx := by
     change Memℓp
       (fun n => (infiniteRealSpectralFrequency n : ℂ) * x n) 2 at hx
@@ -162,9 +170,10 @@ def infiniteRealSpectralHilbertBasis :
 @[simp] theorem infiniteRealSpectralHilbertBasis_apply (n : ℕ) :
     infiniteRealSpectralHilbertBasis n =
       infiniteRealSpectralBasisVector n := by
-  simpa [infiniteRealSpectralHilbertBasis,
-    infiniteRealSpectralBasisVector] using
-      (infiniteRealSpectralHilbertBasis.repr_symm_single n).symm
+  rw [← infiniteRealSpectralHilbertBasis.repr_symm_single n]
+  apply infiniteRealSpectralHilbertBasis.repr.injective
+  simp [infiniteRealSpectralHilbertBasis,
+    infiniteRealSpectralBasisVector]
 
 /-- O dominio maximal e denso porque contem a base canonica. -/
 theorem infiniteRealSpectralGenerator_dense_domain :
