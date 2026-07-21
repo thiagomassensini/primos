@@ -1,4 +1,5 @@
 import CPFormal.Analytic.CpGenuineSecondDifferenceIdentity
+import CPFormal.Analytic.CpBracketGreenBoundary
 
 /-!
 # Regra de produto entre o bracket Genuine e o tilt transversal
@@ -199,6 +200,154 @@ theorem centeredSecondDifference_localDirichletProfile_eq_weightedTilt_add_carri
       dsimp [carrier, radial, localCriticalCarrierCurvature,
         localCriticalCarrierCross]
       ring
+
+/-!
+## Especializacao aos blocos aritmeticos Genuine
+-/
+
+/--
+Cada par real da camera Genuine possui a mesma decomposicao em quatro canais.
+O limite esquerdo permanece positivo para todo raio admissivel da camera.
+-/
+theorem realCpPairBracket_eq_weightedTiltPair_add_carrier
+    (p radius k : ℕ) (hp : Nat.Prime p)
+    (hradius : radius ≤ CPFormal.Genuine.Cp.halfRange p)
+    (s : ℂ) :
+    realCpPairBracket p radius k s =
+      localCriticalLineCarrier s
+          ((p : ℝ) * ((k + 1 : ℕ) : ℝ)) 0 *
+        (cpPairTilt (criticalDisplacement s.re)
+          ((p : ℝ) * ((k + 1 : ℕ) : ℝ)) (radius : ℤ) : ℂ) +
+      localCriticalCarrierCurvature s
+        ((p : ℝ) * ((k + 1 : ℕ) : ℝ)) (radius : ℤ) +
+      localCriticalCarrierCross s
+        ((p : ℝ) * ((k + 1 : ℕ) : ℝ)) (radius : ℤ) := by
+  let center : ℝ := (p : ℝ) * ((k + 1 : ℕ) : ℝ)
+  have hkpos : 0 < ((k + 1 : ℕ) : ℝ) := by positivity
+  have hleftBound :
+      ((k + 1 : ℕ) : ℝ) ≤ center - (radius : ℝ) := by
+    simpa [center] using
+      (natCast_add_one_le_alignedCenter_sub_radius hp hradius)
+  have hleft : 0 < center - (radius : ℝ) :=
+    lt_of_lt_of_le hkpos hleftBound
+  have hpReal : 0 < (p : ℝ) := by exact_mod_cast hp.pos
+  have hcenter : 0 < center := by
+    dsimp [center]
+    exact mul_pos hpReal hkpos
+  have hradiusNonneg : 0 ≤ (radius : ℝ) := by positivity
+  have hright : 0 < center + (radius : ℝ) :=
+    lt_of_lt_of_le hcenter (le_add_of_nonneg_right hradiusNonneg)
+  simpa [realCpPairBracket, localDirichletProfile, center,
+    CPFormal.centeredSecondDifference] using
+    (centeredSecondDifference_localDirichletProfile_eq_weightedTilt_add_carrier
+      s hleft hcenter hright)
+
+/-- Na camera canonica, o tilt inteiro e o unico par de raio `1`. -/
+theorem cpTilt_three_eq_cpPairTilt_one
+    (delta center : ℝ) :
+    cpTilt 3 delta center = cpPairTilt delta center 1 := by
+  rw [cpTilt_eq_saturatedBracket 3 (by norm_num) (by norm_num)]
+  simpa [CPFormal.saturatedBracket, CPFormal.Genuine.Cp.halfRange] using
+    (cpPairTilt_eq_centeredSecondDifference delta center 1).symm
+
+/-- Centro real do `k`-esimo bloco da camera canonica `p = 3`. -/
+def canonicalRealCpCenter (k : ℕ) : ℝ :=
+  (3 : ℝ) * ((k + 1 : ℕ) : ℝ)
+
+/-- Parcela de tilt ponderada pelo carrier critico na camera canonica. -/
+def canonicalCriticalWeightedTiltBlock (k : ℕ) (s : ℂ) : ℂ :=
+  localCriticalLineCarrier s (canonicalRealCpCenter k) 0 *
+    (cpTilt 3 (criticalDisplacement s.re) (canonicalRealCpCenter k) : ℂ)
+
+/-- Curvatura do carrier e cruzamentos no unico raio da camera canonica. -/
+def canonicalCriticalCarrierRemainderBlock (k : ℕ) (s : ℂ) : ℂ :=
+  localCriticalCarrierCurvature s (canonicalRealCpCenter k) 1 +
+    localCriticalCarrierCross s (canonicalRealCpCenter k) 1
+
+/--
+Cada bloco Genuine canonico e tilt ponderado mais o remainder de carrier.
+Esta igualdade usa o monomio completo `n^(-s)` no lado esquerdo.
+-/
+theorem realCpSaturatedBracket_three_eq_weightedTilt_add_carrierRemainder
+    (k : ℕ) (s : ℂ) :
+    realCpSaturatedBracket 3 k s =
+      canonicalCriticalWeightedTiltBlock k s +
+        canonicalCriticalCarrierRemainderBlock k s := by
+  have hpair := realCpPairBracket_eq_weightedTiltPair_add_carrier
+    3 1 k (by norm_num) (by norm_num) s
+  simpa [realCpSaturatedBracket, CPFormal.Genuine.Cp.halfRange,
+    canonicalCriticalWeightedTiltBlock,
+    canonicalCriticalCarrierRemainderBlock,
+    canonicalRealCpCenter, cpTilt_three_eq_cpPairTilt_one] using hpair
+
+/-!
+## Ledger finito e leitura de um zero Genuine
+-/
+
+/-- Soma finita dos tilts ponderados pelos carriers criticos. -/
+def finiteCanonicalCriticalWeightedTiltTrace (M : ℕ) (s : ℂ) : ℂ :=
+  ∑ k ∈ Finset.range M, canonicalCriticalWeightedTiltBlock k s
+
+/-- Soma finita dos canais de curvatura e cruzamento do carrier. -/
+def finiteCanonicalCriticalCarrierRemainderTrace
+    (M : ℕ) (s : ℂ) : ℂ :=
+  ∑ k ∈ Finset.range M, canonicalCriticalCarrierRemainderBlock k s
+
+/--
+Ledger `same-s` finito: o traco bracketado canonico separa exatamente o tilt
+ponderado e o remainder do carrier, antes de qualquer sintese escalar.
+-/
+theorem finiteCanonicalBracketTrace_eq_weightedTilt_add_carrierRemainder
+    (M : ℕ) (s : ℂ) :
+    finiteCanonicalBracketTrace M s =
+      finiteCanonicalCriticalWeightedTiltTrace M s +
+        finiteCanonicalCriticalCarrierRemainderTrace M s := by
+  unfold finiteCanonicalBracketTrace
+    finiteCanonicalCriticalWeightedTiltTrace
+    finiteCanonicalCriticalCarrierRemainderTrace
+  calc
+    (∑ k ∈ Finset.range M, realCpSaturatedBracket 3 k s) =
+        ∑ k ∈ Finset.range M,
+          (canonicalCriticalWeightedTiltBlock k s +
+            canonicalCriticalCarrierRemainderBlock k s) := by
+      apply Finset.sum_congr rfl
+      intro k hk
+      exact
+        realCpSaturatedBracket_three_eq_weightedTilt_add_carrierRemainder
+          k s
+    _ = (∑ k ∈ Finset.range M,
+          canonicalCriticalWeightedTiltBlock k s) +
+        ∑ k ∈ Finset.range M,
+          canonicalCriticalCarrierRemainderBlock k s := by
+      exact Finset.sum_add_distrib
+
+/--
+Num zero Genuine, o ledger `tilt ponderado + carrier` converge exatamente a
+`-1`. Esta e a equacao global realmente fornecida pelo zero; separar o tilt
+do remainder requer uma estimativa nova e nao uma simplificacao algebrica.
+-/
+theorem finiteCanonicalWeightedTilt_add_carrierRemainder_tendsto_neg_one_of_genuine_zero
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip)
+    (hzero : genuineContinuation s = 0) :
+    Filter.Tendsto
+      (fun M : ℕ ↦
+        finiteCanonicalCriticalWeightedTiltTrace M s +
+          finiteCanonicalCriticalCarrierRemainderTrace M s)
+      Filter.atTop (nhds (-1)) := by
+  have hsum :=
+    (summable_realCpSaturatedBracket 3 (by norm_num)
+      (by linarith [hs.1])).tendsto_sum_tsum_nat
+  have htrace : canonicalBracketTrace s = -1 :=
+    canonicalBracketTrace_eq_neg_one_of_genuineContinuation_zero hs hzero
+  have hfinite :
+      Filter.Tendsto
+        (fun M : ℕ ↦ finiteCanonicalBracketTrace M s)
+        Filter.atTop (nhds (canonicalBracketTrace s)) := by
+    simpa [finiteCanonicalBracketTrace, canonicalBracketTrace] using hsum
+  rw [htrace] at hfinite
+  simpa only
+    [finiteCanonicalBracketTrace_eq_weightedTilt_add_carrierRemainder]
+    using hfinite
 
 end
 
