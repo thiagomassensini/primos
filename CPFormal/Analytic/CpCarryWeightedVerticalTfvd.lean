@@ -78,6 +78,35 @@ theorem carryVerticalL2WeightedGreen_apply
   simp [carryWeightedVerticalGreenTerm, carryVerticalL2ShiftFamily,
     carryVerticalL2UnilateralShift_apply, hrle]
 
+/-- A mesma formula, agora indexada pela coordenada de entrada `j`. -/
+theorem carryVerticalL2WeightedGreen_apply_reindexed
+    (q : ℝ) (hq0 : 0 ≤ q) (hq1 : q < 1)
+    (x : CarryVerticalL2) (n : ℕ) :
+    carryVerticalL2WeightedGreen q x n =
+      ∑ j ∈ Finset.range (n + 1),
+        (carryWeightedVerticalGreenKernel q (n - j) : ℂ) * x j := by
+  rw [carryVerticalL2WeightedGreen_apply q hq0 hq1]
+  calc
+    (∑ r ∈ Finset.range (n + 1),
+        (carryWeightedVerticalGreenKernel q r : ℂ) * x (n - r)) =
+      ∑ r ∈ Finset.range (n + 1),
+        (carryWeightedVerticalGreenKernel q
+            (n - (n + 1 - 1 - r)) : ℂ) *
+          x (n + 1 - 1 - r) := by
+        apply Finset.sum_congr rfl
+        intro r hr
+        have hrlt : r < n + 1 := Finset.mem_range.mp hr
+        have hrle : r ≤ n := by omega
+        have hleft : n + 1 - 1 - r = n - r := by omega
+        have hright : n - (n - r) = r := by omega
+        rw [hleft, hright]
+    _ = ∑ j ∈ Finset.range (n + 1),
+        (carryWeightedVerticalGreenKernel q (n - j) : ℂ) * x j :=
+      Finset.sum_range_reflect
+        (fun j =>
+          (carryWeightedVerticalGreenKernel q (n - j) : ℂ) * x j)
+        (n + 1)
+
 end
 
 end CPFormal.Analytic.Cp
