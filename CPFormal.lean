@@ -78,6 +78,7 @@ import CPFormal.Analytic.CpNativeGpreTfvdGluing
 import CPFormal.Analytic.CpNativeGpreTfvdCanonicalGluing
 import CPFormal.Analytic.CpNativeGpreTfvdFiniteClosedRelation
 import CPFormal.Analytic.CpNativeGpreTfvdCutoffCompatibility
+import CPFormal.Analytic.CpNativeGpreTfvdAnalysis
 import CPFormal.Analytic.CpFiniteGenuineAngularGreenBudget
 import CPFormal.Analytic.CpFiniteGenuineOneSidedGreenBudget
 import CPFormal.Analytic.CpGenuineSecondDifferenceIdentity
