@@ -55,6 +55,7 @@ import CPFormal.Analytic.CpFiniteSeededTfvdGreenIdentity
 import CPFormal.Analytic.CpGpreTypes
 import CPFormal.Analytic.CpNativeGpreTowerLift
 import CPFormal.Analytic.CpNativeGpreTowerNorm
+import CPFormal.Analytic.CpNativeGpreJordanBounds
 import CPFormal.Analytic.CpQtildeProvenanceContinuity
 import CPFormal.Analytic.CpFiniteTfvdLogJetResidualAsymptotics
 import CPFormal.Analytic.CpFiniteTfvdLogJetResidualReflection
