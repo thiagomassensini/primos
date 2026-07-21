@@ -391,7 +391,7 @@ theorem seededTfvdGreenRadialClosureAt_iff_coupledGreenFlux_tendsto_zero_of_genu
         finiteCanonicalSeededTfvdGreenRadialClosureObservable
           p M kappa omega s)
       atTop (nhds 0)
-    simpa only [hpoint] using hsum
+    simpa only [hpoint, zero_add] using hsum
 
 end
 
