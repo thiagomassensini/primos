@@ -84,7 +84,7 @@ theorem primeCarryWeightedVerticalTfvd_identity
     primeCarryWeightedVerticalTrace] using
       carryWeightedVerticalTfvd_identity
         (primeCarryAmplitudeRatio p)
-        (primeCarryAmplitudeRatio_pos p (le_trans Nat.one_le_two hp))
+        (primeCarryAmplitudeRatio_pos p (by omega))
         (primeCarryAmplitudeRatio_lt_one p hp)
 
 end
