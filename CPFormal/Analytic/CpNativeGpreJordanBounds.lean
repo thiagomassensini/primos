@@ -4,8 +4,9 @@ import CPFormal.Analytic.CpNativeGpreTowerNorm
 # Cotas aritmeticas nativas para o lift G_pre
 
 Este modulo continua a construcao concreta da torre nativa. A primeira camada
-identifica o canal Jordan como uma funcao multiplicativa e calcula seu valor
-em potencias primas. Nenhuma hipotese espectral ou lei Green entra aqui.
+identifica o canal Jordan como uma funcao multiplicativa, calcula seu valor
+em potencias primas e prova sua positividade global. Nenhuma hipotese espectral
+ou lei Green entra aqui.
 -/
 
 open scoped BigOperators ArithmeticFunction.zeta ArithmeticFunction.Moebius
@@ -66,6 +67,29 @@ theorem nativeGprePrimePowerProfile_mono
       (((p ^ (i + 1) : ℕ) : ℤ) ^ (2 * tau)) := by
   exact_mod_cast Nat.pow_le_pow_left
     ((Nat.pow_le_pow_iff_right hp.one_lt).2 (Nat.le_succ i)) (2 * tau)
+
+/-- O canal Jordan e nao negativo em toda potencia prima. -/
+theorem nativeGpreJordanArithmetic_prime_pow_nonneg
+    (p tau i : ℕ) (hp : p.Prime) :
+    0 ≤ nativeGpreJordanArithmetic tau (p ^ i) := by
+  cases i with
+  | zero => simp
+  | succ i =>
+      rw [nativeGpreJordanArithmetic_prime_pow_succ p tau i hp]
+      exact sub_nonneg.mpr (nativeGprePrimePowerProfile_mono p tau i hp)
+
+/-- Positividade global do canal Jordan, obtida pela fatoracao multiplicativa
+em potencias primas. -/
+theorem nativeGpreJordanArithmetic_nonneg (tau n : ℕ) :
+    0 ≤ nativeGpreJordanArithmetic tau n := by
+  rcases eq_or_ne n 0 with rfl | hn
+  · simp
+  · simpa only [
+      (isMultiplicative_nativeGpreJordanArithmetic tau).multiplicative_factorization
+        _ hn] using!
+      Finset.prod_nonneg fun p hp_mem =>
+        nativeGpreJordanArithmetic_prime_pow_nonneg p tau _
+          (Nat.prime_of_mem_primeFactors hp_mem)
 
 end
 
