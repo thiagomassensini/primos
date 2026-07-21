@@ -92,8 +92,7 @@ theorem carryVerticalL2BackwardShift_single (r k : ℕ) :
     simp [carryVerticalL2BackwardShift_apply, lp.single_apply,
       Pi.single_apply, hrk, hiff]
   · have hne : n + r ≠ k := by omega
-    simp [carryVerticalL2BackwardShift_apply, lp.single_apply,
-      Pi.single_apply, hrk, hne]
+    simp [carryVerticalL2BackwardShift_apply, lp.single_apply, hrk, hne]
 
 /-- Shift unilateral causal, definido como adjunto do tail-shift. -/
 def carryVerticalL2UnilateralShift (r : ℕ) :
