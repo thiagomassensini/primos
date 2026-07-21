@@ -30,7 +30,7 @@ def nativeGpreFiniteContextEmbedding
   toFun c := ⟨c.1, hST c.2⟩
   inj' c d h := by
     apply Subtype.ext
-    exact congrArg Subtype.val h
+    exact congrArg (fun z : ↥T => z.1) h
 
 @[simp] theorem nativeGpreFiniteContextEmbedding_val
     {S T : Finset NativeGpreBoundaryContext} (hST : S ⊆ T)
@@ -143,9 +143,20 @@ theorem nativeGpreFiniteCanonicalTfvdOperator_zero_mono
 def nativeGpreFiniteTfvdRelationRestriction
     {S T : Finset NativeGpreBoundaryContext} (hST : S ⊆ T) :
     (NativeGpreFiniteTfvdBoundary T × NativeGpreFiniteTfvdBoundary T) →ₗ[ℂ]
-      (NativeGpreFiniteTfvdBoundary S × NativeGpreFiniteTfvdBoundary S) :=
-  (nativeGpreFiniteTfvdBoundaryRestriction hST).prod
-    (nativeGpreFiniteTfvdBoundaryRestriction hST)
+      (NativeGpreFiniteTfvdBoundary S × NativeGpreFiniteTfvdBoundary S) where
+  toFun boundary :=
+    (nativeGpreFiniteTfvdBoundaryRestriction hST boundary.1,
+      nativeGpreFiniteTfvdBoundaryRestriction hST boundary.2)
+  map_add' _ _ := rfl
+  map_smul' _ _ := rfl
+
+@[simp] theorem nativeGpreFiniteTfvdRelationRestriction_apply
+    {S T : Finset NativeGpreBoundaryContext} (hST : S ⊆ T)
+    (boundary : NativeGpreFiniteTfvdBoundary T ×
+      NativeGpreFiniteTfvdBoundary T) :
+    nativeGpreFiniteTfvdRelationRestriction hST boundary =
+      (nativeGpreFiniteTfvdBoundaryRestriction hST boundary.1,
+        nativeGpreFiniteTfvdBoundaryRestriction hST boundary.2) := rfl
 
 /-- A relacao de um cutoff maior projeta exatamente a uma relacao do cutoff
 menor. -/
