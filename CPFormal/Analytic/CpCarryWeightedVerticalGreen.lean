@@ -145,10 +145,11 @@ def primeCarryWeightedVerticalGreenKernel (p : ℕ) (r : ℕ) : ℝ :=
 theorem primeCarryWeightedVerticalGreenKernel_summable
     (p : ℕ) (hp : 2 ≤ p) :
     Summable (primeCarryWeightedVerticalGreenKernel p) := by
-  simpa [primeCarryWeightedVerticalGreenKernel] using
-    carryWeightedVerticalGreenKernel_summable
-      (primeCarryAmplitudeRatio_nonneg p)
-      (primeCarryAmplitudeRatio_lt_one p hp)
+  change Summable
+    (carryWeightedVerticalGreenKernel (primeCarryAmplitudeRatio p))
+  exact carryWeightedVerticalGreenKernel_summable
+    (primeCarryAmplitudeRatio_nonneg p)
+    (primeCarryAmplitudeRatio_lt_one p hp)
 
 /-- Uma realizacao vertical e uma familia de shifts que nao aumentam norma.
 A lei de semigrupo sera adicionada somente quando for necessaria para a
@@ -235,11 +236,13 @@ theorem primeCarryWeightedVerticalGreen_norm_le_kernelMass
     (S : CarryVerticalShiftFamily H) (p : ℕ) (hp : 2 ≤ p) :
     ‖primeCarryWeightedVerticalGreen S p‖ ≤
       ∑' r : ℕ, primeCarryWeightedVerticalGreenKernel p r := by
-  simpa [primeCarryWeightedVerticalGreen,
-    primeCarryWeightedVerticalGreenKernel] using
-    carryWeightedVerticalGreen_norm_le_kernelMass S
-      (primeCarryAmplitudeRatio_nonneg p)
-      (primeCarryAmplitudeRatio_lt_one p hp)
+  change
+    ‖carryWeightedVerticalGreen S (primeCarryAmplitudeRatio p)‖ ≤
+      ∑' r : ℕ,
+        carryWeightedVerticalGreenKernel (primeCarryAmplitudeRatio p) r
+  exact carryWeightedVerticalGreen_norm_le_kernelMass S
+    (primeCarryAmplitudeRatio_nonneg p)
+    (primeCarryAmplitudeRatio_lt_one p hp)
 
 /-- Corte finito da mesma serie. Ele usa exatamente o mesmo nucleo que o
 operador infinito, sem renormalizacao dependente de `N`. -/
