@@ -101,6 +101,55 @@ theorem carryWeightedVerticalGreenKernel_summable
   simpa [carryWeightedVerticalGreenKernel, Real.norm_eq_abs,
     abs_of_nonneg hq0, abs_of_nonneg ha0] using hn
 
+/-- Razao canonica entre amplitudes consecutivas na fibra de base `p`. -/
+def primeCarryAmplitudeRatio (p : ℕ) : ℝ :=
+  (Real.sqrt (p : ℝ))⁻¹
+
+theorem primeCarryAmplitudeRatio_nonneg (p : ℕ) :
+    0 ≤ primeCarryAmplitudeRatio p := by
+  unfold primeCarryAmplitudeRatio
+  positivity
+
+/-- Para toda base material `p ≥ 2`, a razao de amplitude e estritamente
+contrativa. -/
+theorem primeCarryAmplitudeRatio_lt_one
+    (p : ℕ) (hp : 2 ≤ p) :
+    primeCarryAmplitudeRatio p < 1 := by
+  have hpR : (1 : ℝ) < (p : ℝ) := by
+    exact_mod_cast (lt_of_lt_of_le Nat.one_lt_two hp)
+  have hp0 : (0 : ℝ) ≤ (p : ℝ) := by positivity
+  have hsqrt0 : 0 ≤ Real.sqrt (p : ℝ) := Real.sqrt_nonneg _
+  have hsqrtSq : (Real.sqrt (p : ℝ)) ^ 2 = (p : ℝ) :=
+    Real.sq_sqrt hp0
+  have hsqrt1 : 1 < Real.sqrt (p : ℝ) := by
+    nlinarith
+  have hsqrtPos : 0 < Real.sqrt (p : ℝ) :=
+    lt_trans zero_lt_one hsqrt1
+  unfold primeCarryAmplitudeRatio
+  by_contra hnot
+  have hge : 1 ≤ (Real.sqrt (p : ℝ))⁻¹ := le_of_not_gt hnot
+  have hle :
+      Real.sqrt (p : ℝ) ≤
+        (Real.sqrt (p : ℝ))⁻¹ * Real.sqrt (p : ℝ) := by
+    calc
+      Real.sqrt (p : ℝ) = 1 * Real.sqrt (p : ℝ) := by rw [one_mul]
+      _ ≤ (Real.sqrt (p : ℝ))⁻¹ * Real.sqrt (p : ℝ) :=
+        mul_le_mul_of_nonneg_right hge hsqrt0
+  rw [inv_mul_cancel₀ hsqrtPos.ne'] at hle
+  exact (not_le_of_gt hsqrt1) hle
+
+/-- Nucleo vertical especializado na amplitude de carry da base `p`. -/
+def primeCarryWeightedVerticalGreenKernel (p : ℕ) (r : ℕ) : ℝ :=
+  carryWeightedVerticalGreenKernel (primeCarryAmplitudeRatio p) r
+
+theorem primeCarryWeightedVerticalGreenKernel_summable
+    (p : ℕ) (hp : 2 ≤ p) :
+    Summable (primeCarryWeightedVerticalGreenKernel p) := by
+  simpa [primeCarryWeightedVerticalGreenKernel] using
+    carryWeightedVerticalGreenKernel_summable
+      (primeCarryAmplitudeRatio_nonneg p)
+      (primeCarryAmplitudeRatio_lt_one p hp)
+
 /-- Uma realizacao vertical e uma familia de shifts que nao aumentam norma.
 A lei de semigrupo sera adicionada somente quando for necessaria para a
 identidade completa de valvula; o bound Green usa apenas a contratilidade. -/
@@ -174,6 +223,23 @@ theorem carryWeightedVerticalGreen_norm_le_kernelMass
     _ ≤ ∑' r : ℕ, carryWeightedVerticalGreenKernel q r :=
       hnorm.tsum_le_tsum
         (fun r => carryWeightedVerticalGreenTerm_norm_le S hq0 r) hk
+
+/-- Green vertical vestido na base material `p`. -/
+def primeCarryWeightedVerticalGreen
+    (S : CarryVerticalShiftFamily H) (p : ℕ) : H →L[ℂ] H :=
+  carryWeightedVerticalGreen S (primeCarryAmplitudeRatio p)
+
+/-- O bound de cada base material e independente do cutoff e usa exatamente a
+massa `l1` do nucleo `(r * p^(-r/2))`. -/
+theorem primeCarryWeightedVerticalGreen_norm_le_kernelMass
+    (S : CarryVerticalShiftFamily H) (p : ℕ) (hp : 2 ≤ p) :
+    ‖primeCarryWeightedVerticalGreen S p‖ ≤
+      ∑' r : ℕ, primeCarryWeightedVerticalGreenKernel p r := by
+  simpa [primeCarryWeightedVerticalGreen,
+    primeCarryWeightedVerticalGreenKernel] using
+    carryWeightedVerticalGreen_norm_le_kernelMass S
+      (primeCarryAmplitudeRatio_nonneg p)
+      (primeCarryAmplitudeRatio_lt_one p hp)
 
 /-- Corte finito da mesma serie. Ele usa exatamente o mesmo nucleo que o
 operador infinito, sem renormalizacao dependente de `N`. -/
