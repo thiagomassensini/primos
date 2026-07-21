@@ -166,7 +166,7 @@ end RegularLinearBoundaryPencil
 def realSpectralGenuineBoundaryFlux (t : ℝ) : ℂ →ₗ[ℂ] ℂ where
   toFun z := realSpectralGenuine t * z
   map_add' x y := by ring
-  map_smul' c x := by ring
+  map_smul' c x := by simp [mul_assoc, mul_left_comm]
 
 @[simp] theorem realSpectralGenuineBoundaryFlux_apply (t : ℝ) (z : ℂ) :
     realSpectralGenuineBoundaryFlux t z = realSpectralGenuine t * z := rfl
