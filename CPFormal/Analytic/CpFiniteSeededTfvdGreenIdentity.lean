@@ -386,6 +386,11 @@ theorem seededTfvdGreenRadialClosureAt_iff_coupledGreenFlux_tendsto_zero_of_genu
     simpa using hdiff
   · intro hflux
     have hsum := hflux.add hendpoint
+    change Tendsto
+      (fun M : ℕ ↦
+        finiteCanonicalSeededTfvdGreenRadialClosureObservable
+          p M kappa omega s)
+      atTop (nhds 0)
     simpa only [hpoint] using hsum
 
 end
