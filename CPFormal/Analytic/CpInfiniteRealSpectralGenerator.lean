@@ -47,11 +47,16 @@ def infiniteRealSpectralMaximalDomain :
   carrier :=
     {x | Memℓp (fun n => (infiniteRealSpectralFrequency n : ℂ) * x n) 2}
   zero_mem' := by
-    simpa using (zero_memℓp : Memℓp (0 : ℕ → ℂ) 2)
+    change Memℓp (0 : ℕ → ℂ) 2
+    exact zero_memℓp
   add_mem' {x y} hx hy := by
-    simpa [mul_add] using hx.add hy
+    convert hx.add hy using 1
+    ext n
+    simp [mul_add]
   smul_mem' c x hx := by
-    simpa [mul_assoc, mul_left_comm] using hx.const_smul c
+    convert hx.const_smul c using 1
+    ext n
+    simp [mul_assoc, mul_left_comm]
 
 /-- Operador maximal `L x(n) = log(n+1) x(n)` em `l2`. -/
 def infiniteRealSpectralGenerator :
@@ -128,10 +133,11 @@ theorem infiniteRealSpectralGenerator_basisVector (n : ℕ) :
         infiniteRealSpectralBasisVector n := by
   apply lp.ext
   funext m
-  by_cases h : m = n
-  · subst m
-    simp [infiniteRealSpectralBasisVector]
-  · simp [infiniteRealSpectralBasisVector, h]
+  change (infiniteRealSpectralFrequency m : ℂ) *
+      (lp.single 2 n 1 : InfiniteRealSpectralHilbert) m =
+    (infiniteRealSpectralFrequency n : ℂ) *
+      (lp.single 2 n 1 : InfiniteRealSpectralHilbert) m
+  by_cases h : m = n <;> simp [lp.single_apply, h]
 
 /-- Base de Hilbert canonica de `l2(N,C)`. -/
 def infiniteRealSpectralHilbertBasis :
@@ -141,8 +147,7 @@ def infiniteRealSpectralHilbertBasis :
 @[simp] theorem infiniteRealSpectralHilbertBasis_apply (n : ℕ) :
     infiniteRealSpectralHilbertBasis n =
       infiniteRealSpectralBasisVector n := by
-  change (LinearIsometryEquiv.refl ℂ InfiniteRealSpectralHilbert).symm
-      (lp.single 2 n 1) = lp.single 2 n 1
+  unfold infiniteRealSpectralHilbertBasis infiniteRealSpectralBasisVector
   rfl
 
 /-- O dominio maximal e denso porque contem a base canonica. -/
@@ -177,7 +182,7 @@ theorem infiniteRealSpectralGenerator_isFormalAdjoint :
       ((infiniteRealSpectralFrequency n : ℂ) * x.1 n) (y.1 n) =
     inner ℂ (x.1 n)
       ((infiniteRealSpectralFrequency n : ℂ) * y.1 n)
-  simp [RCLike.inner_apply, mul_assoc, mul_left_comm, mul_comm]
+  simp [RCLike.inner_apply, mul_assoc, mul_left_comm]
 
 /-- O adjunto age pela mesma formula coordenada a coordenada. -/
 theorem infiniteRealSpectralGenerator_adjoint_apply
@@ -311,7 +316,7 @@ noncomputable def infiniteRealSpectralEvolutionLinearEquiv (t : ℝ) :
     simp [mul_add]
   map_smul' c x := by
     ext n
-    simp [mul_assoc, mul_left_comm]
+    simp [mul_left_comm]
   left_inv x := by
     ext n
     change infiniteRealSpectralPhase (-t) n *
