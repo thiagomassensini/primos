@@ -129,7 +129,8 @@ theorem carryWeightedVerticalGreenTerm_norm_le
     ‖carryWeightedVerticalGreenTerm S q r‖ ≤
         ‖(carryWeightedVerticalGreenKernel q r : ℂ)‖ * ‖S.shift r‖ := by
       rw [carryWeightedVerticalGreenTerm]
-      exact norm_smul_le _ _
+      exact norm_smul_le
+        (carryWeightedVerticalGreenKernel q r : ℂ) (S.shift r)
     _ = carryWeightedVerticalGreenKernel q r * ‖S.shift r‖ := by
       simp [abs_of_nonneg hk0]
     _ ≤ carryWeightedVerticalGreenKernel q r * 1 :=
