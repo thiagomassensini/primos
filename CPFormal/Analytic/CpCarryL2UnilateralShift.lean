@@ -19,7 +19,7 @@ concreto. Nenhuma identidade de bordo e declarada neste arquivo: bracket,
 traco e retorno ainda precisam ser transportados de forma coordenada.
 -/
 
-open scoped BigOperators lp
+open scoped BigOperators lp ENNReal NNReal
 
 namespace CPFormal.Analytic.Cp
 
@@ -66,7 +66,9 @@ theorem carryVerticalL2BackwardShiftLinear_norm_le
 def carryVerticalL2BackwardShift (r : ℕ) :
     CarryVerticalL2 →L[ℂ] CarryVerticalL2 :=
   LinearMap.mkContinuous (carryVerticalL2BackwardShiftLinear r) 1
-    (fun x => by simpa using carryVerticalL2BackwardShiftLinear_norm_le r x)
+    (fun x => by
+      change ‖carryVerticalL2BackwardShiftLinear r x‖ ≤ 1 * ‖x‖
+      simpa using carryVerticalL2BackwardShiftLinear_norm_le r x)
 
 @[simp] theorem carryVerticalL2BackwardShift_apply
     (r : ℕ) (x : CarryVerticalL2) (n : ℕ) :
@@ -76,6 +78,7 @@ theorem carryVerticalL2BackwardShift_norm_le_one (r : ℕ) :
     ‖carryVerticalL2BackwardShift r‖ ≤ 1 := by
   refine ContinuousLinearMap.opNorm_le_bound _ zero_le_one ?_
   intro x
+  change ‖carryVerticalL2BackwardShiftLinear r x‖ ≤ 1 * ‖x‖
   simpa using carryVerticalL2BackwardShiftLinear_norm_le r x
 
 /-- Shift unilateral causal, definido como adjunto do tail-shift. -/
