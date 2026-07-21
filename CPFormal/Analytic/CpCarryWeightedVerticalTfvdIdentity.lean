@@ -79,6 +79,8 @@ theorem primeCarryWeightedVerticalTfvd_identity
           primeCarryWeightedVerticalTrace p =
       ContinuousLinearMap.id ℂ CarryVerticalL2 := by
   simpa [primeCarryVerticalL2WeightedGreen,
+    primeCarryWeightedVerticalGreen,
+    carryVerticalL2WeightedGreen,
     primeCarryWeightedVerticalCenteredBracket,
     primeCarryWeightedVerticalReturn,
     primeCarryWeightedVerticalTrace] using
