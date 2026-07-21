@@ -75,7 +75,7 @@ def nativeGpreFiniteTfvdVisibleFlux
       (nativeGpreFiniteTfvdAnalysis q S (z • x)) = z * observer x
   rw [nativeGpreFiniteTfvdVisibleReadout_analysis
     q hqpos hq1 S observer (z • x)]
-  simpa using observer.map_smul z x
+  exact observer.map_smul z x
 
 /-- Pencil regular da compressao visivel de uma orbita nativa. -/
 def nativeGpreFiniteTfvdVisibleBoundaryPencil
