@@ -28,7 +28,7 @@ Nenhuma tabela de zeros, resultado numerico, funcao zeta ou hipotese Green
 entra nas provas abaixo.
 -/
 
-open scoped ComplexConjugate InnerProduct ENNReal Topology
+open scoped ComplexConjugate InnerProduct ENNReal Topology lp
 
 namespace CPFormal.Analytic.Cp
 
@@ -258,8 +258,9 @@ theorem infiniteRealSpectralPhase_add (t u : ℝ) (n : ℕ) :
 
 @[simp] theorem norm_infiniteRealSpectralPhase (t : ℝ) (n : ℕ) :
     ‖infiniteRealSpectralPhase t n‖ = 1 := by
+  unfold infiniteRealSpectralPhase
   rw [Complex.norm_exp]
-  simp [infiniteRealSpectralPhase]
+  simp
 
 /-- Multiplicar por uma fase coordenada preserva a condicao `l2`. -/
 theorem infiniteRealSpectralPhase_mul_memℓp
