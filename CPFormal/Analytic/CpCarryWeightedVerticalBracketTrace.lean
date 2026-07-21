@@ -30,8 +30,8 @@ noncomputable section
 /-- Avaliacao da coordenada `n` como mapa linear continuo em `ell^2`. -/
 def carryVerticalL2EvalLinear (n : ℕ) : CarryVerticalL2 →ₗ[ℂ] ℂ where
   toFun x := x n
-  map_add' x y := rfl
-  map_smul' c x := rfl
+  map_add' _ _ := rfl
+  map_smul' _ _ := rfl
 
 /-- A avaliacao possui norma no maximo um. -/
 def carryVerticalL2Eval (n : ℕ) : CarryVerticalL2 →L[ℂ] ℂ :=
@@ -74,7 +74,9 @@ def carryWeightedVerticalCenteredBracketCore (q : ℝ) :
     carryWeightedVerticalCenteredBracketCore q x n =
       (q : ℂ)⁻¹ * x (n + 1) - 2 * x n +
         (q : ℂ) * (if 1 ≤ n then x (n - 1) else 0) := by
-  simp [carryWeightedVerticalCenteredBracketCore]
+  by_cases hn : 1 ≤ n
+  · simp [carryWeightedVerticalCenteredBracketCore, hn]
+  · simp [carryWeightedVerticalCenteredBracketCore, hn]
 
 /-- Bracket vestido: a coordenada zero pertence ao reservatorio de bordo e o
 interior comeca na primeira camada positiva. -/
