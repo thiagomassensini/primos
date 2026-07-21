@@ -47,16 +47,31 @@ def infiniteRealSpectralMaximalDomain :
   carrier :=
     {x | Memℓp (fun n => (infiniteRealSpectralFrequency n : ℂ) * x n) 2}
   zero_mem' := by
-    change Memℓp (0 : ℕ → ℂ) 2
-    exact zero_memℓp
+    change Memℓp
+      (fun n => (infiniteRealSpectralFrequency n : ℂ) *
+        (0 : InfiniteRealSpectralHilbert) n) 2
+    apply memℓp_gen
+    simp
   add_mem' {x y} hx hy := by
-    convert hx.add hy using 1
-    ext n
-    simp [mul_add]
+    change Memℓp
+      (fun n => (infiniteRealSpectralFrequency n : ℂ) * x n) 2 at hx
+    change Memℓp
+      (fun n => (infiniteRealSpectralFrequency n : ℂ) * y n) 2 at hy
+    change Memℓp
+      (fun n => (infiniteRealSpectralFrequency n : ℂ) * (x + y) n) 2
+    simpa only [lp.coeFn_add, Pi.add_apply, mul_add] using hx.add hy
   smul_mem' c x hx := by
-    convert hx.const_smul c using 1
-    ext n
-    simp [mul_assoc, mul_left_comm]
+    change Memℓp
+      (fun n => (infiniteRealSpectralFrequency n : ℂ) * x n) 2 at hx
+    change Memℓp
+      (fun n => (infiniteRealSpectralFrequency n : ℂ) * (c • x) n) 2
+    have h := hx.const_smul c
+    convert h using 1
+    funext n
+    rw [lp.coeFn_smul, Pi.smul_apply]
+    change (infiniteRealSpectralFrequency n : ℂ) * (c * x n) =
+      c * ((infiniteRealSpectralFrequency n : ℂ) * x n)
+    ring
 
 /-- Operador maximal `L x(n) = log(n+1) x(n)` em `l2`. -/
 def infiniteRealSpectralGenerator :
@@ -147,8 +162,9 @@ def infiniteRealSpectralHilbertBasis :
 @[simp] theorem infiniteRealSpectralHilbertBasis_apply (n : ℕ) :
     infiniteRealSpectralHilbertBasis n =
       infiniteRealSpectralBasisVector n := by
-  unfold infiniteRealSpectralHilbertBasis infiniteRealSpectralBasisVector
-  rfl
+  simpa [infiniteRealSpectralHilbertBasis,
+    infiniteRealSpectralBasisVector] using
+      (infiniteRealSpectralHilbertBasis.repr_symm_single n).symm
 
 /-- O dominio maximal e denso porque contem a base canonica. -/
 theorem infiniteRealSpectralGenerator_dense_domain :
