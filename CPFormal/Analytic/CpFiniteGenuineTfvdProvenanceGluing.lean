@@ -269,6 +269,164 @@ theorem finiteCanonicalAngularBracketCoupledGenuineGreenFlux_eq_enrichedLedger
   simp only [Complex.add_re, Complex.sub_re]
   ring
 
+/-!
+## Teste exato da linha critica
+
+O ledger acima permite formular o gate final sem uma ponte abstrata. Primeiro
+reabrimos o fluxo alinhado na direcao radial. Depois provamos que, num zero
+Genuine, o fechamento do proprio ledger e equivalente a `re(s) = 1 / 2`.
+-/
+
+/-- O fluxo alinhado conserva a fatoracao radial Green nas `3 * M` arestas. -/
+theorem finiteCanonicalAngularBracketCoupledGenuineGreenFlux_eq_radialDifference_mul_pairing
+    (p M : ℕ) (hp : Nat.Prime p) (s : ℂ) :
+    finiteCanonicalAngularBracketCoupledGenuineGreenFlux p M s =
+      cpRadialDifference p (criticalDisplacement s.re) *
+          (finiteReflectedGradientPairing (3 * M) s).re +
+        finiteCanonicalAngularBracketCoupledSignedBoundary M s := by
+  unfold finiteCanonicalAngularBracketCoupledGenuineGreenFlux
+  rw [finiteOrientedGenuineCpGreenFlux_eq_finiteOrientedCpGreenFlux
+      p (3 * M) hp s,
+    finiteOrientedCpGreenFlux_eq_radialDifference_mul_pairing
+      p (3 * M) hp s]
+  simp [Complex.mul_re]
+
+/--
+Se o fluxo alinhado fecha num zero Genuine, a positividade Green obriga o
+coeficiente radial a zerar.
+-/
+theorem criticalDisplacement_eq_zero_of_alignedGenuineGreenFlux_tendsto_zero
+    (p : ℕ) (hp : Nat.Prime p) {s : ℂ}
+    (hs : s ∈ genuineCriticalStrip)
+    (hzero : genuineContinuation s = 0)
+    (hflux :
+      Tendsto
+        (fun M : ℕ ↦
+          finiteCanonicalAngularBracketCoupledGenuineGreenFlux p M s)
+        atTop (nhds 0)) :
+    criticalDisplacement s.re = 0 := by
+  let c : ℝ := cpRadialDifference p (criticalDisplacement s.re)
+  let pairingRe : ℕ → ℝ :=
+    fun M ↦ (finiteReflectedGradientPairing (3 * M) s).re
+  have hboundary :=
+    finiteCanonicalAngularBracketCoupledSignedBoundary_tendsto_zero_of_genuine_zero
+      hs hzero
+  have hproduct :
+      Tendsto (fun M : ℕ ↦ c * pairingRe M) atTop (nhds 0) := by
+    have hsub := hflux.sub hboundary
+    have hfun :
+        (fun M : ℕ ↦ c * pairingRe M) =
+          (fun M : ℕ ↦
+            finiteCanonicalAngularBracketCoupledGenuineGreenFlux p M s -
+              finiteCanonicalAngularBracketCoupledSignedBoundary M s) := by
+      funext M
+      dsimp [c, pairingRe]
+      rw [finiteCanonicalAngularBracketCoupledGenuineGreenFlux_eq_radialDifference_mul_pairing
+        p M hp s]
+      ring
+    rw [hfun]
+    simpa using hsub
+  have hpositive : 0 < pairingRe 1 := by
+    dsimp [pairingRe]
+    exact finiteReflectedGradientPairing_re_pos (by norm_num) hs
+  have hgreenMonotone := finiteReflectedGradientPairing_re_monotone hs
+  have hbound : ∀ᶠ M in atTop, pairingRe 1 ≤ pairingRe M :=
+    eventually_atTop.2 ⟨1, fun M hM ↦ hgreenMonotone (by omega)⟩
+  have hc : c = 0 :=
+    constant_eq_zero_of_tendsto_mul_of_eventually_pos_lower_bound
+      hpositive hbound hproduct
+  have hfactor := cpRadialDifference_eq_two_mul_delta_mul_cofactor
+    p (criticalDisplacement s.re)
+  have hcofactor := cpRadialCofactor_pos
+    p hp (criticalDisplacement s.re)
+  dsimp [c] at hc
+  nlinarith
+
+/-- Na linha critica, o termo radial zera e resta o bordo ja fechado. -/
+theorem alignedGenuineGreenFlux_tendsto_zero_of_criticalDisplacement
+    (p : ℕ) (hp : Nat.Prime p) {s : ℂ}
+    (hs : s ∈ genuineCriticalStrip)
+    (hzero : genuineContinuation s = 0)
+    (hcritical : criticalDisplacement s.re = 0) :
+    Tendsto
+      (fun M : ℕ ↦
+        finiteCanonicalAngularBracketCoupledGenuineGreenFlux p M s)
+      atTop (nhds 0) := by
+  have hboundary :=
+    finiteCanonicalAngularBracketCoupledSignedBoundary_tendsto_zero_of_genuine_zero
+      hs hzero
+  have hpoint : ∀ M : ℕ,
+      finiteCanonicalAngularBracketCoupledGenuineGreenFlux p M s =
+        finiteCanonicalAngularBracketCoupledSignedBoundary M s := by
+    intro M
+    rw [finiteCanonicalAngularBracketCoupledGenuineGreenFlux_eq_radialDifference_mul_pairing
+      p M hp s, hcritical]
+    simp [cpRadialDifference]
+  simpa only [hpoint] using hboundary
+
+/--
+Resposta kernel-checked do teste global: num zero Genuine, fechar o ledger
+TFVD--log-jet--Green--bordo e exatamente o mesmo que estar na linha critica.
+-/
+theorem enrichedLedger_tendsto_zero_iff_re_eq_half_of_genuine_zero
+    (p : ℕ) (hp : Nat.Prime p)
+    {kappa : ℂ} (hkappa : kappa ≠ 0)
+    (omega : ℕ → ℂ) (homega : ∀ m, omega m ≠ 0)
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip)
+    (hzero : genuineContinuation s = 0) :
+    Tendsto
+        (fun M : ℕ ↦
+          (finiteCanonicalEnrichedTfvdReflectedLogJetWedgeTrace
+              M kappa omega s -
+            finiteCanonicalLogJetGreenDefectTrace p M s +
+            finiteCanonicalAngularBracketCoupledBoundary M s).re)
+        atTop (nhds 0) ↔
+      s.re = (1 : ℝ) / 2 := by
+  constructor
+  · intro hledger
+    have hflux :
+        Tendsto
+          (fun M : ℕ ↦
+            finiteCanonicalAngularBracketCoupledGenuineGreenFlux p M s)
+          atTop (nhds 0) :=
+      hledger.congr' (Eventually.of_forall fun M ↦
+        (finiteCanonicalAngularBracketCoupledGenuineGreenFlux_eq_enrichedLedger
+          p hp hkappa omega homega M s).symm)
+    have hcritical :=
+      criticalDisplacement_eq_zero_of_alignedGenuineGreenFlux_tendsto_zero
+        p hp hs hzero hflux
+    unfold criticalDisplacement at hcritical
+    linarith
+  · intro hre
+    have hcritical : criticalDisplacement s.re = 0 := by
+      unfold criticalDisplacement
+      linarith
+    have hflux :=
+      alignedGenuineGreenFlux_tendsto_zero_of_criticalDisplacement
+        p hp hs hzero hcritical
+    exact hflux.congr' (Eventually.of_forall fun M ↦
+      finiteCanonicalAngularBracketCoupledGenuineGreenFlux_eq_enrichedLedger
+        p hp hkappa omega homega M s)
+
+/-- Forma implicativa: o fechamento concreto do ledger implica a meia reta. -/
+theorem genuine_zero_implies_re_eq_half_of_enrichedLedger_tendsto_zero
+    (p : ℕ) (hp : Nat.Prime p)
+    {kappa : ℂ} (hkappa : kappa ≠ 0)
+    (omega : ℕ → ℂ) (homega : ∀ m, omega m ≠ 0)
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip)
+    (hzero : genuineContinuation s = 0)
+    (hledger :
+      Tendsto
+        (fun M : ℕ ↦
+          (finiteCanonicalEnrichedTfvdReflectedLogJetWedgeTrace
+              M kappa omega s -
+            finiteCanonicalLogJetGreenDefectTrace p M s +
+            finiteCanonicalAngularBracketCoupledBoundary M s).re)
+        atTop (nhds 0)) :
+    s.re = (1 : ℝ) / 2 :=
+  (enrichedLedger_tendsto_zero_iff_re_eq_half_of_genuine_zero
+    p hp hkappa omega homega hs hzero).mp hledger
+
 end
 
 end CPFormal.Analytic.Cp
