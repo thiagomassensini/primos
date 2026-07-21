@@ -179,7 +179,9 @@ theorem nativeGpreBoundaryNumberFluxLift_apply_eq_level_mul_value
 theorem nativeGpreBoundaryNumberFluxLift_eq_numberOperator_comp_valueLift :
     nativeGpreBoundaryNumberFluxLift =
       nativeGpreBoundaryNumberOperator.comp nativeGpreBoundaryValueLift := by
-  ext x c
+  apply LinearMap.ext
+  intro x
+  funext c
   exact nativeGpreBoundaryNumberFluxLift_apply_eq_level_mul_value x c
 
 /-- Pencil de proveniencia produzido pelo lift concreto de `G_pre`. -/
