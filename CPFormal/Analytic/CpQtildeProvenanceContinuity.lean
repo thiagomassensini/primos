@@ -249,7 +249,7 @@ variable [NormedAddCommGroup Hminus] [InnerProductSpace 𝕜₀ Hminus]
 /-- Forma canonica valor--fluxo induzida pelo grafo de uma isometria. -/
 def qtildeNumberGraphBoundaryForm
     (numberOperator : H0 →ₗᵢ[𝕜₀] Hminus) (x y : H0) : 𝕜₀ :=
-  ⟪numberOperator x, numberOperator y⟫_𝕜₀ - ⟪x, y⟫_𝕜₀
+  inner 𝕜₀ (numberOperator x) (numberOperator y) - inner 𝕜₀ x y
 
 /-- O grafo numero e neutro em todos os pares, nao apenas na curva Genuine. -/
 @[simp] theorem qtildeNumberGraphBoundaryForm_eq_zero
