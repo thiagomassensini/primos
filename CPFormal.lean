@@ -72,6 +72,8 @@ import CPFormal.Analytic.CpGenuineFirstOrthogonalGreenLimit
 import CPFormal.Analytic.CpInfiniteRealSpectralGenerator
 import CPFormal.Analytic.CpGenuineBoundaryPencil
 import CPFormal.Analytic.CpCarryWeightedVerticalGreen
+import CPFormal.Analytic.CpCarryAmplitudeIdentification
+import CPFormal.Analytic.CpGenuineGreenCompletedOperator
 import CPFormal.Analytic.CpCarryL2UnilateralShift
 import CPFormal.Analytic.CpCarryWeightedVerticalBracketTrace
 import CPFormal.Analytic.CpCarryWeightedVerticalReturn
