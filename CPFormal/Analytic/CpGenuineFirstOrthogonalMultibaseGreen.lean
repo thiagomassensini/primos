@@ -55,7 +55,6 @@ theorem twoPrimeGreenVector_inner_self (x y : ℝ) :
       x ^ 2 + y ^ 2 := by
   rw [PiLp.inner_apply]
   simp [twoPrimeGreenVector, Fin.sum_univ_succ]
-  ring
 
 /-- Todo cutoff cruzado por um primo impar e nao vazio. -/
 theorem crossPrimeAlignedCutoff_pos
