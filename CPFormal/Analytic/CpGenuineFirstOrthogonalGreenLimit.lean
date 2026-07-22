@@ -47,7 +47,6 @@ theorem norm_realDirichletPowerDeriv
   rw [realDirichletPowerDeriv, norm_mul, norm_neg,
     Complex.norm_cpow_eq_rpow_re_of_pos hx]
   congr 1
-  simp
 
 /-- Uma diferenca consecutiva compra uma potencia pela primeira derivada. -/
 theorem norm_realDirichletPower_succ_sub_le
@@ -67,6 +66,10 @@ theorem norm_realDirichletPower_succ_sub_le
   have hlowerUpper : lower ≤ upper := by
     dsimp [lower, upper]
     exact_mod_cast Nat.le_succ (n + 1)
+  have hlowerMem : lower ∈ Set.Ici lower := by
+    exact le_rfl
+  have hupperMem : upper ∈ Set.Ici lower :=
+    hlowerUpper
   have hderiv :
       ∀ x, x ∈ Set.Ici lower →
         HasDerivWithinAt (realDirichletPower s)
@@ -86,7 +89,7 @@ theorem norm_realDirichletPower_succ_sub_le
       (norm_nonneg s)
   have hlip :=
     (convex_Ici lower).norm_image_sub_le_of_norm_hasDerivWithin_le
-      hderiv hbound le_rfl hlowerUpper
+      hderiv hbound hlowerMem hupperMem
   have hstep : upper - lower = 1 := by
     dsimp [upper, lower]
     norm_num
@@ -105,7 +108,8 @@ theorem norm_positiveDirichletGradient_le
     ‖positiveDirichletGradient s n‖ ≤
       ‖s‖ * ((n + 1 : ℕ) : ℝ) ^ (-s.re - 1) := by
   rw [positiveDirichletGradient_eq_value_sub_value]
-  simpa [positiveDirichletValue, realDirichletPower] using
+  have hn : n + 1 + 1 = n + 2 := by omega
+  simpa [positiveDirichletValue, realDirichletPower, hn] using
     (norm_realDirichletPower_succ_sub_le hs n)
 
 /-- O produto refletido compra tres potencias, uniformemente no strip. -/
@@ -114,7 +118,12 @@ theorem norm_finiteReflectedGradientEdge_le
     ‖finiteReflectedGradientEdge n s‖ ≤
       (‖s‖ * ‖reflectedParameter s‖) *
         ((n + 1 : ℕ) : ℝ) ^ (-3 : ℝ) := by
-  have hsSharp := reflectedParameter_mem_genuineCriticalStrip hs
+  have hsSharp : reflectedParameter s ∈ genuineCriticalStrip := by
+    constructor
+    · simpa [reflectedParameter] using
+        (show 0 < 1 - s.re by linarith [hs.2])
+    · simpa [reflectedParameter] using
+        (show 1 - s.re < 1 by linarith [hs.1])
   have hleft := norm_positiveDirichletGradient_le hs.1 n
   have hright := norm_positiveDirichletGradient_le hsSharp.1 n
   have hx : 0 < ((n + 1 : ℕ) : ℝ) := by positivity
@@ -212,7 +221,7 @@ theorem infiniteReflectedGreenEnergy_pos
     eventually_atTop.2
       ⟨1, fun M hM => finiteReflectedGradientPairing_re_monotone hs hM⟩
   exact lt_of_lt_of_le hfirst
-    (le_of_tendsto
+    (ge_of_tendsto
       (finiteReflectedGradientPairing_re_tendsto_infiniteEnergy hs)
       hbound)
 
@@ -357,14 +366,14 @@ theorem crossPrimeAlignedGreenClosure_iff_limitVector_eq_zero
           cpRadialDifference p (criticalDisplacement s.re) *
             infiniteReflectedGreenEnergy s = 0 := by
         simpa [crossPrimeAlignedGreenLimitVector] using hcoordinate
-      simpa [hpZero] using hpFlux
+      simpa [hpZero, Function.comp_def] using hpFlux
     · have hcoordinate := congrArg
         (fun v : TwoPrimeGreenHilbert => v (1 : Fin 2)) hlimit
       have hqZero :
           cpRadialDifference q (criticalDisplacement s.re) *
             infiniteReflectedGreenEnergy s = 0 := by
         simpa [crossPrimeAlignedGreenLimitVector] using hcoordinate
-      simpa [hqZero] using hqFlux
+      simpa [hqZero, Function.comp_def] using hqFlux
 
 /-! ## Colagem dos dois limites e exposicao da ultima seta -/
 
