@@ -18,9 +18,11 @@ e um vetor nao nulo em todo corte sempre que o deslocamento critico nao zera.
 Assim, o fechamento coordenada a coordenada do Green multibase e equivalente
 a `Re(s) = 1/2`.
 
-O modulo nao assume que todo zero Genuine fecha esse fluxo vetorial. Ele
-transforma essa ultima obrigacao numa interface concreta sem compressao
-escalar e sem interferencia entre cameras.
+Esta equivalencia classifica o detector na extensao ambiente em `s : ℂ`.
+Na orbita C2 nativa, parametrizada por `criticalLineParameter t`, o
+deslocamento critico ja zera por construcao. O modulo conserva a extensao
+ambiente apenas para medir o que cada coordenada retém, sem compressao escalar
+e sem interferencia entre cameras.
 -/
 
 open scoped BigOperators Topology RealInnerProductSpace
