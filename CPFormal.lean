@@ -56,6 +56,7 @@ import CPFormal.Analytic.CpGpreTypes
 import CPFormal.Analytic.CpNativeGpreTowerLift
 import CPFormal.Analytic.CpNativeGpreTowerNorm
 import CPFormal.Analytic.CpNativeGpreJordanBounds
+import CPFormal.Analytic.CpNativeGpreLocalBracketMajorant
 import CPFormal.Analytic.CpQtildeProvenanceContinuity
 import CPFormal.Analytic.CpFiniteTfvdLogJetResidualAsymptotics
 import CPFormal.Analytic.CpFiniteTfvdLogJetResidualReflection
@@ -78,6 +79,7 @@ import CPFormal.Analytic.CpNativeGpreTfvdGluing
 import CPFormal.Analytic.CpNativeGpreTfvdCanonicalGluing
 import CPFormal.Analytic.CpNativeGpreTfvdFiniteClosedRelation
 import CPFormal.Analytic.CpNativeGpreTfvdCutoffCompatibility
+import CPFormal.Analytic.CpNativeGpreTfvdProjectiveAnalysis
 import CPFormal.Analytic.CpNativeGpreTfvdAnalysis
 import CPFormal.Analytic.CpNativeGpreTfvdVisiblePencil
 import CPFormal.Analytic.CpNativeGpreTfvdGenuineCompression
