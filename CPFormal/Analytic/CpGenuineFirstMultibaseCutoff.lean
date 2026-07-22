@@ -244,12 +244,27 @@ theorem weightedHorizontalPrefixes_cross_prime_aligned_tendsto_zero_of_genuine_z
           (q : ℂ) ^ (1 - s) *
             positiveDirichletPrefix s (crossPrimeAlignedCutoff p L))
       atTop (nhds 0) := by
-  simpa only [← verticalCorrection_dirichlet_eq_cpow_mul_prefix
-    p (crossPrimeAlignedCutoff q ·) hp s,
-    ← verticalCorrection_dirichlet_eq_cpow_mul_prefix
-      q (crossPrimeAlignedCutoff p ·) hq s] using
+  have hvertical :=
     verticalCorrection_cross_prime_aligned_tendsto_zero_of_genuine_zero
       p q hp hpodd hq hqodd hs hzero
+  have hfunctions :
+      (fun L : ℕ ↦
+        (p : ℂ) ^ (1 - s) *
+            positiveDirichletPrefix s (crossPrimeAlignedCutoff q L) -
+          (q : ℂ) ^ (1 - s) *
+            positiveDirichletPrefix s (crossPrimeAlignedCutoff p L)) =
+      (fun L : ℕ ↦
+        CPFormal.Genuine.Cp.verticalCorrection p
+            (crossPrimeAlignedCutoff q L) (dirichletTerm s) -
+          CPFormal.Genuine.Cp.verticalCorrection q
+            (crossPrimeAlignedCutoff p L) (dirichletTerm s)) := by
+    funext L
+    rw [verticalCorrection_dirichlet_eq_cpow_mul_prefix
+        p (crossPrimeAlignedCutoff q L) hp s,
+      verticalCorrection_dirichlet_eq_cpow_mul_prefix
+        q (crossPrimeAlignedCutoff p L) hq s]
+  rw [hfunctions]
+  exact hvertical
 
 end
 
