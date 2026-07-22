@@ -83,7 +83,7 @@ theorem twoPrimeGenuineVector_tendsto
   have htoLp :=
     (PiLp.continuous_toLp
       (p := 2) (β := fun _ : Fin 2 => ℂ)).continuousAt.tendsto.comp hpi
-  simpa [twoPrimeGenuineVector] using htoLp
+  simpa [twoPrimeGenuineVector, Function.comp_def] using htoLp
 
 /-!
 ## Cameras normalizadas e seu limite
@@ -103,15 +103,28 @@ theorem finiteNormalizedGenuineCamera_tendsto_genuineContinuation
       atTop (nhds (genuineContinuation s)) := by
   have hchart :=
     finiteBracketedDirichletChart_tendsto p hp (by linarith [hs.1])
-  have hscaled :=
-    tendsto_const_nhds.mul hchart
   have hfactor : cpChartFactor p s ≠ 0 :=
     cpChartFactor_ne_zero_on_genuineCriticalStrip p hp hs
   have hchartFactor :=
     bracketedDirichletChart_eq_cpChartFactor_mul_genuineContinuation
       p hp hpodd hs
-  simpa [finiteNormalizedGenuineCamera, div_eq_mul_inv,
-    hchartFactor, hfactor, mul_comm, mul_left_comm, mul_assoc]
+  have hscaled :
+      Tendsto
+        (fun M : ℕ =>
+          (cpChartFactor p s)⁻¹ * finiteBracketedDirichletChart p M s)
+        atTop
+        (nhds ((cpChartFactor p s)⁻¹ *
+          bracketedDirichletChart p s)) :=
+    (tendsto_const_nhds :
+      Tendsto (fun _ : ℕ => (cpChartFactor p s)⁻¹)
+        atTop (nhds (cpChartFactor p s)⁻¹)).mul hchart
+  have hlimit :
+      (cpChartFactor p s)⁻¹ * bracketedDirichletChart p s =
+        genuineContinuation s := by
+    rw [hchartFactor, ← mul_assoc]
+    simp [hfactor]
+  rw [hlimit] at hscaled
+  simpa only [finiteNormalizedGenuineCamera, div_eq_mul_inv, mul_comm]
     using hscaled
 
 /-- As duas cameras normalizadas nos horizontes cruzados alinhados. -/
@@ -165,7 +178,7 @@ def twoPrimeGenuineDiagonalOperator
   map_smul' c v := by
     ext i
     fin_cases i <;>
-      simp [twoPrimeGenuineVector, mul_comm, mul_left_comm, mul_assoc]
+      simp [twoPrimeGenuineVector, mul_left_comm]
 
 @[simp] theorem twoPrimeGenuineDiagonalOperator_apply_zero
     (a b : ℂ) (v : TwoPrimeGenuineHilbert) :
@@ -224,8 +237,32 @@ theorem finiteAlignedOrthogonalGenuineOperator_tendsto_apply
     (finiteNormalizedGenuineCamera_tendsto_genuineContinuation
       q hq hqodd hs).comp
         (crossPrimeAlignedCutoff_tendsto_atTop p hp.pos)
-  have hpAction := hpCamera.mul tendsto_const_nhds
-  have hqAction := hqCamera.mul tendsto_const_nhds
+  have hpAction :
+      Tendsto
+        (fun L : ℕ =>
+          finiteNormalizedGenuineCamera p
+              (crossPrimeAlignedCutoff q L) s *
+            v (0 : Fin 2))
+        atTop
+        (nhds (genuineContinuation s * v (0 : Fin 2))) := by
+    simpa [Function.comp_def] using
+      hpCamera.mul
+        (tendsto_const_nhds :
+          Tendsto (fun _ : ℕ => v (0 : Fin 2))
+            atTop (nhds (v (0 : Fin 2))))
+  have hqAction :
+      Tendsto
+        (fun L : ℕ =>
+          finiteNormalizedGenuineCamera q
+              (crossPrimeAlignedCutoff p L) s *
+            v (1 : Fin 2))
+        atTop
+        (nhds (genuineContinuation s * v (1 : Fin 2))) := by
+    simpa [Function.comp_def] using
+      hqCamera.mul
+        (tendsto_const_nhds :
+          Tendsto (fun _ : ℕ => v (1 : Fin 2))
+            atTop (nhds (v (1 : Fin 2))))
   simpa [finiteAlignedOrthogonalGenuineOperator,
     orthogonalGenuineLimitOperator, twoPrimeGenuineDiagonalOperator] using
       (twoPrimeGenuineVector_tendsto hpAction hqAction)
