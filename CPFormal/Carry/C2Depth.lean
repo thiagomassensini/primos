@@ -58,11 +58,13 @@ theorem effectiveDepth_eq_centerDepth {n : ℕ} (hn3 : 3 ≤ n) (hn : Odd n) :
   rcases odd_mod_four hn with h | h
   · have hotherMod : (n + 1) % 4 = 2 := by omega
     have hother := padicValNat_two_eq_one_of_mod_four_two hotherMod
-    rw [effectiveDepth, adjacentCenter_of_mod_one h] at hcenter ⊢
+    rw [adjacentCenter_of_mod_one h] at hcenter
+    rw [effectiveDepth, adjacentCenter_of_mod_one h]
     rw [hother, max_eq_left (by omega)]
   · have hotherMod : (n - 1) % 4 = 2 := by omega
     have hother := padicValNat_two_eq_one_of_mod_four_two hotherMod
-    rw [effectiveDepth, adjacentCenter_of_mod_three h] at hcenter ⊢
+    rw [adjacentCenter_of_mod_three h] at hcenter
+    rw [effectiveDepth, adjacentCenter_of_mod_three h]
     rw [hother, max_eq_right (by omega)]
 
 end CPFormal.Carry.C2

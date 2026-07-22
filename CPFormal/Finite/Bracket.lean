@@ -26,8 +26,7 @@ theorem centeredSecondDifference_neg_radius
     (f : ℤ → A) (center radius : ℤ) :
     centeredSecondDifference f center (-radius) =
       centeredSecondDifference f center radius := by
-  simp [centeredSecondDifference, sub_eq_add_neg, add_comm, add_left_comm,
-    add_assoc]
+  simp [centeredSecondDifference, sub_eq_add_neg, add_comm, add_left_comm]
 
 theorem centeredSecondDifference_add
     (f g : ℤ → A) (center radius : ℤ) :
@@ -39,7 +38,7 @@ theorem centeredSecondDifference_add
 
 /-- Soma das segundas diferencas para raios `1, ..., h`. -/
 def saturatedBracket (h : ℕ) (f : ℤ → A) (center : ℤ) : A :=
-  ∑ radius in Finset.Icc 1 h,
+  ∑ radius ∈ Finset.Icc 1 h,
     centeredSecondDifference f center (radius : ℤ)
 
 @[simp] theorem saturatedBracket_zero (h : ℕ) (center : ℤ) :
@@ -50,6 +49,7 @@ theorem saturatedBracket_add
     (h : ℕ) (f g : ℤ → A) (center : ℤ) :
     saturatedBracket h (fun n ↦ f n + g n) center =
       saturatedBracket h f center + saturatedBracket h g center := by
-  simp [saturatedBracket, centeredSecondDifference_add]
+  simp only [saturatedBracket, centeredSecondDifference_add]
+  exact Finset.sum_add_distrib
 
 end CPFormal

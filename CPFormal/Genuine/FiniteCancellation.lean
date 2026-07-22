@@ -19,7 +19,7 @@ variable {ι R : Type*} [CommRing R]
 /-- Soma ponderada das pernas ja agrupadas por centro. -/
 def directChannel
     (centers : Finset ι) (weight legs : ι → R) : R :=
-  ∑ c in centers, weight c * legs c
+  ∑ c ∈ centers, weight c * legs c
 
 /--
 Canal bracketado: em cada centro, subtrai-se da soma das pernas o multiplo
@@ -27,13 +27,13 @@ central determinado pela camera.
 -/
 def bracketChannel
     (centers : Finset ι) (weight legs coefficient centerValue : ι → R) : R :=
-  ∑ c in centers,
+  ∑ c ∈ centers,
     weight c * (legs c - coefficient c * centerValue c)
 
 /-- Canal formado somente pelos centros que sobrevivem ao cancelamento. -/
 def survivingCenterChannel
     (centers : Finset ι) (weight coefficient centerValue : ι → R) : R :=
-  ∑ c in centers, weight c * coefficient c * centerValue c
+  ∑ c ∈ centers, weight c * coefficient c * centerValue c
 
 /-- Cancelamento local de uma camera em um unico centro. -/
 theorem localCancellation (legs coefficient centerValue : R) :

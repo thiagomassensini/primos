@@ -26,12 +26,26 @@ jobs:
       - name: Static audit
         run: bash scripts/static_audit.sh
 
-      - name: Elaborate with Lean kernel
+      - name: Set up Lean and mathlib cache
         uses: leanprover/lean-action@v1
         with:
           auto-config: false
-          build: true
-          build-args: --wfail
+          build: false
           test: false
           lint: false
           use-mathlib-cache: true
+
+      - name: Elaborate with Lean kernel
+        shell: bash
+        run: |
+          set -o pipefail
+          lake build --wfail 2>&1 | tee lean-build.log
+
+      - name: Preserve Lean failure log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lean-build-log-${{ github.run_id }}
+          path: lean-build.log
+          if-no-files-found: ignore
+          retention-days: 7

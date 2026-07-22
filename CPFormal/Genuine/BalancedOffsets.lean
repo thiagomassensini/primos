@@ -10,6 +10,8 @@ cardinalidade e cobertura residual, que serao adicionados separadamente.
 
 namespace CPFormal.Genuine.Cp
 
+noncomputable section
+
 /-- Semialcance da camera prima. -/
 def halfRange (p : ℕ) : ℕ :=
   (p - 1) / 2
@@ -27,4 +29,5 @@ theorem mem_balancedOffsets_iff {p : ℕ} {a : ℤ} :
       a ≠ 0 ∧ (-(halfRange p : ℤ) ≤ a ∧ a ≤ (halfRange p : ℤ)) := by
   simp [balancedOffsets]
 
+end
 end CPFormal.Genuine.Cp

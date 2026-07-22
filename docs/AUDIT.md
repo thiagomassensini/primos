@@ -1,4 +1,4 @@
-# Auditoria do bootstrap 0.2.0 Genuine-first
+# Auditoria Genuine-first
 
 ## Verificacoes realizadas
 
@@ -20,8 +20,8 @@
 - por isso o `lake build` falhou antes da elaboracao dos arquivos do projeto,
   com `error: failed to locate application`.
 
-Uma execucao fora do sandbox exige autorizacao explicita do usuario. Nenhum
-lema recebe o estado `KERNEL_CHECKED` antes dessa execucao terminar com sucesso.
+O bloqueio local foi contornado de forma auditavel pelo GitHub Actions, sem
+alterar o executavel nem as regras do sandbox.
 
 Primeiro comando obrigatorio num ambiente Lean:
 
@@ -44,3 +44,664 @@ O workflow `.github/workflows/lean.yml` usa `leanprover/lean-action@v1` num
 runner `ubuntu-latest`, roda primeiro `scripts/static_audit.sh` e depois
 `lake build --wfail`. O workflow e uma alternativa limpa ao compilador local
 quando o sandbox impede a inicializacao do Lean.
+
+## Certificacao do nucleo ativo
+
+- repositorio privado: `thiagomassensini/primos`;
+- pull request de auditoria: `#1`;
+- branch: `agent/lean-kernel-audit`;
+- commit certificado: `2a29c850389c888c6f1b5bde2dcb899fd261b559`;
+- workflow run: `29634840124` (`Lean kernel audit`, run number 9);
+- resultado: `success` em `lake build --wfail`;
+- Lean: `v4.32.0`;
+- mathlib: revisao fixada pelo `lake-manifest.json`.
+
+## Checkpoint ponderado C2
+
+- commit certificado: `0cc016b69419b811cbf12867f46605280ecdf7db`;
+- workflow run: `29635654651` (`Lean kernel audit`, run number 17);
+- job: `88057413962` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Carry.C2WeightedReindex`.
+
+Esse checkpoint certifica a bijecao finita, o transporte do peso de
+profundidade e a identidade
+
+```text
+direct = expected + extra - missing.
+```
+
+Ele nao certifica uma escolha concreta de caixas infinitas, convergencia,
+identidade com zeta, equivalencia de zeros ou RH.
+
+## Checkpoint de caixa alinhada C2
+
+- commit certificado: `45b7fe8bb761117609054f0b448c8c11db375b78`;
+- workflow run: `29636078858` (`Lean kernel audit`, run number 20);
+- job: `88058546887` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Carry.C2AlignedBox`.
+
+Esse checkpoint define concretamente os centros `4,8,...,4M`, inclui as duas
+pernas de cada centro e prova que a caixa de pernas transportada pela bijecao
+recupera exatamente essas incidencias. Portanto os Finsets de extras e de
+faltantes sao ambos vazios e a reindexacao ponderada nao possui termo de
+bordo.
+
+## Checkpoint de intervalo impar C2
+
+- commit certificado: `b6cdb634a1bbb25eb56709e964d9738e4d001e26`;
+- workflow run: `29636657680` (`Lean kernel audit`, run number 25);
+- job: `88060082966` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`.
+
+O kernel verificou que a caixa de pernas puxada das incidencias e literalmente
+a enumeracao `2k+3`, para `k<2M`. Em particular, seus elementos sao exatamente
+os impares de `3` a `4M+1` e sua cardinalidade e `2M`.
+
+## Checkpoint de residuos balanceados Cp
+
+- commit certificado: `211e2a09fa5312c5fb851de9f4a71f05209b0b24`;
+- workflow run: `29637023211` (`Lean kernel audit`, run number 27);
+- job: `88061047891` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Carry.CpBalancedResidue`.
+
+Para primo impar `p`, o kernel verificou a equivalencia entre offsets
+balanceados e residuos nao nulos de `ZMod p`. A inversa usa
+`ZMod.valMinAbs`, e a camera possui cardinalidade `p-1`.
+
+## Checkpoint da bijecao global Cp
+
+- commit certificado: `e8b9cf7cedf15e7917d7837bb50bb6412d048ccb`;
+- workflow run: `29638936254` (`Lean kernel audit`, run number 34);
+- job: `88066026811` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Carry.CpGlobalIncidence`.
+
+Para primo impar `p`, o kernel verificou que todo inteiro nao divisivel por
+`p` possui um unico offset balanceado `a`; o numero `c=n-a` e divisivel por
+`p`, e a correspondencia `n <-> (c,a)` e uma equivalencia. Tambem foi
+elaborada diretamente a forma existencial unica `∃! (c,a), n=c+a` dentro do
+tipo de incidencias.
+
+## Checkpoint da profundidade efetiva Cp
+
+- commit certificado: `b24ea3d440198b779d30333df608a4cb0b2c78a0`;
+- workflow run: `29640037006` (`Lean kernel audit`, run number 38);
+- job: `88068948411` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Carry.CpDepth`.
+
+O kernel verificou que, entre todos os offsets balanceados da carta, apenas o
+offset canonico torna `n-a` divisivel por `p`. Os demais termos possuem
+`padicValInt` zero, e o supremo finito das profundidades e igual a profundidade
+do centro canonico. O caso `centro = 0` segue a convencao explicita da Mathlib
+`padicValInt p 0 = 0`; para centro nao nulo, foi provada profundidade ao menos
+um.
+
+## Checkpoint da reindexacao ponderada Cp
+
+- commit certificado: `52afc4ffa81f0d62ed732b86de3c4c7f3537284a`;
+- workflow run: `29640821068` (`Lean kernel audit`, run number 45);
+- job: `88070933888` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Carry.CpWeightedReindex`.
+
+O kernel verificou que a bijecao global Cp preserva simultaneamente o valor da
+perna e qualquer peso que dependa da profundidade efetiva. Para caixas finitas
+arbitrarias, a soma direta e a soma esperada diferem exatamente pelas
+incidencias extras menos as faltantes. Quando a imagem da caixa de pernas e a
+caixa esperada coincidem, a reindexacao nao possui bordo.
+
+## Checkpoint de caixa alinhada Cp
+
+- commit certificado: `49f8d226f1f9718fb15d76b89c5934f9852e8303`;
+- workflow run: `29642943076` (`Lean kernel audit`, run number 57);
+- job: `88076344500` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Carry.CpAlignedBox`.
+
+Para primo impar `p`, o kernel verificou que os indices dos centros
+`p,2p,...,Mp` e de todos os offsets balanceados se injetam nas incidencias sem
+colisoes. As caixas de incidencias e de pernas possuem cardinalidade exata
+`M(p-1)`. A caixa de pernas e a pre-imagem pela equivalencia global Cp; sua
+imagem e, portanto, exatamente a caixa bracketada. Extras e faltantes sao
+vazios e a reindexacao ponderada possui bordo zero.
+
+O alvo compilado e `CPFormal.lean`, isto e, o nucleo Genuine-first. O modulo
+`CPFormal.ResearchReserve` e seus imports espectrais/projetivos nao foram
+promovidos por esse run.
+
+## Checkpoint dos pesos, norma de ramo e tilt Cp
+
+- commit certificado: `aec9140c36ed5274a8eb7e8a919ef86c0971c5e9`;
+- workflow run: `29644692098` (`Lean kernel audit`, run number 65);
+- job da tentativa verde: `88080985687` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novos alvos compilados: `CPFormal.Carry.CpBranchWeight`,
+  `CPFormal.Analytic.CpBranchNorm` e `CPFormal.Analytic.CpTilt`.
+
+O kernel verificou a identidade amplitude--massa, o transporte dos pesos
+`p^(-k)` pela profundidade de carry, a soma geometrica da norma quadratica, o
+criterio `norma^2=1 <-> sigma=1/2`, a anulacao critica do tilt Cp e a
+implicacao defeito nulo da norma para tilt nulo. A primeira tentativa desse
+run falhou antes do Lean por reset de conexao ao instalar Elan; a reexecucao
+do mesmo workflow concluiu com sucesso.
+
+A estrutura `GenuineBranchBridge` permanece sem instancia. Portanto esse run
+nao prova que um zero Genuine satura a norma; apenas verifica a conclusao
+condicional caso essa ponte seja construida.
+
+## Checkpoint da rigidez de sinal do tilt Cp
+
+- commit certificado: `4ed11cfed623a94982a7ba3316f5a290c16fb4c9`;
+- workflow run: `29647362054` (`Lean kernel audit`, run number 69);
+- job: `88087733439` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpTiltRigidity`.
+
+O kernel verificou a invariancia dos offsets balanceados por negacao, a
+decomposicao do tilt em brackets simetricos, o sinal estrito de cada bracket
+por convexidade/concavidade e a conclusao
+
+```text
+cpTiltAtSigma p sigma center = 0  <->  sigma = 1/2
+```
+
+para primo impar, `sigma>0` e `center>halfRange(p)`. No mesmo dominio, o zero
+do tilt foi identificado com o zero do defeito da norma de ramo. Esse
+checkpoint nao fornece uma instancia de `GenuineBranchBridge`.
+
+## Checkpoint da carta finita Cp e do criterio Green
+
+- commit certificado: `e9b8c3d9cd3e13b7085db35b9947743204fcf5b1`;
+- workflow run: `29648404437` (`Lean kernel audit`, run number 75);
+- job: `88090470740` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novos alvos compilados: `CPFormal.Genuine.CpFiniteChart` e
+  `CPFormal.Analytic.CpGreenBridge`.
+
+O kernel verificou, para qualquer anel comutativo, a decomposicao de cada
+bracket Cp como bloco completo menos `p` copias do centro e sua soma nos
+primeiros `M` centros. Tambem verificou que uma identidade Green assinada com
+energia positiva, fluxo Genuine nulo e bordo nulo produz a ponte para a norma
+do ramo.
+
+`SignedGreenCertificate` nao possui uma instancia concreta neste checkpoint.
+Em particular, fluxo, cauda, convergencia, identidade infinita da carta e RH
+permanecem fora da conclusao certificada.
+
+## Checkpoint do ladrilhamento literal da carta Cp
+
+- commit certificado: `bad4f56825e0d42d0fc628c3a54a46d8503865bf`;
+- workflow run: `29649780593` (`Lean kernel audit`, run number 78);
+- job: `88094014871` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- alvo compilado ampliado: `CPFormal.Genuine.CpFiniteChart`.
+
+O kernel verificou a traducao de cada bloco para um intervalo inteiro, a
+decomposicao de intervalos adjacentes e a inducao que identifica
+
+```text
+blockPrefix p M f
+  = sum_{1 <= n <= pM+halfRange(p)} f(n).
+```
+
+Por substituicao, a carta finita ficou escrita diretamente como esse prefixo
+positivo menos `p` vezes a soma dos centros. O enunciado e generico em `f`,
+por isso nao se acrescentou uma especializacao redundante em potencias
+complexas. Este checkpoint nao certifica fatoracao da soma central,
+convergencia, identidade infinita, equivalencia de zeros, certificado Green
+concreto ou RH.
+
+## Checkpoint da fatoracao finita de Dirichlet Cp
+
+- commit certificado: `8d941e55af4b1e4e1c6b325b6b07bc90aaa04e8c`;
+- workflow run: `29653694412` (`Lean kernel audit`, run number 80);
+- job: `88104213909` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpFiniteDirichletChart`.
+
+O kernel verificou a multiplicatividade da potencia complexa principal nas
+bases naturais nao negativas, a igualdade `p*p^(-s)=p^(1-s)` para primo `p`,
+a fatoracao da soma finita dos centros e sua substituicao na carta literal.
+
+O resultado e puramente finito e vale para todo `s : Complex`. Este checkpoint
+nao afirma convergencia da serie bracketada, identidade com zeta/Genuine no
+limite, continuacao analitica, equivalencia de zeros, certificado Green
+concreto ou RH.
+
+## Checkpoint da passagem ao limite Cp em `Re(s)>1`
+
+- commit certificado: `44a539e2c432f88d1bda4670ff3daba1a287819e`;
+- workflow run: `29656769332` (`Lean kernel audit`, run number 84);
+- job: `88112424965` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpDirichletLimit`.
+
+O kernel verificou `Complex.summable_one_div_nat_cpow` sob `Re(s)>1`, o
+reindexamento da serie a partir de `n=1`, a convergencia dos prefixos e o fato
+de que `pM+halfRange(p)` tende a infinito. Com a identidade finita anterior,
+isso produz
+
+```text
+finiteChart_p,M(s)
+  -> (1-p^(1-s)) * genuineDirichlet(s).
+```
+
+O objeto `genuineDirichlet` e a soma da serie positiva definida dentro do
+projeto. O checkpoint nao prova que ele coincide, por um teorema separado,
+com a zeta de Riemann da Mathlib; tambem nao trata `Re(s)<=1`, continuacao
+analitica, equivalencia de zeros, certificado Green concreto ou RH.
+
+## Checkpoint da carta Cp bracketada em `Re(s)>-1`
+
+- commit certificado: `af30c410ed6c68f4f4d9a35a4d88435a592b55c8`;
+- workflow run: `29662384450` (`Lean kernel audit`, run number 102);
+- job: `88127131010` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novos alvos compilados: `CPFormal.Analytic.CenteredSecondDifferenceBound`,
+  `CPFormal.Analytic.DirichletSecondDifference`,
+  `CPFormal.Genuine.CpBracketPairing` e
+  `CPFormal.Analytic.CpBracketConvergence`.
+
+O kernel verificou a cota quadratica abstrata da segunda diferenca, as duas
+derivadas de `x^(-s)`, o majorante explicito de cada bloco e a somabilidade
+absoluta da serie bracketada para `Re(s)>-1`. Para primo impar, tambem
+verificou a identidade puramente finita
+
+```text
+Genuine.Cp.bracket = saturatedBracket
+```
+
+e, portanto, que os proprios prefixos `Genuine.Cp.finiteChart` convergem para
+`bracketedDirichletChart`. No semiplano comum `Re(s)>1`, a unicidade do limite
+identifica essa carta com `(1-p^(1-s))*genuineDirichlet(s)`.
+
+Este checkpoint prova convergencia absoluta pontual, nao convergencia
+localmente uniforme. Assim, ainda nao certifica holomorfia do `tsum`,
+continuacao analitica pelo teorema de identidade, equivalencia de zeros,
+certificado Green concreto ou RH.
+
+## Checkpoint da holomorfia e unicidade da continuacao Cp
+
+- commit certificado: `da0585ced6f3922da6b32d57b54f169910357ca7`;
+- workflow run: `29665212572` (`Lean kernel audit`);
+- job: `88134403089` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpBracketHolomorphic`.
+
+Para cada `z` em `Re(s)>-1`, o kernel verificou que a bola de raio
+`(Re(z)+1)/2` admite um majorante somavel comum para todos os blocos
+bracketados. A constante controla `||s(s+1)||` em toda a bola, e o expoente
+usa o piso real `(Re(z)-1)/2>-1`. O criterio de Weierstrass da Mathlib produz
+a holomorfia da cauda e da carta completa nesse semiplano.
+
+O kernel tambem verificou que o semiplano e convexo e preconexo e aplicou o
+principio da identidade: qualquer funcao analitica em `Re(s)>-1` que coincide
+com `(1-p^(1-s))*genuineDirichlet(s)` em `Re(s)>1` coincide com a carta
+bracketada em todo o dominio.
+
+Este checkpoint nao identifica `genuineDirichlet` com `riemannZeta`, nao
+prova a nao anulacao do fator, equivalencia de zeros, certificado Green
+concreto, operador Hilbert--Polya ou RH. Tambem nao exporta um teorema separado
+quantificado sobre compactos; o majorante local em bolas e o endpoint usado
+para certificar a holomorfia.
+
+## Checkpoint do fator regular e quociente Genuine Cp
+
+- commit certificado: `26379be9ed40c9196bd85af8bcba6b2808cf2481`;
+- workflow run: `29667470934` (`Lean kernel audit`, run number 118);
+- job: `88140361964` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpGenuineQuotient`.
+
+O kernel verificou a identidade de modulo
+
+```text
+||p^(1-s)|| = p^(1-Re(s))
+```
+
+para primo `p`. A monotonicidade estrita de `Real.rpow` mostra que esse modulo
+e maior que um abaixo de `Re(s)=1` e menor que um acima. Consequentemente,
+`1-p^(1-s)=0` implica `Re(s)=1`, e o fator nao zera no interior da faixa
+critica.
+
+Foi definido `cpGenuineQuotient` como carta dividida pelo fator. O kernel
+verificou que ele e holomorfo em `0<Re(s)<1`, coincide com a serie
+`genuineDirichlet` em `Re(s)>1` para primo impar e tem zeros equivalentes aos
+da carta dentro da faixa.
+
+O indice primo permanece parte da definicao. Este checkpoint nao prova que os
+quocientes de primos diferentes coincidem na faixa, nao identifica o objeto
+com `riemannZeta`, nao trata multiplicidades, nao constroi certificado Green
+concreto, operador Hilbert--Polya ou RH.
+
+## Checkpoint da compatibilidade Genuine entre cameras Cp
+
+- commit certificado: `a31645bbf79a2743ab14bfbd0343c30b8b6f510c`;
+- workflow run: `29668593622` (`Lean kernel audit`, run number 123);
+- job: `88143422851` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpGenuineCompatibility`.
+
+Para primos impares `p,q`, o kernel verificou em `Re(s)>1` a identidade
+cruzada entre `F_q*B_p` e `F_p*B_q`. Como ambos os produtos sao holomorfos no
+semiplano preconexo `Re(s)>-1`, o principio da identidade prolonga a igualdade
+antes de qualquer divisao. Dentro da faixa critica, os fatores sao nao nulos;
+o cancelamento prova que os quocientes de `p` e `q` coincidem.
+
+O representante `genuineContinuation`, escolhido pela camera `p=3`, e
+portanto independente da camera na faixa, e holomorfo nela e recupera a serie
+Genuine no semiplano inicial. Os zeros de qualquer carta prima impar
+equivalem aos zeros desse mesmo representante na faixa.
+
+Este checkpoint nao identifica o representante com `riemannZeta`, nao trata
+multiplicidades, nao constroi certificado Green concreto, operador
+Hilbert--Polya ou RH.
+
+## Checkpoint Green Cp finito e endpoint refletido
+
+- commit certificado: `7b1275cf6af93a3c03be53e80f780127b42c7b6c`;
+- workflow run: `29670152564` (`Lean kernel audit`, run number 129);
+- job: `88147549171` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novos alvos compilados: `CPFormal.Analytic.CpFiniteGreen` e
+  `CPFormal.Analytic.CpReflectedEndpoint`.
+
+O kernel verificou a telescopagem Green finita com endpoints literais, a
+relacao de autovetor `B_p g_s=p^(-s)g_s`, a fatoracao exata do Wronskiano
+finito pela diferenca dos autovalores refletidos e a ligacao dos cortes da
+carta ao Genuine canonico em `Re(s)>1`.
+
+Tambem verificou, para `s#=1-conj(s)`, que o produto refletido no endpoint
+externo e exatamente `(M+1)^(-1)` e tende a zero. O endpoint inicial nao foi
+apagado: permanecem abertas sua identificacao com o traco bracketado, a
+normalizacao radial, a positividade refletida e a instancia concreta de
+`SignedGreenCertificate`. Este checkpoint nao constroi operador
+Hilbert--Polya e nao prova RH.
+
+## Checkpoint do certificado Green Cp complexo finito
+
+- commit certificado: `b0b47a87a64acfd129fbeb4f0cac148ccc4114ae`;
+- workflow run: `29671533493` (`Lean kernel audit`, run number 131);
+- job: `88151337679` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpFiniteGreenCertificate`.
+
+O kernel verificou uma estrutura finita que conserva separadamente o
+Wronskiano de bloco e a corrente de Stokes. A instancia Cp concreta deriva
+`flux=coefficient*energy+boundary`, onde o fluxo e Wronskiano mais Stokes, a
+energia e o pareamento refletido e o bordo e a diferenca literal dos
+endpoints. O mesmo certificado prova `boundary=1/(M+1)-1`.
+
+O certificado e complexo, nao o `SignedGreenCertificate` real consumido pela
+reducao final. A retirada da fase, a positividade da parte real e o
+cancelamento do endpoint interno pela porta bracketada permanecem abertos.
+Este checkpoint nao constroi operador Hilbert--Polya e nao prova RH.
+
+## Checkpoint da normalizacao radial Green Cp finita
+
+- commit matematico certificado: `3326ae95321c9e3e3f0477f347a0ccf6f3ca8c02`;
+- workflow run: `29673514330` (`Lean kernel audit`);
+- job: `88156612420` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpFiniteGreenRadial`.
+
+O kernel verificou que a normalizacao `p^(1/2+i Im(s))`, aplicada a cada
+bloco antes do Wronskiano, transforma os autovalores de `s` e
+`1-conj(s)` nos escalares reais `p^(-delta)` e `p^delta`. O fluxo orientado
+fatora por `p^delta-p^(-delta)`, e essa diferenca e exatamente `2*delta`
+vezes um cofator estritamente positivo para toda base prima.
+
+Ao tomar partes reais e recombinar a corrente de Stokes, o kernel elaborou a
+identidade Green assinada finita com bordo literal. Nao foi provado que a
+parte real do pareamento refletido e positiva; portanto a positividade da
+energia completa permanece aberta. Tambem permanecem abertos o cancelamento
+do endpoint interno pelo bracket Genuine, a passagem ao limite, uma instancia
+concreta de `SignedGreenCertificate`, um operador Hilbert--Polya e RH.
+
+## Checkpoint da positividade Green Cp termo a termo
+
+- commit matematico certificado: `1fc3d26f66eff2a4772d6ad5f073b923f6c1156f`;
+- workflow run: `29705176557` (`Lean kernel audit`);
+- job: `88240845070` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpFiniteGreenPositivity`.
+
+O kernel verificou a expansao de cada aresta refletida em dois diagonais
+menos dois termos cruzados, as normas exatas desses cruzados e a desigualdade
+real estrita valida em toda a faixa `0<Re(s)<1`. Como consequencia, cada
+aresta tem parte real positiva, todo corte `M>0` possui pareamento refletido
+positivo e a energia radial Green finita e positiva para toda base prima.
+
+Naquele checkpoint permaneceram abertos a identificacao do endpoint interno
+com o bracket Genuine, a anulacao do fluxo em zeros Genuine, a passagem ao
+limite, uma instancia concreta de `SignedGreenCertificate`, um operador
+Hilbert--Polya e RH. O checkpoint seguinte fecha apenas a componente de bordo.
+
+## Checkpoint da porta bracketada e do bordo Green canonico
+
+- commit matematico certificado: `d082847d71a26257045de7fb056403ed0c1d02cf`;
+- workflow run: `29706219224` (`Lean kernel audit`);
+- job: `88243582695` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpBracketGreenBoundary`.
+
+O kernel verificou que a semente da camera canonica `p=3` e exatamente o
+endpoint Green interno refletido `1`. A partir de definicoes independentes,
+verificou em cada corte a identidade
+
+```text
+rawBoundary_M - canonicalBracketTrace_M
+  = outerEndpoint_M - finiteBracketedChart_3,M.
+```
+
+Tambem verificou que a mesma porta pode ser subtraida do fluxo e do bordo sem
+alterar a identidade Green assinada finita. Em todo zero de
+`genuineContinuation` na faixa critica, a carta finita e o endpoint externo
+convergem a zero; portanto o bordo acoplado converge a zero, tanto em `Complex`
+quanto em sua parte real assinada.
+
+Este run nao prova a anulacao ou o limite nulo do fluxo de bulk acoplado, nao
+controla o limite de energia necessario, nao constroi uma instancia concreta
+de `SignedGreenCertificate`, nao constroi operador Hilbert--Polya e nao prova
+RH.
+
+## Checkpoint da caracterizacao do fluxo Green acoplado
+
+- commit matematico certificado: `3fcb6d5a05a2395bcdf3d58d94ef6a7a0afd1f38`;
+- workflow run: `29706939780` (`Lean kernel audit`);
+- job: `88245427884` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpBracketGreenFlux`.
+
+O kernel verificou que o fluxo acoplado e a soma independente da parte real
+do bulk orientado com o bordo bracketado. Tambem preservou a fatoracao
+
+```text
+coupledFlux_M
+  = radialDifference*Re(reflectedPairing_M) + coupledBoundary_M.
+```
+
+Cada novo corte adiciona uma aresta de parte real positiva, portanto a parte
+real do pareamento e monotona e fica acima do primeiro corte estritamente
+positivo. Com o bordo ja nulo no limite em zeros Genuine, o kernel concluiu
+
+```text
+coupledFlux_M -> 0  <->  criticalDisplacement=0.
+```
+
+Essa equivalencia nao fornece a anulacao do fluxo a partir do zero Genuine;
+ela prova que tal anulacao e exatamente a ponte critica. Permanecem abertos os
+tracos de porta `Phi/Psi`, uma identidade independente que forneca essa
+direcao, uma instancia concreta de `SignedGreenCertificate`, operador
+Hilbert--Polya e RH.
+
+## Checkpoint da porta angular finita canonica
+
+- commit matematico certificado: `995e0943697b74cc522d965231e90339f52b94fb`;
+- workflow run: `29708436603` (`Lean kernel audit`);
+- job: `88249048235` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado: `CPFormal.Analytic.CpAngularPort`.
+
+O kernel verificou que a corrente angular finita da camera `p=3`, definida
+em blocos pelos pesos residuais `1,2,0`, e independente da definicao da carta.
+Abrindo os dois objetos e telescopando os endpoints, verificou para todo corte
+
+```text
+finiteBracketedChart_3,M = finiteAngularTrace_M + (3M+1)^(-s).
+```
+
+Para `Re(s)>0`, verificou que o endpoint explicito converge a zero e que o
+traco angular converge para a carta bracketada. Em zeros de
+`genuineContinuation` na faixa critica, concluiu que esse traco converge a
+zero. O checkpoint nao constroi `Psi`, nao prova a identidade Wronskiana nem a
+anulacao do fluxo acoplado, nao constroi operador Hilbert--Polya e nao prova
+RH.
+
+## Checkpoint do log-jet finito da porta angular
+
+- commit matematico certificado: `de6715e04877994629747455ebfc6cc2c54f8ab0`;
+- workflow run: `29710050913` (`Lean kernel audit`);
+- job: `88252649077` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- alvo compilado: `CPFormal.Analytic.CpAngularPort`.
+
+O kernel verificou a construcao independente do campo log-pesado
+
+```text
+L_s(n)=log(n+1)*(n+1)^(-s)
+```
+
+e do traco angular obtido de seus gradientes com pesos `1,2,0`. A carta
+log-bracketada foi definida separadamente; a telescopagem finita forneceu
+
+```text
+finiteLogBracketChart_M = finiteLogJetTrace_M + L_s(3M).
+```
+
+Tambem foram verificadas a norma exata de `L_s(n)` e a convergencia
+`L_s(3M)->0` para `Re(s)>0`, usando a dominacao assintotica do logaritmo por
+potencias positivas.
+
+Esse log-jet e um candidato escalar finito a `Psi`. O run nao o identifica
+com o retorno TFVD enriquecido, nao prova a identidade Wronskiana com `Phi`,
+nao prova a anulacao do fluxo Green em zeros Genuine, nao constroi operador
+Hilbert--Polya e nao prova RH.
+
+## Checkpoint da ponte TFVD finita e do termo off-diagonal
+
+- commit matematico certificado: `60d8885e8959066a1f035651e7a573cc2c80edb0`;
+- workflow run: `29711460431` (`Lean kernel audit`);
+- job: `88255906393` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- alvos compilados: `CPFormal.Analytic.CpFiniteTfvdBridge` e
+  `CPFormal.Analytic.CpFinitePortWronskian`.
+
+O kernel verificou a codificacao TFVD tipada com indice de bloco, through-flow
+e bracket-flow, sua inversao local exata e a especializacao da escala a
+`sqrt(2)`. Verificou tambem que a leitura linear independente das duas
+coordenadas recupera os pesos angulares `1,2`. Somada sobre os blocos, essa
+leitura recupera literalmente as portas finitas `Phi_M` e `Psi_M` para toda
+familia de pesos de curvatura nao nulos.
+
+O Wronskiano das sinteses escalares foi expandido numa matriz de pares de
+blocos e separado em diagonal mais off-diagonal explicito. Um witness de dois
+blocos com off-diagonal igual a `1` prova que a compressao escalar nao pode
+ser identificada universalmente com o fluxo Green diagonal. O checkpoint nao
+prova a identidade diagonal TFVD--Green, nao prova cancelamento aritmetico da
+interferencia, nao prova a anulacao do fluxo em zeros Genuine, nao constroi
+operador Hilbert--Polya e nao prova RH.
+
+## Checkpoint do pullback diagonal TFVD--Green
+
+- commit matematico certificado: `42bc0ce6d4d64502005a1cef4500a9df36c4f4c5`;
+- workflow run: `29714351088` (`Lean kernel audit`);
+- job: `88264360190` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- alvo compilado: `CPFormal.Analytic.CpFinitePortWronskian`.
+
+O kernel verificou uma forma Green refletida fixa no portador TFVD, definida
+pelo retorno local das duas arestas e nao por um residual. A coordenada Green
+canonica preserva literalmente o indice `n` e codifica o bloco Cp normalizado
+em fase junto do gradiente horizontal no mesmo registro.
+
+A identificacao foi provada primeiro coordenada por coordenada e depois
+somada somente na diagonal:
+
+```text
+finiteTfvdCpGreenDiagonal(p,M,s)
+  = finiteOrientedCpGreenFlux(p,M,s).
+```
+
+A igualdade nao usa hipotese de zero, passagem ao limite, calibracao ou
+cancelamento off-diagonal. Ela fecha o pullback TFVD do portador Green, mas
+nao identifica as coordenadas angulares/log-jet que recuperam `Phi_M/Psi_M`
+com esse portador. O intertwiner angular--Green e o cancelamento da
+interferencia escalar permanecem gates separados. Nao foram provados
+`Green-to-zero`, operador Hilbert--Polya ou RH.
+
+## Checkpoint da aresta dormente e do intertwiner angular--Green
+
+- commit matematico certificado: `ef39ed4ec05e97ec449422a524537c2c570907d6`;
+- workflow run: `29715936088` (`Lean kernel audit`);
+- job: `88269139110` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado:
+  `CPFormal.Analytic.CpFiniteTfvdAngularGreenIntertwiner`.
+
+O kernel verificou que o portador TFVD angular atual recupera e transporta
+exatamente os gradientes nos residuos `0,1 mod 3` para os dois portadores
+Green canonicos correspondentes. A terceira aresta do bloco possui peso
+angular zero, mas continua sendo consumida pelo Green.
+
+Um witness tipado provou que nenhum mapa universal do par de coordenadas
+TFVD ordinaria/log-jet atual pode reconstruir uma terceira aresta arbitraria:
+as mesmas entradas seriam obrigadas a produzir `0` e `1`.
+
+Foi entao adicionado somente o campo `dormantEdge`. O retorno enriquecido
+recupera as tres arestas, enquanto esquecer esse campo devolve
+definicionalmente as portas anteriores e preserva literalmente os readouts
+`Phi/Psi`. O teorema central verificou bloco por bloco que os dois canais
+visiveis e o dormente produzem exatamente o trio Green canonico nos indices
+`3m`, `3m+1` e `3m+2`.
+
+O checkpoint nao identifica ainda o Wronskiano do log-jet enriquecido com a
+forma Green, nao trata a soma off-diagonal, nao prova `Green-to-zero`, nao
+passa ao limite, nao constroi operador Hilbert--Polya e nao prova RH.
+
+## Checkpoint do wedge log-jet enriquecido e do defeito Green
+
+- commit matematico certificado: `946d8579cb6a2557721e72be2e51676f1899d629`;
+- workflow run: `29717563536` (`Lean kernel audit`);
+- job: `88273712912` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado:
+  `CPFormal.Analytic.CpFiniteTfvdLogJetGreenComparison`.
+
+O kernel verificou que o wedge refletido das quatro portas TFVD
+enriquecidas recupera e pareia separadamente os tres residuos do bloco,
+inclusive a aresta dormente. Coordenada por coordenada, o wedge log-jet foi
+reduzido a um salto de logaritmo multiplicado pelo fluxo cruzado dos dois
+vertices consecutivos.
+
+Esse fluxo de vertices foi comparado com o wedge Green radial, construido
+independentemente. O resultado exato e uma decomposicao tipada
+
+```text
+logJetWedgeTriple = cpGreenWedgeTriple + defectTriple.
+```
+
+Um witness canonico verificou que, na primeira aresta e em `s=0`, o wedge
+log-jet vale `-log(2)/2`, enquanto o wedge Green vale zero para toda base
+`p`. Portanto a igualdade direta nao e uma identidade algebrica universal e
+o canal de defeito nao pode ser apagado. O witness esta fora da faixa
+critica e nao exclui uma identidade adicional restrita ou renormalizada.
+
+Este checkpoint nao prova que o defeito telescopa ou se anula, nao formaliza
+ainda o comutador log-jet do bloco Cp, nao trata a soma off-diagonal, nao
+prova `Green-to-zero`, nao passa ao limite, nao constroi operador
+Hilbert--Polya e nao prova RH.

@@ -1,0 +1,116 @@
+# Mapa das fontes de pesquisa
+
+As fontes abaixo orientaram o bootstrap, mas nenhuma declaracao delas foi
+importada automaticamente como teorema Lean.
+
+| Fonte | Papel |
+|---|---|
+| `GENUINE_C2_CP_RESUMO(1).md` | definicoes Genuine C2/Cp e cancelamento de pernas |
+| `CANON_DECOMPOSICAO_ANGULAR_CAMERAS_PRIMAS(2).md` | genealogia, atlas multibase, status e ponte aberta |
+| `C2_EQUACAO_ANGULAR_PROJETIVA_MULTIBASE.md` | espaco ponderado, sintese de Riesz e projecao |
+| `TEOREMA_CARTA_BRACKETADA_ADAPTADA_A_CARACTERES_DE_DIRICHLET(2).md` | reserva de pesquisa para cartas sincronizadas |
+| `Texto colado(76).txt` | implementacao numerica intervalar finita |
+| `Library/Lean/GlobalDecomposition.lean` | antecedente arquitetural C2 para endereco global e existencia unica; nao importado como prova Cp |
+| `Library/Lean/OperatorNorm.lean` | antecedente C2 da massa dominante e do criterio de saturacao; auditado, mas a formula Cp foi derivada novamente |
+| `Library/Lean/Tilt.lean` | antecedentes de anulacao e sinal do tilt de duas pernas; somente a parte estrutural foi reaproveitada nesta etapa |
+| `Library/GENUINE_FIRST/cp_branch_tilt_operator.py` | especificacao Cp do ramo puro, energia por perna, profundidade inicial e tilt multirramo |
+| `C2_GREEN_HARDY_BOUNDARY_RELATION.md` | registra que continuidade Green nao fornece por si so o traco de fluxo; usado para manter o certificado concreto aberto |
+| `TEORIA_GEOMETRICA_DO_CARRY_E_OPERADOR_ORTOGONAL_MULTIBASE.md` | mapa de pesquisa para a formula da carta Cp e para a ponte carry--operador; nao importado como prova |
+| `GENUINE_GLOBAL_GEOMETRIA_VERTICAL_MULTIPRIMA_GITHUB.md` | mapa de pesquisa para a identidade inicial e para o alvo posterior de convergencia bracketada; nao importado como prova |
+
+Correspondencia atualmente formalizada a partir do resumo Genuine:
+
+| Formula da fonte | Endpoint Lean |
+|---|---|
+| `F_Cp = D_p - B_p` no nivel de cancelamento finito | `Genuine.finiteCancellation` |
+| bracket C2 deixa `2 f(c)` | `Genuine.C2.local_genuine_cancellation` |
+| bracket Cp deixa `(p-1) f(c)` | `Genuine.Cp.local_genuine_cancellation` |
+| `k_eff(n)=max(v_2(n-1),v_2(n+1))` | `Carry.C2.effectiveDepth` |
+| peso efetivo e peso do centro escolhido | `Carry.C2.effectiveDepth_eq_centerDepth` |
+| residuos nao nulos correspondem aos offsets balanceados Cp | `Carry.Cp.balancedOffsetEquivNonzeroResidue` |
+| camera Cp possui `p-1` pernas | `Carry.Cp.card_balancedOffsets` |
+| cada perna Cp nao multipla possui centro e offset balanceado unicos | `Carry.Cp.nonmultipleEquivIncidence`, `Carry.Cp.existsUnique_incidence` |
+| somente o offset canonico da carta Cp produz carry | `Carry.Cp.dvd_sub_iff_eq_offset` |
+| profundidade efetiva Cp e a profundidade do centro canonico | `Carry.Cp.effectiveDepth_eq_centerDepth` |
+| soma ponderada Cp preserva o peso do carry sob a bijecao | `Carry.Cp.weighted_reindex` |
+| caixa Cp arbitraria possui bordo assinado `extras - faltantes` | `Carry.Cp.weighted_reindex_with_boundary` |
+| cobertura Cp exata elimina o bordo | `Carry.Cp.weighted_reindex_of_exact_cover` |
+| centros Cp `p,2p,...,Mp` com todos os offsets balanceados | `Carry.Cp.alignedIncidenceBox` |
+| caixa Cp alinhada possui `M(p-1)` incidencias e pernas | `Carry.Cp.card_alignedIncidenceBox`, `Carry.Cp.card_alignedNonmultipleBox` |
+| a caixa direta Cp cobre exatamente a caixa bracketada | `Carry.Cp.incidenceImage_alignedNonmultipleBox` |
+| caixas Cp alinhadas possuem extras e faltantes vazios | `Carry.Cp.extraIncidences_alignedBox`, `Carry.Cp.missingIncidences_alignedBox` |
+| reindexacao ponderada sem bordo na caixa Cp alinhada | `Carry.Cp.weighted_reindex_alignedBox` |
+| massa critica `p^(-k)` e amplitude `p^(-k/2)` | `Carry.Cp.criticalMass`, `Carry.Cp.criticalAmplitude` |
+| quadrado da amplitude e a massa | `Carry.Cp.criticalAmplitude_sq_eq_mass` |
+| o peso concreto de carry atravessa a caixa Cp sem bordo | `Carry.Cp.criticalMass_reindex_alignedBox` |
+| massa do ramo em `sigma` e razao `p^(-2 sigma)` | `Carry.Cp.branchMassWeight`, `Carry.Cp.branchRatio` |
+| norma quadratica definida pela serie de profundidades | `Analytic.Cp.branchNormSq` |
+| forma fechada da norma | `Analytic.Cp.branchNormSq_eq_closed` |
+| norma quadratica igual a um exatamente em `sigma=1/2` | `Analytic.Cp.branchNormSq_eq_one_iff` |
+| defeito da norma e `sigma-1/2` possuem o mesmo zero | `Analytic.Cp.branchDefect_eq_zero_iff_criticalDisplacement_eq_zero` |
+| tilt bracketado de todas as pernas Cp | `Analytic.Cp.cpTilt` |
+| norma saturada implica tilt nulo | `Analytic.Cp.branchDefect_zero_implies_cpTiltAtSigma_zero` |
+| pareamento exato do tilt por `a ↦ -a` | `Analytic.Cp.cpTilt_eq_half_sum_pair` |
+| sinal positivo de cada bracket para `delta>0` | `Analytic.Cp.cpPairTilt_pos_of_delta_pos` |
+| sinal negativo de cada bracket para `-1<delta<0` | `Analytic.Cp.cpPairTilt_neg_of_neg_one_lt_delta` |
+| rigidez canonica do tilt fora da camera | `Analytic.Cp.tiltRigidityAt_of_halfRange_lt_center` |
+| zeros do tilt exatamente na meia abscissa | `Analytic.Cp.cpTiltAtSigma_eq_zero_iff_half` |
+| equivalencia entre defeito da norma e tilt no centro admissivel | `Analytic.Cp.branchDefect_eq_zero_iff_cpTiltAtSigma_eq_zero_of_admissible_center` |
+| bloco completo = pernas + centro | `Genuine.Cp.centerBlock_eq_legSum_add_center` |
+| transladar um bloco completo produz seu intervalo inteiro | `Genuine.Cp.centerBlock_eq_sum_Icc` |
+| bracket Cp = bloco completo menos `p` centros | `Genuine.Cp.bracket_eq_centerBlock_sub_p_mul_center` |
+| carta finita = prefixo por blocos menos correcao vertical | `Genuine.Cp.finiteChart_eq_blockPrefix_sub_p_mul_centerSum` |
+| os blocos alinhados ladrilham `1,...,pM+halfRange(p)` | `Genuine.Cp.blockPrefix_eq_positiveIntervalSum` |
+| carta finita = prefixo positivo literal menos centros | `Genuine.Cp.finiteChart_eq_positiveIntervalSum_sub_p_mul_centerSum` |
+| monomio de Dirichlet no ramo principal positivo | `Analytic.Cp.dirichletTerm` |
+| separar `(p*m)^(-s)` em `p^(-s)m^(-s)` | `Analytic.Cp.dirichletTerm_alignedCenter` |
+| `p` vezes a soma dos centros = `p^(1-s)` vezes o prefixo curto | `Analytic.Cp.p_mul_centerSum_dirichlet_eq_cpow_mul_prefix` |
+| carta finita de Dirichlet com correcao vertical fatorada | `Analytic.Cp.finiteChart_dirichlet_eq_prefix_sub_cpow_mul_prefix` |
+| Genuine inicial definido pela serie positiva | `Analytic.Cp.genuineDirichlet` |
+| somabilidade de `n^(-s)` para `Re(s)>1` | `Analytic.Cp.summable_dirichletTerm_nat_add_one` |
+| prefixos positivos convergem para o Genuine inicial | `Analytic.Cp.positiveDirichletPrefix_tendsto_genuineDirichlet` |
+| carta finita escrita como dois prefixos da mesma serie | `Analytic.Cp.finiteChart_dirichlet_eq_two_prefixes` |
+| passagem ao limite `finiteChart -> (1-p^(1-s))*Genuine` em `Re(s)>1` | `Analytic.Cp.finiteChart_dirichlet_tendsto_genuine_factor` |
+| cota quadratica abstrata da segunda diferenca centrada | `Analytic.norm_centeredSecondDifference_le` |
+| derivadas primeira e segunda de `x^(-s)` no eixo real positivo | `Analytic.hasDerivAt_realDirichletPower`, `Analytic.hasDerivAt_realDirichletPowerDeriv` |
+| ganho de duas potencias para a segunda diferenca de `x^(-s)` | `Analytic.norm_realDirichletPower_centeredSecondDifference_le` |
+| bracket Genuine Cp = soma saturada das segundas diferencas | `Genuine.Cp.bracket_eq_saturatedBracket` |
+| majorante de um bloco Cp por `(k+1)^(-Re(s)-2)` | `Analytic.Cp.norm_realCpSaturatedBracket_le` |
+| somabilidade absoluta da carta bracketada em `Re(s)>-1` | `Analytic.Cp.summable_norm_realCpSaturatedBracket` |
+| prefixo bracketado = `Genuine.Cp.finiteChart` em cada corte | `Analytic.Cp.finiteBracketedDirichletChart_eq_finiteChart` |
+| prefixos Genuine convergem para a carta bracketada em `Re(s)>-1` | `Analytic.Cp.finiteChart_dirichlet_tendsto_bracketedDirichletChart` |
+| carta bracketada = fator Genuine no semiplano comum `Re(s)>1` | `Analytic.Cp.bracketedDirichletChart_eq_genuine_factor` |
+| majorante uniforme somavel numa bola local do semiplano `Re(s)>-1` | `Analytic.Cp.norm_realCpSaturatedBracket_le_local`, `Analytic.Cp.summable_localCpBracketMajorant` |
+| holomorfia da carta bracketada em `Re(s)>-1` | `Analytic.Cp.analyticOnNhd_bracketedDirichletChart` |
+| unicidade da continuacao da identidade fator Genuine | `Analytic.Cp.bracketedDirichletChart_unique_analytic_continuation` |
+| zero do fator Cp implica `Re(s)=1` | `Analytic.Cp.cpChartFactor_zero_implies_re_eq_one` |
+| fator Cp nao zera no interior da faixa critica | `Analytic.Cp.cpChartFactor_ne_zero_on_genuineCriticalStrip` |
+| quociente Cp recupera a serie Genuine em `Re(s)>1` | `Analytic.Cp.cpGenuineQuotient_eq_genuineDirichlet` |
+| quociente Cp e holomorfo no interior da faixa | `Analytic.Cp.analyticOnNhd_cpGenuineQuotient_genuineCriticalStrip` |
+| zeros da carta equivalem aos zeros do quociente Cp na faixa | `Analytic.Cp.bracketedDirichletChart_zero_iff_cpGenuineQuotient_zero` |
+| identidade cruzada das cartas primas em `Re(s)>-1` | `Analytic.Cp.crossNormalizedChart_eq_swap` |
+| quocientes Genuine de duas cameras primas coincidem na faixa | `Analytic.Cp.cpGenuineQuotient_eq_cpGenuineQuotient` |
+| representante Genuine canonico recupera a serie em `Re(s)>1` | `Analytic.Cp.genuineContinuation_eq_genuineDirichlet` |
+| representante Genuine canonico e holomorfo na faixa | `Analytic.Cp.analyticOnNhd_genuineContinuation_genuineCriticalStrip` |
+| toda camera prima impar produz o mesmo representante Genuine | `Analytic.Cp.cpGenuineQuotient_eq_genuineContinuation` |
+| zero de qualquer carta prima equivale a zero do Genuine canonico | `Analytic.Cp.bracketedDirichletChart_zero_iff_genuineContinuation_zero` |
+| identidade Green discreta finita com endpoints literais | `Analytic.Cp.finiteGreenBulk_eq_boundary` |
+| bloco Cp atua em `g_s` pelo autovalor exato `p^(-s)` | `Analytic.Cp.cpBlockGradient_eq_eigenvalue_mul` |
+| fluxo Cp finito fatora pela diferenca dos autovalores refletidos | `Analytic.Cp.finiteCpGreenFlux_eq_eigenvalueDifference_mul_pairing` |
+| endpoint externo refletido e `1/(M+1)` e tende a zero | `Analytic.Cp.finiteReflectedOuterEndpoint_eq_inv`, `Analytic.Cp.finiteReflectedOuterEndpoint_tendsto_zero` |
+| certificado Green complexo finito deriva `flux=coefficient*energy+boundary` de duas identidades independentes | `Analytic.Cp.FiniteComplexGreenCertificate.green_identity`, `Analytic.Cp.finiteCpGreenCertificate` |
+| bordo da instancia Cp finita e exatamente `1/(M+1)-1` | `Analytic.Cp.finiteCpGreenCertificate_boundary_eq_inv_sub_one` |
+| normalizador de fase transforma o autovalor Cp em `p^(-delta)` real | `Analytic.Cp.cpPhaseNormalizer_mul_eigenvalue`, `Analytic.Cp.phaseNormalizedCpBlockGradient_eq_radial_mul` |
+| o bloco refletido normalizado possui autovalor real `p^delta` | `Analytic.Cp.phaseNormalizedCpBlockGradient_reflected_eq_radial_mul` |
+| Wronskiano normalizado fatora por `p^(-delta)-p^delta` | `Analytic.Cp.finitePhaseNormalizedCpGreenFlux_eq_radialDifference_mul_pairing` |
+| diferenca radial e `2*delta` vezes cofator primo positivo | `Analytic.Cp.cpRadialDifference_eq_two_mul_delta_mul_cofactor`, `Analytic.Cp.cpRadialCofactor_pos` |
+| identidade Green real assinada em corte finito e bordo literal | `Analytic.Cp.finiteSignedCpGreen_identity` |
+| cada aresta refletida possui parte real positiva em `0<Re(s)<1` | `Analytic.Cp.finiteReflectedGradientEdge_re_pos` |
+| pareamento refletido de todo corte nao vazio possui parte real positiva | `Analytic.Cp.finiteReflectedGradientPairing_re_pos` |
+| energia radial Green finita e positiva para todo primo e corte nao vazio | `Analytic.Cp.finiteRadialGreenEnergy_pos` |
+| identidade Green assinada, energia positiva e bordo fechado implicam `delta=0` | `Analytic.Cp.SignedGreenCertificate.criticalDisplacement_eq_zero_of_genuine_zero` |
+| certificado Green concreto produz a ponte Genuine--ramo | `Analytic.Cp.SignedGreenCertificate.toGenuineBranchBridge` |
+| ponte ainda aberta de zeros Genuine para a norma | `Analytic.Cp.GenuineBranchBridge` (sem instancia) |
+
+Observacao: `GEOMETRIA_C2_CP_DECOMPOSICAO_POR_CARRY(1).md` chegou vazio na
+copia de trabalho desta versao e, portanto, nao foi usado para afirmacoes.

@@ -23,6 +23,6 @@ def mulShift (p : ℕ) (x : ℕ → A) : ℕ → A :=
 theorem mulShift_comm (p q : ℕ) (x : ℕ → A) :
     mulShift p (mulShift q x) = mulShift q (mulShift p x) := by
   funext n
-  simp [mulShift, Nat.mul_assoc, Nat.mul_left_comm, Nat.mul_comm]
+  simp [mulShift, Nat.mul_left_comm]
 
 end CPFormal

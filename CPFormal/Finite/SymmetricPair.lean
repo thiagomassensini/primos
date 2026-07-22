@@ -36,7 +36,7 @@ def reflected (pair : SymmetricPair) : SymmetricPair :=
 
 @[simp] theorem reflected_right (pair : SymmetricPair) :
     pair.reflected.right = pair.left := by
-  simp [reflected, left, right]
+  simp [reflected, left, right, sub_eq_add_neg]
 
 end SymmetricPair
 end CPFormal
