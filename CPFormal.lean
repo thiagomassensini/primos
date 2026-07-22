@@ -55,6 +55,7 @@ import CPFormal.Analytic.CpFiniteSeededTfvdGreenIdentity
 import CPFormal.Analytic.CpGpreTypes
 import CPFormal.Analytic.CpNativeGpreTowerLift
 import CPFormal.Analytic.CpNativeGpreTowerNorm
+import CPFormal.Analytic.CpNativeGprePrimeTowerBessel
 import CPFormal.Analytic.CpNativeGpreJordanBounds
 import CPFormal.Analytic.CpNativeGpreLocalBracketMajorant
 import CPFormal.Analytic.CpQtildeProvenanceContinuity
@@ -74,6 +75,8 @@ import CPFormal.Analytic.CpGenuineBoundaryPencil
 import CPFormal.Analytic.CpCarryWeightedVerticalGreen
 import CPFormal.Analytic.CpCarryAmplitudeIdentification
 import CPFormal.Analytic.CpGenuineGreenCompletedOperator
+import CPFormal.Analytic.CpGenuineCrossPrimeObservability
+import CPFormal.Analytic.CpGenuinePrimeGreenBessel
 import CPFormal.Analytic.CpCarryL2UnilateralShift
 import CPFormal.Analytic.CpCarryWeightedVerticalBracketTrace
 import CPFormal.Analytic.CpCarryWeightedVerticalReturn
