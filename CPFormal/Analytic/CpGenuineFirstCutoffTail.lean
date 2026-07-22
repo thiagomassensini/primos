@@ -282,6 +282,146 @@ theorem verticalCorrection_cross_prime_defect_eq_cutoffTail_defect_of_genuine_ze
       p q hp hpodd hq hqodd hs hzero
   linear_combination htransport
 
+/-!
+## Detector multibase fora do locus de zeros
+-/
+
+/--
+Em qualquer ponto do semiplano bracketado, a correcao vertical menos a cauda
+e o prefixo horizontal menos a carta infinita. Esta e a forma nao anulada da
+identidade horizontal--vertical.
+-/
+theorem verticalCorrection_sub_cutoffTail_eq_blockPrefix_sub_chart
+    (p M : ℕ) (hp : Nat.Prime p) (hpodd : Odd p)
+    {s : ℂ} (hs : -1 < s.re) :
+    CPFormal.Genuine.Cp.verticalCorrection p M (dirichletTerm s) -
+        realCpBracketCutoffTail p M s =
+      CPFormal.Genuine.Cp.blockPrefix p M (dirichletTerm s) -
+        bracketedDirichletChart p s := by
+  have hsplit :=
+    bracketedDirichletChart_eq_finiteChart_add_cutoffTail
+      p M hp hpodd hs
+  have hfinite :=
+    CPFormal.Genuine.Cp.finiteChart_eq_blockPrefix_sub_verticalCorrection
+      p hp M (dirichletTerm s)
+  calc
+    CPFormal.Genuine.Cp.verticalCorrection p M (dirichletTerm s) -
+        realCpBracketCutoffTail p M s =
+      CPFormal.Genuine.Cp.blockPrefix p M (dirichletTerm s) -
+        (CPFormal.Genuine.Cp.blockPrefix p M (dirichletTerm s) -
+          CPFormal.Genuine.Cp.verticalCorrection p M (dirichletTerm s)) -
+        realCpBracketCutoffTail p M s := by ring
+    _ = CPFormal.Genuine.Cp.blockPrefix p M (dirichletTerm s) -
+        CPFormal.Genuine.Cp.finiteChart p M (dirichletTerm s) -
+        realCpBracketCutoffTail p M s := by rw [← hfinite]
+    _ = CPFormal.Genuine.Cp.blockPrefix p M (dirichletTerm s) -
+        (CPFormal.Genuine.Cp.finiteChart p M (dirichletTerm s) +
+          realCpBracketCutoffTail p M s) := by ring
+    _ = CPFormal.Genuine.Cp.blockPrefix p M (dirichletTerm s) -
+        bracketedDirichletChart p s := by rw [← hsplit]
+
+/--
+Defeito horizontal--vertical de duas bases nos cutoffs cruzados que enxergam
+o mesmo prefixo literal.
+-/
+def crossPrimeHorizontalVerticalCutoffDefect
+    (p q : ℕ) (s : ℂ) : ℂ :=
+  (CPFormal.Genuine.Cp.verticalCorrection p
+      (CPFormal.Genuine.Cp.halfRange q) (dirichletTerm s) -
+    realCpBracketCutoffTail p
+      (CPFormal.Genuine.Cp.halfRange q) s) -
+  (CPFormal.Genuine.Cp.verticalCorrection q
+      (CPFormal.Genuine.Cp.halfRange p) (dirichletTerm s) -
+    realCpBracketCutoffTail q
+      (CPFormal.Genuine.Cp.halfRange p) s)
+
+/--
+Depois do alinhamento horizontal, o defeito multibase e exatamente a
+diferenca orientada entre as duas cartas bracketadas infinitas.
+-/
+theorem crossPrimeHorizontalVerticalCutoffDefect_eq_chart_sub_chart
+    (p q : ℕ)
+    (hp : Nat.Prime p) (hpodd : Odd p)
+    (hq : Nat.Prime q) (hqodd : Odd q)
+    {s : ℂ} (hs : -1 < s.re) :
+    crossPrimeHorizontalVerticalCutoffDefect p q s =
+      bracketedDirichletChart q s - bracketedDirichletChart p s := by
+  unfold crossPrimeHorizontalVerticalCutoffDefect
+  rw [verticalCorrection_sub_cutoffTail_eq_blockPrefix_sub_chart
+      p (CPFormal.Genuine.Cp.halfRange q) hp hpodd hs,
+    verticalCorrection_sub_cutoffTail_eq_blockPrefix_sub_chart
+      q (CPFormal.Genuine.Cp.halfRange p) hq hqodd hs,
+    blockPrefix_cross_prime_aligned
+      p q hp hpodd hq hqodd (dirichletTerm s)]
+  ring
+
+/--
+Fatoracao central: no strip, o defeito horizontal--vertical multibase e a
+diferenca dos fatores de camera multiplicada pelo unico Genuine.
+-/
+theorem crossPrimeHorizontalVerticalCutoffDefect_eq_factor_sub_mul_genuine
+    (p q : ℕ)
+    (hp : Nat.Prime p) (hpodd : Odd p)
+    (hq : Nat.Prime q) (hqodd : Odd q)
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
+    crossPrimeHorizontalVerticalCutoffDefect p q s =
+      (cpChartFactor q s - cpChartFactor p s) *
+        genuineContinuation s := by
+  rw [crossPrimeHorizontalVerticalCutoffDefect_eq_chart_sub_chart
+      p q hp hpodd hq hqodd (by linarith [hs.1]),
+    bracketedDirichletChart_eq_cpChartFactor_mul_genuineContinuation
+      q hq hqodd hs,
+    bracketedDirichletChart_eq_cpChartFactor_mul_genuineContinuation
+      p hp hpodd hs]
+  ring
+
+/--
+Fatores de duas cameras primas distintas nao coincidem dentro do strip. A
+prova usa apenas os modulos `p^(1-re(s))` e a injetividade da potencia real
+com expoente positivo.
+-/
+theorem cpChartFactor_sub_ne_zero_of_distinct_primes_on_strip
+    (p q : ℕ) (hp : Nat.Prime p) (hq : Nat.Prime q)
+    (hpq : p ≠ q)
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
+    cpChartFactor q s - cpChartFactor p s ≠ 0 := by
+  intro hzero
+  have heq : cpChartFactor q s = cpChartFactor p s :=
+    sub_eq_zero.mp hzero
+  have hpow :
+      (q : ℂ) ^ (1 - s) = (p : ℂ) ^ (1 - s) := by
+    unfold cpChartFactor at heq
+    linear_combination -heq
+  have hnorm := congrArg norm hpow
+  rw [norm_prime_cpow_one_sub q hq s,
+    norm_prime_cpow_one_sub p hp s] at hnorm
+  have hexponent : (1 : ℝ) - s.re ≠ 0 := by
+    linarith [hs.2]
+  have hcast : (q : ℝ) = (p : ℝ) :=
+    (Real.rpow_left_inj (by positivity) (by positivity) hexponent).mp hnorm
+  have hnat : q = p := by
+    exact_mod_cast hcast
+  exact hpq hnat.symm
+
+/--
+Criterio Genuine-first bidirecional: para duas bases primas impares distintas,
+o fechamento horizontal--vertical multibase ocorre exatamente nos zeros do
+Genuine canonico.
+-/
+theorem crossPrimeHorizontalVerticalCutoffDefect_eq_zero_iff_genuine_zero
+    (p q : ℕ)
+    (hp : Nat.Prime p) (hpodd : Odd p)
+    (hq : Nat.Prime q) (hqodd : Odd q)
+    (hpq : p ≠ q)
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
+    crossPrimeHorizontalVerticalCutoffDefect p q s = 0 ↔
+      genuineContinuation s = 0 := by
+  rw [crossPrimeHorizontalVerticalCutoffDefect_eq_factor_sub_mul_genuine
+      p q hp hpodd hq hqodd hs]
+  exact mul_eq_zero_iff_left
+    (cpChartFactor_sub_ne_zero_of_distinct_primes_on_strip
+      p q hp hq hpq hs)
+
 end
 
 end CPFormal.Analytic.Cp
