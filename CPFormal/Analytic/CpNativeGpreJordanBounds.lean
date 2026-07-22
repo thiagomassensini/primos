@@ -153,7 +153,7 @@ def nativeGpreDualPowerArithmetic
   ⟨fun n =>
       (nativeGprePowerArithmetic tau n,
         nativeGpreValuationPowerArithmetic p tau n),
-    by simp⟩
+    rfl⟩
 
 @[simp] theorem nativeGpreDualPowerArithmetic_fst
     (p tau n : ℕ) :
@@ -215,8 +215,12 @@ def nativeGpreDualJordanArithmetic
     (nativeGpreDualJordanArithmetic p tau n).fst =
       nativeGpreJordanArithmetic tau n := by
   classical
-  simp [nativeGpreDualJordanArithmetic, nativeGpreJordanArithmetic,
-    ArithmeticFunction.mul_apply, nativeGpreDualPowerArithmetic]
+  unfold nativeGpreDualJordanArithmetic nativeGpreJordanArithmetic
+  rw [ArithmeticFunction.mul_apply, ArithmeticFunction.mul_apply]
+  rw [TrivSqZeroExt.fst_sum]
+  apply Finset.sum_congr rfl
+  intro x hx
+  simp [nativeGpreDualPowerArithmetic]
 
 /-- A coordenada tangente da convolucao dual e literalmente `H_(p,tau)`. -/
 @[simp] theorem nativeGpreDualJordanArithmetic_snd
@@ -224,8 +228,12 @@ def nativeGpreDualJordanArithmetic
     (nativeGpreDualJordanArithmetic p tau n).snd =
       nativeGpreHArithmetic p tau n := by
   classical
-  simp [nativeGpreDualJordanArithmetic, nativeGpreHArithmetic,
-    ArithmeticFunction.mul_apply, nativeGpreDualPowerArithmetic]
+  unfold nativeGpreDualJordanArithmetic nativeGpreHArithmetic
+  rw [ArithmeticFunction.mul_apply, ArithmeticFunction.mul_apply]
+  rw [TrivSqZeroExt.snd_sum]
+  apply Finset.sum_congr rfl
+  intro x hx
+  simp [nativeGpreDualPowerArithmetic, zsmul_eq_mul]
 
 /-- A convolucao dual inteira e multiplicativa. Em particular, `H` e a
 coordenada tangente de um objeto multiplicativo, embora nao seja multiplicativo
@@ -264,6 +272,10 @@ theorem nativeGpreHArithmetic_prime_pow_succ
     p tau (q ^ i) (pow_ne_zero _ hq.ne_zero)
   rw [Nat.sum_divisors_prime_pow hq] at hcurr hprev
   rw [Finset.sum_range_succ] at hcurr
+  rw [nativeGpreValuationPowerArithmetic_apply p tau (q ^ (i + 1))
+      (pow_ne_zero _ hq.ne_zero),
+    nativeGpreValuationPowerArithmetic_apply p tau (q ^ i)
+      (pow_ne_zero _ hq.ne_zero)]
   linarith
 
 /-- O perfil bruto de valuacao nao diminui ao subir uma potencia prima. -/
@@ -315,7 +327,8 @@ theorem nativeGpreHArithmetic_prime_pow_nonneg
       have hone :=
         (isMultiplicative_nativeGpreDualJordanArithmetic p tau).map_one
       have hsnd := congrArg TrivSqZeroExt.snd hone
-      simpa using hsnd
+      rw [nativeGpreDualJordanArithmetic_snd] at hsnd
+      rw [hsnd]
   | succ i =>
       rw [nativeGpreHArithmetic_prime_pow_succ p q tau i hq]
       exact sub_nonneg.mpr
@@ -331,7 +344,9 @@ theorem nativeGpreHArithmetic_prime_pow_le
       have hone :=
         (isMultiplicative_nativeGpreDualJordanArithmetic p tau).map_one
       have hsnd := congrArg TrivSqZeroExt.snd hone
-      simpa using hsnd
+      rw [nativeGpreDualJordanArithmetic_snd] at hsnd
+      rw [hsnd]
+      exact nativeGpreValuationPowerArithmetic_nonneg p tau 1
   | succ i =>
       rw [nativeGpreHArithmetic_prime_pow_succ p q tau i hq]
       exact sub_le_self _
@@ -370,8 +385,7 @@ theorem nativeGpreHArithmetic_nonneg
   rcases eq_or_ne n 0 with rfl | hn
   · simp [nativeGpreHArithmetic]
   · rw [← nativeGpreDualJordanArithmetic_snd]
-    rw [(isMultiplicative_nativeGpreDualJordanArithmetic p tau)
-      .multiplicative_factorization n hn]
+    rw [(isMultiplicative_nativeGpreDualJordanArithmetic p tau).multiplicative_factorization n hn]
     exact (nativeGpreDualProduct_nonneg n.primeFactors
       (fun q => nativeGpreDualJordanArithmetic p tau
         (q ^ n.factorization q)) (by
@@ -400,7 +414,7 @@ theorem nativeGpreHArithmetic_le_valuationPowerArithmetic
         (fun d hd => nativeGpreHArithmetic_nonneg p tau d hp)
         (Nat.mem_divisors_self n hn)
     rw [sum_divisors_nativeGpreHArithmetic p tau n hn] at hle
-    exact hle
+    simpa [nativeGpreValuationPowerArithmetic_apply p tau n hn] using hle
 
 /-- Um divisor comum nao pode carregar mais que metade da valuacao total das
 duas pernas. -/
