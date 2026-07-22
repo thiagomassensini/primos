@@ -389,9 +389,7 @@ theorem nativeGpreHArithmetic_nonneg
   rcases eq_or_ne n 0 with rfl | hn
   · simp [nativeGpreHArithmetic]
   · rw [← nativeGpreDualJordanArithmetic_snd]
-    have hfactor :=
-      (isMultiplicative_nativeGpreDualJordanArithmetic p tau)
-        .multiplicative_factorization n hn
+    have hfactor := (isMultiplicative_nativeGpreDualJordanArithmetic p tau).multiplicative_factorization n hn
     rw [hfactor]
     exact (nativeGpreDualProduct_nonneg n.primeFactors
       (fun q => nativeGpreDualJordanArithmetic p tau
