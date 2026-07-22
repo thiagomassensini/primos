@@ -139,7 +139,7 @@ theorem carryWeightedCanonicalAngularBlockObserver_finiteRealSpectralState
   rw [carryWeightedUndressedEval_finiteRealSpectralState q hq M t (3 * m) h0,
     carryWeightedUndressedEval_finiteRealSpectralState q hq M t (3 * m + 1) h1,
     carryWeightedUndressedEval_finiteRealSpectralState q hq M t (3 * m + 2) h2]
-  simpa [realSpectralState] using
+  simpa [realSpectralState, positiveDirichletValue_eq_natDirichletTerm] using
     (canonicalAngularGradientBlock_eq_values
       m (criticalLineParameter t)).symm
 
@@ -224,10 +224,11 @@ theorem nativeGpreFiniteGenuine_isCharacteristicValue_iff
           lambda ↔
       lambda = finiteRealSpectralCamera 3 M t := by
   change
-    (nativeGpreFiniteTfvdVisibleBoundaryPencil q hqpos.le hq1 S
-        (nativeGpreFiniteGenuineObserver q M t)
-        (nativeGpreFiniteWeightedRealSpectralState q M t)).
-          toLinearBoundaryPencil.IsCharacteristicValue lambda ↔
+    LinearBoundaryPencil.IsCharacteristicValue
+        (nativeGpreFiniteTfvdVisibleBoundaryPencil q hqpos.le hq1 S
+          (nativeGpreFiniteGenuineObserver q M t)
+          (nativeGpreFiniteWeightedRealSpectralState q M t)).toLinearBoundaryPencil
+        lambda ↔
       lambda = finiteRealSpectralCamera 3 M t
   rw [nativeGpreFiniteTfvdVisible_isCharacteristicValue_iff
     q hqpos hq1 S
@@ -302,8 +303,12 @@ theorem nativeGpreFiniteGenuineBoundaryLinearization_tendsto
       atTop
       (nhds ((realSpectralGenuineBoundaryPencil t).linearization 1)) := by
   have h := finiteRealSpectralCamera_three_tendsto_realSpectralGenuine t
-  simpa only [nativeGpreFiniteGenuineBoundaryLinearization_one,
-    realSpectralGenuineBoundaryLinearization_apply, mul_one] using h
+  convert h using 1
+  · funext M
+    exact nativeGpreFiniteGenuineBoundaryLinearization_one
+      q hqpos hq1 S M t
+  · rw [realSpectralGenuineBoundaryLinearization_apply]
+    ring
 
 /-- Num zero Genuine, os coeficientes das compressoes finitas tendem a zero. -/
 theorem nativeGpreFiniteGenuineBoundaryLinearization_tendsto_zero_of_resonance
@@ -318,8 +323,9 @@ theorem nativeGpreFiniteGenuineBoundaryLinearization_tendsto_zero_of_resonance
   have h := nativeGpreFiniteGenuineBoundaryLinearization_tendsto
     q hqpos hq1 S t
   change realSpectralGenuine t = 0 at hres
-  simpa only [realSpectralGenuineBoundaryLinearization_apply, mul_one, hres]
-    using h
+  convert h using 1
+  rw [realSpectralGenuineBoundaryLinearization_apply, hres]
+  ring
 
 /-- O pencil limite da familia nativa e o pencil escalar Genuine. -/
 def nativeGpreGenuineLimitBoundaryPencil (t : ℝ) :
@@ -331,8 +337,8 @@ do pencil limite das compressoes nativas. -/
 theorem isRealSpectralResonance_iff_nativeGpreGenuineLimit_zeroCharacteristic
     (t : ℝ) :
     IsRealSpectralResonance t ↔
-      ((nativeGpreGenuineLimitBoundaryPencil t).toLinearBoundaryPencil).
-        IsCharacteristicValue 0 := by
+      LinearBoundaryPencil.IsCharacteristicValue
+        (nativeGpreGenuineLimitBoundaryPencil t).toLinearBoundaryPencil 0 := by
   exact isRealSpectralResonance_iff_zero_characteristicValue t
 
 end
