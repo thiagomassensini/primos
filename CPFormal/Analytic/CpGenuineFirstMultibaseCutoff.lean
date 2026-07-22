@@ -143,13 +143,19 @@ theorem realCpBracketCutoffTail_tendsto_zero
       atTop (nhds 0) := by
   have hsum := summable_realCpSaturatedBracket p hp hs
   have hpartial := hsum.tendsto_sum_tsum_nat
+  have hconstant :
+      Tendsto
+        (fun _ : ℕ ↦ ∑' k : ℕ, realCpSaturatedBracket p k s)
+        atTop
+        (nhds (∑' k : ℕ, realCpSaturatedBracket p k s)) :=
+    tendsto_const_nhds
   have hlimit :
       Tendsto
         (fun M : ℕ ↦
           (∑' k : ℕ, realCpSaturatedBracket p k s) -
             ∑ k ∈ Finset.range M, realCpSaturatedBracket p k s)
         atTop (nhds 0) := by
-    simpa using tendsto_const_nhds.sub hpartial
+    simpa using hconstant.sub hpartial
   have htail : ∀ M : ℕ,
       realCpBracketCutoffTail p M s =
         (∑' k : ℕ, realCpSaturatedBracket p k s) -
@@ -201,7 +207,13 @@ theorem verticalCorrection_cross_prime_aligned_tendsto_zero_of_genuine_zero
   have htailQ :=
     (realCpBracketCutoffTail_tendsto_zero q hq hconv).comp
       (crossPrimeAlignedCutoff_tendsto_atTop p hp.pos)
-  have htailDiff := htailP.sub htailQ
+  have htailDiff :
+      Tendsto
+        (fun L : ℕ ↦
+          realCpBracketCutoffTail p (crossPrimeAlignedCutoff q L) s -
+            realCpBracketCutoffTail q (crossPrimeAlignedCutoff p L) s)
+        atTop (nhds 0) := by
+    simpa [Function.comp_def] using htailP.sub htailQ
   have hpoint : ∀ L : ℕ,
       CPFormal.Genuine.Cp.verticalCorrection p
             (crossPrimeAlignedCutoff q L) (dirichletTerm s) -
