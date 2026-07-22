@@ -233,7 +233,7 @@ def nativeGpreDualJordanArithmetic
   rw [TrivSqZeroExt.snd_sum]
   apply Finset.sum_congr rfl
   intro x hx
-  simp [nativeGpreDualPowerArithmetic, zsmul_eq_mul]
+  simp [nativeGpreDualPowerArithmetic]
 
 /-- A convolucao dual inteira e multiplicativa. Em particular, `H` e a
 coordenada tangente de um objeto multiplicativo, embora nao seja multiplicativo
@@ -328,7 +328,9 @@ theorem nativeGpreHArithmetic_prime_pow_nonneg
         (isMultiplicative_nativeGpreDualJordanArithmetic p tau).map_one
       have hsnd := congrArg TrivSqZeroExt.snd hone
       rw [nativeGpreDualJordanArithmetic_snd] at hsnd
-      rw [hsnd]
+      have hzero : nativeGpreHArithmetic p tau 1 = 0 := by
+        simpa using hsnd
+      simpa [hzero]
   | succ i =>
       rw [nativeGpreHArithmetic_prime_pow_succ p q tau i hq]
       exact sub_nonneg.mpr
@@ -345,8 +347,10 @@ theorem nativeGpreHArithmetic_prime_pow_le
         (isMultiplicative_nativeGpreDualJordanArithmetic p tau).map_one
       have hsnd := congrArg TrivSqZeroExt.snd hone
       rw [nativeGpreDualJordanArithmetic_snd] at hsnd
-      rw [hsnd]
-      exact nativeGpreValuationPowerArithmetic_nonneg p tau 1
+      have hzero : nativeGpreHArithmetic p tau 1 = 0 := by
+        simpa using hsnd
+      simpa [hzero] using
+        nativeGpreValuationPowerArithmetic_nonneg p tau 1
   | succ i =>
       rw [nativeGpreHArithmetic_prime_pow_succ p q tau i hq]
       exact sub_le_self _
@@ -385,7 +389,10 @@ theorem nativeGpreHArithmetic_nonneg
   rcases eq_or_ne n 0 with rfl | hn
   · simp [nativeGpreHArithmetic]
   · rw [← nativeGpreDualJordanArithmetic_snd]
-    rw [(isMultiplicative_nativeGpreDualJordanArithmetic p tau).multiplicative_factorization n hn]
+    have hfactor :=
+      (isMultiplicative_nativeGpreDualJordanArithmetic p tau)
+        .multiplicative_factorization n hn
+    rw [hfactor]
     exact (nativeGpreDualProduct_nonneg n.primeFactors
       (fun q => nativeGpreDualJordanArithmetic p tau
         (q ^ n.factorization q)) (by
