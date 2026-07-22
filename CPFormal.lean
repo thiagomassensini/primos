@@ -64,6 +64,7 @@ import CPFormal.Analytic.CpFiniteTfvdLogJetCriticalLineTraces
 import CPFormal.Analytic.CpFiniteTfvdLogJetCriticalPhaseFan
 import CPFormal.Analytic.CpRealSpectralOperator
 import CPFormal.Analytic.CpRealSpectralGenerator
+import CPFormal.Analytic.CpGenuineFirstCutoffTail
 import CPFormal.Analytic.CpInfiniteRealSpectralGenerator
 import CPFormal.Analytic.CpGenuineBoundaryPencil
 import CPFormal.Analytic.CpCarryWeightedVerticalGreen
