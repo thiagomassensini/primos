@@ -69,20 +69,26 @@ def carryWeightedFiniteChartObserver (q : ℝ) (M : ℕ) :
       (∑ m ∈ Finset.range M,
         carryWeightedCanonicalAngularBlockObserver q m x) +
       carryWeightedUndressedEval q (3 * M) x := by
-  rfl
+  simp [carryWeightedFiniteChartObserver]
 
 /-- Estado real-espectral finito, vestido por `q^n`, antes da inclusao em
 `ell^2`. -/
 noncomputable def nativeGpreFiniteWeightedRealSpectralCore
     (q : ℝ) (N : ℕ) (t : ℝ) : NativeGpreComplexEdgeCore :=
-  ∑ n ∈ Finset.range N,
-    Finsupp.single n ((q : ℂ) ^ n * realSpectralState t n)
+  Finsupp.onFinset (Finset.range N)
+    (fun n =>
+      if n ∈ Finset.range N then
+        (q : ℂ) ^ n * realSpectralState t n
+      else 0)
+    (by
+      intro n hnzero
+      by_contra hn
+      simp [hn] at hnzero)
 
 @[simp] theorem nativeGpreFiniteWeightedRealSpectralCore_apply_of_lt
     (q : ℝ) (N : ℕ) (t : ℝ) (n : ℕ) (hn : n < N) :
     nativeGpreFiniteWeightedRealSpectralCore q N t n =
       (q : ℂ) ^ n * realSpectralState t n := by
-  classical
   simp [nativeGpreFiniteWeightedRealSpectralCore, hn]
 
 /-- O mesmo estado visto no Hilbert vertical. O cutoff `3M+1` contem todos os
@@ -123,8 +129,14 @@ theorem carryWeightedCanonicalAngularBlockObserver_finiteRealSpectralState
   have h0 : 3 * m < 3 * M + 1 := by omega
   have h1 : 3 * m + 1 < 3 * M + 1 := by omega
   have h2 : 3 * m + 2 < 3 * M + 1 := by omega
-  rw [carryWeightedCanonicalAngularBlockObserver_apply,
-    carryWeightedUndressedEval_finiteRealSpectralState q hq M t (3 * m) h0,
+  change
+    carryWeightedUndressedEval q (3 * m)
+          (nativeGpreFiniteWeightedRealSpectralState q M t) +
+        carryWeightedUndressedEval q (3 * m + 1)
+          (nativeGpreFiniteWeightedRealSpectralState q M t) -
+      2 * carryWeightedUndressedEval q (3 * m + 2)
+          (nativeGpreFiniteWeightedRealSpectralState q M t) = _
+  rw [carryWeightedUndressedEval_finiteRealSpectralState q hq M t (3 * m) h0,
     carryWeightedUndressedEval_finiteRealSpectralState q hq M t (3 * m + 1) h1,
     carryWeightedUndressedEval_finiteRealSpectralState q hq M t (3 * m + 2) h2]
   simpa [realSpectralState] using
@@ -211,6 +223,12 @@ theorem nativeGpreFiniteGenuine_isCharacteristicValue_iff
         q hqpos.le hq1 S M t).toLinearBoundaryPencil.IsCharacteristicValue
           lambda ↔
       lambda = finiteRealSpectralCamera 3 M t := by
+  change
+    (nativeGpreFiniteTfvdVisibleBoundaryPencil q hqpos.le hq1 S
+        (nativeGpreFiniteGenuineObserver q M t)
+        (nativeGpreFiniteWeightedRealSpectralState q M t)).
+          toLinearBoundaryPencil.IsCharacteristicValue lambda ↔
+      lambda = finiteRealSpectralCamera 3 M t
   rw [nativeGpreFiniteTfvdVisible_isCharacteristicValue_iff
     q hqpos hq1 S
       (nativeGpreFiniteGenuineObserver q M t)
@@ -252,6 +270,26 @@ theorem finiteRealSpectralCamera_three_tendsto_realSpectralGenuine
     simp [finiteRealSpectralCamera, finiteRealSpectralChart,
       div_eq_mul_inv, hlimit]
 
+/-- A linearizacao no vetor unitario e exatamente a camera finita. -/
+@[simp] theorem nativeGpreFiniteGenuineBoundaryLinearization_one
+    (q : ℝ) (hqpos : 0 < q) (hq1 : q < 1)
+    (S : Finset NativeGpreBoundaryContext) (M : ℕ) (t : ℝ) :
+    (nativeGpreFiniteGenuineBoundaryPencil
+      q hqpos.le hq1 S M t).linearization 1 =
+        finiteRealSpectralCamera 3 M t := by
+  change
+    nativeGpreFiniteTfvdVisibleFlux q hqpos.le hq1 S
+        (nativeGpreFiniteGenuineObserver q M t)
+        (nativeGpreFiniteWeightedRealSpectralState q M t) 1 =
+      finiteRealSpectralCamera 3 M t
+  rw [nativeGpreFiniteTfvdVisibleFlux_apply
+    q hqpos hq1 S
+      (nativeGpreFiniteGenuineObserver q M t)
+      (nativeGpreFiniteWeightedRealSpectralState q M t) 1]
+  rw [nativeGpreFiniteGenuineObserver_finiteRealSpectralState
+    q hqpos.ne' M t]
+  ring
+
 /-- Os coeficientes caracteristicos da familia de pencils nativos convergem ao
 coeficiente do pencil Genuine escalar. -/
 theorem nativeGpreFiniteGenuineBoundaryLinearization_tendsto
@@ -264,7 +302,8 @@ theorem nativeGpreFiniteGenuineBoundaryLinearization_tendsto
       atTop
       (nhds ((realSpectralGenuineBoundaryPencil t).linearization 1)) := by
   have h := finiteRealSpectralCamera_three_tendsto_realSpectralGenuine t
-  simpa [nativeGpreFiniteGenuineBoundaryPencil] using h
+  simpa only [nativeGpreFiniteGenuineBoundaryLinearization_one,
+    realSpectralGenuineBoundaryLinearization_apply, mul_one] using h
 
 /-- Num zero Genuine, os coeficientes das compressoes finitas tendem a zero. -/
 theorem nativeGpreFiniteGenuineBoundaryLinearization_tendsto_zero_of_resonance
@@ -279,7 +318,8 @@ theorem nativeGpreFiniteGenuineBoundaryLinearization_tendsto_zero_of_resonance
   have h := nativeGpreFiniteGenuineBoundaryLinearization_tendsto
     q hqpos hq1 S t
   change realSpectralGenuine t = 0 at hres
-  simpa [hres] using h
+  simpa only [realSpectralGenuineBoundaryLinearization_apply, mul_one, hres]
+    using h
 
 /-- O pencil limite da familia nativa e o pencil escalar Genuine. -/
 def nativeGpreGenuineLimitBoundaryPencil (t : ℝ) :
@@ -291,7 +331,7 @@ do pencil limite das compressoes nativas. -/
 theorem isRealSpectralResonance_iff_nativeGpreGenuineLimit_zeroCharacteristic
     (t : ℝ) :
     IsRealSpectralResonance t ↔
-      (nativeGpreGenuineLimitBoundaryPencil t).toLinearBoundaryPencil.
+      ((nativeGpreGenuineLimitBoundaryPencil t).toLinearBoundaryPencil).
         IsCharacteristicValue 0 := by
   exact isRealSpectralResonance_iff_zero_characteristicValue t
 
