@@ -24,9 +24,10 @@ se, e somente se,
 
 `genuineContinuation s = 0` e `Re(s) = 1/2`.
 
-Isto nao postula que o primeiro nucleo esta contido no segundo. Essa inclusao
-e precisamente a ultima relacao de bordo que ainda deve ser demonstrada; ela
-nao e escondida numa estrutura ou numa hipotese renomeada.
+Esta equivalencia descreve o nucleo conjunto na extensao ambiente em `s : ℂ`;
+ela nao declara uma obrigacao faltante da C2 nativa. Ao especializar
+`s = criticalLineParameter t`, o deslocamento critico zera por construcao e
+o vetor Green limite zera pela caracterizacao ja provada.
 -/
 
 open scoped BigOperators Topology RealInnerProductSpace
@@ -375,7 +376,7 @@ theorem crossPrimeAlignedGreenClosure_iff_limitVector_eq_zero
         simpa [crossPrimeAlignedGreenLimitVector] using hcoordinate
       simpa [hqZero, Function.comp_def] using hqFlux
 
-/-! ## Colagem dos dois limites e exposicao da ultima seta -/
+/-! ## Identificacao conjunta dos dois limites na extensao ambiente -/
 
 /-- O operador Genuine limite e zero somente se seu coeficiente e zero. -/
 theorem orthogonalGenuineLimitOperator_eq_zero_iff
