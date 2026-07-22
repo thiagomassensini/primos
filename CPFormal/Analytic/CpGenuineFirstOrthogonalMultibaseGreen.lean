@@ -51,7 +51,7 @@ A energia interna do vetor de duas cameras e a soma das duas energias
 coordenadas. Nao aparece termo cruzado entre os primos.
 -/
 theorem twoPrimeGreenVector_inner_self (x y : ℝ) :
-    ⟪twoPrimeGreenVector x y, twoPrimeGreenVector x y⟫_ℝ =
+    inner ℝ (twoPrimeGreenVector x y) (twoPrimeGreenVector x y) =
       x ^ 2 + y ^ 2 := by
   rw [PiLp.inner_apply]
   simp [twoPrimeGreenVector, Fin.sum_univ_succ]
@@ -129,8 +129,8 @@ theorem crossPrimeAlignedGreenFluxVector_eq_radial_add_boundary
 /-- Ledger pitagorico explicito para o bulk radial das duas cameras. -/
 theorem crossPrimeAlignedRadialBulkVector_inner_self
     (p q L : ℕ) (s : ℂ) :
-    ⟪crossPrimeAlignedRadialBulkVector p q L s,
-      crossPrimeAlignedRadialBulkVector p q L s⟫_ℝ =
+    inner ℝ (crossPrimeAlignedRadialBulkVector p q L s)
+      (crossPrimeAlignedRadialBulkVector p q L s) =
       (2 * criticalDisplacement s.re *
         finiteRadialGreenEnergy p
           (crossPrimeAlignedCutoff q L) s) ^ 2 +
@@ -188,8 +188,8 @@ def crossPrimeAlignedGreenBoundaryEnergy
 /-- A energia de bordo e literalmente o produto interno do vetor de bordo. -/
 theorem crossPrimeAlignedGreenBoundaryVector_inner_self
     (p q L : ℕ) (s : ℂ) :
-    ⟪crossPrimeAlignedGreenBoundaryVector p q L s,
-      crossPrimeAlignedGreenBoundaryVector p q L s⟫_ℝ =
+    inner ℝ (crossPrimeAlignedGreenBoundaryVector p q L s)
+      (crossPrimeAlignedGreenBoundaryVector p q L s) =
       crossPrimeAlignedGreenBoundaryEnergy p q L s := by
   exact twoPrimeGreenVector_inner_self _ _
 
