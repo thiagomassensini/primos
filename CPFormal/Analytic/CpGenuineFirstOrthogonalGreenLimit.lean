@@ -67,9 +67,9 @@ theorem norm_realDirichletPower_succ_sub_le
     dsimp [lower, upper]
     exact_mod_cast Nat.le_succ (n + 1)
   have hlowerMem : lower ∈ Set.Ici lower := by
-    exact le_rfl
-  have hupperMem : upper ∈ Set.Ici lower :=
-    hlowerUpper
+    exact Set.mem_Ici.mpr (le_refl lower)
+  have hupperMem : upper ∈ Set.Ici lower := by
+    exact Set.mem_Ici.mpr hlowerUpper
   have hderiv :
       ∀ x, x ∈ Set.Ici lower →
         HasDerivWithinAt (realDirichletPower s)
