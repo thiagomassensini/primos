@@ -1,0 +1,141 @@
+name: Check Zenodo DOI for v0.45.0
+
+on:
+  push:
+    branches:
+      - ops/ensure-v0.45.0-release
+    paths:
+      - .github/workflows/check-zenodo-v0.45.0.yml
+
+permissions:
+  contents: write
+
+jobs:
+  check-zenodo:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout operational branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Poll Zenodo and persist DOI metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p ops
+
+          python3 - <<'PY'
+          import datetime as dt
+          import json
+          import time
+          import urllib.parse
+          import urllib.request
+
+          endpoint = "https://zenodo.org/api/records"
+          queries = [
+              '"CPFormal v0.45.0"',
+              '"thiagomassensini/primos"',
+              '"Genuine-first real spectral and enriched TFVD checkpoint"',
+          ]
+          selected = None
+          observations = []
+
+          def related_to_repo(metadata):
+              values = []
+              for item in metadata.get("related_identifiers", []) or []:
+                  values.append(str(item.get("identifier", "")))
+              text = " ".join(values + [
+                  str(metadata.get("title", "")),
+                  str(metadata.get("description", "")),
+                  str(metadata.get("version", "")),
+              ]).lower()
+              return (
+                  "thiagomassensini/primos" in text
+                  or "cpformal v0.45.0" in text
+                  or ("cpformal" in text and "0.45.0" in text)
+              )
+
+          for attempt in range(1, 19):
+              all_hits = []
+              for query in queries:
+                  url = endpoint + "?" + urllib.parse.urlencode({
+                      "q": query,
+                      "size": 25,
+                      "sort": "mostrecent",
+                  })
+                  request = urllib.request.Request(
+                      url,
+                      headers={"User-Agent": "CPFormal-Zenodo-check/1.0"},
+                  )
+                  try:
+                      with urllib.request.urlopen(request, timeout=30) as response:
+                          payload = json.load(response)
+                      hits = payload.get("hits", {}).get("hits", [])
+                      observations.append({
+                          "attempt": attempt,
+                          "query": query,
+                          "hit_count": len(hits),
+                      })
+                      all_hits.extend(hits)
+                  except Exception as exc:
+                      observations.append({
+                          "attempt": attempt,
+                          "query": query,
+                          "error": f"{type(exc).__name__}: {exc}",
+                      })
+
+              seen = set()
+              for record in all_hits:
+                  rid = str(record.get("id", ""))
+                  if rid in seen:
+                      continue
+                  seen.add(rid)
+                  metadata = record.get("metadata", {}) or {}
+                  if related_to_repo(metadata):
+                      selected = record
+                      break
+
+              if selected is not None:
+                  break
+              time.sleep(20)
+
+          checked_at = dt.datetime.now(dt.timezone.utc).isoformat()
+          if selected is None:
+              output = {
+                  "status": "pending",
+                  "checked_at_utc": checked_at,
+                  "release_tag": "v0.45.0",
+                  "repository": "thiagomassensini/primos",
+                  "observations": observations,
+              }
+          else:
+              metadata = selected.get("metadata", {}) or {}
+              links = selected.get("links", {}) or {}
+              output = {
+                  "status": "confirmed",
+                  "checked_at_utc": checked_at,
+                  "release_tag": "v0.45.0",
+                  "repository": "thiagomassensini/primos",
+                  "record_id": selected.get("id"),
+                  "doi": selected.get("doi") or metadata.get("doi"),
+                  "conceptdoi": selected.get("conceptdoi") or metadata.get("conceptdoi"),
+                  "title": metadata.get("title"),
+                  "version": metadata.get("version"),
+                  "published": selected.get("created"),
+                  "record_url": links.get("html") or links.get("self_html"),
+                  "observations": observations,
+              }
+
+          with open("ops/zenodo-v0.45.0-confirmed.json", "w", encoding="utf-8") as handle:
+              json.dump(output, handle, ensure_ascii=False, indent=2, sort_keys=True)
+              handle.write("\n")
+          PY
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ops/zenodo-v0.45.0-confirmed.json
+          git commit -m "chore(zenodo): persist v0.45.0 DOI lookup"
+          git push origin "HEAD:ops/ensure-v0.45.0-release"
