@@ -70,6 +70,7 @@ import CPFormal.Analytic.CpGenuineFirstOrthogonalMultibaseGreen
 import CPFormal.Analytic.CpGenuineFirstOrthogonalLimit
 import CPFormal.Analytic.CpGenuineFirstOrthogonalGreenLimit
 import CPFormal.Analytic.CpGenuineFirstFinalKernelGate
+import CPFormal.Analytic.CpGenuineFirstCarryAmplitudeGate
 import CPFormal.Analytic.CpInfiniteRealSpectralGenerator
 import CPFormal.Analytic.CpGenuineBoundaryPencil
 import CPFormal.Analytic.CpCarryWeightedVerticalGreen
