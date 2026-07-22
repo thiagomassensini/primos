@@ -80,6 +80,7 @@ import CPFormal.Analytic.CpNativeGpreTfvdFiniteClosedRelation
 import CPFormal.Analytic.CpNativeGpreTfvdCutoffCompatibility
 import CPFormal.Analytic.CpNativeGpreTfvdAnalysis
 import CPFormal.Analytic.CpNativeGpreTfvdVisiblePencil
+import CPFormal.Analytic.CpNativeGpreTfvdGenuineCompression
 import CPFormal.Analytic.CpFiniteGenuineAngularGreenBudget
 import CPFormal.Analytic.CpFiniteGenuineOneSidedGreenBudget
 import CPFormal.Analytic.CpGenuineSecondDifferenceIdentity
