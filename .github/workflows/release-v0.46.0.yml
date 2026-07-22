@@ -1,0 +1,84 @@
+name: Publish v0.46.0
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/release-v0.46.0.yml
+      - docs/RELEASE_0.46.0.md
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-v0.46.0
+  cancel-in-progress: false
+
+jobs:
+  verify-and-release:
+    name: Verify and publish v0.46.0
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Static audit
+        run: bash scripts/static_audit.sh
+
+      - name: Set up Lean and mathlib cache
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
+
+      - name: Elaborate with Lean kernel
+        shell: bash
+        run: |
+          set -o pipefail
+          lake build --wfail 2>&1 | tee lean-release-build.log
+
+      - name: Preserve Lean failure log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lean-release-build-log-${{ github.run_id }}
+          path: lean-release-build.log
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Create annotated tag and publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: v0.46.0
+          TITLE: CPFormal v0.46.0 — Genuine-first cutoff provenance and orthogonal limit checkpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          if git ls-remote --exit-code --tags origin "refs/tags/${TAG}" >/dev/null 2>&1; then
+            echo "Tag ${TAG} already exists; keeping the existing immutable reference."
+          else
+            git tag -a "${TAG}" "${GITHUB_SHA}" -m "${TITLE}"
+            git push origin "refs/tags/${TAG}"
+          fi
+
+          if gh release view "${TAG}" >/dev/null 2>&1; then
+            echo "Release ${TAG} already exists; nothing to republish."
+            exit 0
+          fi
+
+          gh release create "${TAG}" \
+            --verify-tag \
+            --title "${TITLE}" \
+            --notes-file docs/RELEASE_0.46.0.md
