@@ -23,7 +23,7 @@ transforma essa ultima obrigacao numa interface concreta sem compressao
 escalar e sem interferencia entre cameras.
 -/
 
-open scoped BigOperators Topology InnerProduct
+open scoped BigOperators Topology RealInnerProductSpace
 
 namespace CPFormal.Analytic.Cp
 
@@ -146,7 +146,7 @@ podem se cancelar entre si.
 -/
 theorem crossPrimeAlignedRadialBulkVector_eq_zero_iff_criticalDisplacement_eq_zero
     (p q L : ℕ)
-    (hp : Nat.Prime p) (hpodd : Odd p)
+    (hp : Nat.Prime p) (_hpodd : Odd p)
     (hq : Nat.Prime q) (hqodd : Odd q)
     {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
     crossPrimeAlignedRadialBulkVector p q L s = 0 ↔
@@ -319,7 +319,7 @@ coordenada a coordenada equivale exatamente a estar na linha critica.
 -/
 theorem crossPrimeAlignedGreenClosure_iff_criticalDisplacement_eq_zero
     (p q : ℕ)
-    (hp : Nat.Prime p) (hpodd : Odd p)
+    (hp : Nat.Prime p) (_hpodd : Odd p)
     (hq : Nat.Prime q) (hqodd : Odd q)
     {s : ℂ} (hs : s ∈ genuineCriticalStrip)
     (hzero : genuineContinuation s = 0) :
