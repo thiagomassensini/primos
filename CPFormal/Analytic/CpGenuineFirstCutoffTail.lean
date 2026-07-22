@@ -124,6 +124,164 @@ theorem finiteRealSpectralCamera_eq_neg_cutoffTail_div_factor_of_resonance
     p M hp hpodd t hres]
   ring
 
+/-!
+## Transferencia horizontal--vertical entre bases
+-/
+
+/--
+Num zero de uma camera, o prefixo horizontal junto da cauda bracketada ainda
+nao resolvida recompõe exatamente a correcao vertical do mesmo cutoff.
+-/
+theorem blockPrefix_add_cutoffTail_eq_verticalCorrection_of_chart_zero
+    (p M : ℕ) (hp : Nat.Prime p) (hpodd : Odd p)
+    {s : ℂ} (hs : -1 < s.re)
+    (hzero : bracketedDirichletChart p s = 0) :
+    CPFormal.Genuine.Cp.blockPrefix p M (dirichletTerm s) +
+        realCpBracketCutoffTail p M s =
+      CPFormal.Genuine.Cp.verticalCorrection p M (dirichletTerm s) := by
+  have hfinite :=
+    finiteChart_eq_neg_cutoffTail_of_chart_zero
+      p M hp hpodd hs hzero
+  have hblock :=
+    CPFormal.Genuine.Cp.finiteChart_eq_blockPrefix_sub_verticalCorrection
+      p hp M (dirichletTerm s)
+  calc
+    CPFormal.Genuine.Cp.blockPrefix p M (dirichletTerm s) +
+        realCpBracketCutoffTail p M s =
+      CPFormal.Genuine.Cp.finiteChart p M (dirichletTerm s) +
+        CPFormal.Genuine.Cp.verticalCorrection p M (dirichletTerm s) +
+        realCpBracketCutoffTail p M s := by
+          rw [hblock]
+          ring
+    _ = -realCpBracketCutoffTail p M s +
+        CPFormal.Genuine.Cp.verticalCorrection p M (dirichletTerm s) +
+        realCpBracketCutoffTail p M s := by rw [hfinite]
+    _ = CPFormal.Genuine.Cp.verticalCorrection p M (dirichletTerm s) := by
+      ring
+
+/--
+Cutoffs cruzados por duas bases primas impares possuem o mesmo prefixo
+horizontal literal. Na base `p` usamos `halfRange q` blocos; na base `q`,
+`halfRange p`. Ambos terminam no inteiro `(p*q-1)/2`.
+-/
+theorem blockPrefix_cross_prime_aligned
+    (p q : ℕ)
+    (hp : Nat.Prime p) (hpodd : Odd p)
+    (hq : Nat.Prime q) (hqodd : Odd q)
+    (f : ℤ → ℂ) :
+    CPFormal.Genuine.Cp.blockPrefix p
+        (CPFormal.Genuine.Cp.halfRange q) f =
+      CPFormal.Genuine.Cp.blockPrefix q
+        (CPFormal.Genuine.Cp.halfRange p) f := by
+  rw [CPFormal.Genuine.Cp.blockPrefix_eq_positiveIntervalSum
+      p hp hpodd,
+    CPFormal.Genuine.Cp.blockPrefix_eq_positiveIntervalSum
+      q hq hqodd]
+  have hpformNat :=
+    CPFormal.Carry.Cp.two_mul_halfRange_add_one hpodd
+  have hqformNat :=
+    CPFormal.Carry.Cp.two_mul_halfRange_add_one hqodd
+  have hpformInt :
+      (p : ℤ) =
+        2 * (CPFormal.Genuine.Cp.halfRange p : ℤ) + 1 := by
+    exact_mod_cast hpformNat.symm
+  have hqformInt :
+      (q : ℤ) =
+        2 * (CPFormal.Genuine.Cp.halfRange q : ℤ) + 1 := by
+    exact_mod_cast hqformNat.symm
+  have hend :
+      (p : ℤ) * (CPFormal.Genuine.Cp.halfRange q : ℤ) +
+          (CPFormal.Genuine.Cp.halfRange p : ℤ) =
+        (q : ℤ) * (CPFormal.Genuine.Cp.halfRange p : ℤ) +
+          (CPFormal.Genuine.Cp.halfRange q : ℤ) := by
+    rw [hpformInt, hqformInt]
+    ring
+  rw [hend]
+
+/--
+Lei multibase no zero Genuine: depois de alinhar o mesmo prefixo horizontal,
+cada correcao vertical menos sua cauda bracketada produz o mesmo valor.
+-/
+theorem verticalCorrection_sub_cutoffTail_cross_prime_of_genuine_zero
+    (p q : ℕ)
+    (hp : Nat.Prime p) (hpodd : Odd p)
+    (hq : Nat.Prime q) (hqodd : Odd q)
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip)
+    (hzero : genuineContinuation s = 0) :
+    CPFormal.Genuine.Cp.verticalCorrection p
+          (CPFormal.Genuine.Cp.halfRange q) (dirichletTerm s) -
+        realCpBracketCutoffTail p
+          (CPFormal.Genuine.Cp.halfRange q) s =
+      CPFormal.Genuine.Cp.verticalCorrection q
+          (CPFormal.Genuine.Cp.halfRange p) (dirichletTerm s) -
+        realCpBracketCutoffTail q
+          (CPFormal.Genuine.Cp.halfRange p) s := by
+  have hconv : -1 < s.re := by linarith [hs.1]
+  have hzeroP : bracketedDirichletChart p s = 0 :=
+    (bracketedDirichletChart_zero_iff_genuineContinuation_zero
+      p hp hpodd hs).2 hzero
+  have hzeroQ : bracketedDirichletChart q s = 0 :=
+    (bracketedDirichletChart_zero_iff_genuineContinuation_zero
+      q hq hqodd hs).2 hzero
+  have hpLedger :=
+    blockPrefix_add_cutoffTail_eq_verticalCorrection_of_chart_zero
+      p (CPFormal.Genuine.Cp.halfRange q)
+      hp hpodd hconv hzeroP
+  have hqLedger :=
+    blockPrefix_add_cutoffTail_eq_verticalCorrection_of_chart_zero
+      q (CPFormal.Genuine.Cp.halfRange p)
+      hq hqodd hconv hzeroQ
+  calc
+    CPFormal.Genuine.Cp.verticalCorrection p
+          (CPFormal.Genuine.Cp.halfRange q) (dirichletTerm s) -
+        realCpBracketCutoffTail p
+          (CPFormal.Genuine.Cp.halfRange q) s =
+      (CPFormal.Genuine.Cp.blockPrefix p
+          (CPFormal.Genuine.Cp.halfRange q) (dirichletTerm s) +
+        realCpBracketCutoffTail p
+          (CPFormal.Genuine.Cp.halfRange q) s) -
+        realCpBracketCutoffTail p
+          (CPFormal.Genuine.Cp.halfRange q) s := by rw [hpLedger]
+    _ = CPFormal.Genuine.Cp.blockPrefix p
+          (CPFormal.Genuine.Cp.halfRange q) (dirichletTerm s) := by ring
+    _ = CPFormal.Genuine.Cp.blockPrefix q
+          (CPFormal.Genuine.Cp.halfRange p) (dirichletTerm s) :=
+      blockPrefix_cross_prime_aligned
+        p q hp hpodd hq hqodd (dirichletTerm s)
+    _ = (CPFormal.Genuine.Cp.blockPrefix q
+          (CPFormal.Genuine.Cp.halfRange p) (dirichletTerm s) +
+        realCpBracketCutoffTail q
+          (CPFormal.Genuine.Cp.halfRange p) s) -
+        realCpBracketCutoffTail q
+          (CPFormal.Genuine.Cp.halfRange p) s := by ring
+    _ = CPFormal.Genuine.Cp.verticalCorrection q
+          (CPFormal.Genuine.Cp.halfRange p) (dirichletTerm s) -
+        realCpBracketCutoffTail q
+          (CPFormal.Genuine.Cp.halfRange p) s := by rw [hqLedger]
+
+/--
+Forma conservativa da mesma lei: o desacordo vertical entre duas bases e
+exatamente o desacordo entre suas caudas bracketadas nao resolvidas.
+-/
+theorem verticalCorrection_cross_prime_defect_eq_cutoffTail_defect_of_genuine_zero
+    (p q : ℕ)
+    (hp : Nat.Prime p) (hpodd : Odd p)
+    (hq : Nat.Prime q) (hqodd : Odd q)
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip)
+    (hzero : genuineContinuation s = 0) :
+    CPFormal.Genuine.Cp.verticalCorrection p
+          (CPFormal.Genuine.Cp.halfRange q) (dirichletTerm s) -
+        CPFormal.Genuine.Cp.verticalCorrection q
+          (CPFormal.Genuine.Cp.halfRange p) (dirichletTerm s) =
+      realCpBracketCutoffTail p
+          (CPFormal.Genuine.Cp.halfRange q) s -
+        realCpBracketCutoffTail q
+          (CPFormal.Genuine.Cp.halfRange p) s := by
+  have htransport :=
+    verticalCorrection_sub_cutoffTail_cross_prime_of_genuine_zero
+      p q hp hpodd hq hqodd hs hzero
+  linear_combination htransport
+
 end
 
 end CPFormal.Analytic.Cp
