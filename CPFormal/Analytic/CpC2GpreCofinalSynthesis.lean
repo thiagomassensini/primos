@@ -182,6 +182,26 @@ theorem c2GpreNormalizedCofinalSynthesis_eq_cameraGap
     c2GpreNormalizedCameraPrefixSynthesis_eq_weightedPrefix q
       (crossPrimeAlignedCutoff p L) hq s]
 
+/-- The requested absolute synthesis error is identically zero, hence converges
+to zero without a zero hypothesis or an asymptotic estimate. -/
+theorem c2GpreNormalizedCofinalSynthesis_error_tendsto_zero
+    (p q : ℕ) (hp : Nat.Prime p) (hq : Nat.Prime q) (s : ℂ) :
+    Tendsto
+      (fun L : ℕ =>
+        ‖c2GpreNormalizedCofinalSynthesis p q L s -
+          c2CrossPrimeCofinalCameraGap p q L s‖)
+      atTop (nhds 0) := by
+  have heq :
+      (fun L : ℕ =>
+        ‖c2GpreNormalizedCofinalSynthesis p q L s -
+          c2CrossPrimeCofinalCameraGap p q L s‖) =
+        (fun _ : ℕ => (0 : ℝ)) := by
+    funext L
+    rw [c2GpreNormalizedCofinalSynthesis_eq_cameraGap p q L hp hq s]
+    simp
+  rw [heq]
+  exact tendsto_const_nhds
+
 /-- Concrete, non-tautological instance of the previously isolated horizontal
 cofinal intertwiner.  Equality holds for every cutoff, hence in particular
 eventually. -/
