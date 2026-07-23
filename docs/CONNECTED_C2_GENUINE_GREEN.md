@@ -77,10 +77,95 @@ de coordenadas C2 na porta TFVD universal, e Tate nao e necessario para
 construir essa parte. Isso ainda nao e um intertwiner entre a dinamica C2 e o
 operador Genuine.
 
+## O pushforward realiza as duas escalas formalmente usadas
+
+O pushforward truncado das fibras impares fornece agora uma realizacao
+aritmetica exata da porta anterior. Para um core positivo `m`, as duas pernas
+na profundidade `k >= 2` sao
+
+```text
+2^k m - 1,   2^k m + 1,
+```
+
+cada uma com peso `2^(-k)`. O modulo
+`CPFormal.Carry.C2OddCorePushforward` define separadamente as ultimas
+profundidades admissiveis das duas pernas e soma somente os niveis realmente
+contidos no cutoff. A partir dessas somas finitas, sem postular uma lei de
+halving, o kernel prova
+
+```text
+2 a_(8M)(m) - a_(4M)(m) = 1              (0 < m <= M).
+```
+
+Escrevendo
+
+```text
+epsilon_(M,r) = 1 - a_(4M)(r),
+K_T(p,q)      = a_T(pq) - a_T(p) a_T(q),
+```
+
+o modulo `CPFormal.Analytic.CpC2OddCorePushforwardTfvd` especializa essa
+identidade simultaneamente em `p`, `q` e `pq` e obtem
+
+```text
+2 K_(8M)(p,q) - K_(4M)(p,q)
+  = (1/2) epsilon_(M,p) epsilon_(M,q).
+```
+
+As quatro massas concretas
+
+```text
+(a_T(p), a_T(pq); 1, a_T(q))
+```
+
+sao codificadas na porta TFVD enriquecida. O retorno exato da valvula prova
+
+```text
+visibleCell = K_T(p,q),
+dormantCell = 0,
+```
+
+e a celula visivel satisfaz a mesma identidade de Richardson. Assim, os
+parametros formais `h=1` e `h=1/2` do modelo conectado sao de fato os
+cutoffs aritmeticos `4M` e `8M`. Esta realizacao ainda e um `encode/decode`
+sintetico de quatro escalares na porta universal; ela nao afirma que essas
+coordenadas sejam o estado canonico de gradientes.
+
+Ha tambem uma ligacao finita com o canal log-Dirichlet. Depois de normalizar
+explicitamente o coeficiente unitario por `a_T(1)=1` e zerar os indices
+pares, defina `b_T` por inversao de Dirichlet:
+
+```text
+b_T * a_T = a_T log.
+```
+
+Para primos impares distintos, o kernel prova
+
+```text
+b_T(pq) = log(pq) K_T(p,q),
+
+2 b_(8M)(pq) - b_(4M)(pq)
+  = log(pq) (1/2) epsilon_(M,p) epsilon_(M,q).
+```
+
+Vestir esse coeficiente pelo monomio `positiveDirichletValue` produz
+exatamente o `positiveLogDirichletValue` ja usado pelo log-jet canonico. A
+telescopagem finita adicional
+
+```text
+positiveLogDirichletValue(s,N)
+  = sum_{n<N} positiveLogDirichletGradient(s,n)
+```
+
+coloca o monomio semiprimo no span linear do campo de arestas log-jet nativo.
+O que ainda nao existe e a reorganizacao com os pesos das cameras canonicas
+e o transporte coercivo dessa soma para a proveniencia `same-s` completa.
+
 O portador canonico `same-s` usado atualmente pelo Genuine, porem, codifica
 gradientes Dirichlet e log-Dirichlet consecutivos. A porta C2 acima codifica
-massas `a_M(p),a_M(q),a_M(pq)`. A seta aritmetica entre esses dois tipos de
-estado ainda nao existe.
+massas `a_M(p),a_M(q),a_M(pq)`. A telescopagem nova alcanca o span do campo
+log-jet, mas a seta ponderada entre a celula de massa e o estado canonico
+`same-s` ainda nao existe.
 
 ## Por que o defeito atual nao basta
 
@@ -158,16 +243,17 @@ mas nao pode localizar a parte real de um zero ainda desconhecido.
 
 ## Menor ponte nova
 
-Uma rota C2--`G_pre` honesta precisa construir um intertwiner com quatro
-propriedades separadas:
+O pushforward novo fecha as duas primeiras tarefas da rota finita: fornece
+um estado conjunto no mesmo cutoff e o coloca exatamente na porta C2--TFVD.
+Uma rota C2--`G_pre` completa ainda precisa construir um intertwiner com as
+duas propriedades espectrais restantes:
 
-1. um estado conjunto de duas bases no mesmo cutoff;
-2. um mapa aritmetico desse estado para a porta C2--TFVD ja formalizada;
-3. uma projecao coerciva dessa porta sobre a proveniencia canonica `same-s`
+1. uma projecao coerciva dessa porta sobre a proveniencia canonica `same-s`
    ou sobre o detector radial;
-4. uma lei, derivada do zero Genuine, que feche o readout conectado.
+2. uma lei, derivada do zero Genuine, que feche o readout conectado.
 
-A propriedade 3 nao pode pressupor que a proveniencia zera: para cameras
+A primeira propriedade restante nao pode pressupor que a proveniencia zera:
+para cameras
 primas distintas, isso ja equivale a `delta = 0`.
 
 A normalizacao tambem e obrigatoria. No modelo C2,
@@ -180,6 +266,27 @@ epsilon_M(p) epsilon_M(q) * provenanceGap_M -> 0
 
 nao controla `provenanceGap_M`. E necessario obter uma identidade finita
 exata, ou um erro pequeno relativamente ao defeito conectado.
+
+## Guardas para o canal zeta do pushforward
+
+A formalizacao usa somente a camada finita que e exata. As afirmacoes
+analiticas adicionais do material exigem correcoes antes de entrarem na
+cadeia:
+
+- para usar inversao de Dirichlet, o canal normalizado substitui
+  explicitamente o coeficiente bruto do core `1` por `a_T(1)=1`; o `b_T`
+  formalizado pertence a esse canal impar seed-normalizado, nao ao polinomio
+  truncado bruto sem essa correcao constante;
+- convergencia pontual dos coeficientes `b_T(n)` nao autoriza trocar limite e
+  serie sem uma majorante uniforme;
+- `(1-2^(-s)) zeta(s)` tem zeros adicionais na reta `Re(s)=0`, portanto a
+  equivalencia de zeros com Genuine so e segura no strip aberto;
+- num zero de multiplicidade `r`, o residuo de `-Z'/Z` e `-r`, nao `+r`, e
+  existe ainda o comportamento singular em `s=1`.
+
+Por isso nenhum limite de serie, continuacao meromorfa ou enunciado de polos
+foi usado nos modulos novos. A inversao de Dirichlet e coeficiente por
+coeficiente e inteiramente finita.
 
 ## Papel de Tate
 

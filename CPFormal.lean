@@ -6,6 +6,7 @@ import CPFormal.Carry.C2Adjacent
 import CPFormal.Carry.C2Depth
 import CPFormal.Carry.C2WeightedReindex
 import CPFormal.Carry.C2AlignedBox
+import CPFormal.Carry.C2OddCorePushforward
 import CPFormal.Carry.CpBalancedResidue
 import CPFormal.Carry.CpGlobalIncidence
 import CPFormal.Carry.CpDepth
@@ -83,6 +84,7 @@ import CPFormal.Analytic.CpTateCarryLocalCarrier
 import CPFormal.Analytic.CpCriticalRadialBracketGuard
 import CPFormal.Analytic.CpConnectedC2Defect
 import CPFormal.Analytic.CpConnectedC2TfvdPort
+import CPFormal.Analytic.CpC2OddCorePushforwardTfvd
 import CPFormal.Analytic.CpNativeGpreConnectedC2Guard
 import CPFormal.Analytic.CpCarryL2UnilateralShift
 import CPFormal.Analytic.CpCarryWeightedVerticalBracketTrace
