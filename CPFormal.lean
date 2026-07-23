@@ -85,6 +85,7 @@ import CPFormal.Analytic.CpCriticalRadialBracketGuard
 import CPFormal.Analytic.CpConnectedC2Defect
 import CPFormal.Analytic.CpConnectedC2TfvdPort
 import CPFormal.Analytic.CpC2OddCorePushforwardTfvd
+import CPFormal.Analytic.CpC2LogJetGpreLift
 import CPFormal.Analytic.CpNativeGpreConnectedC2Guard
 import CPFormal.Analytic.CpCarryL2UnilateralShift
 import CPFormal.Analytic.CpCarryWeightedVerticalBracketTrace

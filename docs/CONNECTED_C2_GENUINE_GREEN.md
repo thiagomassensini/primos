@@ -158,14 +158,72 @@ positiveLogDirichletValue(s,N)
 ```
 
 coloca o monomio semiprimo no span linear do campo de arestas log-jet nativo.
-O que ainda nao existe e a reorganizacao com os pesos das cameras canonicas
-e o transporte coercivo dessa soma para a proveniencia `same-s` completa.
+O modulo `CPFormal.Analytic.CpC2LogJetGpreLift` conserva agora esse span como
+um estado finitamente suportado, em vez de somar as arestas antes da analise.
+Para todo atlas finito de proveniencia, o mesmo estado alimenta as pernas
+TFVD e `G_pre`; a inversa continua existente reconstrui o estado vertical
+inteiro, e somente depois um readout finito recupera
+`positiveLogDirichletValue(s,N)`.
+
+Consequentemente, a identidade de Richardson semiprima concreta fatora pelo
+carrier enriquecido:
+
+```text
+RichardsonLogCoefficient(pq) * positiveDirichletValue(s,pq-1)
+  = (1/2 epsilon_(M,p) epsilon_(M,q))
+      * enrichedReadout(enrichedAnalysis(logJetPrefix(s,pq-1))).
+```
+
+O coeficiente conectado permanece como escalar externo. Cada coordenada de
+proveniencia selecionada e populada explicitamente antes do readout, mas a
+inversa atual recupera o prefixo pela perna TFVD e nao usa essas coordenadas.
+Portanto, esse e um lift sem perda do prefixo log-jet usado pelo `C2`, nao um
+lift da interacao conectada inteira para a proveniencia. Ainda falta provar
+que uma combinacao ponderada das pernas `G_pre` detecta esse coeficiente e
+desce para a proveniencia Green canonica.
+
+O mesmo modulo prova ainda o crosswalk semiprimo exato
+
+```text
+positiveLogDirichletValue(s,pq-1)
+  = cpLogScaleCoefficient(p,s)
+  + cpLogScaleCoefficient(q,s)
+  + finiteCpLogJetCommutator(p,q-1,s)
+  + finiteCpLogJetCommutator(q,p-1,s).
+```
+
+Assim, o vertice sintetizado se abre em duas sementes de cameras e dois
+bordos de comutador finitos, sem primalidade, condicao de faixa ou zero
+Genuine.
 
 O portador canonico `same-s` usado atualmente pelo Genuine, porem, codifica
 gradientes Dirichlet e log-Dirichlet consecutivos. A porta C2 acima codifica
 massas `a_M(p),a_M(q),a_M(pq)`. A telescopagem nova alcanca o span do campo
-log-jet, mas a seta ponderada entre a celula de massa e o estado canonico
-`same-s` ainda nao existe.
+log-jet e o novo lift conserva o estado enquanto popula o atlas de
+proveniencia, mas a seta ponderada que use esse atlas para recuperar a
+interacao conectada e o gap Green `same-s` entre duas cameras ainda nao
+existe.
+
+## Covariancia `same-s` e seu limite
+
+Para uma unica camera `p`, aplicar o bloco Cp simultaneamente ao gradiente
+ordinario e ao log-gradiente cancela exatamente o shear logaritmico no
+determinante:
+
+```text
+W(B_p D, B_p L) = natDirichletTerm(s,p)^2 W(D,L).
+```
+
+Depois da normalizacao de fase critica, o fator e puramente radial:
+
+```text
+W_p^norm = p^(-2 delta) W_0.
+```
+
+Isso identifica a lei de transporte local sugerida pelo canon, mas nao
+sincroniza duas cameras. Para `p != q`, os fatores radiais continuam
+diferentes quando `delta != 0`; usar sua igualdade como hipotese seria
+reintroduzir exatamente a conclusao forte.
 
 ## Por que o defeito atual nao basta
 
@@ -258,6 +316,15 @@ primas distintas, isso ja equivale a `delta = 0`.
 
 A normalizacao tambem e obrigatoria. No modelo C2,
 `epsilon_M(p) epsilon_M(q)` tende a zero quando a profundidade cresce.
+O modulo novo registra a lei finita mais precisa: ao duplicar `M`, cada
+defeito marginal e dividido por `2` e o coeficiente conectado e dividido por
+`4`:
+
+```text
+epsilon_(2M,r) = (1/2) epsilon_(M,r),
+connectedDefect_(2M)(p,q) = (1/4) connectedDefect_M(p,q).
+```
+
 Portanto provar apenas
 
 ```text
@@ -265,7 +332,9 @@ epsilon_M(p) epsilon_M(q) * provenanceGap_M -> 0
 ```
 
 nao controla `provenanceGap_M`. E necessario obter uma identidade finita
-exata, ou um erro pequeno relativamente ao defeito conectado.
+exata, ou um erro pequeno relativamente ao defeito conectado. Em particular,
+o produto conectado vezes um vertice semiprimo fixo converge a zero para
+todo `s`; esse limite nao caracteriza zeros Genuine.
 
 ## Guardas para o canal zeta do pushforward
 
