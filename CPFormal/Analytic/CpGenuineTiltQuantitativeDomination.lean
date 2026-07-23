@@ -114,8 +114,7 @@ theorem centeredSecondDifference_ge_of_pair_secondDeriv_ge
       exact (ha t).continuousAt.continuousWithinAt
     · intro t ht
       exact (ha t).hasDerivWithinAt
-    · dsimp [a, g]
-      nlinarith
+    · simp [a, g, two_mul]
     · intro t ht
       exact (hg t ht).continuousAt.continuousWithinAt
     · intro t ht
@@ -220,8 +219,7 @@ theorem centeredSecondDifference_le_of_pair_secondDeriv_le
       exact (hg t ht).continuousAt.continuousWithinAt
     · intro t ht
       exact (hg t (Set.Ico_subset_Icc_self ht)).hasDerivWithinAt
-    · dsimp [a, g]
-      nlinarith
+    · simp [a, g, two_mul]
     · intro t ht
       exact (ha t).continuousAt.continuousWithinAt
     · intro t ht
