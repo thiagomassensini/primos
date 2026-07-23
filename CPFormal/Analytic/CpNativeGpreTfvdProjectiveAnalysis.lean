@@ -1,5 +1,6 @@
 import CPFormal.Analytic.CpNativeGpreTfvdAnalysis
 import CPFormal.Analytic.CpNativeGpreTfvdCutoffCompatibility
+import Mathlib.Analysis.Normed.Module.ContinuousInverse
 import Mathlib.Analysis.Normed.Operator.Banach
 import Mathlib.Topology.Algebra.Module.ContinuousLinearMap.PiProd
 
