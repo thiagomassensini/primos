@@ -154,9 +154,6 @@ theorem c2GpreNormalizedCameraPrefixSynthesis_eq_weightedPrefix
         ∑ k ∈ Finset.range cutoff,
           dirichletTerm s (CPFormal.Genuine.Cp.alignedCenter base k) := by
       congr 1
-      apply Finset.sum_congr rfl
-      intro k hk
-      simp [natDirichletTerm, CPFormal.Genuine.Cp.alignedCenter]
     _ = (base : ℂ) ^ (1 - s) * positiveDirichletPrefix s cutoff := by
       exact p_mul_centerSum_dirichlet_eq_cpow_mul_prefix
         base hbase cutoff s
