@@ -52,6 +52,7 @@ import CPFormal.Analytic.CpGenuineCarrySaturationTransport
 import CPFormal.Analytic.CpGenuineTiltProductRule
 import CPFormal.Analytic.CpGenuineTiltPhaseCancellation
 import CPFormal.Analytic.CpGenuineTiltQuantitativeDomination
+import CPFormal.Analytic.CpGenuineTiltBlockBounds
 import CPFormal.Analytic.CpTfvdGenuineCarryIdentification
 import CPFormal.Analytic.CpSeededTfvdSameSBoundary
 import CPFormal.Analytic.CpFiniteSeededTfvdGreenIdentity
