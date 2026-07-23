@@ -71,14 +71,13 @@ theorem c2GpreCameraPairCompression_zero_with_positive_carryEnergy
   · simp
   · have hp0 : 0 < (p : ℝ) := by exact_mod_cast hp.pos
     have hq0 : 0 < (q : ℝ) := by exact_mod_cast hq.pos
-    have hap : 0 < criticalAmplitude p kp := by
-      unfold criticalAmplitude
+    have hmp : 0 < criticalMass p kp := by
+      unfold criticalMass
       exact Real.rpow_pos_of_pos hp0 _
-    have haq : 0 < criticalAmplitude q kq := by
-      unfold criticalAmplitude
+    have hmq : 0 < criticalMass q kq := by
+      unfold criticalMass
       exact Real.rpow_pos_of_pos hq0 _
-    simp [c2GpreCarryWeightedCameraPairEnergy]
-    nlinarith [sq_pos_of_pos hap, sq_pos_of_pos haq]
+    simpa [c2GpreCarryWeightedCameraPairEnergy] using add_pos hmp hmq
 
 /-- Therefore scalar camera cancellation is not coercive for the quadratic
 carry energy. -/
