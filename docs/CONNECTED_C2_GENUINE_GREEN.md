@@ -182,6 +182,12 @@ lift da interacao conectada inteira para a proveniencia. Ainda falta provar
 que uma combinacao ponderada das pernas `G_pre` detecta esse coeficiente e
 desce para a proveniencia Green canonica.
 
+Um guarda operacional simples torna essa fronteira precisa: o teorema de
+reconstrucao e o readout escalar continuam validos com o atlas vazio
+`S = empty`. Portanto, qualquer proximo lema que pretenda ser uma lei de
+proveniencia deve depender nao trivialmente de coordenadas selecionadas do
+atlas e comparar as duas cameras; nao basta reutilizar a inversa TFVD.
+
 O mesmo modulo prova ainda o crosswalk semiprimo exato
 
 ```text
