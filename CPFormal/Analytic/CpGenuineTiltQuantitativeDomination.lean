@@ -123,7 +123,7 @@ theorem centeredSecondDifference_ge_of_pair_secondDeriv_ge
       exact hqd t (Set.Ico_subset_Icc_self ht)
   have hfinal := hag radius ⟨hradius, le_rfl⟩
   dsimp [a, g] at hfinal
-  convert hfinal using 1 <;> ring
+  linarith [hfinal]
 
 /-- A symmetric upper bound for the second derivative gives the corresponding
 sharp upper bound for the centered second difference. -/
@@ -228,7 +228,7 @@ theorem centeredSecondDifference_le_of_pair_secondDeriv_le
       exact hdq t (Set.Ico_subset_Icc_self ht)
   have hfinal := hga radius ⟨hradius, le_rfl⟩
   dsimp [a, g] at hfinal
-  convert hfinal using 1 <;> ring
+  linarith [hfinal]
 
 end
 
