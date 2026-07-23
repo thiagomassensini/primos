@@ -35,10 +35,11 @@ def canonicalCriticalTiltCarrier (k : ℕ) (s : ℂ) : ℂ :=
 theorem canonicalCriticalTiltCarrier_ne_zero (k : ℕ) (s : ℂ) :
     canonicalCriticalTiltCarrier k s ≠ 0 := by
   unfold canonicalCriticalTiltCarrier localCriticalLineCarrier
-    criticalLineDirichletCarrier canonicalRealCpCenter
+    criticalLineDirichletCarrier
   apply (Complex.cpow_ne_zero_iff).2
   left
-  norm_num
+  apply Complex.ofReal_ne_zero.mpr
+  simp [canonicalRealCpCenter]
   positivity
 
 /-- Remove the native carrier phase before summing the local tilt blocks. -/
@@ -51,8 +52,9 @@ theorem canonicalPhaseUnwoundTiltBlock_eq (k : ℕ) (s : ℂ) :
     canonicalPhaseUnwoundTiltBlock k s =
       (cpTilt 3 (criticalDisplacement s.re) (canonicalRealCpCenter k) : ℂ) := by
   unfold canonicalPhaseUnwoundTiltBlock
-    canonicalCriticalWeightedTiltBlock canonicalCriticalTiltCarrier
-  field_simp [canonicalCriticalTiltCarrier_ne_zero]
+  rw [div_eq_iff (canonicalCriticalTiltCarrier_ne_zero k s)]
+  unfold canonicalCriticalWeightedTiltBlock canonicalCriticalTiltCarrier
+  ring
 
 /-- Every canonical center lies strictly outside the radius-one camera. -/
 theorem halfRange_three_lt_canonicalRealCpCenter (k : ℕ) :
@@ -91,17 +93,16 @@ theorem canonicalPhaseUnwoundTiltBlock_re_neg
 
 /-- Finite pre-compression detector obtained by unwinding every carrier before
 adding the tagged blocks. -/
-def finiteCanonicalPhaseUnwoundTiltTrace (M : ℕ) (s : ℂ) : ℂ :=
-  ∑ k ∈ Finset.range M, canonicalPhaseUnwoundTiltBlock k s
+def finiteCanonicalPhaseUnwoundTiltTrace (M : ℕ) (s : ℂ) : ℝ :=
+  ∑ k ∈ Finset.range M, (canonicalPhaseUnwoundTiltBlock k s).re
 
 /-- The pre-compression detector is strictly positive on the right half of the
 strip as soon as one block is present. -/
 theorem finiteCanonicalPhaseUnwoundTiltTrace_re_pos
     {M : ℕ} (hM : 0 < M) {s : ℂ}
     (hdelta : 0 < criticalDisplacement s.re) :
-    0 < (finiteCanonicalPhaseUnwoundTiltTrace M s).re := by
+    0 < finiteCanonicalPhaseUnwoundTiltTrace M s := by
   unfold finiteCanonicalPhaseUnwoundTiltTrace
-  simp only [map_sum]
   apply Finset.sum_pos
   · intro k hk
     exact canonicalPhaseUnwoundTiltBlock_re_pos k hdelta
@@ -113,9 +114,8 @@ theorem finiteCanonicalPhaseUnwoundTiltTrace_re_neg
     {M : ℕ} (hM : 0 < M) {s : ℂ}
     (hre : 0 < s.re)
     (hdelta : criticalDisplacement s.re < 0) :
-    (finiteCanonicalPhaseUnwoundTiltTrace M s).re < 0 := by
+    finiteCanonicalPhaseUnwoundTiltTrace M s < 0 := by
   unfold finiteCanonicalPhaseUnwoundTiltTrace
-  simp only [map_sum]
   apply Finset.sum_neg
   · intro k hk
     exact canonicalPhaseUnwoundTiltBlock_re_neg k hre hdelta
@@ -130,7 +130,9 @@ theorem finiteCanonicalPhaseUnwoundTiltTrace_eq_zero_iff_re_eq_half
   · intro hzero
     by_contra hoff
     have hdelta : criticalDisplacement s.re ≠ 0 := by
-      unfold criticalDisplacement
+      intro hdeltaZero
+      apply hoff
+      unfold criticalDisplacement at hdeltaZero
       linarith
     rcases lt_or_gt_of_ne hdelta with hneg | hpos
     · have hsign := finiteCanonicalPhaseUnwoundTiltTrace_re_neg
@@ -151,7 +153,8 @@ theorem finiteCanonicalPhaseUnwoundTiltTrace_eq_zero_iff_re_eq_half
       rw [hhalf]
       ring
     rw [hdelta]
-    simp
+    simpa using
+      (cpTilt_zero 3 (by norm_num) (canonicalRealCpCenter k))
 
 /-! ## Original phase-bearing trace: exact domination firewall -/
 
@@ -173,6 +176,7 @@ theorem finiteCanonicalCriticalWeightedTiltTrace_succ_eq_first_add_tail
   unfold finiteCanonicalCriticalWeightedTiltTrace
     finiteCanonicalCriticalWeightedTiltTail
   rw [Finset.sum_range_succ']
+  ring
 
 /-- The norm of the complex tail is bounded by the sum of the block norms. -/
 theorem norm_finiteCanonicalCriticalWeightedTiltTail_le
