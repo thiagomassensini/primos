@@ -2,25 +2,27 @@
 
 ## Resultado
 
-O módulo
+Os módulos
 
 ```text
 CPFormal/Analytic/CpC2GpreCofinalSynthesis.lean
+CPFormal/Analytic/CpC2GpreCofinalTaggedSynthesis.lean
 ```
 
-instancia concretamente a relação
+instanciam concretamente a relação
 
 ```text
 C2GpreNormalizedCofinalIntertwinesCameraGap
 ```
 
-por uma soma finita definida antes de mencionar o gap das câmeras. A síntese
-usa átomos log-Dirichlet recuperados diretamente das pernas nativas de
-proveniência `G_pre`, aplica pesos explícitos independentes de qualquer hipótese
-de zero e reindexa exatamente os dois prefixos alinhados.
+por uma soma finita definida antes de mencionar o gap das câmeras. A primeira
+camada constrói e reindexa os átomos log-Dirichlet. A segunda realiza cada
+átomo literalmente como leitura de uma tag ativa na perna nativa de
+proveniência `G_pre` e permite que o atlas finito cresça com o nível cofinal.
 
-O checkpoint foi elaborado pelo Lean 4 no commit
-`58d21b0319dbd67d29c320b576339e368ed70d1b`, GitHub Actions run `#446`.
+Os pesos são explícitos e independentes de qualquer hipótese de zero. A
+igualdade com o gap horizontal vale em cada cutoff; o erro não é apenas
+`o(1)`, mas identicamente zero.
 
 ## 1. Por que pares semiprimos, sozinhos, não cobrem a câmera
 
@@ -52,7 +54,11 @@ em todo índice multiplicativo positivo. No locus `n = p*q`, esse átomo é
 literalmente o readout C2 normalizado já construído; fora desse locus ele é a
 extensão de suporte necessária para cobrir a câmera inteira.
 
-## 2. Leitura do átomo nas tags nativas
+Essa extensão está de acordo com a distinção estrutural entre o canal
+log-Dirichlet e o canal ordinário: o primeiro fornece o gerador `log(n)`, e a
+síntese de câmera aplica depois o peso que remove esse gerador.
+
+## 2. Leitura de um átomo nas tags nativas
 
 O estado de duas células
 
@@ -114,7 +120,7 @@ do cutoff ou do deslocamento crítico.
 
 ## 4. Reindexação finita de uma câmera
 
-A síntese de uma câmera é definida como soma de átomos:
+A síntese escalar de uma câmera é definida como soma de átomos:
 
 ```text
 c2GpreNormalizedCameraPrefixSynthesis r M s
@@ -134,68 +140,133 @@ c2GpreNormalizedCameraPrefixSynthesis r M s
 A igualdade é finita e não usa série infinita, limite, zeta ou hipótese de
 ressonância.
 
-## 5. Síntese cofinal das duas câmeras
+## 5. Pacote finito de tags de proveniência
 
-Nos cutoffs cruzados, defina
-
-```text
-c2GpreNormalizedCofinalSynthesis p q L s
-  = cameraSynthesis(p, crossPrimeAlignedCutoff(q,L), s)
-      - cameraSynthesis(q, crossPrimeAlignedCutoff(p,L), s).
-```
-
-Essa definição contém apenas somas de átomos e seus pesos. Ela não menciona
-`c2CrossPrimeCofinalCameraGap`.
-
-A reindexação finita prova, para todo `L`,
+Para realizar literalmente a soma no carrier, o tipo
 
 ```text
-c2GpreNormalizedCofinalSynthesis_eq_cameraGap:
-
-c2GpreNormalizedCofinalSynthesis p q L s
-  = c2CrossPrimeCofinalCameraGap p q L s.
+C2GpreActiveCameraPrefixAtlas S r M
 ```
 
-Consequentemente o erro solicitado não é apenas `o(1)`: ele é identicamente
-zero,
+fornece uma tag nativa para cada índice `k < M`, com
 
 ```text
-c2GpreNormalizedCofinalSynthesis_error_tendsto_zero:
-
-||synthesis_L - cameraGap_L|| -> 0.
+vertex(k).cell = r * (k+1)
+nativeCoefficient(vertex(k)) != 0.
 ```
 
-## 6. Instância concreta do intertwiner horizontal
+A síntese tagueada é
+
+```text
+c2GpreNormalizedCameraPrefixTaggedSynthesis
+  verticalRatio S r M atlas s.
+```
+
+Cada termo dessa soma é formado na ordem:
+
+1. inserir o átomo na análise enriquecida;
+2. lê-lo em `data.2.1` pela tag correspondente;
+3. dividir pelo coeficiente nativo ativo;
+4. multiplicar pelo peso `r/log(r*(k+1))`;
+5. somar somente depois da leitura coordenada.
 
 O teorema
 
 ```text
-c2GpreNormalizedCofinalSynthesis_intertwinesCameraGap
+c2GpreNormalizedCameraPrefixTaggedSynthesis_eq_atomSynthesis
 ```
 
-fornece uma prova concreta de
+prova que a realização tagueada recupera termo a termo a síntese escalar.
+
+## 6. Atlas crescente e síntese cofinal das duas câmeras
+
+O tipo
+
+```text
+C2GpreActiveCofinalAtlasFamily p q
+```
+
+contém:
+
+```text
+support : L -> Finset NativeGpreBoundaryContext
+pPrefix : active atlas for p at crossPrimeAlignedCutoff(q,L)
+qPrefix : active atlas for q at crossPrimeAlignedCutoff(p,L).
+```
+
+Assim, o atlas `support L` pode crescer com o horizonte. A síntese
+
+```text
+c2GpreNormalizedCofinalTaggedSynthesis
+  verticalRatio family L s
+```
+
+é a diferença das duas somas de readouts nativos. Sua definição não menciona o
+gap das câmeras.
+
+Primeiro, o kernel prova
+
+```text
+c2GpreNormalizedCofinalTaggedSynthesis_eq_atomSynthesis.
+```
+
+Depois, pela reindexação finita dos átomos,
+
+```text
+c2GpreNormalizedCofinalTaggedSynthesis_eq_cameraGap:
+
+TaggedSynthesis_L(p,q,s)
+  = c2CrossPrimeCofinalCameraGap p q L s.
+```
+
+A versão escalar paralela é
+
+```text
+c2GpreNormalizedCofinalSynthesis_eq_cameraGap.
+```
+
+## 7. Erro e instância concreta do intertwiner
+
+Como a igualdade vale em cada cutoff,
+
+```text
+c2GpreNormalizedCofinalTaggedSynthesis_error_tendsto_zero:
+
+||TaggedSynthesis_L - CameraGap_L|| -> 0
+```
+
+é provado reduzindo a sequência de erros à função constante zero.
+
+O teorema
+
+```text
+c2GpreNormalizedCofinalTaggedSynthesis_intertwinesCameraGap
+```
+
+fornece a instância concreta
 
 ```text
 C2GpreNormalizedCofinalIntertwinesCameraGap
-  (fun L => c2GpreNormalizedCofinalSynthesis p q L s) p q s.
+  (fun L => TaggedSynthesis_L) p q s.
 ```
 
-Como a igualdade vale em todo cutoff, a condição eventual da relação é
-imediata, mas a síntese não foi definida como o lado das câmeras.
+Não há hipótese de igualdade inserida na definição do somador nem hipótese de
+zero usada na reindexação.
 
-Compondo essa instância com o teorema Genuine já existente, o kernel obtém
+## 8. Fechamento oscilatório em um zero Genuine
+
+Compondo a instância acima com o teorema Genuine existente, o kernel obtém
 
 ```text
-c2GpreNormalizedCofinalSynthesis_tendsto_zero_of_genuine_zero:
+c2GpreNormalizedCofinalTaggedSynthesis_tendsto_zero_of_genuine_zero:
 
-G(s)=0
-  -> c2GpreNormalizedCofinalSynthesis(p,q,L,s) -> 0.
+G(s)=0 -> TaggedSynthesis_L(p,q,s) -> 0.
 ```
 
-Esse fechamento é oscilatório e global; o fator geométrico C2 já foi removido
-antes da soma.
+Esse fechamento é global e oscilatório. O fator geométrico C2 foi removido
+antes da soma; a convergência não é produzida pelo decaimento `1/4`.
 
-## 7. Guarda da última seta para o deslocamento crítico
+## 9. Guarda da última seta para o deslocamento crítico
 
 O objeto acima é o gap **horizontal dos prefixos ponderados**. Ele já fecha em
 todo zero Genuine, independentemente de uma informação Green adicional.
@@ -216,7 +287,7 @@ crossPrimeAlignedGreenClosure_iff_criticalDisplacement_eq_zero.
 Não é o simples fechamento do prefixo horizontal.
 
 Para impedir que essas duas noções sejam identificadas por nomenclatura, o
-novo módulo define
+módulo escalar define
 
 ```text
 C2GpreHorizontalSynthesisClosureForcesCritical p q
@@ -245,7 +316,7 @@ o operador em soma direta não zera fora da meia-abscissa porque o bloco Green
 retém a informação radial. Isso não implica, isoladamente, que o escalar
 `genuineContinuation` não possa zerar fora da linha.
 
-## 8. Estado lógico final
+## 10. Estado lógico final
 
 Ficaram kernel-checked:
 
@@ -253,7 +324,10 @@ Ficaram kernel-checked:
 - coincidência com o readout C2 normalizado no suporte semiprimo;
 - peso explícito `r/log(r*m)`;
 - reindexação finita da síntese para cada câmera;
-- igualdade exata da síntese cofinal com o gap horizontal;
+- pacote de tags ativas em cada prefixo finito;
+- família de atlas finitos crescente com o cutoff cofinal;
+- igualdade da soma literal de readouts com a síntese atômica;
+- igualdade exata da síntese cofinal tagueada com o gap horizontal;
 - erro de síntese identicamente zero;
 - instância concreta de `C2GpreNormalizedCofinalIntertwinesCameraGap`;
 - fechamento dessa síntese em todo zero Genuine;
@@ -265,11 +339,9 @@ síntese horizontal com o fechamento Green/proveniência radial necessário para
 localizar a parte real. Nenhuma instância de inclusão do kernel Genuine no
 kernel Green é declarada.
 
-## 9. Validação
+## 11. Validação
 
 - Lean `v4.32.0`;
-- `CPFormal`: 8.770 targets com `--wfail`;
-- auditoria estática: verde;
-- elaboração integral pelo kernel: verde;
+- auditoria estática e elaboração integral executadas pelo workflow do PR;
 - nenhum `sorry`, `admit` ou axioma local;
-- GitHub Actions run `#446`: verde.
+- o run e o commit finais são registrados na descrição do PR #8.
