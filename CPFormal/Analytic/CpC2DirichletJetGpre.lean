@@ -58,7 +58,7 @@ def c2GprePairCore
     c2GprePairCore leftCell rightCell leftValue rightValue leftCell =
       leftValue := by
   classical
-  simp [c2GprePairCore, hneq, Ne.symm hneq]
+  simp [c2GprePairCore, hneq]
 
 @[simp] theorem c2GprePairCore_apply_right
     {leftCell rightCell : ℕ} (hneq : leftCell ≠ rightCell)
@@ -66,7 +66,7 @@ def c2GprePairCore
     c2GprePairCore leftCell rightCell leftValue rightValue rightCell =
       rightValue := by
   classical
-  simp [c2GprePairCore, hneq, Ne.symm hneq]
+  simp [c2GprePairCore, Ne.symm hneq]
 
 /-- The same two-point edge state after the enriched TFVD--`G_pre` analysis. -/
 def c2GprePairEnrichedAnalysis
@@ -98,8 +98,11 @@ theorem c2GpreNormalizedProvenanceValueReadout_pair_left
   unfold c2GpreNormalizedProvenanceValueReadout
     c2GprePairEnrichedAnalysis
   rw [nativeGpreFiniteTfvdAnalysis_apply]
-  simp only [nativeGpreFiniteContinuousBoundaryValueLift_apply,
-    nativeGpreCanonicalVerticalRealization_apply]
+  change
+    (c2GprePairCore leftCell rightCell leftValue rightValue c.1.cell *
+        (nativeGpreTowerCoordinateCoefficient
+          (c.1.withRole .value) : ℂ)) *
+      (c2GpreProvenanceValueCoefficient c.1)⁻¹ = leftValue
   rw [hcell, c2GprePairCore_apply_left hneq]
   unfold c2GpreProvenanceValueCoefficient at hactive ⊢
   field_simp [hactive]
@@ -118,8 +121,11 @@ theorem c2GpreNormalizedProvenanceValueReadout_pair_right
   unfold c2GpreNormalizedProvenanceValueReadout
     c2GprePairEnrichedAnalysis
   rw [nativeGpreFiniteTfvdAnalysis_apply]
-  simp only [nativeGpreFiniteContinuousBoundaryValueLift_apply,
-    nativeGpreCanonicalVerticalRealization_apply]
+  change
+    (c2GprePairCore leftCell rightCell leftValue rightValue c.1.cell *
+        (nativeGpreTowerCoordinateCoefficient
+          (c.1.withRole .value) : ℂ)) *
+      (c2GpreProvenanceValueCoefficient c.1)⁻¹ = rightValue
   rw [hcell, c2GprePairCore_apply_right hneq]
   unfold c2GpreProvenanceValueCoefficient at hactive ⊢
   field_simp [hactive]
@@ -272,6 +278,10 @@ theorem c2OddCoreDirichletLogGpreReadout_eq_spectralGap
       (c2OddCoreLogDirichletMassValue cutoff s q)
       honeneq atlas.one_cell atlas.q_cell atlas.one_active atlas.q_active
   unfold c2OddCoreDirichletLogGpreReadout
+    c2OddCoreDirichletGpreLowerAnalysis
+    c2OddCoreDirichletGpreUpperAnalysis
+    c2OddCoreLogDirichletGpreLowerAnalysis
+    c2OddCoreLogDirichletGpreUpperAnalysis
   rw [hLowerD, hUpperD, hLowerL, hUpperL]
   unfold c2OddCoreDirichletLogSpectralGap
     c2OddCoreJointSpectralPath c2OddCoreFactorizedSpectralPath
