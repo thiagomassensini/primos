@@ -16,29 +16,29 @@ noncomputable section
 
 /-- First derivative of the transverse power profile. -/
 def transverseRpowFirstDeriv (delta x : ℝ) : ℝ :=
-  -(delta * x ^ (-delta - 1))
+  (-delta) * x ^ (-delta - 1)
 
 /-- Second derivative of the transverse power profile, in the form returned by
 `Real.hasDerivAt_rpow_const`. -/
 def transverseRpowSecondDeriv (delta x : ℝ) : ℝ :=
-  -(delta * ((-delta - 1) * x ^ ((-delta - 1) - 1)))
+  (-delta) * ((-delta - 1) * x ^ ((-delta - 1) - 1))
 
 /-- Exact first derivative of `x ↦ x^(-delta)` away from zero. -/
 theorem hasDerivAt_transverseRpow
     (delta : ℝ) {x : ℝ} (hx : x ≠ 0) :
     HasDerivAt (fun y : ℝ ↦ y ^ (-delta))
       (transverseRpowFirstDeriv delta x) x := by
-  simpa [transverseRpowFirstDeriv] using
-    (Real.hasDerivAt_rpow_const (x := x) (p := -delta) (Or.inl hx))
+  unfold transverseRpowFirstDeriv
+  exact Real.hasDerivAt_rpow_const (x := x) (p := -delta) (Or.inl hx)
 
 /-- Exact derivative of the first-derivative profile away from zero. -/
 theorem hasDerivAt_transverseRpowFirstDeriv
     (delta : ℝ) {x : ℝ} (hx : x ≠ 0) :
     HasDerivAt (transverseRpowFirstDeriv delta)
       (transverseRpowSecondDeriv delta x) x := by
-  simpa [transverseRpowFirstDeriv, transverseRpowSecondDeriv] using
-    (Real.hasDerivAt_rpow_const
-      (x := x) (p := -delta - 1) (Or.inl hx)).const_mul (-delta)
+  unfold transverseRpowFirstDeriv transverseRpowSecondDeriv
+  exact (Real.hasDerivAt_rpow_const
+    (x := x) (p := -delta - 1) (Or.inl hx)).const_mul (-delta)
 
 /-- Algebraic form of the transverse second derivative. -/
 theorem transverseRpowSecondDeriv_eq
@@ -60,7 +60,7 @@ theorem two_mul_center_rpow_neg_le_pair
       (center - t) ^ (-beta) + (center + t) ^ (-beta) := by
   by_cases htzero : t = 0
   · subst t
-    simp
+    nlinarith
   · have hminus : 0 < center - t := by linarith [ht.2]
     have hplus : 0 < center + t := by linarith [ht.1]
     have hxy : center - t ≠ center + t := by
