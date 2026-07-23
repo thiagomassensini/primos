@@ -193,6 +193,44 @@ theorem c2OddCoreDirichletLogSpectralGap_eq_connectedCumulant_mul
   push_cast
   ring
 
+/-- The exact `4M/8M` Richardson correction survives the Dirichlet
+one-jet injection and is dressed only by the common log-frequency at `pq`. -/
+theorem c2OddCoreDirichletLogSpectralGap_richardson_exact
+    {M p q : ℕ}
+    (hp : Nat.Prime p) (hpodd : Odd p)
+    (hq : Nat.Prime q) (hqodd : Odd q)
+    (hpM : p ≤ M) (hqM : q ≤ M) (hpqM : p * q ≤ M)
+    (s : ℂ) :
+    2 * c2OddCoreDirichletLogSpectralGap (8 * M) p q s -
+        c2OddCoreDirichletLogSpectralGap (4 * M) p q s =
+      (((1 / 2 : ℝ) *
+        c2OddCoreFourScaleDefectReal M p *
+          c2OddCoreFourScaleDefectReal M q : ℝ) : ℂ) *
+        natLogDirichletTerm s (p * q) := by
+  rw [c2OddCoreDirichletLogSpectralGap_eq_connectedCumulant_mul
+      (8 * M) hp hpodd hq hqodd s,
+    c2OddCoreDirichletLogSpectralGap_eq_connectedCumulant_mul
+      (4 * M) hp hpodd hq hqodd s]
+  have hConnected :=
+    c2OddCoreConnectedCumulantReal_richardson_exact
+      hp.pos hq.pos hpM hqM hpqM
+  calc
+    2 *
+          ((c2OddCoreConnectedCumulantReal (8 * M) p q : ℂ) *
+            natLogDirichletTerm s (p * q)) -
+        (c2OddCoreConnectedCumulantReal (4 * M) p q : ℂ) *
+          natLogDirichletTerm s (p * q) =
+      ((2 * c2OddCoreConnectedCumulantReal (8 * M) p q -
+          c2OddCoreConnectedCumulantReal (4 * M) p q : ℝ) : ℂ) *
+        natLogDirichletTerm s (p * q) := by
+          push_cast
+          ring
+    _ = (((1 / 2 : ℝ) *
+          c2OddCoreFourScaleDefectReal M p *
+            c2OddCoreFourScaleDefectReal M q : ℝ) : ℂ) *
+        natLogDirichletTerm s (p * q) := by
+          rw [hConnected]
+
 /-- For distinct odd primes the injected spectral gap is exactly the finite
 logarithmic coefficient `b_T(pq)` acting on the Dirichlet vertex `(pq)^(-s)`. -/
 theorem c2OddCoreDirichletLogSpectralGap_eq_logCoefficient_mul
@@ -313,6 +351,32 @@ theorem c2OddCoreDirichletLogTfvdReadout_eq_spectralGap
     c2OddCoreJointSpectralPath c2OddCoreFactorizedSpectralPath
     sameSEdgeBoundaryWedge
   ring
+
+/-- Richardson can be performed after TFVD encoding: the visible one-jet
+readout returns the exact connected dyadic defect at the common spectral
+frequency. -/
+theorem c2OddCoreDirichletLogTfvdReadout_richardson_exact
+    (block : ℕ) {kappa omega : ℂ}
+    (hkappa : kappa ≠ 0) (homega : omega ≠ 0)
+    {M p q : ℕ}
+    (hp : Nat.Prime p) (hpodd : Odd p)
+    (hq : Nat.Prime q) (hqodd : Odd q)
+    (hpM : p ≤ M) (hqM : q ≤ M) (hpqM : p * q ≤ M)
+    (s : ℂ) :
+    2 * c2OddCoreDirichletLogTfvdReadout
+          block kappa omega (8 * M) p q s -
+        c2OddCoreDirichletLogTfvdReadout
+          block kappa omega (4 * M) p q s =
+      (((1 / 2 : ℝ) *
+        c2OddCoreFourScaleDefectReal M p *
+          c2OddCoreFourScaleDefectReal M q : ℝ) : ℂ) *
+        natLogDirichletTerm s (p * q) := by
+  rw [c2OddCoreDirichletLogTfvdReadout_eq_spectralGap
+      block hkappa homega (8 * M) p q s,
+    c2OddCoreDirichletLogTfvdReadout_eq_spectralGap
+      block hkappa homega (4 * M) p q s,
+    c2OddCoreDirichletLogSpectralGap_richardson_exact
+      hp hpodd hq hqodd hpM hqM hpqM s]
 
 /-- Final finite crosswalk: the TFVD readout of the Dirichlet/log-Dirichlet
 pushforward is the extracted semiprime coefficient times its frequency. -/
