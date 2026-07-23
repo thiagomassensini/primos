@@ -60,7 +60,7 @@ theorem two_mul_center_rpow_neg_le_pair
       (center - t) ^ (-beta) + (center + t) ^ (-beta) := by
   by_cases htzero : t = 0
   · subst t
-    nlinarith
+    simp [two_mul]
   · have hminus : 0 < center - t := by linarith [ht.2]
     have hplus : 0 < center + t := by linarith [ht.1]
     have hxy : center - t ≠ center + t := by
