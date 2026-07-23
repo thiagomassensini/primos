@@ -58,7 +58,8 @@ theorem centeredSecondDifference_ge_of_pair_secondDeriv_ge
           (f'' (center + t)) t := by
       simpa [Function.comp_def] using
         (hf'plus t ht).scomp t hinnerPlus
-    simpa [d, sub_neg_eq_add] using hplus.sub hminus
+    have hsum := hplus.fun_add hminus.neg
+    simpa [d, sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using hsum
   have hq : ∀ t : ℝ, HasDerivAt q (C * 2) t := by
     intro t
     have htwo : HasDerivAt (fun u : ℝ ↦ 2 * u) 2 t := by
@@ -113,7 +114,8 @@ theorem centeredSecondDifference_ge_of_pair_secondDeriv_ge
       exact (ha t).continuousAt.continuousWithinAt
     · intro t ht
       exact (ha t).hasDerivWithinAt
-    · norm_num [a, g]
+    · dsimp [a, g]
+      nlinarith
     · intro t ht
       exact (hg t ht).continuousAt.continuousWithinAt
     · intro t ht
@@ -162,7 +164,8 @@ theorem centeredSecondDifference_le_of_pair_secondDeriv_le
           (f'' (center + t)) t := by
       simpa [Function.comp_def] using
         (hf'plus t ht).scomp t hinnerPlus
-    simpa [d, sub_neg_eq_add] using hplus.sub hminus
+    have hsum := hplus.fun_add hminus.neg
+    simpa [d, sub_eq_add_neg, add_comm, add_left_comm, add_assoc] using hsum
   have hq : ∀ t : ℝ, HasDerivAt q (C * 2) t := by
     intro t
     have htwo : HasDerivAt (fun u : ℝ ↦ 2 * u) 2 t := by
@@ -217,7 +220,8 @@ theorem centeredSecondDifference_le_of_pair_secondDeriv_le
       exact (hg t ht).continuousAt.continuousWithinAt
     · intro t ht
       exact (hg t (Set.Ico_subset_Icc_self ht)).hasDerivWithinAt
-    · norm_num [a, g]
+    · dsimp [a, g]
+      nlinarith
     · intro t ht
       exact (ha t).continuousAt.continuousWithinAt
     · intro t ht
