@@ -82,6 +82,8 @@ import CPFormal.Analytic.CpGenuineGreenKernelInclusion
 import CPFormal.Analytic.CpTateCarryLocalCarrier
 import CPFormal.Analytic.CpCriticalRadialBracketGuard
 import CPFormal.Analytic.CpConnectedC2Defect
+import CPFormal.Analytic.CpConnectedC2TfvdPort
+import CPFormal.Analytic.CpNativeGpreConnectedC2Guard
 import CPFormal.Analytic.CpCarryL2UnilateralShift
 import CPFormal.Analytic.CpCarryWeightedVerticalBracketTrace
 import CPFormal.Analytic.CpCarryWeightedVerticalReturn

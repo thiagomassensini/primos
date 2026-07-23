@@ -44,6 +44,44 @@ detector-modelo radial e positivo quando `delta != 0` e zera exatamente em
 Essa especializacao e apenas um detector-modelo. Ela nao identifica o defeito
 de massa `epsilon_M(p)` do documento com `cpRadialDifference p delta`.
 
+## A porta TFVD ja contem o cumulante
+
+Existe uma identificacao mais forte e inteiramente interna ao projeto. Pela
+definicao da forma de bordo,
+
+```text
+sameSEdgeBoundaryWedge(left,right,jetLeft,jetRight)
+  = right * jetLeft - left * jetRight.
+```
+
+Logo
+
+```text
+K_h
+  = a_h(pq) - a_h(p) a_h(q)
+  = sameSEdgeBoundaryWedge(a_h(p),a_h(pq),1,a_h(q)).
+```
+
+O modulo `CPFormal.Analytic.CpConnectedC2TfvdPort` codifica essas quatro
+entradas com `enrichedAngularTfvdEncode` e prova, depois do retorno exato da
+valvula:
+
+```text
+visibleCell = K_h
+dormantCell = 0.
+```
+
+Richardson aplicado diretamente a essas celulas visiveis produz
+`(1/2) epsilon_p epsilon_q`. Portanto existe uma codificacao algebrica finita
+de coordenadas C2 na porta TFVD universal, e Tate nao e necessario para
+construir essa parte. Isso ainda nao e um intertwiner entre a dinamica C2 e o
+operador Genuine.
+
+O portador canonico `same-s` usado atualmente pelo Genuine, porem, codifica
+gradientes Dirichlet e log-Dirichlet consecutivos. A porta C2 acima codifica
+massas `a_M(p),a_M(q),a_M(pq)`. A seta aritmetica entre esses dois tipos de
+estado ainda nao existe.
+
 ## Por que o defeito atual nao basta
 
 No documento C2, `p,q` sao fatores primos observados pela mesma profundidade
@@ -75,7 +113,7 @@ da lei de halving exigira uma construcao de escala nova e explicita.
 
 ## Relação com `G_pre`
 
-`G_pre` e o carrier atual mais proximo da algebra conectada:
+`G_pre` e o carrier aritmetico atual mais proximo da algebra conectada:
 
 - possui quatro cantos com sinais `(+,-,-,+)`;
 - preserva os eixos aritmeticos, de canto, orientacao e proveniencia;
@@ -89,6 +127,31 @@ Mas ainda nao possui:
 - uma lei de halving entre dois cutoffs;
 - um teorema que transporte o zero Genuine para esse readout conectado.
 
+Existem ainda duas obstrucoes exatas, formalizadas em
+`CPFormal.Analytic.CpNativeGpreConnectedC2Guard`.
+
+Primeiro, a massa Jordan infinita atual e multiplicativa. Para `m,n`
+coprimos,
+
+```text
+J_tau(mn) - J_tau(m) J_tau(n) = 0.
+```
+
+Em particular, especializar diretamente o cumulante C2 nessa massa para dois
+primos distintos produz zero, nao um detector positivo.
+
+Segundo, os carriers e tracos atuais sao lineares na coordenada de aresta.
+Nao existe um funcional puramente linear somente nas duas marginais
+
+```text
+L : R x R -> R
+```
+
+com `L(epsilon_p,epsilon_q)=epsilon_p epsilon_q`. O wedge da porta C2 resolve
+a parte algebrica por ser bilinear; uma realizacao aritmetica no carrier
+`G_pre` ainda precisa desse wedge, de uma coordenada quadratica/tensorial ou
+de um estado aumentado que ja armazene o monomio misto.
+
 A compressao Genuine atual de `G_pre` e construida diretamente em
 `criticalLineParameter t`. Ela certifica a camera real-espectral na linha,
 mas nao pode localizar a parte real de um zero ainda desconhecido.
@@ -99,9 +162,9 @@ Uma rota C2--`G_pre` honesta precisa construir um intertwiner com quatro
 propriedades separadas:
 
 1. um estado conjunto de duas bases no mesmo cutoff;
-2. uma identidade finita de Richardson que extraia o canal conectado;
-3. uma projecao coerciva desse canal sobre a proveniencia `same-s` ou sobre o
-   detector radial;
+2. um mapa aritmetico desse estado para a porta C2--TFVD ja formalizada;
+3. uma projecao coerciva dessa porta sobre a proveniencia canonica `same-s`
+   ou sobre o detector radial;
 4. uma lei, derivada do zero Genuine, que feche o readout conectado.
 
 A propriedade 3 nao pode pressupor que a proveniencia zera: para cameras
