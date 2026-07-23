@@ -98,12 +98,11 @@ theorem c2GpreNormalizedProvenanceValueReadout_pair_left
   unfold c2GpreNormalizedProvenanceValueReadout
     c2GprePairEnrichedAnalysis
   rw [nativeGpreFiniteTfvdAnalysis_apply]
-  change
-    (c2GprePairCore leftCell rightCell leftValue rightValue c.1.cell *
-        (nativeGpreTowerCoordinateCoefficient
-          (c.1.withRole .value) : ℂ)) *
-      (c2GpreProvenanceValueCoefficient c.1)⁻¹ = leftValue
-  rw [hcell, c2GprePairCore_apply_left hneq]
+  dsimp
+  rw [nativeGpreFiniteContinuousBoundaryValueLift_canonical,
+    nativeGpreFiniteBoundaryValueLift_apply,
+    nativeGpreBoundaryValueLift_apply,
+    hcell, c2GprePairCore_apply_left hneq]
   unfold c2GpreProvenanceValueCoefficient at hactive ⊢
   field_simp [hactive]
 
@@ -121,12 +120,11 @@ theorem c2GpreNormalizedProvenanceValueReadout_pair_right
   unfold c2GpreNormalizedProvenanceValueReadout
     c2GprePairEnrichedAnalysis
   rw [nativeGpreFiniteTfvdAnalysis_apply]
-  change
-    (c2GprePairCore leftCell rightCell leftValue rightValue c.1.cell *
-        (nativeGpreTowerCoordinateCoefficient
-          (c.1.withRole .value) : ℂ)) *
-      (c2GpreProvenanceValueCoefficient c.1)⁻¹ = rightValue
-  rw [hcell, c2GprePairCore_apply_right hneq]
+  dsimp
+  rw [nativeGpreFiniteContinuousBoundaryValueLift_canonical,
+    nativeGpreFiniteBoundaryValueLift_apply,
+    nativeGpreBoundaryValueLift_apply,
+    hcell, c2GprePairCore_apply_right hneq]
   unfold c2GpreProvenanceValueCoefficient at hactive ⊢
   field_simp [hactive]
 
