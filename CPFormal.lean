@@ -86,6 +86,7 @@ import CPFormal.Analytic.CpConnectedC2Defect
 import CPFormal.Analytic.CpConnectedC2TfvdPort
 import CPFormal.Analytic.CpC2OddCorePushforwardTfvd
 import CPFormal.Analytic.CpC2DirichletJetTfvd
+import CPFormal.Analytic.CpC2DirichletJetGpre
 import CPFormal.Analytic.CpC2LogJetGpreLift
 import CPFormal.Analytic.CpNativeGpreConnectedC2Guard
 import CPFormal.Analytic.CpCarryL2UnilateralShift
