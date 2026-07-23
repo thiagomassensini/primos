@@ -38,7 +38,7 @@ theorem centeredSecondDifference_ge_of_pair_secondDeriv_ge
     C * radius ^ 2 ≤
       f (center - radius) - 2 * f center + f (center + radius) := by
   let d : ℝ → ℝ := fun t ↦ f' (center + t) - f' (center - t)
-  let q : ℝ → ℝ := fun t ↦ 2 * C * t
+  let q : ℝ → ℝ := fun t ↦ C * (2 * t)
   have hd : ∀ t ∈ Set.Icc (0 : ℝ) radius,
       HasDerivAt d (f'' (center + t) + f'' (center - t)) t := by
     intro t ht
@@ -58,16 +58,15 @@ theorem centeredSecondDifference_ge_of_pair_secondDeriv_ge
           (f'' (center + t)) t := by
       simpa [Function.comp_def] using
         (hf'plus t ht).scomp t hinnerPlus
-    convert hplus.sub hminus using 1
-    · funext u
-      simp [d]
-    · ring
-  have hq : ∀ t : ℝ, HasDerivAt q (2 * C) t := by
+    simpa [d, sub_neg_eq_add] using hplus.sub hminus
+  have hq : ∀ t : ℝ, HasDerivAt q (C * 2) t := by
     intro t
-    simpa [q] using (hasDerivAt_id t).const_mul (2 * C)
+    have htwo : HasDerivAt (fun u : ℝ ↦ 2 * u) 2 t := by
+      simpa using (hasDerivAt_id t).const_mul 2
+    simpa [q] using htwo.const_mul C
   have hqd : ∀ t ∈ Set.Icc (0 : ℝ) radius, q t ≤ d t := by
     apply image_le_of_deriv_right_le_deriv_boundary
-      (f := q) (f' := fun _ ↦ 2 * C)
+      (f := q) (f' := fun _ ↦ C * 2)
       (B := d) (B' := fun t ↦ f'' (center + t) + f'' (center - t))
     · intro t ht
       exact (hq t).continuousAt.continuousWithinAt
@@ -79,7 +78,7 @@ theorem centeredSecondDifference_ge_of_pair_secondDeriv_ge
     · intro t ht
       exact (hd t (Set.Ico_subset_Icc_self ht)).hasDerivWithinAt
     · intro t ht
-      simpa [add_comm] using hpair t (Set.Ico_subset_Icc_self ht)
+      simpa [mul_comm, add_comm] using hpair t (Set.Ico_subset_Icc_self ht)
   let g : ℝ → ℝ := fun t ↦
     f (center - t) + f (center + t) - 2 * f center
   let a : ℝ → ℝ := fun t ↦ C * t ^ 2
@@ -114,8 +113,7 @@ theorem centeredSecondDifference_ge_of_pair_secondDeriv_ge
       exact (ha t).continuousAt.continuousWithinAt
     · intro t ht
       exact (ha t).hasDerivWithinAt
-    · dsimp [a, g]
-      ring
+    · norm_num [a, g]
     · intro t ht
       exact (hg t ht).continuousAt.continuousWithinAt
     · intro t ht
@@ -144,7 +142,7 @@ theorem centeredSecondDifference_le_of_pair_secondDeriv_le
     f (center - radius) - 2 * f center + f (center + radius) ≤
       C * radius ^ 2 := by
   let d : ℝ → ℝ := fun t ↦ f' (center + t) - f' (center - t)
-  let q : ℝ → ℝ := fun t ↦ 2 * C * t
+  let q : ℝ → ℝ := fun t ↦ C * (2 * t)
   have hd : ∀ t ∈ Set.Icc (0 : ℝ) radius,
       HasDerivAt d (f'' (center + t) + f'' (center - t)) t := by
     intro t ht
@@ -164,17 +162,16 @@ theorem centeredSecondDifference_le_of_pair_secondDeriv_le
           (f'' (center + t)) t := by
       simpa [Function.comp_def] using
         (hf'plus t ht).scomp t hinnerPlus
-    convert hplus.sub hminus using 1
-    · funext u
-      simp [d]
-    · ring
-  have hq : ∀ t : ℝ, HasDerivAt q (2 * C) t := by
+    simpa [d, sub_neg_eq_add] using hplus.sub hminus
+  have hq : ∀ t : ℝ, HasDerivAt q (C * 2) t := by
     intro t
-    simpa [q] using (hasDerivAt_id t).const_mul (2 * C)
+    have htwo : HasDerivAt (fun u : ℝ ↦ 2 * u) 2 t := by
+      simpa using (hasDerivAt_id t).const_mul 2
+    simpa [q] using htwo.const_mul C
   have hdq : ∀ t ∈ Set.Icc (0 : ℝ) radius, d t ≤ q t := by
     apply image_le_of_deriv_right_le_deriv_boundary
       (f := d) (f' := fun t ↦ f'' (center + t) + f'' (center - t))
-      (B := q) (B' := fun _ ↦ 2 * C)
+      (B := q) (B' := fun _ ↦ C * 2)
     · intro t ht
       exact (hd t ht).continuousAt.continuousWithinAt
     · intro t ht
@@ -185,7 +182,7 @@ theorem centeredSecondDifference_le_of_pair_secondDeriv_le
     · intro t ht
       exact (hq t).hasDerivWithinAt
     · intro t ht
-      simpa [add_comm] using hpair t (Set.Ico_subset_Icc_self ht)
+      simpa [mul_comm, add_comm] using hpair t (Set.Ico_subset_Icc_self ht)
   let g : ℝ → ℝ := fun t ↦
     f (center - t) + f (center + t) - 2 * f center
   let a : ℝ → ℝ := fun t ↦ C * t ^ 2
@@ -220,8 +217,7 @@ theorem centeredSecondDifference_le_of_pair_secondDeriv_le
       exact (hg t ht).continuousAt.continuousWithinAt
     · intro t ht
       exact (hg t (Set.Ico_subset_Icc_self ht)).hasDerivWithinAt
-    · dsimp [a, g]
-      ring
+    · norm_num [a, g]
     · intro t ht
       exact (ha t).continuousAt.continuousWithinAt
     · intro t ht
