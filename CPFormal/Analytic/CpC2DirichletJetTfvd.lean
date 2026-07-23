@@ -1,4 +1,5 @@
 import CPFormal.Analytic.CpC2OddCorePushforwardTfvd
+import CPFormal.Analytic.CpFiniteLogJetCommutator
 
 /-!
 # Dirichlet pushforward of the connected C2 cell
@@ -83,9 +84,9 @@ theorem c2OddCoreDirichletSpectralGap_eq_normalizedConnected_mul
             c2OddCoreNormalizedMassArithmetic cutoff q : ℝ) : ℂ)) *
         natDirichletTerm s (p * q) := by
   unfold c2OddCoreDirichletSpectralGap sameSEdgeBoundaryWedge
-  rw [c2OddCoreDirichletMassValue_one,
-    natDirichletTerm_mul p q s]
+  rw [c2OddCoreDirichletMassValue_one]
   unfold c2OddCoreDirichletMassValue
+  rw [natDirichletTerm_mul p q s]
   push_cast
   ring
 
@@ -157,9 +158,9 @@ theorem c2OddCoreDirichletLogSpectralGap_eq_normalizedConnected_mul
   rw [c2OddCoreDirichletMassValue_one,
     c2OddCoreLogDirichletMassValue_one]
   simp only [mul_one, mul_zero, add_zero]
-  rw [natLogDirichletTerm_mul_leibniz p q hp hq s]
   unfold c2OddCoreDirichletMassValue
     c2OddCoreLogDirichletMassValue
+  rw [natLogDirichletTerm_mul_leibniz p q hp hq s]
   push_cast
   ring
 
