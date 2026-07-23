@@ -78,6 +78,7 @@ import CPFormal.Analytic.CpGenuineGreenCompletedOperator
 import CPFormal.Analytic.CpGenuineCrossPrimeObservability
 import CPFormal.Analytic.CpGenuinePrimeGreenBessel
 import CPFormal.Analytic.CpGenuineKernelPrimeState
+import CPFormal.Analytic.CpGenuineGreenKernelInclusion
 import CPFormal.Analytic.CpCarryL2UnilateralShift
 import CPFormal.Analytic.CpCarryWeightedVerticalBracketTrace
 import CPFormal.Analytic.CpCarryWeightedVerticalReturn

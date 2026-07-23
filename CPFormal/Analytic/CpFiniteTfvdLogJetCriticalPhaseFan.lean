@@ -1,4 +1,5 @@
 import CPFormal.Analytic.CpFiniteTfvdLogJetCriticalLineTraces
+import Mathlib.Analysis.Real.Pi.Bounds
 
 /-!
 # Leque triangular de fases na linha critica

@@ -1,4 +1,8 @@
 import CPFormal.Analytic.CpTilt
+import Mathlib.Analysis.Convex.Deriv
+import Mathlib.Analysis.Convex.SpecificFunctions.Pow
+import Mathlib.Analysis.SpecialFunctions.Pow.Continuity
+import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
 
 /-!
 # Rigidez de sinal do tilt multibase `Cₚ`
