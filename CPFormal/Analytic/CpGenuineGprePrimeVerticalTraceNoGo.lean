@@ -24,8 +24,6 @@ namespace CPFormal.Analytic.Cp
 
 noncomputable section
 
-set_option maxHeartbeats 800000
-
 /-- One complete first-level mass in the vertical fiber of a prime camera. -/
 def primeVerticalTraceNoGoFiber (p : Nat.Primes) : CarryVerticalL2 :=
   lp.single 2 1 ((p : ℝ)⁻¹ : ℂ)
@@ -37,6 +35,11 @@ def primeVerticalTraceNoGoFiber (p : Nat.Primes) : CarryVerticalL2 :=
 @[simp] theorem primeVerticalTraceNoGoFiber_one (p : Nat.Primes) :
     primeVerticalTraceNoGoFiber p 1 = ((p : ℝ)⁻¹ : ℂ) := by
   simp [primeVerticalTraceNoGoFiber, lp.single_apply]
+
+@[simp] theorem primeVerticalTraceNoGoFiber_apply_ne_one
+    (p : Nat.Primes) {n : ℕ} (hn : n ≠ 1) :
+    primeVerticalTraceNoGoFiber p n = 0 := by
+  simp [primeVerticalTraceNoGoFiber, lp.single_apply, hn]
 
 /-- Exact fiber norm. -/
 theorem primeVerticalTraceNoGoFiber_norm_sq (p : Nat.Primes) :
@@ -97,32 +100,66 @@ def primeVerticalTraceNoGoBracketModel
     lp.single 2 2
       ((primeCarryAmplitudeRatio p : ℂ) * ((p : ℝ)⁻¹ : ℂ))
 
+@[simp] theorem primeVerticalTraceNoGoBracketModel_zero
+    (p : Nat.Primes) :
+    primeVerticalTraceNoGoBracketModel p 0 = 0 := by
+  simp [primeVerticalTraceNoGoBracketModel, lp.single_apply]
+
+@[simp] theorem primeVerticalTraceNoGoBracketModel_one
+    (p : Nat.Primes) :
+    primeVerticalTraceNoGoBracketModel p 1 =
+      -2 * ((p : ℝ)⁻¹ : ℂ) := by
+  simp [primeVerticalTraceNoGoBracketModel, lp.single_apply]
+
+@[simp] theorem primeVerticalTraceNoGoBracketModel_two
+    (p : Nat.Primes) :
+    primeVerticalTraceNoGoBracketModel p 2 =
+      (primeCarryAmplitudeRatio p : ℂ) * ((p : ℝ)⁻¹ : ℂ) := by
+  simp [primeVerticalTraceNoGoBracketModel, lp.single_apply]
+
+@[simp] theorem primeVerticalTraceNoGoBracketModel_apply_of_three_le
+    (p : Nat.Primes) {n : ℕ} (hn : 3 ≤ n) :
+    primeVerticalTraceNoGoBracketModel p n = 0 := by
+  have hn1 : n ≠ 1 := by omega
+  have hn2 : n ≠ 2 := by omega
+  simp [primeVerticalTraceNoGoBracketModel, lp.single_apply, hn1, hn2]
+
 /-- The dressed centered bracket has only levels `1` and `2` active. -/
 theorem primeCarryWeightedVerticalCenteredBracket_noGoFiber
     (p : Nat.Primes) :
     primeCarryWeightedVerticalCenteredBracket (p : ℕ)
         (primeVerticalTraceNoGoFiber p) =
       primeVerticalTraceNoGoBracketModel p := by
+  change carryWeightedVerticalCenteredBracket (primeCarryAmplitudeRatio p)
+      (primeVerticalTraceNoGoFiber p) = primeVerticalTraceNoGoBracketModel p
   ext n
   cases n with
   | zero =>
-      simp [primeCarryWeightedVerticalCenteredBracket,
-        primeVerticalTraceNoGoBracketModel, lp.single_apply]
+      rw [carryWeightedVerticalCenteredBracket_zero,
+        primeVerticalTraceNoGoBracketModel_zero]
   | succ n =>
-      rw [primeCarryWeightedVerticalCenteredBracket,
-        carryWeightedVerticalCenteredBracket_succ]
+      rw [carryWeightedVerticalCenteredBracket_succ]
       cases n with
       | zero =>
-          simp [primeVerticalTraceNoGoFiber,
-            primeVerticalTraceNoGoBracketModel, lp.single_apply]
+          rw [primeVerticalTraceNoGoFiber_apply_ne_one p (by norm_num : 2 ≠ 1),
+            primeVerticalTraceNoGoFiber_one,
+            primeVerticalTraceNoGoFiber_zero,
+            primeVerticalTraceNoGoBracketModel_one]
+          ring
       | succ n =>
           cases n with
           | zero =>
-              simp [primeVerticalTraceNoGoFiber,
-                primeVerticalTraceNoGoBracketModel, lp.single_apply]
+              rw [primeVerticalTraceNoGoFiber_apply_ne_one p (by norm_num : 3 ≠ 1),
+                primeVerticalTraceNoGoFiber_apply_ne_one p (by norm_num : 2 ≠ 1),
+                primeVerticalTraceNoGoFiber_one,
+                primeVerticalTraceNoGoBracketModel_two]
+              ring
           | succ n =>
-              simp [primeVerticalTraceNoGoFiber,
-                primeVerticalTraceNoGoBracketModel, lp.single_apply]
+              rw [primeVerticalTraceNoGoFiber_apply_ne_one p (by omega),
+                primeVerticalTraceNoGoFiber_apply_ne_one p (by omega),
+                primeVerticalTraceNoGoFiber_apply_ne_one p (by omega),
+                primeVerticalTraceNoGoBracketModel_apply_of_three_le p (by omega)]
+              ring
 
 /-- The bracket norm loses no more than a fixed multiple of the full mass. -/
 theorem norm_primeVerticalTraceNoGoBracketModel_le
@@ -201,7 +238,8 @@ def primeVerticalTraceNoGoGlobalState : PrimeCarryVerticalHilbert :=
         ((p : ℝ)⁻¹) ^ 2) := by
       simpa [primeToNat, Function.comp_def, inv_pow] using
         hnat.comp_injective hinjective
-    simpa only [primeVerticalTraceNoGoFiber_norm_sq] using hprime⟩
+    exact hprime.congr fun p =>
+      (primeVerticalTraceNoGoFiber_norm_sq p).symm⟩
 
 @[simp] theorem primeVerticalTraceNoGoGlobalState_apply
     (p : Nat.Primes) :
