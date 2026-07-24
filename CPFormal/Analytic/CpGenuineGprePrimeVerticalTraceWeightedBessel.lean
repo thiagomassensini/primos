@@ -53,7 +53,6 @@ theorem canonicalEnrichedGpreLogJetGreenScalarTest_eq_massTest
   intro p hp
   have hq := primeCarryAmplitudeRatio_ne_zero_prime p
   field_simp [hq]
-  ring
 
 /-- Squaring the inverse critical amplitude produces exactly the prime weight. -/
 theorem inv_primeCarryAmplitudeRatio_mul_sq
@@ -61,7 +60,6 @@ theorem inv_primeCarryAmplitudeRatio_mul_sq
     ((primeCarryAmplitudeRatio p)⁻¹ * a) ^ 2 =
       (p : ℝ) * a ^ 2 := by
   have hp0 : (p : ℝ) ≠ 0 := by exact_mod_cast p.prop.ne_zero
-  have hq := primeCarryAmplitudeRatio_ne_zero_prime p
   rw [mul_pow, inv_pow, primeCarryAmplitudeRatio_sq_eq_inv]
   field_simp [hp0]
 
@@ -88,9 +86,14 @@ theorem sum_finiteEnrichedNativeGpreMassReadout_sq_le_squareMass
       canonicalEnrichedGpreMassReadoutSquareMass M s := by
   have hsum := summable_primeMassGreenBulkCutoffProfile_sq (3 * M) hs
   have hle := hsum.sum_le_tsum S (fun p hp => sq_nonneg _)
-  simpa [canonicalEnrichedGpreMassReadoutSquareMass,
-    finiteEnrichedNativeGpreMassLogJetGreenBulkReadout_eq
-      (kappa := (1 : ℂ)) (omega := fun _ => (1 : ℂ))] using hle
+  have hreadout : ∀ p : Nat.Primes,
+      finiteEnrichedNativeGpreMassLogJetGreenBulkReadout
+          p M 1 (fun _ => 1) s =
+        primeMassGreenBulkCutoffProfile (3 * M) s p := by
+    intro p
+    exact finiteEnrichedNativeGpreMassLogJetGreenBulkReadout_eq
+      p M (by norm_num) (fun _ => 1) (by intro m; norm_num) s
+  simpa only [hreadout, canonicalEnrichedGpreMassReadoutSquareMass] using hle
 
 /-- Global weighted Bessel inequality.  The right-hand coefficient norm carries
 exactly one factor of `p`, corresponding to the missing half-amplitude gain. -/
