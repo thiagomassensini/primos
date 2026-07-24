@@ -31,17 +31,17 @@ namespace CPFormal.Analytic.Cp
 noncomputable section
 
 /-- Distinguished zero residue in a prime camera. -/
-def primeCarryResidueZero (p : Nat.Primes) : Fin (p : ℕ) :=
+def primeCarryResidueZero (p : Nat.Primes) : Fin p.1 :=
   ⟨0, p.prop.pos⟩
 
 /-- Binary carry pulse on one complete residue cycle. -/
 def primeCarryResiduePulse
-    (p : Nat.Primes) (a : Fin (p : ℕ)) : ℝ :=
+    (p : Nat.Primes) (a : Fin p.1) : ℝ :=
   if a = primeCarryResidueZero p then 1 else 0
 
 /-- Centered carry defect: `1 - p` at the carry residue and `1` elsewhere. -/
 def primeCenteredCarryDefect
-    (p : Nat.Primes) (a : Fin (p : ℕ)) : ℝ :=
+    (p : Nat.Primes) (a : Fin p.1) : ℝ :=
   1 - (p : ℝ) * primeCarryResiduePulse p a
 
 @[simp] theorem primeCenteredCarryDefect_zero
@@ -51,100 +51,83 @@ def primeCenteredCarryDefect
   simp [primeCenteredCarryDefect, primeCarryResiduePulse]
 
 @[simp] theorem primeCenteredCarryDefect_ne_zero
-    (p : Nat.Primes) {a : Fin (p : ℕ)}
+    (p : Nat.Primes) {a : Fin p.1}
     (ha : a ≠ primeCarryResidueZero p) :
     primeCenteredCarryDefect p a = 1 := by
   simp [primeCenteredCarryDefect, primeCarryResiduePulse, ha]
 
+/-- The carry pulse has total mass one on a complete residue cycle. -/
+theorem sum_primeCarryResiduePulse_eq_one
+    (p : Nat.Primes) :
+    (∑ a : Fin p.1, primeCarryResiduePulse p a) = 1 := by
+  classical
+  simp [primeCarryResiduePulse]
+
 /-- The centered defect has zero mean over one full camera cycle. -/
 theorem sum_primeCenteredCarryDefect_eq_zero
     (p : Nat.Primes) :
-    (∑ a : Fin (p : ℕ), primeCenteredCarryDefect p a) = 0 := by
+    (∑ a : Fin p.1, primeCenteredCarryDefect p a) = 0 := by
   classical
-  let z : Fin (p : ℕ) := primeCarryResidueZero p
-  have hz : z ∈ (Finset.univ : Finset (Fin (p : ℕ))) := Finset.mem_univ z
-  have hsum :
-      (∑ a ∈ (Finset.univ.erase z), primeCenteredCarryDefect p a) =
-        ((Finset.univ.erase z).card : ℝ) := by
-    calc
-      (∑ a ∈ (Finset.univ.erase z), primeCenteredCarryDefect p a) =
-          ∑ a ∈ (Finset.univ.erase z), (1 : ℝ) := by
-            apply Finset.sum_congr rfl
-            intro a ha
-            have hne : a ≠ z := (Finset.mem_erase.mp ha).1
-            simpa [z] using primeCenteredCarryDefect_ne_zero p hne
-      _ = ((Finset.univ.erase z).card : ℝ) := by simp
-  have hcard :
-      (Finset.univ.erase z).card = (p : ℕ) - 1 := by
-    rw [Finset.card_erase_of_mem hz, Fintype.card_fin]
-  calc
-    (∑ a : Fin (p : ℕ), primeCenteredCarryDefect p a) =
-        (∑ a ∈ (Finset.univ.erase z), primeCenteredCarryDefect p a) +
-          primeCenteredCarryDefect p z := by
-            symm
-            exact Finset.sum_erase_add _ hz
-    _ = 0 := by
-      rw [hsum, hcard]
-      have hp1 : 1 ≤ (p : ℕ) := p.prop.one_le
-      rw [Nat.cast_sub hp1]
-      simp [z]
-      ring
+  unfold primeCenteredCarryDefect
+  rw [Finset.sum_sub_distrib]
+  simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin,
+    nsmul_eq_mul, Finset.mul_sum, sum_primeCarryResiduePulse_eq_one]
+  push_cast
+  ring
+
+/-- A binary residue pulse is idempotent under squaring. -/
+theorem primeCarryResiduePulse_sq
+    (p : Nat.Primes) (a : Fin p.1) :
+    (primeCarryResiduePulse p a) ^ 2 = primeCarryResiduePulse p a := by
+  classical
+  by_cases ha : a = primeCarryResidueZero p <;>
+    simp [primeCarryResiduePulse, ha]
 
 /-- Exact squared ledger of one centered carry defect. -/
 theorem sum_sq_primeCenteredCarryDefect
     (p : Nat.Primes) :
-    (∑ a : Fin (p : ℕ), (primeCenteredCarryDefect p a) ^ 2) =
+    (∑ a : Fin p.1, (primeCenteredCarryDefect p a) ^ 2) =
       (p : ℝ) * ((p : ℝ) - 1) := by
   classical
-  let z : Fin (p : ℕ) := primeCarryResidueZero p
-  have hz : z ∈ (Finset.univ : Finset (Fin (p : ℕ))) := Finset.mem_univ z
-  have hsum :
-      (∑ a ∈ (Finset.univ.erase z),
-          (primeCenteredCarryDefect p a) ^ 2) =
-        ((Finset.univ.erase z).card : ℝ) := by
-    calc
-      (∑ a ∈ (Finset.univ.erase z),
-          (primeCenteredCarryDefect p a) ^ 2) =
-          ∑ a ∈ (Finset.univ.erase z), (1 : ℝ) := by
-            apply Finset.sum_congr rfl
-            intro a ha
-            have hne : a ≠ z := (Finset.mem_erase.mp ha).1
-            rw [show primeCenteredCarryDefect p a = 1 by
-              simpa [z] using primeCenteredCarryDefect_ne_zero p hne]
-            norm_num
-      _ = ((Finset.univ.erase z).card : ℝ) := by simp
-  have hcard :
-      (Finset.univ.erase z).card = (p : ℕ) - 1 := by
-    rw [Finset.card_erase_of_mem hz, Fintype.card_fin]
+  have hpoint : ∀ a : Fin p.1,
+      (primeCenteredCarryDefect p a) ^ 2 =
+        1 - 2 * (p : ℝ) * primeCarryResiduePulse p a +
+          (p : ℝ) ^ 2 * primeCarryResiduePulse p a := by
+    intro a
+    unfold primeCenteredCarryDefect
+    rw [← primeCarryResiduePulse_sq p a]
+    ring
   calc
-    (∑ a : Fin (p : ℕ), (primeCenteredCarryDefect p a) ^ 2) =
-        (∑ a ∈ (Finset.univ.erase z),
-          (primeCenteredCarryDefect p a) ^ 2) +
-            (primeCenteredCarryDefect p z) ^ 2 := by
-              symm
-              exact Finset.sum_erase_add _ hz
-    _ = (p : ℝ) * ((p : ℝ) - 1) := by
-      rw [hsum, hcard]
-      have hp1 : 1 ≤ (p : ℕ) := p.prop.one_le
-      rw [Nat.cast_sub hp1]
-      simp [z]
+    (∑ a : Fin p.1, (primeCenteredCarryDefect p a) ^ 2) =
+        ∑ a : Fin p.1,
+          (1 - 2 * (p : ℝ) * primeCarryResiduePulse p a +
+            (p : ℝ) ^ 2 * primeCarryResiduePulse p a) := by
+              apply Finset.sum_congr rfl
+              intro a ha
+              exact hpoint a
+    _ = (p : ℝ) - 2 * (p : ℝ) + (p : ℝ) ^ 2 := by
+      rw [Finset.sum_add_distrib, Finset.sum_sub_distrib]
+      simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin,
+        nsmul_eq_mul, Finset.mul_sum, sum_primeCarryResiduePulse_eq_one]
+      push_cast
       ring
+    _ = (p : ℝ) * ((p : ℝ) - 1) := by ring
 
 /-- The product of two independent centered camera cycles has zero total
 correlation. -/
 theorem sum_prod_primeCenteredCarryDefect_eq_zero
     (p q : Nat.Primes) :
-    (∑ x : Fin (p : ℕ) × Fin (q : ℕ),
+    (∑ x : Fin p.1 × Fin q.1,
       primeCenteredCarryDefect p x.1 *
         primeCenteredCarryDefect q x.2) = 0 := by
   rw [Fintype.sum_prod_type]
   calc
-    (∑ a : Fin (p : ℕ), ∑ b : Fin (q : ℕ),
+    (∑ a : Fin p.1, ∑ b : Fin q.1,
         primeCenteredCarryDefect p a *
           primeCenteredCarryDefect q b) =
-      ∑ a : Fin (p : ℕ),
+      ∑ a : Fin p.1,
         primeCenteredCarryDefect p a *
-          (∑ b : Fin (q : ℕ), primeCenteredCarryDefect q b) := by
+          (∑ b : Fin q.1, primeCenteredCarryDefect q b) := by
             apply Finset.sum_congr rfl
             intro a ha
             rw [Finset.mul_sum]
@@ -152,7 +135,7 @@ theorem sum_prod_primeCenteredCarryDefect_eq_zero
 
 /-- Local finite Hilbert space of a prime residue camera. -/
 abbrev PrimeCarryResidueHilbert (p : Nat.Primes) :=
-  lp (fun _ : Fin (p : ℕ) => ℝ) 2
+  lp (fun _ : Fin p.1 => ℝ) 2
 
 /-- The two factors of `p^(-1/2)`: one is the normalized counting measure of
 one residue cycle and one is the critical carry amplitude. -/
@@ -168,7 +151,7 @@ def primeCarryDefectAxisCoefficient (p : Nat.Primes) : ℝ :=
 /-- Material centered carry axis in one camera. -/
 def primeCriticalCenteredCarryAxis
     (p : Nat.Primes) : PrimeCarryResidueHilbert p :=
-  ∑ a ∈ (Finset.univ : Finset (Fin (p : ℕ))),
+  ∑ a ∈ (Finset.univ : Finset (Fin p.1)),
     lp.single 2 a
       (primeCarryDefectAxisCoefficient p * primeCenteredCarryDefect p a)
 
@@ -180,20 +163,20 @@ theorem primeCriticalCenteredCarryAxis_norm_sq
       ((p : ℝ) - 1) / (p : ℝ) := by
   have hraw :=
     lp.norm_sum_single
-      (E := fun _ : Fin (p : ℕ) => ℝ)
+      (E := fun _ : Fin p.1 => ℝ)
       (p := (2 : ℝ≥0∞)) (by norm_num)
-      (fun a : Fin (p : ℕ) =>
+      (fun a : Fin p.1 =>
         primeCarryDefectAxisCoefficient p * primeCenteredCarryDefect p a)
-      (Finset.univ : Finset (Fin (p : ℕ)))
+      (Finset.univ : Finset (Fin p.1))
   have hraw' :
       ‖primeCriticalCenteredCarryAxis p‖ ^ 2 =
-        ∑ a : Fin (p : ℕ),
+        ∑ a : Fin p.1,
           |primeCarryDefectAxisCoefficient p *
             primeCenteredCarryDefect p a| ^ 2 := by
     simpa [primeCriticalCenteredCarryAxis, Real.norm_eq_abs] using hraw
   calc
     ‖primeCriticalCenteredCarryAxis p‖ ^ 2 =
-        ∑ a : Fin (p : ℕ),
+        ∑ a : Fin p.1,
           (primeCarryDefectAxisCoefficient p *
             primeCenteredCarryDefect p a) ^ 2 := by
               rw [hraw']
@@ -201,7 +184,7 @@ theorem primeCriticalCenteredCarryAxis_norm_sq
               intro a ha
               rw [sq_abs]
     _ = (primeCarryDefectAxisCoefficient p) ^ 2 *
-          ∑ a : Fin (p : ℕ), (primeCenteredCarryDefect p a) ^ 2 := by
+          ∑ a : Fin p.1, (primeCenteredCarryDefect p a) ^ 2 := by
             rw [Finset.mul_sum]
             apply Finset.sum_congr rfl
             intro a ha
