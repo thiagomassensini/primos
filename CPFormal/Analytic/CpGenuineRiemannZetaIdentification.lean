@@ -62,8 +62,10 @@ theorem hasDerivAt_cpChartFactor_one
   have hfactor :=
     (hasDerivAt_const (x := (1 : ℂ)) (c := (1 : ℂ))).sub hpow
   unfold cpChartFactor
-  convert hfactor using 1 <;>
-    simp [Complex.ofReal_log (show 0 ≤ (p : ℝ) by positivity)]
+  convert hfactor using 1
+  · funext s
+    rfl
+  · simp [Complex.ofReal_log (show 0 ≤ (p : ℝ) by positivity)]
 
 /-- Canonical divided camera factor, analytically completed at `s = 1`. -/
 def cpChartFactorSlope (p : ℕ) : ℂ → ℂ :=
