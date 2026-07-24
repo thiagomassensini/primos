@@ -1,4 +1,5 @@
 import CPFormal.Analytic.CpGenuineCompatibility
+import CPFormal.Analytic.CpFiniteGreenRadial
 import Mathlib.NumberTheory.Harmonic.ZetaAsymp
 import Mathlib.Analysis.Complex.RemovableSingularity
 
@@ -28,6 +29,13 @@ namespace CPFormal.Analytic.Cp
 open Set Filter ComplexConjugate
 
 noncomputable section
+
+attribute [local instance 10000]
+  NormedAddCommGroup.toAddCommGroup
+  CommCStarAlgebra.toNonUnitalCommCStarAlgebra
+  NonUnitalCommCStarAlgebra.toNonUnitalCStarAlgebra
+  NonUnitalCStarAlgebra.toNormedSpace
+  NormedSpace.toModule
 
 /-- The original absolutely convergent Genuine Dirichlet series is the Riemann
 zeta series. -/
@@ -81,7 +89,7 @@ theorem differentiable_cpChartFactorSlope
   rw [← differentiableOn_univ]
   exact
     (Complex.differentiableOn_dslope
-      (f := cpChartFactor p) (a := (1 : ℂ)) (s := Set.univ)
+      (f := cpChartFactor p) (c := (1 : ℂ)) (s := Set.univ)
       (by simp : Set.univ ∈ 𝓝 (1 : ℂ))).2
       (differentiable_cpChartFactor p hp).differentiableOn
 
@@ -99,7 +107,7 @@ theorem differentiable_riemannCpChart
 /-- Away from the removable point, the regularization is the camera factor
 multiplied by Riemann zeta. -/
 theorem riemannCpChart_eq_factor_mul_riemannZeta
-    (p : ℕ) (hp : Nat.Prime p) {s : ℂ} (hs : s ≠ 1) :
+    (p : ℕ) (_hp : Nat.Prime p) {s : ℂ} (hs : s ≠ 1) :
     riemannCpChart p s = cpChartFactor p s * riemannZeta s := by
   rw [riemannCpChart, cpChartFactorSlope_eq_div p hs,
     riemannZeta_eq_inv_sub_mul hs]
@@ -120,8 +128,9 @@ theorem riemannCpChart_eq_factor_mul_genuineDirichlet
       (1 - (p : ℂ) ^ (1 - s)) * genuineDirichlet s := by
   have hs1 : s ≠ 1 := by
     intro h
-    subst s
-    norm_num at hs
+    have hre := congrArg Complex.re h
+    norm_num at hre
+    linarith
   rw [riemannCpChart_eq_factor_mul_riemannZeta p hp hs1,
     ← genuineDirichlet_eq_riemannZeta hs]
   rfl
@@ -145,8 +154,9 @@ theorem genuineContinuation_eq_riemannZeta
     genuineContinuation s = riemannZeta s := by
   have hs1 : s ≠ 1 := by
     intro h
-    subst s
-    norm_num at hs
+    have hre := congrArg Complex.re h
+    norm_num at hre
+    linarith [hs.2]
   have hhalfPlane : s ∈ bracketHalfPlane := by
     change -1 < s.re
     linarith [hs.1]
