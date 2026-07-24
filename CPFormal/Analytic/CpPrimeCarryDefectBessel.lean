@@ -63,9 +63,6 @@ theorem sum_primeCenteredCarryDefect_eq_zero
   classical
   let z : Fin (p : ℕ) := primeCarryResidueZero p
   have hz : z ∈ (Finset.univ : Finset (Fin (p : ℕ))) := Finset.mem_univ z
-  change (∑ a ∈ (Finset.univ : Finset (Fin (p : ℕ))),
-    primeCenteredCarryDefect p a) = 0
-  rw [← Finset.sum_erase_add _ hz]
   have hsum :
       (∑ a ∈ (Finset.univ.erase z), primeCenteredCarryDefect p a) =
         ((Finset.univ.erase z).card : ℝ) := by
@@ -77,15 +74,21 @@ theorem sum_primeCenteredCarryDefect_eq_zero
             have hne : a ≠ z := (Finset.mem_erase.mp ha).1
             simpa [z] using primeCenteredCarryDefect_ne_zero p hne
       _ = ((Finset.univ.erase z).card : ℝ) := by simp
-  rw [hsum]
   have hcard :
       (Finset.univ.erase z).card = (p : ℕ) - 1 := by
     rw [Finset.card_erase_of_mem hz, Fintype.card_fin]
-  rw [hcard]
-  have hp1 : 1 ≤ (p : ℕ) := p.prop.one_le
-  rw [Nat.cast_sub hp1]
-  simp [z]
-  ring
+  calc
+    (∑ a : Fin (p : ℕ), primeCenteredCarryDefect p a) =
+        (∑ a ∈ (Finset.univ.erase z), primeCenteredCarryDefect p a) +
+          primeCenteredCarryDefect p z := by
+            symm
+            exact Finset.sum_erase_add _ hz
+    _ = 0 := by
+      rw [hsum, hcard]
+      have hp1 : 1 ≤ (p : ℕ) := p.prop.one_le
+      rw [Nat.cast_sub hp1]
+      simp [z]
+      ring
 
 /-- Exact squared ledger of one centered carry defect. -/
 theorem sum_sq_primeCenteredCarryDefect
@@ -95,10 +98,6 @@ theorem sum_sq_primeCenteredCarryDefect
   classical
   let z : Fin (p : ℕ) := primeCarryResidueZero p
   have hz : z ∈ (Finset.univ : Finset (Fin (p : ℕ))) := Finset.mem_univ z
-  change (∑ a ∈ (Finset.univ : Finset (Fin (p : ℕ))),
-    (primeCenteredCarryDefect p a) ^ 2) =
-      (p : ℝ) * ((p : ℝ) - 1)
-  rw [← Finset.sum_erase_add _ hz]
   have hsum :
       (∑ a ∈ (Finset.univ.erase z),
           (primeCenteredCarryDefect p a) ^ 2) =
@@ -114,15 +113,22 @@ theorem sum_sq_primeCenteredCarryDefect
               simpa [z] using primeCenteredCarryDefect_ne_zero p hne]
             norm_num
       _ = ((Finset.univ.erase z).card : ℝ) := by simp
-  rw [hsum]
   have hcard :
       (Finset.univ.erase z).card = (p : ℕ) - 1 := by
     rw [Finset.card_erase_of_mem hz, Fintype.card_fin]
-  rw [hcard]
-  have hp1 : 1 ≤ (p : ℕ) := p.prop.one_le
-  rw [Nat.cast_sub hp1]
-  simp [z]
-  ring
+  calc
+    (∑ a : Fin (p : ℕ), (primeCenteredCarryDefect p a) ^ 2) =
+        (∑ a ∈ (Finset.univ.erase z),
+          (primeCenteredCarryDefect p a) ^ 2) +
+            (primeCenteredCarryDefect p z) ^ 2 := by
+              symm
+              exact Finset.sum_erase_add _ hz
+    _ = (p : ℝ) * ((p : ℝ) - 1) := by
+      rw [hsum, hcard]
+      have hp1 : 1 ≤ (p : ℕ) := p.prop.one_le
+      rw [Nat.cast_sub hp1]
+      simp [z]
+      ring
 
 /-- The product of two independent centered camera cycles has zero total
 correlation. -/
@@ -226,19 +232,6 @@ abbrev PrimeCarryDefectAtlasHilbert (S : Finset Nat.Primes) :=
 def primeCriticalCenteredCarryAtlasAxis
     (S : Finset Nat.Primes) (p : S) : PrimeCarryDefectAtlasHilbert S :=
   lp.single 2 p (primeCriticalCenteredCarryAxis p.1)
-
-/-- Distinct cameras remain orthogonal after insertion into the atlas. -/
-theorem primeCriticalCenteredCarryAtlasAxis_orthogonal
-    (S : Finset Nat.Primes) {p q : S} (hpq : p ≠ q) :
-    inner ℝ (primeCriticalCenteredCarryAtlasAxis S p)
-      (primeCriticalCenteredCarryAtlasAxis S q) = 0 := by
-  classical
-  rw [primeCriticalCenteredCarryAtlasAxis, lp.inner_single_left]
-  have hzero :
-      (lp.single 2 q (primeCriticalCenteredCarryAxis q.1) :
-        PrimeCarryDefectAtlasHilbert S) p = 0 :=
-    lp.single_apply_ne 2 q (primeCriticalCenteredCarryAxis q.1) hpq
-  rw [hzero, inner_zero_right]
 
 /-- Synthesis of finitely many centered carry axes. -/
 def finitePrimeCarryDefectSynthesis
