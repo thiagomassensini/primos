@@ -96,6 +96,7 @@ import CPFormal.Analytic.CpGenuineGprePrimeVerticalTraceDualTest
 import CPFormal.Analytic.CpGenuineGprePrimeVerticalTraceWeightedBessel
 import CPFormal.Analytic.CpGenuineGprePrimeVerticalTraceNoGo
 import CPFormal.Analytic.CpPrimeCarryDefectBessel
+import CPFormal.Analytic.CpPrimeCarryDefectReadoutCrosswalk
 import CPFormal.Analytic.CpTateCarryLocalCarrier
 import CPFormal.Analytic.CpCriticalRadialBracketGuard
 import CPFormal.Analytic.CpConnectedC2Defect
