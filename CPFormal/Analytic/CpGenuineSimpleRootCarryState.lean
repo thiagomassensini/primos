@@ -70,8 +70,11 @@ theorem deriv_riemannZeta_conj (s : ℂ) :
     funext z
     simp [Function.comp_def, riemannZeta_conj]
   have hder := congrArg deriv hfun
+  rw [deriv_conj_conj] at hder
   have hpoint := congrFun hder ((starRingEnd ℂ) s)
-  simpa [deriv_conj_conj, Function.comp_def] using hpoint.symm
+  change (starRingEnd ℂ) (deriv riemannZeta s) =
+    deriv riemannZeta ((starRingEnd ℂ) s) at hpoint
+  exact hpoint.symm
 
 /-- On the open strip the completed zeta function is the product of the
 Deligne real Gamma factor and Riemann zeta. -/
@@ -99,10 +102,9 @@ theorem differentiableAt_GammaR_of_re_pos
       (fun z : ℂ => (Real.pi : ℂ) ^ (-z / 2)) s :=
     ((differentiable_const_cpow_of_neZero (Real.pi : ℂ)).comp
       (differentiable_id.neg.div_const 2)).differentiableAt
-  have hgammaArg : ∀ n : ℕ, s / 2 ≠ -n := by
+  have hgammaArg : ∀ n : ℕ, s / 2 ≠ -(n : ℂ) := by
     intro n hneg
     have hre := congrArg Complex.re hneg
-    simp only [div_re, ofNat_re, neg_re, Nat.cast_re] at hre
     norm_num at hre
     linarith
   have hgamma : DifferentiableAt ℂ (fun z : ℂ => Gamma (z / 2)) s :=
@@ -253,7 +255,6 @@ theorem genuineRootTangentMassVerticalFiberState_eq_massFiber
   unfold genuineRootTangentMassVerticalFiberState
     primeMassGreenVerticalFiberState
   congr 2
-  norm_cast
   rw [genuineRootTangentGreenBulk_eq_of_simple_zero p M hroot]
   exact (primeMassGreenBulkCutoffProfile_eq_amplitude_mul M s p).symm
 
