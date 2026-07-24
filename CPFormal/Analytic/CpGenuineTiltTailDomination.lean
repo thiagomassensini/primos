@@ -96,8 +96,11 @@ theorem canonicalCriticalWeightedTiltBlock_upper_bound
   have hdelta := criticalDisplacement_ne_zero_of_re_ne_half hoff
   have htilt := abs_cpTilt_three_upper_bound
     hbounds.1 hbounds.2 hdelta (one_lt_canonicalRealCpCenter k)
+  have hcenter0 : 0 ≤ canonicalRealCpCenter k :=
+    le_of_lt (lt_trans zero_lt_one (one_lt_canonicalRealCpCenter k))
   have hscale :
-      0 ≤ (canonicalRealCpCenter k) ^ (-(1 : ℝ) / 2) := by positivity
+      0 ≤ (canonicalRealCpCenter k) ^ (-(1 : ℝ) / 2) :=
+    Real.rpow_nonneg hcenter0 _
   exact mul_le_mul_of_nonneg_left htilt hscale
 
 end
