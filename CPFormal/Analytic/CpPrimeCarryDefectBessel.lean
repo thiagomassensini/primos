@@ -63,6 +63,8 @@ theorem sum_primeCenteredCarryDefect_eq_zero
   classical
   let z : Fin (p : ℕ) := primeCarryResidueZero p
   have hz : z ∈ (Finset.univ : Finset (Fin (p : ℕ))) := Finset.mem_univ z
+  change (∑ a ∈ (Finset.univ : Finset (Fin (p : ℕ))),
+    primeCenteredCarryDefect p a) = 0
   rw [← Finset.sum_erase_add _ hz]
   have hsum :
       (∑ a ∈ (Finset.univ.erase z), primeCenteredCarryDefect p a) =
@@ -93,6 +95,9 @@ theorem sum_sq_primeCenteredCarryDefect
   classical
   let z : Fin (p : ℕ) := primeCarryResidueZero p
   have hz : z ∈ (Finset.univ : Finset (Fin (p : ℕ))) := Finset.mem_univ z
+  change (∑ a ∈ (Finset.univ : Finset (Fin (p : ℕ))),
+    (primeCenteredCarryDefect p a) ^ 2) =
+      (p : ℝ) * ((p : ℝ) - 1)
   rw [← Finset.sum_erase_add _ hz]
   have hsum :
       (∑ a ∈ (Finset.univ.erase z),
@@ -152,7 +157,7 @@ def primeCarryDefectAxisCoefficient (p : Nat.Primes) : ℝ :=
     (p : Nat.Primes) :
     primeCarryDefectAxisCoefficient p = (p : ℝ)⁻¹ := by
   rw [primeCarryDefectAxisCoefficient]
-  exact primeCarryAmplitudeRatio_sq_eq_inv (p : ℕ)
+  simpa [pow_two] using primeCarryAmplitudeRatio_sq_eq_inv (p : ℕ)
 
 /-- Material centered carry axis in one camera. -/
 def primeCriticalCenteredCarryAxis
@@ -174,13 +179,21 @@ theorem primeCriticalCenteredCarryAxis_norm_sq
       (fun a : Fin (p : ℕ) =>
         primeCarryDefectAxisCoefficient p * primeCenteredCarryDefect p a)
       (Finset.univ : Finset (Fin (p : ℕ)))
+  have hraw' :
+      ‖primeCriticalCenteredCarryAxis p‖ ^ 2 =
+        ∑ a : Fin (p : ℕ),
+          |primeCarryDefectAxisCoefficient p *
+            primeCenteredCarryDefect p a| ^ 2 := by
+    simpa [primeCriticalCenteredCarryAxis, Real.norm_eq_abs] using hraw
   calc
     ‖primeCriticalCenteredCarryAxis p‖ ^ 2 =
         ∑ a : Fin (p : ℕ),
           (primeCarryDefectAxisCoefficient p *
             primeCenteredCarryDefect p a) ^ 2 := by
-              simpa [primeCriticalCenteredCarryAxis,
-                Real.norm_eq_abs, sq_abs] using hraw
+              rw [hraw']
+              apply Finset.sum_congr rfl
+              intro a ha
+              rw [sq_abs]
     _ = (primeCarryDefectAxisCoefficient p) ^ 2 *
           ∑ a : Fin (p : ℕ), (primeCenteredCarryDefect p a) ^ 2 := by
             rw [Finset.mul_sum]
@@ -190,9 +203,8 @@ theorem primeCriticalCenteredCarryAxis_norm_sq
     _ = ((p : ℝ) - 1) / (p : ℝ) := by
       rw [primeCarryDefectAxisCoefficient_eq_inv,
         sum_sq_primeCenteredCarryDefect]
-      have hp0 : (p : ℝ) ≠ 0 := by positivity
+      have hp0 : (p : ℝ) ≠ 0 := by exact_mod_cast p.prop.ne_zero
       field_simp [hp0]
-      ring
 
 /-- Local contractivity of every centered carry axis. -/
 theorem primeCriticalCenteredCarryAxis_norm_le_one
@@ -201,6 +213,7 @@ theorem primeCriticalCenteredCarryAxis_norm_le_one
   have hpR : (0 : ℝ) < (p : ℝ) := by exact_mod_cast p.prop.pos
   have hfrac : ((p : ℝ) - 1) / (p : ℝ) < 1 := by
     rw [div_lt_one hpR]
+    linarith
   have hsq := primeCriticalCenteredCarryAxis_norm_sq p
   have hnorm0 : 0 ≤ ‖primeCriticalCenteredCarryAxis p‖ := norm_nonneg _
   nlinarith
@@ -221,7 +234,11 @@ theorem primeCriticalCenteredCarryAtlasAxis_orthogonal
       (primeCriticalCenteredCarryAtlasAxis S q) = 0 := by
   classical
   rw [primeCriticalCenteredCarryAtlasAxis, lp.inner_single_left]
-  simp [lp.single_apply, hpq]
+  have hzero :
+      (lp.single 2 q (primeCriticalCenteredCarryAxis q.1) :
+        PrimeCarryDefectAtlasHilbert S) p = 0 :=
+    lp.single_apply_ne 2 q (primeCriticalCenteredCarryAxis q.1) hpq
+  rw [hzero, inner_zero_right]
 
 /-- Synthesis of finitely many centered carry axes. -/
 def finitePrimeCarryDefectSynthesis
@@ -253,7 +270,14 @@ theorem finitePrimeCarryDefectSynthesis_norm_sq_le
   have hmul :
       |c p| * ‖primeCriticalCenteredCarryAxis p.1‖ ≤ |c p| := by
     simpa using mul_le_mul_of_nonneg_left haxis habs0
-  nlinarith [sq_abs (c p)]
+  have hleft0 :
+      0 ≤ |c p| * ‖primeCriticalCenteredCarryAxis p.1‖ :=
+    mul_nonneg habs0 hnorm0
+  have hsq :
+      (|c p| * ‖primeCriticalCenteredCarryAxis p.1‖) ^ 2 ≤
+        |c p| ^ 2 :=
+    (sq_le_sq₀ hleft0 habs0).2 hmul
+  simpa [sq_abs] using hsq
 
 end
 
