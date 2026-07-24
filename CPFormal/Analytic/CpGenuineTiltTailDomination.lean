@@ -37,9 +37,10 @@ theorem norm_criticalLineDirichletCarrier
     (s : ℂ) {x : ℝ} (hx : 0 < x) :
     ‖criticalLineDirichletCarrier s x‖ = x ^ (-(1 : ℝ) / 2) := by
   unfold criticalLineDirichletCarrier
-  simpa using
-    (Complex.norm_cpow_eq_rpow_re_of_pos hx
-      (-((1 : ℂ) / 2 + Complex.I * s.im)))
+  have h :=
+    Complex.norm_cpow_eq_rpow_re_of_pos hx
+      (-((1 : ℂ) / 2 + Complex.I * s.im))
+  simpa [div_eq_mul_inv] using h
 
 /-- Exact norm of a canonical phase-bearing tilt block. -/
 theorem norm_canonicalCriticalWeightedTiltBlock
@@ -49,6 +50,7 @@ theorem norm_canonicalCriticalWeightedTiltBlock
         |cpTilt 3 (criticalDisplacement s.re) (canonicalRealCpCenter k)| := by
   unfold canonicalCriticalWeightedTiltBlock localCriticalLineCarrier
   rw [norm_mul]
+  simp only [Int.cast_zero, add_zero]
   have hcenter : 0 < canonicalRealCpCenter k := by
     unfold canonicalRealCpCenter
     positivity
@@ -76,7 +78,7 @@ theorem canonicalCriticalWeightedTiltBlock_zero_lower_bound
   have hdelta := criticalDisplacement_ne_zero_of_re_ne_half hoff
   have htilt := abs_cpTilt_three_lower_bound
     hbounds.1 hbounds.2 hdelta (by norm_num : (1 : ℝ) < 3)
-  have hscale : 0 ≤ (3 : ℝ) ^ (-(1 : ℝ) / 2) := Real.rpow_nonneg _ _
+  have hscale : 0 ≤ (3 : ℝ) ^ (-(1 : ℝ) / 2) := by positivity
   have hmul := mul_le_mul_of_nonneg_left htilt hscale
   simpa [canonicalRealCpCenter] using hmul
 
@@ -95,8 +97,7 @@ theorem canonicalCriticalWeightedTiltBlock_upper_bound
   have htilt := abs_cpTilt_three_upper_bound
     hbounds.1 hbounds.2 hdelta (one_lt_canonicalRealCpCenter k)
   have hscale :
-      0 ≤ (canonicalRealCpCenter k) ^ (-(1 : ℝ) / 2) :=
-    Real.rpow_nonneg _ _
+      0 ≤ (canonicalRealCpCenter k) ^ (-(1 : ℝ) / 2) := by positivity
   exact mul_le_mul_of_nonneg_left htilt hscale
 
 end
