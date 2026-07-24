@@ -159,7 +159,7 @@ theorem primeCarryWeightedVerticalCenteredBracket_noGoFiber
                 primeVerticalTraceNoGoFiber_apply_ne_one p (by omega),
                 primeVerticalTraceNoGoFiber_apply_ne_one p (by omega),
                 primeVerticalTraceNoGoBracketModel_apply_of_three_le p (by omega)]
-              ring
+              simp
 
 /-- The bracket norm loses no more than a fixed multiple of the full mass. -/
 theorem norm_primeVerticalTraceNoGoBracketModel_le
