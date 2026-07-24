@@ -70,8 +70,8 @@ def primeMassGreenVerticalGlobalState
     rw [memℓp_gen_iff (by norm_num : 0 < (2 : ℝ≥0∞).toReal)]
     have hsum := summable_primeMassGreenBulkCutoffProfile_sq M hs
     exact hsum.congr fun p => by
-      rw [primeMassGreenVerticalFiberState_norm_sq]
-      rfl⟩
+      simpa [f] using
+        (primeMassGreenVerticalFiberState_norm_sq M s p).symm⟩
 
 @[simp] theorem primeMassGreenVerticalGlobalState_apply
     (M : ℕ) (s : ℂ) (hs : s ∈ genuineCriticalStrip)
