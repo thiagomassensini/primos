@@ -8,9 +8,9 @@ if [[ -x "$PWD/.elan/bin/lake" ]]; then
   export PATH="$ELAN_HOME/bin:$PATH"
 fi
 
-if grep -RInE '^[[:space:]]*(axiom|sorry)\b|:=[[:space:]]*by[[:space:]]+sorry\b' \
+if grep -RInE '^[[:space:]]*(axiom|sorry|admit)\b|:=[[:space:]]*by[[:space:]]+(sorry|admit)\b' \
   --include='*.lean' CPFormal CPFormal.lean; then
-  echo "Falha: foi encontrado axiom/sorry em codigo Lean." >&2
+  echo "Falha: foi encontrado axiom/sorry/admit em codigo Lean." >&2
   exit 1
 fi
 
@@ -22,4 +22,4 @@ fi
 lake update
 lake build
 
-echo "Auditoria concluida: build integral sem axiom/sorry local."
+echo "Auditoria concluida: build integral sem axiom/sorry/admit local."
