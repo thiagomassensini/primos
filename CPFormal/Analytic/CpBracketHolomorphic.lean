@@ -1,4 +1,5 @@
 import CPFormal.Analytic.CpBracketConvergence
+import Mathlib.Analysis.CStarAlgebra.Classes
 import Mathlib.Analysis.Complex.LocallyUniformLimit
 import Mathlib.Analysis.Complex.CauchyIntegral
 import Mathlib.Analysis.Analytic.Uniqueness

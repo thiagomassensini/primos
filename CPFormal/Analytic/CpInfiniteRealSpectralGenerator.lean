@@ -228,6 +228,7 @@ theorem infiniteRealSpectralGenerator_adjoint_apply
     inner ℂ (infiniteRealSpectralBasisVector n)
       (infiniteRealSpectralGenerator.adjoint y) at h
   rw [infiniteRealSpectralGenerator_basisVector] at h
+  rw [inner_smul_left] at h
   simpa [infiniteRealSpectralBasisVector, lp.inner_single_left] using h.symm
 
 /-- A maximalidade: o dominio do adjunto ja pertence ao dominio original. -/
