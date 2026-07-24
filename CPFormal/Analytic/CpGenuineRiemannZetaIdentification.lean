@@ -168,8 +168,9 @@ theorem genuineContinuation_eq_riemannZeta
           3 (by norm_num) hs1
   exact mul_left_cancel₀ hfactor hmul
 
-/-- Reflection preserves the open critical strip. -/
-theorem reflectedParameter_mem_genuineCriticalStrip
+/-- Reflection preserves the open critical strip; this local name avoids
+colliding with the later Green-budget interface. -/
+theorem reflectedParameter_mem_genuineCriticalStrip_zeta
     {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
     reflectedParameter s ∈ genuineCriticalStrip := by
   constructor
@@ -204,7 +205,7 @@ theorem genuineContinuation_reflectedParameter_eq_zero_of_zero
     rw [riemannZeta_one_sub hnotNeg hnotOne, hconj]
     ring
   rw [genuineContinuation_eq_riemannZeta
-    (reflectedParameter_mem_genuineCriticalStrip hs)]
+    (reflectedParameter_mem_genuineCriticalStrip_zeta hs)]
   exact hrefZeta
 
 end
