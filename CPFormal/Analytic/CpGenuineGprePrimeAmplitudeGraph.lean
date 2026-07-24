@@ -64,7 +64,12 @@ theorem exists_primeAmplitudeUpgradeGraphPair_iff
       fun p => (primeCarryAmplitudeRatio p)⁻¹ * mass p
     have hf : Memℓp f 2 := by
       rw [memℓp_gen_iff (by norm_num : 0 < (2 : ℝ≥0∞).toReal)]
-      simpa [f, Real.norm_eq_abs, sq_abs] using hdomain
+      apply hdomain.congr
+      intro p
+      change
+        ‖(primeCarryAmplitudeRatio p)⁻¹ * mass p‖ ^ 2 =
+          ((primeCarryAmplitudeRatio p)⁻¹ * mass p) ^ 2
+      rw [Real.norm_eq_abs, sq_abs]
     refine ⟨⟨f, hf⟩, ?_⟩
     intro p
     rfl
@@ -120,13 +125,24 @@ theorem primeAmplitudeUpgradedMassFiniteState_norm_sq
       ∑ p ∈ S,
         ((primeCarryAmplitudeRatio p)⁻¹ *
           primeMassGreenBulkCutoffProfile M s p) ^ 2 := by
-  simpa [primeAmplitudeUpgradedMassFiniteState, Real.norm_eq_abs, sq_abs] using
-    (lp.norm_sum_single
-      (E := fun _ : Nat.Primes => ℝ)
-      (p := (2 : ℝ≥0∞)) (by norm_num)
-      (fun p : Nat.Primes =>
-        (primeCarryAmplitudeRatio p)⁻¹ *
-          primeMassGreenBulkCutoffProfile M s p) S)
+  calc
+    ‖primeAmplitudeUpgradedMassFiniteState M s S‖ ^ 2 =
+        ∑ p ∈ S,
+          ‖(primeCarryAmplitudeRatio p)⁻¹ *
+            primeMassGreenBulkCutoffProfile M s p‖ ^ 2 := by
+      simpa [primeAmplitudeUpgradedMassFiniteState] using
+        (lp.norm_sum_single
+          (E := fun _ : Nat.Primes => ℝ)
+          (p := (2 : ℝ≥0∞)) (by norm_num)
+          (fun p : Nat.Primes =>
+            (primeCarryAmplitudeRatio p)⁻¹ *
+              primeMassGreenBulkCutoffProfile M s p) S)
+    _ = ∑ p ∈ S,
+          ((primeCarryAmplitudeRatio p)⁻¹ *
+            primeMassGreenBulkCutoffProfile M s p) ^ 2 := by
+      apply Finset.sum_congr rfl
+      intro p hp
+      rw [Real.norm_eq_abs, sq_abs]
 
 /-- Uniform graph control over all finite prime atlases. -/
 def PrimeAmplitudeUpgradedMassFiniteStatesBounded
@@ -140,15 +156,20 @@ theorem primeAmplitudeUpgradedMassFiniteStatesBounded_iff
     (M : ℕ) (hM : 0 < M) {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
     PrimeAmplitudeUpgradedMassFiniteStatesBounded M s ↔
       criticalDisplacement s.re = 0 := by
-  unfold PrimeAmplitudeUpgradedMassFiniteStatesBounded
-  have hstates :
-      (fun S : Finset Nat.Primes =>
-        primeAmplitudeUpgradedMassFiniteState M s S) =
-      (fun S : Finset Nat.Primes => primeGreenBulkFiniteState M s S) := by
-    funext S
-    exact primeAmplitudeUpgradedMassFiniteState_eq_greenBulkFiniteState M s S
-  rw [hstates]
-  exact primeGreenBulkFiniteStatesBounded_iff M hM hs
+  constructor
+  · rintro ⟨C, hC⟩
+    apply (primeGreenBulkFiniteStatesBounded_iff M hM hs).1
+    refine ⟨C, ?_⟩
+    intro S
+    rw [← primeAmplitudeUpgradedMassFiniteState_eq_greenBulkFiniteState]
+    exact hC S
+  · intro hcritical
+    rcases (primeGreenBulkFiniteStatesBounded_iff M hM hs).2 hcritical with
+      ⟨C, hC⟩
+    refine ⟨C, ?_⟩
+    intro S
+    rw [primeAmplitudeUpgradedMassFiniteState_eq_greenBulkFiniteState]
+    exact hC S
 
 /-- Final zero-to-graph-boundedness obligation. -/
 def GenuineZerosBoundPrimeAmplitudeUpgradeGraph : Prop :=
