@@ -26,7 +26,7 @@ noncomputable section
 
 /-- One complete first-level mass in the vertical fiber of a prime camera. -/
 def primeVerticalTraceNoGoFiber (p : Nat.Primes) : CarryVerticalL2 :=
-  lp.single 2 1 ((p : ℝ)⁻¹ : ℂ)
+  lp.single 2 1 (((p : ℝ)⁻¹ : ℝ) : ℂ)
 
 @[simp] theorem primeVerticalTraceNoGoFiber_zero (p : Nat.Primes) :
     primeVerticalTraceNoGoFiber p 0 = 0 := by
@@ -93,36 +93,47 @@ theorem not_summable_primeVerticalTraceNoGoFluxProfile_sq :
     simp [one_div]
   exact Nat.Primes.not_summable_one_div honeDiv
 
+/-- Sparse coefficient function for the dressed bracket witness. -/
+def primeVerticalTraceNoGoBracketCoefficient
+    (p : Nat.Primes) (n : ℕ) : ℂ :=
+  if n = 1 then -2 * ((p : ℝ)⁻¹ : ℂ)
+  else if n = 2 then
+    (primeCarryAmplitudeRatio p : ℂ) * ((p : ℝ)⁻¹ : ℂ)
+  else 0
+
 /-- Explicit two-coordinate model for the dressed bracket of the witness. -/
 def primeVerticalTraceNoGoBracketModel
     (p : Nat.Primes) : CarryVerticalL2 :=
-  lp.single 2 1 (-2 * ((p : ℝ)⁻¹ : ℂ)) +
-    lp.single 2 2
-      ((primeCarryAmplitudeRatio p : ℂ) * ((p : ℝ)⁻¹ : ℂ))
+  ∑ n ∈ ({1, 2} : Finset ℕ),
+    lp.single 2 n (primeVerticalTraceNoGoBracketCoefficient p n)
 
 @[simp] theorem primeVerticalTraceNoGoBracketModel_zero
     (p : Nat.Primes) :
     primeVerticalTraceNoGoBracketModel p 0 = 0 := by
-  simp [primeVerticalTraceNoGoBracketModel, lp.single_apply]
+  simp [primeVerticalTraceNoGoBracketModel,
+    primeVerticalTraceNoGoBracketCoefficient, lp.single_apply]
 
 @[simp] theorem primeVerticalTraceNoGoBracketModel_one
     (p : Nat.Primes) :
     primeVerticalTraceNoGoBracketModel p 1 =
       -2 * ((p : ℝ)⁻¹ : ℂ) := by
-  simp [primeVerticalTraceNoGoBracketModel, lp.single_apply]
+  simp [primeVerticalTraceNoGoBracketModel,
+    primeVerticalTraceNoGoBracketCoefficient, lp.single_apply]
 
 @[simp] theorem primeVerticalTraceNoGoBracketModel_two
     (p : Nat.Primes) :
     primeVerticalTraceNoGoBracketModel p 2 =
       (primeCarryAmplitudeRatio p : ℂ) * ((p : ℝ)⁻¹ : ℂ) := by
-  simp [primeVerticalTraceNoGoBracketModel, lp.single_apply]
+  simp [primeVerticalTraceNoGoBracketModel,
+    primeVerticalTraceNoGoBracketCoefficient, lp.single_apply]
 
 @[simp] theorem primeVerticalTraceNoGoBracketModel_apply_of_three_le
     (p : Nat.Primes) {n : ℕ} (hn : 3 ≤ n) :
     primeVerticalTraceNoGoBracketModel p n = 0 := by
   have hn1 : n ≠ 1 := by omega
   have hn2 : n ≠ 2 := by omega
-  simp [primeVerticalTraceNoGoBracketModel, lp.single_apply, hn1, hn2]
+  simp [primeVerticalTraceNoGoBracketModel,
+    primeVerticalTraceNoGoBracketCoefficient, lp.single_apply, hn1, hn2]
 
 /-- The dressed centered bracket has only levels `1` and `2` active. -/
 theorem primeCarryWeightedVerticalCenteredBracket_noGoFiber
@@ -161,6 +172,24 @@ theorem primeCarryWeightedVerticalCenteredBracket_noGoFiber
                 primeVerticalTraceNoGoBracketModel_apply_of_three_le p (by omega)]
               simp only [mul_zero, sub_zero, zero_add]
 
+/-- Exact squared norm of the two-coordinate bracket model. -/
+theorem primeVerticalTraceNoGoBracketModel_norm_sq
+    (p : Nat.Primes) :
+    ‖primeVerticalTraceNoGoBracketModel p‖ ^ 2 =
+      (2 * (p : ℝ)⁻¹) ^ 2 +
+        (primeCarryAmplitudeRatio p * (p : ℝ)⁻¹) ^ 2 := by
+  have hp0 : (0 : ℝ) ≤ (p : ℝ)⁻¹ := by positivity
+  have hq0 : 0 ≤ primeCarryAmplitudeRatio p :=
+    primeCarryAmplitudeRatio_nonneg p
+  simpa [primeVerticalTraceNoGoBracketModel,
+    primeVerticalTraceNoGoBracketCoefficient, Real.norm_eq_abs,
+    abs_of_nonneg hp0, abs_of_nonneg hq0, norm_mul] using
+    (lp.norm_sum_single
+      (E := fun _ : ℕ => ℂ)
+      (p := (2 : ℝ≥0∞)) (by norm_num)
+      (primeVerticalTraceNoGoBracketCoefficient p)
+      ({1, 2} : Finset ℕ))
+
 /-- The bracket norm loses no more than a fixed multiple of the full mass. -/
 theorem norm_primeVerticalTraceNoGoBracketModel_le
     (p : Nat.Primes) :
@@ -170,23 +199,21 @@ theorem norm_primeVerticalTraceNoGoBracketModel_le
     primeCarryAmplitudeRatio_nonneg p
   have hq1 : primeCarryAmplitudeRatio p ≤ 1 :=
     (primeCarryAmplitudeRatio_lt_one (p : ℕ) p.prop.two_le).le
-  unfold primeVerticalTraceNoGoBracketModel
-  calc
-    ‖lp.single 2 1 (-2 * ((p : ℝ)⁻¹ : ℂ)) +
-        lp.single 2 2
-          ((primeCarryAmplitudeRatio p : ℂ) * ((p : ℝ)⁻¹ : ℂ))‖ ≤
-      ‖lp.single 2 1 (-2 * ((p : ℝ)⁻¹ : ℂ))‖ +
-        ‖lp.single 2 2
-          ((primeCarryAmplitudeRatio p : ℂ) * ((p : ℝ)⁻¹ : ℂ))‖ :=
-        norm_add_le _ _
-    _ = 2 * (p : ℝ)⁻¹ +
-        primeCarryAmplitudeRatio p * (p : ℝ)⁻¹ := by
-      rw [lp.norm_single (by norm_num : (0 : ℝ≥0∞) < 2),
-        lp.norm_single (by norm_num : (0 : ℝ≥0∞) < 2), norm_mul]
-      simp [abs_of_nonneg hp0, abs_of_nonneg hq0]
-    _ ≤ 2 * (p : ℝ)⁻¹ + 1 * (p : ℝ)⁻¹ := by
-      gcongr
-    _ = 3 * (p : ℝ)⁻¹ := by ring
+  have hmul : primeCarryAmplitudeRatio p * (p : ℝ)⁻¹ ≤ (p : ℝ)⁻¹ :=
+    mul_le_of_le_one_left hp0 hq1
+  have hmul0 : 0 ≤ primeCarryAmplitudeRatio p * (p : ℝ)⁻¹ :=
+    mul_nonneg hq0 hp0
+  have hmulSq :
+      (primeCarryAmplitudeRatio p * (p : ℝ)⁻¹) ^ 2 ≤
+        ((p : ℝ)⁻¹) ^ 2 := by
+    nlinarith
+  have hsq : ‖primeVerticalTraceNoGoBracketModel p‖ ^ 2 ≤
+      (3 * (p : ℝ)⁻¹) ^ 2 := by
+    rw [primeVerticalTraceNoGoBracketModel_norm_sq]
+    nlinarith [sq_nonneg ((p : ℝ)⁻¹)]
+  have hnorm0 : 0 ≤ ‖primeVerticalTraceNoGoBracketModel p‖ := norm_nonneg _
+  have hbound0 : 0 ≤ 3 * (p : ℝ)⁻¹ := by positivity
+  nlinarith
 
 /-- The bracket outputs of the witness remain square-summable over all primes. -/
 theorem summable_primeVerticalTraceNoGoBracket_sq :
