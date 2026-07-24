@@ -38,16 +38,12 @@ theorem primeMassGreenRadialProfile_eq_amplitude_mul
       primeCarryAmplitudeRatio p * primeCarryGreenRadialProfile delta p := by
   have hp0 : (0 : ℝ) < (p : ℝ) := by exact_mod_cast p.prop.pos
   unfold primeMassGreenRadialProfile primeCarryGreenRadialProfile
-    primeCarryAmplitudeRatio cpRadialDifference
-  rw [mul_sub]
-  have hhalf : ((Real.sqrt (p : ℝ))⁻¹) = (p : ℝ) ^ (-(1 : ℝ) / 2) := by
-    rw [← Real.rpow_neg_one]
-    have hsqrtEq : Real.sqrt (p : ℝ) = (p : ℝ) ^ ((1 : ℝ) / 2) := by
-      rw [Real.sqrt_eq_rpow]
-    rw [hsqrtEq, ← Real.rpow_mul hp0.le]
-    ring_nf
-  rw [hhalf, ← Real.rpow_add hp0, ← Real.rpow_add hp0]
-  ring_nf
+  rw [← mul_assoc, ← pow_two,
+    primeCarryAmplitudeRatio_sq_eq_inv (p : ℕ)]
+  unfold cpRadialDifference
+  rw [mul_sub, ← Real.rpow_neg_one,
+    ← Real.rpow_add hp0, ← Real.rpow_add hp0]
+  congr 1 <;> ring
 
 /-- Squared mass-radial profiles are summable over all prime cameras for every
 transverse displacement in `(-1/2,1/2)`. -/
