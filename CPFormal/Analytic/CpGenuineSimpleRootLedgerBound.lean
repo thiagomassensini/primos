@@ -85,8 +85,9 @@ theorem simpleRootPositiveBoxLedgerCeiling_nonneg :
 
 The strict comparison is retained because it is the physical credit/debt
 ledger.  The separate `residual_le_ceiling` field records the actual finite
-upper bound used by the Hilbert argument. -/
-structure SimpleRootPositiveBoxScalarLedgerData : Prop where
+upper bound used by the Hilbert argument.  This is a data structure rather
+than a proposition because it stores the two real ledger values. -/
+structure SimpleRootPositiveBoxScalarLedgerData where
   residualLedger : ℝ
   sectorMargin : ℝ
   residual_nonneg : 0 ≤ residualLedger
@@ -100,7 +101,7 @@ prime-atlas energy reconstructed from the root tangent.
 Only `atlas_norm_sq_le_residual` is not supplied by the scalar ledger theorem
 itself.  It must be proved from the bracket conservation/provenance identity,
 not postulated as a global instance. -/
-structure SimpleRootPositiveBoxLedgerMassCrosswalk (s : ℂ) : Prop where
+structure SimpleRootPositiveBoxLedgerMassCrosswalk (s : ℂ) where
   ledger : SimpleRootPositiveBoxScalarLedgerData
   atlas_norm_sq_le_residual :
     ∀ S : Finset Nat.Primes,
