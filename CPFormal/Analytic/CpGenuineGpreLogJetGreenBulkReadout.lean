@@ -48,7 +48,6 @@ theorem finiteNativeGpreLogJetGreenBulkReadout_complex_eq
   rw [finiteCanonicalCpLogJetCommutatorWedgeTrace_eq_neg_log_mul_green
     (p : ℕ) p.prop M s]
   field_simp [hlogC]
-  ring
 
 /-- Exact finite crosswalk from the normalized log-jet wedge trace to the
 centered prime Green bulk. -/
