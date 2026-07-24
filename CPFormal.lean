@@ -102,6 +102,7 @@ import CPFormal.Analytic.CpGenuinePrimeCarryDefectUniformBessel
 import CPFormal.Analytic.CpGenuineRootTangentCarryCrosswalk
 import CPFormal.Analytic.CpGenuineRootTangentCarryAtlas
 import CPFormal.Analytic.CpGenuineSimpleRootCarryState
+import CPFormal.Analytic.CpGenuineSimpleRootLedgerBound
 import CPFormal.Analytic.CpTateCarryLocalCarrier
 import CPFormal.Analytic.CpCriticalRadialBracketGuard
 import CPFormal.Analytic.CpConnectedC2Defect
