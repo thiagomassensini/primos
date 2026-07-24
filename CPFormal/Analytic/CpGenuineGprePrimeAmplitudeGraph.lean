@@ -66,10 +66,8 @@ theorem exists_primeAmplitudeUpgradeGraphPair_iff
       rw [memℓp_gen_iff (by norm_num : 0 < (2 : ℝ≥0∞).toReal)]
       apply hdomain.congr
       intro p
-      change
-        ‖(primeCarryAmplitudeRatio p)⁻¹ * mass p‖ ^ 2 =
-          ((primeCarryAmplitudeRatio p)⁻¹ * mass p) ^ 2
-      rw [Real.norm_eq_abs, sq_abs]
+      dsimp [f]
+      norm_num [Real.rpow_two, Real.norm_eq_abs, sq_abs]
     refine ⟨⟨f, hf⟩, ?_⟩
     intro p
     rfl
