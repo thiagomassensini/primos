@@ -125,20 +125,18 @@ theorem normalizedReflectedCameraFactorGap_eq_greenRadial
   rw [hfactor]
   field_simp [hpC]
   calc
-    (((primeCarryAmplitudeRatio p : ℝ) : ℂ) *
-          cpPhaseNormalizer (p : ℕ) s *
-            natDirichletTerm (reflectedParameter s) (p : ℕ) -
-        ((primeCarryAmplitudeRatio p : ℝ) : ℂ) *
-          cpPhaseNormalizer (p : ℕ) s *
-            natDirichletTerm s (p : ℕ)) =
-      ((primeCarryAmplitudeRatio p : ℝ) : ℂ) *
+    ((primeCarryAmplitudeRatio p : ℂ) *
+        cpPhaseNormalizer (p : ℕ) s *
+          (natDirichletTerm (reflectedParameter s) (p : ℕ) -
+            natDirichletTerm s (p : ℕ))) =
+      ((primeCarryAmplitudeRatio p : ℂ) *
         (cpPhaseNormalizer (p : ℕ) s *
             natDirichletTerm (reflectedParameter s) (p : ℕ) -
           cpPhaseNormalizer (p : ℕ) s *
-            natDirichletTerm s (p : ℕ)) := by ring
-    _ = ((primeCarryAmplitudeRatio p : ℝ) : ℂ) *
+            natDirichletTerm s (p : ℕ))) := by ring
+    _ = ((primeCarryAmplitudeRatio p : ℂ) *
         ((((p : ℝ) ^ (criticalDisplacement s.re) : ℝ) : ℂ) -
-          (((p : ℝ) ^ (-criticalDisplacement s.re) : ℝ) : ℂ)) := by
+          (((p : ℝ) ^ (-criticalDisplacement s.re) : ℝ) : ℂ))) := by
             rw [hrefRadial, hsRadial]
     _ = ((primeCarryGreenRadialProfile
           (criticalDisplacement s.re) p : ℝ) : ℂ) := by
