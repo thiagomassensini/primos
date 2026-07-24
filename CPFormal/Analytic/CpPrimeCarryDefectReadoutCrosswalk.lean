@@ -34,7 +34,8 @@ noncomputable section
 
 private theorem prime_coe_sub_one_pos (p : Nat.Primes) :
     0 < (p : ℝ) - 1 := by
-  exact_mod_cast p.prop.one_lt
+  have hp : (1 : ℝ) < (p : ℝ) := by exact_mod_cast p.prop.one_lt
+  linarith
 
 /-- Canonical dual of the critically dressed centered carry axis. -/
 def primeCriticalCenteredCarryDualAxis
@@ -66,7 +67,6 @@ theorem primeCriticalCenteredCarryDualAxis_norm_sq
   have hp0 : (p : ℝ) ≠ 0 := by exact_mod_cast p.prop.ne_zero
   have hp1 : (p : ℝ) - 1 ≠ 0 := ne_of_gt (prime_coe_sub_one_pos p)
   field_simp [hp0, hp1]
-  ring
 
 /-- The dual-axis squared norm is at least one. -/
 theorem one_le_primeCriticalCenteredCarryDualAxis_norm_sq
