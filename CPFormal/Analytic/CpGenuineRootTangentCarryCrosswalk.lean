@@ -124,10 +124,27 @@ theorem normalizedReflectedCameraFactorGap_eq_greenRadial
   unfold normalizedReflectedCameraFactorGap
   rw [hfactor]
   field_simp [hpC]
-  rw [mul_sub, hrefRadial, hsRadial]
-  unfold primeCarryGreenRadialProfile cpRadialDifference
-  push_cast
-  ring
+  calc
+    (((primeCarryAmplitudeRatio p : ℝ) : ℂ) *
+          cpPhaseNormalizer (p : ℕ) s *
+            natDirichletTerm (reflectedParameter s) (p : ℕ) -
+        ((primeCarryAmplitudeRatio p : ℝ) : ℂ) *
+          cpPhaseNormalizer (p : ℕ) s *
+            natDirichletTerm s (p : ℕ)) =
+      ((primeCarryAmplitudeRatio p : ℝ) : ℂ) *
+        (cpPhaseNormalizer (p : ℕ) s *
+            natDirichletTerm (reflectedParameter s) (p : ℕ) -
+          cpPhaseNormalizer (p : ℕ) s *
+            natDirichletTerm s (p : ℕ)) := by ring
+    _ = ((primeCarryAmplitudeRatio p : ℝ) : ℂ) *
+        ((((p : ℝ) ^ (criticalDisplacement s.re) : ℝ) : ℂ) -
+          (((p : ℝ) ^ (-criticalDisplacement s.re) : ℝ) : ℂ)) := by
+            rw [hrefRadial, hsRadial]
+    _ = ((primeCarryGreenRadialProfile
+          (criticalDisplacement s.re) p : ℝ) : ℂ) := by
+            unfold primeCarryGreenRadialProfile cpRadialDifference
+            push_cast
+            ring
 
 /-- The same radial coefficient reconstructed only from the two simple-root
 camera tangent ratios. -/
