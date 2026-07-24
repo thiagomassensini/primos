@@ -37,7 +37,6 @@ theorem primeMassGreenRadialProfile_eq_amplitude_mul
     primeMassGreenRadialProfile delta p =
       primeCarryAmplitudeRatio p * primeCarryGreenRadialProfile delta p := by
   have hp0 : (0 : ℝ) < (p : ℝ) := by exact_mod_cast p.prop.pos
-  have hsqrt : Real.sqrt (p : ℝ) ≠ 0 := by positivity
   unfold primeMassGreenRadialProfile primeCarryGreenRadialProfile
     primeCarryAmplitudeRatio cpRadialDifference
   rw [mul_sub]
@@ -46,10 +45,9 @@ theorem primeMassGreenRadialProfile_eq_amplitude_mul
     have hsqrtEq : Real.sqrt (p : ℝ) = (p : ℝ) ^ ((1 : ℝ) / 2) := by
       rw [Real.sqrt_eq_rpow]
     rw [hsqrtEq, ← Real.rpow_mul hp0.le]
-    congr 1
-    ring
+    ring_nf
   rw [hhalf, ← Real.rpow_add hp0, ← Real.rpow_add hp0]
-  congr 1 <;> ring
+  ring_nf
 
 /-- Squared mass-radial profiles are summable over all prime cameras for every
 transverse displacement in `(-1/2,1/2)`. -/
@@ -150,9 +148,11 @@ theorem primeAmplitudeUpgrade_massBulk_eq_carryBulk
         primeMassGreenBulkCutoffProfile M s p =
       primeCarryGreenBulkCutoffProfile M s p := by
   rw [primeMassGreenBulkCutoffProfile_eq_amplitude_mul]
+  have hp0 : (0 : ℝ) < (p : ℝ) := by exact_mod_cast p.prop.pos
+  have hsqrtPos : 0 < Real.sqrt (p : ℝ) := Real.sqrt_pos.2 hp0
   have hratio : primeCarryAmplitudeRatio p ≠ 0 := by
     unfold primeCarryAmplitudeRatio
-    positivity
+    exact inv_ne_zero hsqrtPos.ne'
   field_simp [hratio]
 
 /-- Exact domain threshold: the always-existing mass profile can be upgraded
