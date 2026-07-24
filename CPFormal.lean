@@ -89,6 +89,7 @@ import CPFormal.Analytic.CpGenuineGprePrimeMomentCrosswalk
 import CPFormal.Analytic.CpGenuineGpreLogJetGreenBulkReadout
 import CPFormal.Analytic.CpGenuineGprePrimeAmplitudeUpgrade
 import CPFormal.Analytic.CpGenuineGprePrimeAmplitudeGraph
+import CPFormal.Analytic.CpGenuineGprePrimeVerticalTraceGate
 import CPFormal.Analytic.CpTateCarryLocalCarrier
 import CPFormal.Analytic.CpCriticalRadialBracketGuard
 import CPFormal.Analytic.CpConnectedC2Defect
