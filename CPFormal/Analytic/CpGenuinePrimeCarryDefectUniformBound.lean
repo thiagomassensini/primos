@@ -232,8 +232,7 @@ theorem exists_globalCarryDefectReadoutRealization_iff_scaledCorrectionCloses
         cpRadialDifference p (criticalDisplacement s.re) = 0 :=
       (cpRadialDifference_eq_zero_iff
         p hp (criticalDisplacement s.re)).2 hcritical
-    simpa [hradial] using
-      (tendsto_const_nhds : Tendsto (fun _ : ℕ => (0 : ℂ)) atTop (nhds 0))
+    simp [hradial]
   · intro hcorrection
     have hcritical :=
       criticalDisplacement_eq_zero_of_genuine_zero_of_scaled_correction
