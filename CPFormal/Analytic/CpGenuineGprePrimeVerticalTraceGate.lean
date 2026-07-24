@@ -1,4 +1,5 @@
 import CPFormal.Analytic.CpGenuineGprePrimeAmplitudeGraph
+import CPFormal.Analytic.CpCarryWeightedVerticalBracketTrace
 
 /-!
 # Primewise vertical TFVD trace and the last graph-domain gate
@@ -34,7 +35,7 @@ vertical fiber. -/
 def primeMassGreenVerticalFiberState
     (M : ℕ) (s : ℂ) (p : Nat.Primes) : CarryVerticalL2 :=
   lp.single 2 1
-    ((primeMassGreenBulkCutoffProfile M s p : ℝ) : ℂ)
+    (primeMassGreenBulkCutoffProfile M s p : ℂ)
 
 @[simp] theorem primeMassGreenVerticalFiberState_zero
     (M : ℕ) (s : ℂ) (p : Nat.Primes) :
@@ -84,7 +85,7 @@ theorem primeCarryWeightedVerticalTrace_massFiber
     (M : ℕ) (s : ℂ) (p : Nat.Primes) :
     primeCarryWeightedVerticalTrace (p : ℕ)
         (primeMassGreenVerticalFiberState M s p) =
-      (0, (primeCarryGreenBulkCutoffProfile M s p : ℝ) : ℂ) := by
+      (0, (primeCarryGreenBulkCutoffProfile M s p : ℂ)) := by
   rw [primeCarryWeightedVerticalTrace, carryWeightedVerticalTrace_apply]
   apply Prod.ext
   · simp
