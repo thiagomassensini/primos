@@ -68,7 +68,8 @@ theorem exists_primeAmplitudeUpgradeGraphPair_iff
       intro p
       dsimp [f]
       rw [show (2 : ℝ≥0∞).toReal = (2 : ℝ) by norm_num,
-        Real.rpow_two, Real.norm_eq_abs, sq_abs]
+        Real.rpow_two]
+      exact (sq_abs ((primeCarryAmplitudeRatio p)⁻¹ * mass p)).symm
     refine ⟨⟨f, hf⟩, ?_⟩
     intro p
     rfl
