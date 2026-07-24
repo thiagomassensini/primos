@@ -74,11 +74,11 @@ theorem canonicalScalarTestsBounded_of_globalCarryDefectReadoutRealization
     canonicalEnrichedGpreLogJetGreenScalarTest_sq_le_of_global_realization
       M s x hrealizes S coeff
 
-/-- Conditional final chain in the exact requested Bessel language.  Its sole
-premise is the construction of one global state from the Genuine zero. -/
-theorem criticalDisplacement_eq_zero_of_genuine_zero_of_globalCarryState
+/-- Once a global centered-carry state has been constructed, its explicit
+Bessel bound forces critical localization.  No zero hypothesis is needed at
+this stage; the zero is needed only to construct the state. -/
+theorem criticalDisplacement_eq_zero_of_globalCarryState
     {s : ℂ} (hs : s ∈ genuineCriticalStrip)
-    (hzero : genuineContinuation s = 0)
     (x : PrimeCarryDefectGlobalHilbert)
     (hrealizes :
       IsCanonicalEnrichedPrimeCarryDefectReadoutRealization 1 s x) :
