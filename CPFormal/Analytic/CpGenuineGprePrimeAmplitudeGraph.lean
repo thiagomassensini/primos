@@ -67,7 +67,8 @@ theorem exists_primeAmplitudeUpgradeGraphPair_iff
       apply hdomain.congr
       intro p
       dsimp [f]
-      simp only [Real.norm_eq_abs, mul_pow, inv_pow, sq_abs]
+      rw [show (2 : ℝ≥0∞).toReal = (2 : ℝ) by norm_num,
+        Real.rpow_two, Real.norm_eq_abs, sq_abs]
     refine ⟨⟨f, hf⟩, ?_⟩
     intro p
     rfl
