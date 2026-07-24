@@ -24,6 +24,8 @@ namespace CPFormal.Analytic.Cp
 
 noncomputable section
 
+set_option maxHeartbeats 800000
+
 /-- One complete first-level mass in the vertical fiber of a prime camera. -/
 def primeVerticalTraceNoGoFiber (p : Nat.Primes) : CarryVerticalL2 :=
   lp.single 2 1 ((p : ℝ)⁻¹ : ℂ)
@@ -41,7 +43,7 @@ theorem primeVerticalTraceNoGoFiber_norm_sq (p : Nat.Primes) :
     ‖primeVerticalTraceNoGoFiber p‖ ^ 2 = ((p : ℝ)⁻¹) ^ 2 := by
   unfold primeVerticalTraceNoGoFiber
   rw [lp.norm_single (by norm_num : (0 : ℝ≥0∞) < 2)]
-  simp [sq_abs]
+  simp
 
 /-- The material trace upgrades the complete mass to the critical amplitude. -/
 theorem primeCarryWeightedVerticalTrace_noGoFiber
@@ -96,7 +98,6 @@ def primeVerticalTraceNoGoBracketModel
       ((primeCarryAmplitudeRatio p : ℂ) * ((p : ℝ)⁻¹ : ℂ))
 
 /-- The dressed centered bracket has only levels `1` and `2` active. -/
-set_option maxHeartbeats 800000 in
 theorem primeCarryWeightedVerticalCenteredBracket_noGoFiber
     (p : Nat.Primes) :
     primeCarryWeightedVerticalCenteredBracket (p : ℕ)
@@ -197,12 +198,10 @@ def primeVerticalTraceNoGoGlobalState : PrimeCarryVerticalHilbert :=
     have hnat : Summable (fun n : ℕ => (((n : ℝ) ^ 2)⁻¹)) :=
       (Real.summable_nat_pow_inv (p := 2)).2 (by norm_num)
     have hprime : Summable (fun p : Nat.Primes =>
-        (((p : ℝ) ^ 2)⁻¹)) := by
-      simpa [primeToNat, Function.comp_def] using
+        ((p : ℝ)⁻¹) ^ 2) := by
+      simpa [primeToNat, Function.comp_def, inv_pow] using
         hnat.comp_injective hinjective
-    refine hprime.congr ?_
-    intro p
-    rw [primeVerticalTraceNoGoFiber_norm_sq, inv_pow]⟩
+    simpa only [primeVerticalTraceNoGoFiber_norm_sq] using hprime⟩
 
 @[simp] theorem primeVerticalTraceNoGoGlobalState_apply
     (p : Nat.Primes) :
