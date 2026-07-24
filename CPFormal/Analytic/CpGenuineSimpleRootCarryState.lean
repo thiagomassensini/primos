@@ -72,9 +72,7 @@ theorem deriv_riemannZeta_conj (s : ℂ) :
   have hder := congrArg deriv hfun
   rw [deriv_conj_conj] at hder
   have hpoint := congrFun hder ((starRingEnd ℂ) s)
-  change (starRingEnd ℂ) (deriv riemannZeta s) =
-    deriv riemannZeta ((starRingEnd ℂ) s) at hpoint
-  exact hpoint.symm
+  simpa only [Function.comp_apply, star_star] using hpoint.symm
 
 /-- On the open strip the completed zeta function is the product of the
 Deligne real Gamma factor and Riemann zeta. -/
