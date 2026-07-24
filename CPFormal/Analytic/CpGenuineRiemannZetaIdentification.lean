@@ -53,15 +53,16 @@ theorem hasDerivAt_cpChartFactor_one
     HasDerivAt (cpChartFactor p) (Real.log (p : ℝ) : ℂ) 1 := by
   have hpC : (p : ℂ) ≠ 0 := by
     exact_mod_cast hp.ne_zero
+  have hinner0 :=
+    (hasDerivAt_const (x := (1 : ℂ)) (c := (1 : ℂ))).sub
+      (hasDerivAt_id (1 : ℂ))
   have hinner :
       HasDerivAt (fun z : ℂ => 1 - z) (-1) 1 := by
-    simpa using
-      (hasDerivAt_const (x := (1 : ℂ)) (c := (1 : ℂ))).sub
-        (hasDerivAt_id (1 : ℂ))
+    simpa only [Pi.sub_apply, id_eq] using hinner0
   have hpow := hinner.const_cpow (c := (p : ℂ)) (Or.inl hpC)
   have hfactor :=
     (hasDerivAt_const (x := (1 : ℂ)) (c := (1 : ℂ))).sub hpow
-  simpa [cpChartFactor,
+  simpa only [cpChartFactor, Pi.sub_apply, id_eq,
     Complex.ofReal_log (show 0 ≤ (p : ℝ) by positivity)] using hfactor
 
 /-- Canonical divided camera factor, analytically completed at `s = 1`. -/
