@@ -63,6 +63,12 @@ theorem sum_primeCarryResiduePulse_eq_one
   classical
   simp [primeCarryResiduePulse]
 
+/-- A constant multiple of the carry pulse integrates to that constant. -/
+theorem sum_const_mul_primeCarryResiduePulse_eq
+    (p : Nat.Primes) (c : ℝ) :
+    (∑ a : Fin p.1, c * primeCarryResiduePulse p a) = c := by
+  rw [← Finset.mul_sum, sum_primeCarryResiduePulse_eq_one, mul_one]
+
 /-- The centered defect has zero mean over one full camera cycle. -/
 theorem sum_primeCenteredCarryDefect_eq_zero
     (p : Nat.Primes) :
@@ -70,9 +76,8 @@ theorem sum_primeCenteredCarryDefect_eq_zero
   classical
   unfold primeCenteredCarryDefect
   rw [Finset.sum_sub_distrib]
-  simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin,
-    nsmul_eq_mul, Finset.mul_sum, sum_primeCarryResiduePulse_eq_one]
-  push_cast
+  have hone : (∑ _a : Fin p.1, (1 : ℝ)) = (p : ℝ) := by simp
+  rw [hone, sum_const_mul_primeCarryResiduePulse_eq p (p : ℝ)]
   ring
 
 /-- A binary residue pulse is idempotent under squaring. -/
@@ -95,22 +100,32 @@ theorem sum_sq_primeCenteredCarryDefect
           (p : ℝ) ^ 2 * primeCarryResiduePulse p a := by
     intro a
     unfold primeCenteredCarryDefect
-    rw [← primeCarryResiduePulse_sq p a]
-    ring
+    calc
+      (1 - (p : ℝ) * primeCarryResiduePulse p a) ^ 2 =
+          1 - 2 * (p : ℝ) * primeCarryResiduePulse p a +
+            (p : ℝ) ^ 2 * (primeCarryResiduePulse p a) ^ 2 := by ring
+      _ = 1 - 2 * (p : ℝ) * primeCarryResiduePulse p a +
+            (p : ℝ) ^ 2 * primeCarryResiduePulse p a := by
+              rw [primeCarryResiduePulse_sq]
   calc
     (∑ a : Fin p.1, (primeCenteredCarryDefect p a) ^ 2) =
         ∑ a : Fin p.1,
           (1 - 2 * (p : ℝ) * primeCarryResiduePulse p a +
             (p : ℝ) ^ 2 * primeCarryResiduePulse p a) := by
               apply Finset.sum_congr rfl
-              intro a ha
+              intro a _ha
               exact hpoint a
+    _ = (∑ _a : Fin p.1, (1 : ℝ)) -
+          (∑ a : Fin p.1,
+            (2 * (p : ℝ)) * primeCarryResiduePulse p a) +
+          (∑ a : Fin p.1,
+            ((p : ℝ) ^ 2) * primeCarryResiduePulse p a) := by
+              rw [Finset.sum_add_distrib, Finset.sum_sub_distrib]
     _ = (p : ℝ) - 2 * (p : ℝ) + (p : ℝ) ^ 2 := by
-      rw [Finset.sum_add_distrib, Finset.sum_sub_distrib]
-      simp only [Finset.sum_const, Finset.card_univ, Fintype.card_fin,
-        nsmul_eq_mul, Finset.mul_sum, sum_primeCarryResiduePulse_eq_one]
-      push_cast
-      ring
+      have hone : (∑ _a : Fin p.1, (1 : ℝ)) = (p : ℝ) := by simp
+      rw [hone,
+        sum_const_mul_primeCarryResiduePulse_eq p (2 * (p : ℝ)),
+        sum_const_mul_primeCarryResiduePulse_eq p ((p : ℝ) ^ 2)]
     _ = (p : ℝ) * ((p : ℝ) - 1) := by ring
 
 /-- The product of two independent centered camera cycles has zero total
@@ -129,7 +144,7 @@ theorem sum_prod_primeCenteredCarryDefect_eq_zero
         primeCenteredCarryDefect p a *
           (∑ b : Fin q.1, primeCenteredCarryDefect q b) := by
             apply Finset.sum_congr rfl
-            intro a ha
+            intro a _ha
             rw [Finset.mul_sum]
     _ = 0 := by rw [sum_primeCenteredCarryDefect_eq_zero]; simp
 
@@ -181,13 +196,13 @@ theorem primeCriticalCenteredCarryAxis_norm_sq
             primeCenteredCarryDefect p a) ^ 2 := by
               rw [hraw']
               apply Finset.sum_congr rfl
-              intro a ha
+              intro a _ha
               rw [sq_abs]
     _ = (primeCarryDefectAxisCoefficient p) ^ 2 *
           ∑ a : Fin p.1, (primeCenteredCarryDefect p a) ^ 2 := by
             rw [Finset.mul_sum]
             apply Finset.sum_congr rfl
-            intro a ha
+            intro a _ha
             ring
     _ = ((p : ℝ) - 1) / (p : ℝ) := by
       rw [primeCarryDefectAxisCoefficient_eq_inv,
@@ -238,7 +253,7 @@ theorem finitePrimeCarryDefectSynthesis_norm_sq_le
       ∑ p : S, ‖c p • primeCriticalCenteredCarryAxis p.1‖ ^ 2 by
         simpa [finitePrimeCarryDefectSynthesis] using hraw]
   apply Finset.sum_le_sum
-  intro p hp
+  intro p _hp
   rw [norm_smul, Real.norm_eq_abs]
   have haxis := primeCriticalCenteredCarryAxis_norm_le_one p.1
   have habs0 : 0 ≤ |c p| := abs_nonneg _
