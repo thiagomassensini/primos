@@ -91,6 +91,7 @@ import CPFormal.Analytic.CpGenuineGprePrimeAmplitudeUpgrade
 import CPFormal.Analytic.CpGenuineGprePrimeAmplitudeGraph
 import CPFormal.Analytic.CpGenuineGprePrimeVerticalTraceGate
 import CPFormal.Analytic.CpGenuineGprePrimeVerticalTraceAtlas
+import CPFormal.Analytic.CpGenuineGprePrimeVerticalTraceDualTest
 import CPFormal.Analytic.CpTateCarryLocalCarrier
 import CPFormal.Analytic.CpCriticalRadialBracketGuard
 import CPFormal.Analytic.CpConnectedC2Defect
