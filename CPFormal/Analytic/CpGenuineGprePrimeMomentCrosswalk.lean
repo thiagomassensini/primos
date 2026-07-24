@@ -56,7 +56,8 @@ theorem inner_nativeGpreRealTimeFirstLevelProfile_greenEnergyState
   unfold nativeGpreRealTimeFirstLevelProfile
     nativeGpreGreenEnergyFirstLevelState
   rw [lp.inner_single_left]
-  simp [lp.single_apply, Pi.single_apply]
+  simp [lp.single_apply]
+  ring
 
 /-- The reflected first-level gap is exactly the two-exponent Dirichlet gap
 appearing in the carry-dressed Green camera. -/
@@ -71,6 +72,7 @@ theorem inner_nativeGpreReflectedFirstLevelGapProfile_greenEnergyState
     inner_nativeGpreRealTimeFirstLevelProfile_greenEnergyState]
   have hexponent : -(1 - s.re) = s.re - 1 := by ring
   rw [hexponent]
+  ring
 
 /-- Exact universal-state crosswalk: every centered prime Green bulk is the
 moment of the same energy state against its reflected first-level `G_pre`
