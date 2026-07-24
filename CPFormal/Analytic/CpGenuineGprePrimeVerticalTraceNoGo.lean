@@ -226,8 +226,6 @@ def primeVerticalTraceNoGoGlobalState : PrimeCarryVerticalHilbert :=
   ⟨f, by
     change Memℓp f 2
     rw [memℓp_gen_iff (by norm_num : 0 < (2 : ℝ≥0∞).toReal)]
-    change Summable (fun p : Nat.Primes =>
-      ‖primeVerticalTraceNoGoFiber p‖ ^ 2)
     let primeToNat : Nat.Primes → ℕ := fun p => (p : ℕ)
     have hinjective : Function.Injective primeToNat := by
       intro p q hpq
@@ -238,8 +236,8 @@ def primeVerticalTraceNoGoGlobalState : PrimeCarryVerticalHilbert :=
         ((p : ℝ)⁻¹) ^ 2) := by
       simpa [primeToNat, Function.comp_def, inv_pow] using
         hnat.comp_injective hinjective
-    exact hprime.congr fun p =>
-      (primeVerticalTraceNoGoFiber_norm_sq p).symm⟩
+    exact hprime.congr fun p => by
+      simpa [f] using (primeVerticalTraceNoGoFiber_norm_sq p).symm⟩
 
 @[simp] theorem primeVerticalTraceNoGoGlobalState_apply
     (p : Nat.Primes) :
