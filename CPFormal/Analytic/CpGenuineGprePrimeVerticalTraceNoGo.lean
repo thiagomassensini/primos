@@ -26,7 +26,7 @@ noncomputable section
 
 /-- One complete first-level mass in the vertical fiber of a prime camera. -/
 def primeVerticalTraceNoGoFiber (p : Nat.Primes) : CarryVerticalL2 :=
-  lp.single 2 1 (((p : ℝ)⁻¹ : ℝ) : ℂ)
+  lp.single 2 1 ((p : ℝ)⁻¹ : ℂ)
 
 @[simp] theorem primeVerticalTraceNoGoFiber_zero (p : Nat.Primes) :
     primeVerticalTraceNoGoFiber p 0 = 0 := by
@@ -41,7 +41,7 @@ theorem primeVerticalTraceNoGoFiber_norm_sq (p : Nat.Primes) :
     ‖primeVerticalTraceNoGoFiber p‖ ^ 2 = ((p : ℝ)⁻¹) ^ 2 := by
   unfold primeVerticalTraceNoGoFiber
   rw [lp.norm_single (by norm_num : (0 : ℝ≥0∞) < 2)]
-  simp [Real.norm_eq_abs, abs_of_pos (by exact_mod_cast p.prop.pos)]
+  simp [sq_abs]
 
 /-- The material trace upgrades the complete mass to the critical amplitude. -/
 theorem primeCarryWeightedVerticalTrace_noGoFiber
@@ -96,6 +96,7 @@ def primeVerticalTraceNoGoBracketModel
       ((primeCarryAmplitudeRatio p : ℂ) * ((p : ℝ)⁻¹ : ℂ))
 
 /-- The dressed centered bracket has only levels `1` and `2` active. -/
+set_option maxHeartbeats 800000 in
 theorem primeCarryWeightedVerticalCenteredBracket_noGoFiber
     (p : Nat.Primes) :
     primeCarryWeightedVerticalCenteredBracket (p : ℕ)
@@ -144,8 +145,7 @@ theorem norm_primeVerticalTraceNoGoBracketModel_le
         primeCarryAmplitudeRatio p * (p : ℝ)⁻¹ := by
       rw [lp.norm_single (by norm_num : (0 : ℝ≥0∞) < 2),
         lp.norm_single (by norm_num : (0 : ℝ≥0∞) < 2), norm_mul]
-      simp [Real.norm_eq_abs, abs_of_nonneg hp0,
-        abs_of_nonneg hq0]
+      simp [abs_of_nonneg hp0, abs_of_nonneg hq0]
     _ ≤ 2 * (p : ℝ)⁻¹ + 1 * (p : ℝ)⁻¹ := by
       gcongr
     _ = 3 * (p : ℝ)⁻¹ := by ring
@@ -188,16 +188,25 @@ def primeVerticalTraceNoGoGlobalState : PrimeCarryVerticalHilbert :=
   ⟨f, by
     change Memℓp f 2
     rw [memℓp_gen_iff (by norm_num : 0 < (2 : ℝ≥0∞).toReal)]
+    change Summable (fun p : Nat.Primes =>
+      ‖primeVerticalTraceNoGoFiber p‖ ^ 2)
     let primeToNat : Nat.Primes → ℕ := fun p => (p : ℕ)
     have hinjective : Function.Injective primeToNat := by
       intro p q hpq
       exact Nat.Primes.coe_nat_injective hpq
     have hnat : Summable (fun n : ℕ => (((n : ℝ) ^ 2)⁻¹)) :=
       (Real.summable_nat_pow_inv (p := 2)).2 (by norm_num)
-    have hprime := hnat.comp_injective hinjective
-    exact hprime.congr fun p => by
-      rw [primeVerticalTraceNoGoFiber_norm_sq]
-      simp [f, primeToNat, inv_pow]⟩
+    have hprime : Summable (fun p : Nat.Primes =>
+        (((p : ℝ) ^ 2)⁻¹)) := by
+      simpa [primeToNat, Function.comp_def] using
+        hnat.comp_injective hinjective
+    refine hprime.congr ?_
+    intro p
+    rw [primeVerticalTraceNoGoFiber_norm_sq, inv_pow]⟩
+
+@[simp] theorem primeVerticalTraceNoGoGlobalState_apply
+    (p : Nat.Primes) :
+    primeVerticalTraceNoGoGlobalState p = primeVerticalTraceNoGoFiber p := rfl
 
 /-- Exact formulation of the vertical no-go: global state and global bracket
 regularity coexist with failure of global trace regularity. -/
@@ -212,7 +221,8 @@ theorem exists_global_primeVertical_state_and_bracket_without_trace :
   · refine ⟨primeVerticalTraceNoGoGlobalState, ?_, ?_⟩
     · intro p
       rfl
-    · simpa using summable_primeVerticalTraceNoGoBracket_sq
+    · simpa only [primeVerticalTraceNoGoGlobalState_apply] using
+        summable_primeVerticalTraceNoGoBracket_sq
   · exact not_summable_primeVerticalTraceNoGoFluxProfile_sq
 
 end
