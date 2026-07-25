@@ -131,7 +131,7 @@ theorem nativeCarryCriticalAmplitudePreserved_iff_im_eq_zero (z : ℂ) :
         (by norm_num : (2 : ℝ) ≠ 1)).mp hpow
     linarith
   · intro him n
-    simpa [him] using norm_carryComplexTimeState z n
+    simp [him]
 
 /-- The scalar Genuine readout written in the intrinsic complex-time
 coordinate of the carry orbit. -/
