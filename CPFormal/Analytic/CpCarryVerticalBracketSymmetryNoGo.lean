@@ -40,6 +40,7 @@ theorem inner_bracket_basisOne_basisTwo
     inner ℂ
         (carryWeightedVerticalCenteredBracket q carryVerticalBasisOne)
         carryVerticalBasisTwo = (q : ℂ) := by
+  unfold carryVerticalBasisTwo
   rw [lp.inner_single_right]
   change inner ℂ
       (carryWeightedVerticalCenteredBracket q carryVerticalBasisOne 2) 1 = _
@@ -53,6 +54,7 @@ theorem inner_basisOne_bracket_basisTwo
     inner ℂ carryVerticalBasisOne
         (carryWeightedVerticalCenteredBracket q carryVerticalBasisTwo) =
       ((q : ℂ)⁻¹) := by
+  unfold carryVerticalBasisOne
   rw [lp.inner_single_left]
   change inner ℂ 1
       (carryWeightedVerticalCenteredBracket q carryVerticalBasisTwo 1) = _
@@ -67,6 +69,13 @@ theorem carryWeightedVerticalCenteredBracket_not_isSymmetric
     ¬ (carryWeightedVerticalCenteredBracket q).toLinearMap.IsSymmetric := by
   intro hsym
   have hpair := hsym carryVerticalBasisOne carryVerticalBasisTwo
+  change
+    inner ℂ
+        (carryWeightedVerticalCenteredBracket q carryVerticalBasisOne)
+        carryVerticalBasisTwo =
+      inner ℂ carryVerticalBasisOne
+        (carryWeightedVerticalCenteredBracket q carryVerticalBasisTwo)
+    at hpair
   rw [inner_bracket_basisOne_basisTwo,
     inner_basisOne_bracket_basisTwo] at hpair
   have hqeq : q = q⁻¹ := by
