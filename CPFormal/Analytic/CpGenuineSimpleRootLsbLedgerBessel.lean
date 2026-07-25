@@ -38,20 +38,44 @@ theorem primeCriticalCenteredCarryAxis_apply_eq_normalizedLsbIncrement
     primeCenteredCarryDefect_eq_scale_mul_lsbIncrement]
   field_simp [hp0]
 
-/-- Finite synthesis of the normalized LSB velocities on a prime atlas. -/
+/-- Finite synthesis of the normalized LSB velocities, embedded in the fixed
+global prime-fiber Hilbert space. -/
 def finiteNormalizedLsbVelocitySynthesis
     (S : Finset Nat.Primes) (coeff : Nat.Primes → ℝ) :
-    PrimeCarryDefectAtlasHilbert S :=
-  finitePrimeCarryDefectSynthesis S (fun p : S => coeff p.1)
+    PrimeCarryDefectGlobalHilbert :=
+  ∑ p ∈ S,
+    lp.single 2 p (coeff p • primeCriticalCenteredCarryAxis p)
 
 /-- The normalized LSB synthesis is an unweighted Bessel family. -/
 theorem finiteNormalizedLsbVelocitySynthesis_norm_sq_le
     (S : Finset Nat.Primes) (coeff : Nat.Primes → ℝ) :
     ‖finiteNormalizedLsbVelocitySynthesis S coeff‖ ^ 2 ≤
       ∑ p ∈ S, (coeff p) ^ 2 := by
-  have h := finitePrimeCarryDefectSynthesis_norm_sq_le
-    S (fun p : S => coeff p.1)
-  simpa [finiteNormalizedLsbVelocitySynthesis] using h
+  have hraw :=
+    lp.norm_sum_single
+      (E := fun p : Nat.Primes => PrimeCarryResidueHilbert p)
+      (p := (2 : ℝ≥0∞)) (by norm_num)
+      (fun p : Nat.Primes => coeff p • primeCriticalCenteredCarryAxis p) S
+  rw [show ‖finiteNormalizedLsbVelocitySynthesis S coeff‖ ^ 2 =
+      ∑ p ∈ S, ‖coeff p • primeCriticalCenteredCarryAxis p‖ ^ 2 by
+        simpa [finiteNormalizedLsbVelocitySynthesis] using hraw]
+  apply Finset.sum_le_sum
+  intro p hp
+  rw [norm_smul, Real.norm_eq_abs]
+  have haxis := primeCriticalCenteredCarryAxis_norm_le_one p
+  have habs0 : 0 ≤ |coeff p| := abs_nonneg _
+  have hnorm0 : 0 ≤ ‖primeCriticalCenteredCarryAxis p‖ := norm_nonneg _
+  have hmul :
+      |coeff p| * ‖primeCriticalCenteredCarryAxis p‖ ≤ |coeff p| := by
+    simpa using mul_le_mul_of_nonneg_left haxis habs0
+  have hleft0 :
+      0 ≤ |coeff p| * ‖primeCriticalCenteredCarryAxis p‖ :=
+    mul_nonneg habs0 hnorm0
+  have hsq :
+      (|coeff p| * ‖primeCriticalCenteredCarryAxis p‖) ^ 2 ≤
+        |coeff p| ^ 2 :=
+    (sq_le_sq₀ hleft0 habs0).2 hmul
+  simpa [sq_abs] using hsq
 
 /-- Scalar test reconstructed from the simple-root tangents of the centered
 carry transforms.  The cutoff `3M` matches the three Green edges encoded by
