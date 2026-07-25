@@ -105,7 +105,7 @@ theorem nativeGpreFiniteHilbertProvenanceBoundaryPencil_greenSymmetry
   intro c hc
   rw [nativeGpreFiniteBoundaryNumberFlux_eq_level_mul_value,
     nativeGpreFiniteBoundaryNumberFlux_eq_level_mul_value]
-  simp [RCLike.inner_apply, mul_assoc, mul_left_comm, mul_comm]
+  simp [RCLike.inner_apply, mul_left_comm, mul_comm]
 
 /-- Hence every finite provenance relation is symmetric. -/
 theorem nativeGpreFiniteHilbertProvenanceBoundaryRelation_isSymmetric
