@@ -72,7 +72,9 @@ theorem primeCriticalCenteredCarryAxis_apply
     primeCriticalCenteredCarryAxis p a =
       primeCarryDefectAxisCoefficient p * primeCenteredCarryDefect p a := by
   classical
-  simp [primeCriticalCenteredCarryAxis]
+  simp only [primeCriticalCenteredCarryAxis, lp.coeFn_sum,
+    Finset.sum_apply, lp.coeFn_single, Finset.sum_pi_single]
+  simp
 
 /-- Coordinate formula for the dual centered-carry axis. -/
 theorem primeCriticalCenteredCarryDualAxis_apply
@@ -128,11 +130,10 @@ theorem primeCenteredCarryOffsetCoefficient_eq_scaled_lsbIncrement
   · subst a
     simp [primeCenteredCarryOffsetCoefficient,
       primeAdimensionalLsbOffsetIncrement]
+  · simp only [primeCenteredCarryOffsetCoefficient,
+      primeAdimensionalLsbOffsetIncrement, ha, if_false]
     push_cast
-    ring
-  · simp [primeCenteredCarryOffsetCoefficient,
-      primeAdimensionalLsbOffsetIncrement, ha]
-    field_simp [hp1]
+    exact (div_self hp1).symm
 
 /-- Centered-carry transform of one complete balanced camera block. -/
 def primeCenteredCarryBlock
@@ -234,11 +235,14 @@ theorem finitePrimeCenteredCarryDirichletTransform_tendsto
     Tendsto
       (fun M : ℕ => finitePrimeCenteredCarryDirichletTransform p M s)
       atTop (nhds (primeCenteredCarryDirichletTransform p s)) := by
-  simpa [primeCenteredCarryDirichletTransform] using
-    (finiteBracketedDirichletChart_tendsto p hp hs).congr'
-      (Eventually.of_forall fun M =>
-        finitePrimeCenteredCarryDirichletTransform_eq_finiteBracketedChart
-          p M hp hpodd s)
+  have hlimit := finiteBracketedDirichletChart_tendsto p hp hs
+  have heq :
+      (fun M : ℕ => finiteBracketedDirichletChart p M s) =ᶠ[atTop]
+        (fun M : ℕ => finitePrimeCenteredCarryDirichletTransform p M s) :=
+    Eventually.of_forall fun M =>
+      (finitePrimeCenteredCarryDirichletTransform_eq_finiteBracketedChart
+        p M hp hpodd s).symm
+  simpa [primeCenteredCarryDirichletTransform] using hlimit.congr' heq
 
 /-- On the open critical strip, the analytic centered-carry transform is the
 camera product `F_p * G`. -/
