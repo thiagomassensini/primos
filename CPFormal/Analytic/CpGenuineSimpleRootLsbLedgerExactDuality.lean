@@ -86,7 +86,7 @@ theorem inner_finiteNormalizedLsbVelocitySynthesis_rootTangentAtlasState
     genuineRootTangentPrimeCarryDefectAtlasState_apply, if_pos hp]
   unfold genuineRootTangentPrimeCarryDefectState
   rw [inner_smul_right, inner_primeCriticalCenteredCarryAxis_dualAxis]
-  ring
+  simp [mul_comm]
 
 /-- Coefficient which represents the root atlas state in the primal normalized
 LSB axes. -/
@@ -173,7 +173,7 @@ theorem simpleRootLsbLedgerFunctionalBoundAt_iff_rootTangentAtlas_norm_le
               ‖genuineRootTangentPrimeCarryDefectAtlasState M s S‖ ≤
             L * ‖genuineRootTangentPrimeCarryDefectAtlasState M s S‖ := by
         simpa [pow_two] using htest
-      exact (mul_le_mul_right hpos).mp hmul
+      exact le_of_mul_le_mul_right hmul hpos
   · rintro ⟨hL, hatlas⟩
     refine ⟨hL, ?_⟩
     intro S coeff
