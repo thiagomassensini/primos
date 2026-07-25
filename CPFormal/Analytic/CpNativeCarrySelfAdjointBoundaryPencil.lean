@@ -107,7 +107,7 @@ theorem characteristicValue_im_eq_zero_of_isSelfAdjoint
   have hconj : (starRingEnd ℂ) z = z :=
     mul_right_cancel₀ hnormNe hsym
   have him := congrArg Complex.im hconj
-  simp only [map_neg, Complex.conj_im] at him
+  simp only [Complex.conj_im] at him
   linarith
 
 end LinearPMap
