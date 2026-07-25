@@ -103,6 +103,7 @@ def realScalarBoundaryOperator (a : ℝ) : B →ₗ[ℂ] B :=
 theorem realScalarBoundaryOperator_isSymmetric (a : ℝ) :
     (realScalarBoundaryOperator (B := B) a).IsSymmetric := by
   intro x y
+  rw [inner_smul_left, inner_smul_right]
   simp [realScalarBoundaryOperator]
 
 end LinearBoundaryPencil
@@ -110,7 +111,7 @@ end LinearBoundaryPencil
 /-! ## Specialization to the concrete full-Hilbert TFVD--G_pre pencil -/
 
 /-- The concrete native carry domain selected by a fixed boundary operator. -/
-def nativeGpreHilbertBoundaryConditionDomain
+abbrev nativeGpreHilbertBoundaryConditionDomain
     (q : ℝ) (S : Finset NativeGpreBoundaryContext)
     (T : NativeGpreHilbertGluedBoundary S →ₗ[ℂ]
       NativeGpreHilbertGluedBoundary S) :
@@ -118,7 +119,7 @@ def nativeGpreHilbertBoundaryConditionDomain
   (nativeGpreHilbertGluedBoundaryPencil q S).boundaryConditionDomain T
 
 /-- The concrete pencil restricted to the preceding fixed boundary condition. -/
-def nativeGpreHilbertBoundaryConditionPencil
+abbrev nativeGpreHilbertBoundaryConditionPencil
     (q : ℝ) (S : Finset NativeGpreBoundaryContext)
     (T : NativeGpreHilbertGluedBoundary S →ₗ[ℂ]
       NativeGpreHilbertGluedBoundary S) :
@@ -135,15 +136,27 @@ theorem nativeGpreHilbertBoundaryConditionDomain_isotropic
     (hT : T.IsSymmetric) :
     CarryVerticalBoundaryIsotropic q
       (nativeGpreHilbertBoundaryConditionDomain q S T) := by
-  apply
-    (nativeGpreHilbertGluedBoundaryPencilOn_greenSymmetry_iff q S
-      (nativeGpreHilbertBoundaryConditionDomain q S T)).1
-  simpa [nativeGpreHilbertBoundaryConditionPencil,
-    nativeGpreHilbertBoundaryConditionDomain,
-    nativeGpreHilbertGluedBoundaryPencilOn,
-    LinearBoundaryPencil.onBoundaryCondition] using
-      (LinearBoundaryPencil.onBoundaryCondition_satisfiesGreenSymmetry
-        (nativeGpreHilbertGluedBoundaryPencil q S) T hT)
+  intro x y
+  have hgreen :=
+    LinearBoundaryPencil.onBoundaryCondition_satisfiesGreenSymmetry
+      (nativeGpreHilbertGluedBoundaryPencil q S) T hT x y
+  have hdefect :=
+    nativeGpreHilbertGluedGreenDefect_eq_verticalWronskian
+      q S (x : CarryVerticalL2) (y : CarryVerticalL2)
+  change
+    inner ℂ
+        ((nativeGpreHilbertGluedBoundaryPencil q S).fluxTrace
+          (y : CarryVerticalL2))
+        ((nativeGpreHilbertGluedBoundaryPencil q S).valueTrace
+          (x : CarryVerticalL2)) =
+      inner ℂ
+        ((nativeGpreHilbertGluedBoundaryPencil q S).valueTrace
+          (y : CarryVerticalL2))
+        ((nativeGpreHilbertGluedBoundaryPencil q S).fluxTrace
+          (x : CarryVerticalL2))
+    at hgreen
+  rw [hgreen, sub_self] at hdefect
+  exact hdefect.symm
 
 /-- The corresponding concrete boundary relation is symmetric. -/
 theorem nativeGpreHilbertBoundaryConditionRelation_isSymmetric
@@ -152,10 +165,9 @@ theorem nativeGpreHilbertBoundaryConditionRelation_isSymmetric
       NativeGpreHilbertGluedBoundary S)
     (hT : T.IsSymmetric) :
     NativeBoundaryRelationIsSymmetric
-      (nativeGpreHilbertBoundaryConditionPencil q S T).relation := by
-  simpa [nativeGpreHilbertBoundaryConditionPencil] using
-    LinearBoundaryPencil.onBoundaryCondition_relation_isSymmetric
-      (nativeGpreHilbertGluedBoundaryPencil q S) T hT
+      (nativeGpreHilbertBoundaryConditionPencil q S T).relation :=
+  LinearBoundaryPencil.onBoundaryCondition_relation_isSymmetric
+    (nativeGpreHilbertGluedBoundaryPencil q S) T hT
 
 /-- Real Robin boundary conditions give a concrete one-parameter family of
 Wronskian-isotropic native carry domains. -/
