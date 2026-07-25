@@ -32,7 +32,7 @@ namespace CPFormal.Analytic.Cp
 
 noncomputable section
 
-namespace LinearPMap
+namespace NativePMap
 
 variable {H : Type*}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
@@ -45,20 +45,20 @@ def spectralPencilOperator (A : H →ₗ.[ℂ] H) (z : ℂ) :
 
 @[simp] theorem spectralPencilOperator_apply
     (A : H →ₗ.[ℂ] H) (z : ℂ) (x : A.domain) :
-    A.spectralPencilOperator z x = A x - z • (x : H) := by
+    spectralPencilOperator A z x = A x - z • (x : H) := by
   rfl
 
 /-- `z` is a characteristic value when `A - z I` has one nontrivial kernel
 vector.  Unlike the older scalar Genuine pencil, the parameter is `z`, not the
 readout value. -/
 def IsCharacteristicValue (A : H →ₗ.[ℂ] H) (z : ℂ) : Prop :=
-  ∃ x : A.domain, (x : H) ≠ 0 ∧ A.spectralPencilOperator z x = 0
+  ∃ x : A.domain, (x : H) ≠ 0 ∧ spectralPencilOperator A z x = 0
 
 /-- Characteristic values are equivalently ordinary eigenpairs in the fixed
 operator domain. -/
 theorem isCharacteristicValue_iff_eigenpair
     (A : H →ₗ.[ℂ] H) (z : ℂ) :
-    A.IsCharacteristicValue z ↔
+    IsCharacteristicValue A z ↔
       ∃ x : A.domain, (x : H) ≠ 0 ∧ A x = z • (x : H) := by
   constructor
   · rintro ⟨x, hx, hzero⟩
@@ -78,7 +78,7 @@ def spectralRelation (A : H →ₗ.[ℂ] H) : Submodule ℂ (H × H) :=
 as a linear relation. -/
 theorem spectralRelation_isSelfAdjoint
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) :
-    (A.spectralRelation).adjoint = A.spectralRelation := by
+    (spectralRelation A).adjoint = spectralRelation A := by
   unfold spectralRelation
   calc
     A.graph.adjoint = A.adjoint.graph :=
@@ -91,9 +91,9 @@ real.  The proof uses only the defining Green/symmetry identity on one
 characteristic vector. -/
 theorem characteristicValue_im_eq_zero_of_isSelfAdjoint
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
-    {z : ℂ} (hz : A.IsCharacteristicValue z) :
+    {z : ℂ} (hz : IsCharacteristicValue A z) :
     z.im = 0 := by
-  rcases (A.isCharacteristicValue_iff_eigenpair z).1 hz with ⟨x, hx, hAx⟩
+  rcases (isCharacteristicValue_iff_eigenpair A z).1 hz with ⟨x, hx, hAx⟩
   have hformal : A.IsFormalAdjoint A := by
     have h := LinearPMap.adjoint_isFormalAdjoint hA.dense_domain
     rw [LinearPMap.isSelfAdjoint_def.mp hA] at h
@@ -110,7 +110,7 @@ theorem characteristicValue_im_eq_zero_of_isSelfAdjoint
   simp only [Complex.conj_im] at him
   linarith
 
-end LinearPMap
+end NativePMap
 
 /-- A genuine self-adjoint realization of the native carry boundary pencil.
 
@@ -126,7 +126,7 @@ structure NativeCarrySelfAdjointBoundaryPencilRealization
   resonance_iff_characteristic :
     ∀ {z : ℂ}, carryComplexTimeParameter z ∈ genuineCriticalStrip →
       (IsNativeCarryComplexTimeResonance z ↔
-        operator.IsCharacteristicValue z)
+        NativePMap.IsCharacteristicValue operator z)
 
 namespace NativeCarrySelfAdjointBoundaryPencilRealization
 
@@ -136,13 +136,13 @@ variable {H : Type*}
 /-- The boundary relation of a native realization. -/
 def relation (R : NativeCarrySelfAdjointBoundaryPencilRealization H) :
     Submodule ℂ (H × H) :=
-  R.operator.spectralRelation
+  NativePMap.spectralRelation R.operator
 
 /-- The realized boundary relation is self-adjoint. -/
 theorem relation_isSelfAdjoint
     (R : NativeCarrySelfAdjointBoundaryPencilRealization H) :
     R.relation.adjoint = R.relation :=
-  LinearPMap.spectralRelation_isSelfAdjoint R.operator_isSelfAdjoint
+  NativePMap.spectralRelation_isSelfAdjoint R.operator_isSelfAdjoint
 
 /-- A self-adjoint boundary realization forces every native resonance to have
 real carry time. -/
@@ -150,7 +150,7 @@ theorem complexTimeZeroRigidity
     (R : NativeCarrySelfAdjointBoundaryPencilRealization H) :
     NativeCarryComplexTimeZeroRigidity := by
   intro z hz hres
-  apply LinearPMap.characteristicValue_im_eq_zero_of_isSelfAdjoint
+  apply NativePMap.characteristicValue_im_eq_zero_of_isSelfAdjoint
     R.operator_isSelfAdjoint
   exact (R.resonance_iff_characteristic hz).1 hres
 
