@@ -135,7 +135,7 @@ theorem nativeGpreFiniteGluedHilbertGreenDefect_eq_verticalWronskian
         (nativeGpreFiniteHilbertBoundaryValueLift S y)
         (nativeGpreFiniteHilbertBoundaryNumberFluxLift S x)) = _
   rw [hprovenance]
-  linarith
+  linear_combination hvertical
 
 /-- A subspace of native edge states is boundary-isotropic when the canonical
 vertical realizations have pairwise zero Wronskian. -/
