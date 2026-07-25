@@ -42,7 +42,7 @@ def carryComplexTimeParameter (z : ℂ) : ℂ :=
 
 @[simp] theorem carryComplexTimeParameter_re (z : ℂ) :
     (carryComplexTimeParameter z).re = (1 : ℝ) / 2 - z.im := by
-  simpa [carryComplexTimeParameter, sub_eq_add_neg]
+  simp [carryComplexTimeParameter, sub_eq_add_neg]
 
 @[simp] theorem carryComplexTimeParameter_im (z : ℂ) :
     (carryComplexTimeParameter z).im = z.re := by
@@ -87,6 +87,52 @@ carry time. -/
     criticalDisplacement (carryComplexTimeParameter z).re = -z.im := by
   simp [criticalDisplacement]
 
+/-- The native carry state evaluated at complex time. -/
+def carryComplexTimeState (z : ℂ) (n : ℕ) : ℂ :=
+  positiveDirichletValue (carryComplexTimeParameter z) n
+
+/-- Real complex time recovers literally the already formalized native
+real-spectral state. -/
+@[simp] theorem carryComplexTimeState_ofReal (t : ℝ) (n : ℕ) :
+    carryComplexTimeState (t : ℂ) n = realSpectralState t n := by
+  simp [carryComplexTimeState, realSpectralState]
+
+/-- Exact radial effect of imaginary carry time.  Real time leaves the critical
+amplitude `(n+1)^(-1/2)` unchanged; `z.im` is precisely the radial dressing. -/
+@[simp] theorem norm_carryComplexTimeState (z : ℂ) (n : ℕ) :
+    ‖carryComplexTimeState z n‖ =
+      (((n + 1 : ℕ) : ℝ)) ^ (-(1 / 2 : ℝ) + z.im) := by
+  unfold carryComplexTimeState
+  rw [norm_positiveDirichletValue, carryComplexTimeParameter_re]
+  congr 1
+  ring
+
+/-- Complex time preserves the critical carry amplitude in every coordinate. -/
+def NativeCarryCriticalAmplitudePreserved (z : ℂ) : Prop :=
+  ∀ n : ℕ,
+    ‖carryComplexTimeState z n‖ =
+      (((n + 1 : ℕ) : ℝ)) ^ (-(1 / 2 : ℝ))
+
+/-- Critical amplitude preservation is exactly reality of the carry time.
+Thus a nonreal time is not a second physical spectral parameter: it changes the
+mass-to-amplitude normalization fixed by the carry. -/
+theorem nativeCarryCriticalAmplitudePreserved_iff_im_eq_zero (z : ℂ) :
+    NativeCarryCriticalAmplitudePreserved z ↔ z.im = 0 := by
+  constructor
+  · intro hpreserved
+    have hpow :
+        (2 : ℝ) ^ (-(1 / 2 : ℝ) + z.im) =
+          (2 : ℝ) ^ (-(1 / 2 : ℝ)) := by
+      simpa using hpreserved 1
+    have hexponent :
+        -(1 / 2 : ℝ) + z.im = -(1 / 2 : ℝ) :=
+      (Real.rpow_right_inj
+        (by norm_num : 0 < (2 : ℝ))
+        (by norm_num : (2 : ℝ) ≠ 1)).mp hpow
+    linarith
+  · intro him n
+    simpa [him] using norm_carryComplexTimeState z n
+
 /-- The scalar Genuine readout written in the intrinsic complex-time
 coordinate of the carry orbit. -/
 def carryComplexTimeGenuine (z : ℂ) : ℂ :=
@@ -119,6 +165,14 @@ resonate only when it is real. -/
 def NativeCarryComplexTimeZeroRigidity : Prop :=
   ∀ {z : ℂ}, carryComplexTimeParameter z ∈ genuineCriticalStrip →
     IsNativeCarryComplexTimeResonance z → z.im = 0
+
+/-- The target stated directly in the user's mass-to-amplitude language: every
+scalar resonance of the continuation must preserve the critical carry
+amplitude fixed before the continuation. -/
+def NativeCarryComplexTimeZeroPreservesCriticalAmplitude : Prop :=
+  ∀ {z : ℂ}, carryComplexTimeParameter z ∈ genuineCriticalStrip →
+    IsNativeCarryComplexTimeResonance z →
+      NativeCarryCriticalAmplitudePreserved z
 
 /-- Exhaustion of the continued zero set is exactly the strong scalar
 nonvanishing statement, expressed without any external function. -/
@@ -173,6 +227,27 @@ theorem nativeCarryComplexTimeZeroRigidity_iff_strongNonvanishing :
     change carryComplexTimeGenuine z = 0 at hres
     exact (hstrong hz hoff) hres
 
+/-- Saying that scalar zeros preserve the carry amplitude is exactly saying
+that complex-time zeros have real time. -/
+theorem nativeCarryComplexTimeZeroPreservesCriticalAmplitude_iff_zeroRigidity :
+    NativeCarryComplexTimeZeroPreservesCriticalAmplitude ↔
+      NativeCarryComplexTimeZeroRigidity := by
+  constructor
+  · intro hpreserves z hz hres
+    exact (nativeCarryCriticalAmplitudePreserved_iff_im_eq_zero z).1
+      (hpreserves hz hres)
+  · intro hrigid z hz hres
+    exact (nativeCarryCriticalAmplitudePreserved_iff_im_eq_zero z).2
+      (hrigid hz hres)
+
+/-- Therefore the amplitude-preservation formulation is also exactly the
+strong scalar target. -/
+theorem nativeCarryComplexTimeZeroPreservesCriticalAmplitude_iff_strongNonvanishing :
+    NativeCarryComplexTimeZeroPreservesCriticalAmplitude ↔
+      GenuineStrongNonvanishingInStrip := by
+  rw [nativeCarryComplexTimeZeroPreservesCriticalAmplitude_iff_zeroRigidity,
+    nativeCarryComplexTimeZeroRigidity_iff_strongNonvanishing]
+
 /-- The two native formulations are literally the same theorem. -/
 theorem nativeCarrySpectrumExhaustsGenuine_iff_complexTimeZeroRigidity :
     NativeCarrySpectrumExhaustsGenuine ↔
@@ -212,6 +287,22 @@ theorem genuineGreenCompletedCarryComplexTime_zero_iff
       exact hres
     · rw [criticalDisplacement_carryComplexTimeParameter_re, him]
       simp
+
+/-- The same completed-operator theorem stated directly through preservation of
+the critical carry amplitude. -/
+theorem genuineGreenCompletedCarryComplexTime_zero_iff_amplitudePreserved
+    (p q : ℕ) (hp : Nat.Prime p) (hq : Nat.Prime q)
+    {z : ℂ} (hz : carryComplexTimeParameter z ∈ genuineCriticalStrip) :
+    genuineGreenCompletedLimitOperator p q (carryComplexTimeParameter z) = 0 ↔
+      NativeCarryCriticalAmplitudePreserved z ∧
+        IsRealSpectralResonance z.re := by
+  rw [genuineGreenCompletedCarryComplexTime_zero_iff p q hp hq hz]
+  constructor
+  · rintro ⟨him, hres⟩
+    exact ⟨(nativeCarryCriticalAmplitudePreserved_iff_im_eq_zero z).2 him, hres⟩
+  · rintro ⟨hpreserved, hres⟩
+    exact ⟨(nativeCarryCriticalAmplitudePreserved_iff_im_eq_zero z).1 hpreserved,
+      hres⟩
 
 /-- Direct root-level consequence already certified for the completed native
 operator: a nonreal complex time cannot be a zero. -/
