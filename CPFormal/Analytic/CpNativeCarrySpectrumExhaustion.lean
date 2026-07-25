@@ -42,7 +42,7 @@ def carryComplexTimeParameter (z : ℂ) : ℂ :=
 
 @[simp] theorem carryComplexTimeParameter_re (z : ℂ) :
     (carryComplexTimeParameter z).re = (1 : ℝ) / 2 - z.im := by
-  simp [carryComplexTimeParameter]
+  simpa [carryComplexTimeParameter, sub_eq_add_neg]
 
 @[simp] theorem carryComplexTimeParameter_im (z : ℂ) :
     (carryComplexTimeParameter z).im = z.re := by
@@ -72,14 +72,14 @@ def carryComplexTimeOfParameter (s : ℂ) : ℂ :=
     carryComplexTimeParameter (carryComplexTimeOfParameter s) = s := by
   apply Complex.ext <;>
     simp [carryComplexTimeParameter, carryComplexTimeOfParameter,
-      criticalDisplacement] <;> ring
+      criticalDisplacement]
 
 /-- The two coordinate changes are inverse in the other direction as well. -/
 @[simp] theorem carryComplexTimeOfParameter_ofTime (z : ℂ) :
     carryComplexTimeOfParameter (carryComplexTimeParameter z) = z := by
   apply Complex.ext <;>
     simp [carryComplexTimeParameter, carryComplexTimeOfParameter,
-      criticalDisplacement] <;> ring
+      criticalDisplacement]
 
 /-- Transverse displacement is exactly minus the imaginary part of complex
 carry time. -/
