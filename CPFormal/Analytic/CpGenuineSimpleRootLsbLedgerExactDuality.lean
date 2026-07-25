@@ -193,15 +193,15 @@ theorem simpleRootLsbLedgerFunctionalBoundAt_iff_rootTangentAtlas_norm_le
 /-- The positive-box LSB functional package is exactly a scalar Ledger package
 whose residual bounds the norm—not merely the squared norm—of every finite
 root-tangent atlas. -/
-theorem exists_positiveBoxLsbLedgerBesselCrosswalk_iff
+theorem nonempty_positiveBoxLsbLedgerBesselCrosswalk_iff
     (s : ℂ) :
-    (∃ hcross : SimpleRootPositiveBoxLsbLedgerBesselCrosswalk s, True) ↔
+    Nonempty (SimpleRootPositiveBoxLsbLedgerBesselCrosswalk s) ↔
       ∃ ledger : SimpleRootPositiveBoxScalarLedgerData,
         ∀ S : Finset Nat.Primes,
           ‖genuineRootTangentPrimeCarryDefectAtlasState 1 s S‖ ≤
             ledger.residualLedger := by
   constructor
-  · rintro ⟨hcross, _⟩
+  · rintro ⟨hcross⟩
     refine ⟨hcross.ledger, ?_⟩
     exact
       (simpleRootLsbLedgerFunctionalBoundAt_iff_rootTangentAtlas_norm_le
@@ -211,7 +211,7 @@ theorem exists_positiveBoxLsbLedgerBesselCrosswalk_iff
         SimpleRootLsbLedgerFunctionalBoundAt 1 s ledger.residualLedger :=
       (simpleRootLsbLedgerFunctionalBoundAt_iff_rootTangentAtlas_norm_le
         1 s ledger.residualLedger).2 ⟨ledger.residual_nonneg, hatlas⟩
-    exact ⟨⟨ledger, hfunctional⟩, trivial⟩
+    exact ⟨⟨ledger, hfunctional⟩⟩
 
 /-- The amplitude-level LSB Ledger crosswalk implies the earlier squared-energy
 crosswalk.  The implication uses the certified ceiling `13/250 < 1`; no unit
