@@ -1,4 +1,6 @@
-import Mathlib
+import Mathlib.Analysis.Calculus.MeanValue
+import Mathlib.Analysis.Convex.Basic
+import Mathlib.Tactic
 
 /-!
 # Ganho quadratico da segunda diferenca central

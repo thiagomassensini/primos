@@ -1,5 +1,5 @@
 import CPFormal.Finite.SymmetricPair
-import Mathlib
+import Mathlib.Tactic
 
 /-!
 # Bracket finito abstrato
