@@ -65,9 +65,11 @@ theorem nativeGpreHilbertBoundaryNumberFlux_eq_level_mul_value
     (x : CarryVerticalL2) (c : ↥S) :
     nativeGpreHilbertBoundaryNumberFluxLift S x c =
       (c.1.towerLevel.val : ℂ) * nativeGpreHilbertBoundaryValueLift S x c := by
-  rw [nativeGpreHilbertBoundaryNumberFluxLift_apply,
-    nativeGpreHilbertBoundaryValueLift_apply,
-    nativeGpreFiniteContinuousBoundaryRoleLift_apply,
+  change
+    nativeGpreFiniteContinuousBoundaryRoleLift .numberFlux S x c =
+      (c.1.towerLevel.val : ℂ) *
+        nativeGpreFiniteContinuousBoundaryRoleLift .value S x c
+  rw [nativeGpreFiniteContinuousBoundaryRoleLift_apply,
     nativeGpreFiniteContinuousBoundaryRoleLift_apply,
     nativeGpreBoundary_numberFluxCoefficient_eq_level_mul_value]
   push_cast
@@ -108,7 +110,7 @@ theorem nativeGpreHilbertProvenanceBoundaryPencil_greenSymmetry
         (nativeGpreHilbertBoundaryNumberFluxLift S x c)
   rw [nativeGpreHilbertBoundaryNumberFlux_eq_level_mul_value,
     nativeGpreHilbertBoundaryNumberFlux_eq_level_mul_value]
-  simp [RCLike.inner_apply, mul_assoc, mul_left_comm, mul_comm]
+  simp [RCLike.inner_apply, mul_left_comm, mul_comm]
 
 /-- The provenance relation remains symmetric after extension to all vertical
 Hilbert states. -/
