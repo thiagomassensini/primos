@@ -23,7 +23,7 @@ namespace LinearBoundaryPencil
 
 variable {X B : Type*}
   [AddCommGroup X] [Module ℂ X]
-  [NormedAddCommGroup B] [InnerProductSpace ℂ B] [CompleteSpace B]
+  [NormedAddCommGroup B] [InnerProductSpace ℂ B]
 
 /-- The exact Green symmetry identity for the value and flux traces. -/
 def SatisfiesGreenSymmetry (P : LinearBoundaryPencil X B) : Prop :=
@@ -35,8 +35,8 @@ def SatisfiesGreenSymmetry (P : LinearBoundaryPencil X B) : Prop :=
 relation. -/
 theorem relation_isSymmetric_of_satisfiesGreenSymmetry
     (P : LinearBoundaryPencil X B)
-    (hP : P.SatisfiesGreenSymmetry) :
-    P.relation.IsSymmetricRelation := by
+    (hP : SatisfiesGreenSymmetry P) :
+    NativeBoundaryRelationIsSymmetric P.relation := by
   intro boundary hboundary
   change boundary ∈ LinearMap.range (P.valueTrace.prod P.fluxTrace) at hboundary
   rcases hboundary with ⟨x, rfl⟩
@@ -55,8 +55,8 @@ theorem relation_isSymmetric_of_satisfiesGreenSymmetry
 underlying states. -/
 theorem satisfiesGreenSymmetry_of_relation_isSymmetric
     (P : LinearBoundaryPencil X B)
-    (hP : P.relation.IsSymmetricRelation) :
-    P.SatisfiesGreenSymmetry := by
+    (hP : NativeBoundaryRelationIsSymmetric P.relation) :
+    SatisfiesGreenSymmetry P := by
   intro x y
   have hxmem : (P.valueTrace x, P.fluxTrace x) ∈ P.relation := by
     exact ⟨x, rfl⟩
@@ -69,11 +69,11 @@ theorem satisfiesGreenSymmetry_of_relation_isSymmetric
       hxadj (P.valueTrace y) (P.fluxTrace y) hyMem
   exact sub_eq_zero.mp hgreen
 
-/-- Green symmetry and symmetry of the boundary relation are the same
-condition. -/
+/-- Green symmetry and relation symmetry are the same condition. -/
 theorem satisfiesGreenSymmetry_iff_relation_isSymmetric
     (P : LinearBoundaryPencil X B) :
-    P.SatisfiesGreenSymmetry ↔ P.relation.IsSymmetricRelation := by
+    SatisfiesGreenSymmetry P ↔
+      NativeBoundaryRelationIsSymmetric P.relation := by
   constructor
   · exact P.relation_isSymmetric_of_satisfiesGreenSymmetry
   · exact P.satisfiesGreenSymmetry_of_relation_isSymmetric
@@ -81,23 +81,21 @@ theorem satisfiesGreenSymmetry_iff_relation_isSymmetric
 /-- A characteristic slope of a Green-symmetric pencil is real. -/
 theorem relationHasSlope_im_eq_zero_of_satisfiesGreenSymmetry
     (P : LinearBoundaryPencil X B)
-    (hP : P.SatisfiesGreenSymmetry)
+    (hP : SatisfiesGreenSymmetry P)
     {z : ℂ} (hz : P.RelationHasSlope z) :
     z.im = 0 :=
-  P.relationHasSlope_im_eq_zero_of_relation_isSymmetric
+  P.relationHasSlope_im_eq_zero_of_nativeRelationSymmetric
     (P.relation_isSymmetric_of_satisfiesGreenSymmetry hP) hz
 
 end LinearBoundaryPencil
 
-/-- Concrete Green-identity realization target.  This is weaker to construct
-than a maximal self-adjoint relation but already sufficient for reality of the
-native characteristic parameter. -/
+/-- Concrete Green-identity realization target. -/
 structure NativeCarryGreenSymmetricBoundaryPencilRealization
     (X B : Type*)
     [AddCommGroup X] [Module ℂ X]
-    [NormedAddCommGroup B] [InnerProductSpace ℂ B] [CompleteSpace B] where
+    [NormedAddCommGroup B] [InnerProductSpace ℂ B] where
   pencil : LinearBoundaryPencil X B
-  green_symmetry : pencil.SatisfiesGreenSymmetry
+  green_symmetry : LinearBoundaryPencil.SatisfiesGreenSymmetry pencil
   resonance_iff_relationHasSlope :
     ∀ {z : ℂ}, carryComplexTimeParameter z ∈ genuineCriticalStrip →
       (IsNativeCarryComplexTimeResonance z ↔ pencil.RelationHasSlope z)
@@ -106,7 +104,7 @@ namespace NativeCarryGreenSymmetricBoundaryPencilRealization
 
 variable {X B : Type*}
   [AddCommGroup X] [Module ℂ X]
-  [NormedAddCommGroup B] [InnerProductSpace ℂ B] [CompleteSpace B]
+  [NormedAddCommGroup B] [InnerProductSpace ℂ B]
 
 /-- The Green identity forces complex-time zero rigidity. -/
 theorem complexTimeZeroRigidity
@@ -117,8 +115,7 @@ theorem complexTimeZeroRigidity
     R.green_symmetry
   exact (R.resonance_iff_relationHasSlope hz).1 hres
 
-/-- The Green-identity realization preserves the critical carry amplitude at
-every zero. -/
+/-- The Green-identity realization preserves the critical carry amplitude. -/
 theorem zeroPreservesCriticalAmplitude
     (R : NativeCarryGreenSymmetricBoundaryPencilRealization X B) :
     NativeCarryComplexTimeZeroPreservesCriticalAmplitude :=
