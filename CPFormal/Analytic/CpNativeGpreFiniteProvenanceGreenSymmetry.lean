@@ -35,10 +35,12 @@ noncomputable def nativeGpreFiniteHilbertBoundaryValueLift
   toFun x := WithLp.toLp 2 fun c => nativeGpreFiniteBoundaryValueLift S x c
   map_add' x y := by
     ext c
-    rfl
+    simpa using congrArg (fun f => f c)
+      ((nativeGpreFiniteBoundaryValueLift S).map_add x y)
   map_smul' a x := by
     ext c
-    rfl
+    simpa using congrArg (fun f => f c)
+      ((nativeGpreFiniteBoundaryValueLift S).map_smul a x)
 
 /-- Number-flux lift into the same finite Hilbert atlas. -/
 noncomputable def nativeGpreFiniteHilbertBoundaryNumberFluxLift
@@ -47,10 +49,12 @@ noncomputable def nativeGpreFiniteHilbertBoundaryNumberFluxLift
   toFun x := WithLp.toLp 2 fun c => nativeGpreFiniteBoundaryNumberFluxLift S x c
   map_add' x y := by
     ext c
-    rfl
+    simpa using congrArg (fun f => f c)
+      ((nativeGpreFiniteBoundaryNumberFluxLift S).map_add x y)
   map_smul' a x := by
     ext c
-    rfl
+    simpa using congrArg (fun f => f c)
+      ((nativeGpreFiniteBoundaryNumberFluxLift S).map_smul a x)
 
 @[simp] theorem nativeGpreFiniteHilbertBoundaryValueLift_apply
     (S : Finset NativeGpreBoundaryContext)
