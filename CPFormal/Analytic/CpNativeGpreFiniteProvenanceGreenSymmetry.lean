@@ -92,10 +92,19 @@ theorem nativeGpreFiniteHilbertProvenanceBoundaryPencil_greenSymmetry
       (nativeGpreFiniteHilbertProvenanceBoundaryPencil S) := by
   intro x y
   rw [PiLp.inner_apply, PiLp.inner_apply]
+  change
+    (∑ c : ↥S,
+      inner ℂ
+        (nativeGpreFiniteBoundaryNumberFluxLift S y c)
+        (nativeGpreFiniteBoundaryValueLift S x c)) =
+      ∑ c : ↥S,
+        inner ℂ
+          (nativeGpreFiniteBoundaryValueLift S y c)
+          (nativeGpreFiniteBoundaryNumberFluxLift S x c)
   apply Finset.sum_congr rfl
   intro c hc
-  rw [nativeGpreFiniteHilbertBoundaryNumberFlux_eq_level_mul_value,
-    nativeGpreFiniteHilbertBoundaryNumberFlux_eq_level_mul_value]
+  rw [nativeGpreFiniteBoundaryNumberFlux_eq_level_mul_value,
+    nativeGpreFiniteBoundaryNumberFlux_eq_level_mul_value]
   simp [RCLike.inner_apply, mul_assoc, mul_left_comm, mul_comm]
 
 /-- Hence every finite provenance relation is symmetric. -/
