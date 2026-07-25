@@ -35,7 +35,7 @@ noncomputable section
 namespace NativePMap
 
 variable {H : Type*}
-  [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
+  [NormedAddCommGroup H] [InnerProductSpace ℂ H]
 
 /-- The fixed spectral pencil `A - z I`, with `z` itself as the characteristic
 parameter.  Its domain is the fixed domain of `A`. -/
@@ -77,6 +77,7 @@ def spectralRelation (A : H →ₗ.[ℂ] H) : Submodule ℂ (H × H) :=
 /-- Self-adjointness of the operator is exactly self-adjointness of its graph
 as a linear relation. -/
 theorem spectralRelation_isSelfAdjoint
+    [CompleteSpace H]
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A) :
     (spectralRelation A).adjoint = spectralRelation A := by
   unfold spectralRelation
@@ -90,6 +91,7 @@ theorem spectralRelation_isSelfAdjoint
 real.  The proof uses only the defining Green/symmetry identity on one
 characteristic vector. -/
 theorem characteristicValue_im_eq_zero_of_isSelfAdjoint
+    [CompleteSpace H]
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
     {z : ℂ} (hz : IsCharacteristicValue A z) :
     z.im = 0 := by
