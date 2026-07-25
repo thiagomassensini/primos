@@ -105,6 +105,7 @@ import CPFormal.Analytic.CpGenuineSimpleRootCarryState
 import CPFormal.Analytic.CpGenuineSimpleRootLedgerBound
 import CPFormal.Analytic.CpPrimeAdimensionalLsbCrosswalk
 import CPFormal.Analytic.CpGenuineSimpleRootLsbLedgerBessel
+import CPFormal.Analytic.CpGenuineSimpleRootLsbLedgerExactDuality
 import CPFormal.Analytic.CpTateCarryLocalCarrier
 import CPFormal.Analytic.CpCriticalRadialBracketGuard
 import CPFormal.Analytic.CpConnectedC2Defect
