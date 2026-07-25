@@ -86,6 +86,7 @@ import CPFormal.Analytic.CpGenuineCrossPrimeObservability
 import CPFormal.Analytic.CpGenuinePrimeGreenBessel
 import CPFormal.Analytic.CpGenuineKernelPrimeState
 import CPFormal.Analytic.CpGenuineGreenKernelInclusion
+import CPFormal.Analytic.CpNativeCarrySpectrumExhaustion
 import CPFormal.Analytic.CpGenuineGprePrimeMomentCrosswalk
 import CPFormal.Analytic.CpGenuineGpreLogJetGreenBulkReadout
 import CPFormal.Analytic.CpGenuineGprePrimeAmplitudeUpgrade
