@@ -103,8 +103,9 @@ def realScalarBoundaryOperator (a : ℝ) : B →ₗ[ℂ] B :=
 theorem realScalarBoundaryOperator_isSymmetric (a : ℝ) :
     (realScalarBoundaryOperator (B := B) a).IsSymmetric := by
   intro x y
+  change inner ℂ ((a : ℂ) • x) y = inner ℂ x ((a : ℂ) • y)
   rw [inner_smul_left, inner_smul_right]
-  simp [realScalarBoundaryOperator]
+  simp
 
 end LinearBoundaryPencil
 
