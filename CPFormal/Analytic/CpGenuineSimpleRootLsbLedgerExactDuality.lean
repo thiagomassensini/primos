@@ -79,7 +79,7 @@ theorem inner_finiteNormalizedLsbVelocitySynthesis_rootTangentAtlasState
         simpleRootLsbTangentScalarTest M s S coeff := by
   unfold finiteNormalizedLsbVelocitySynthesis
     simpleRootLsbTangentScalarTest
-  simp_rw [inner_sum_left]
+  rw [sum_inner]
   apply Finset.sum_congr rfl
   intro p hp
   rw [lp.inner_single_left, inner_smul_left,
@@ -105,7 +105,6 @@ theorem genuineRootTangentPrimeCarryDefectState_eq_rieszAxis
   unfold genuineRootTangentPrimeCarryDefectState
     simpleRootLsbRieszCoefficient primeCriticalCenteredCarryDualAxis
   rw [smul_smul]
-  ring
 
 /-- The normalized-LSB synthesis at the Riesz coefficient is exactly the
 finite root-tangent provenance atlas. -/
@@ -158,14 +157,23 @@ theorem simpleRootLsbLedgerFunctionalBoundAt_iff_rootTangentAtlas_norm_le
     have htest := hbound.2 S (simpleRootLsbRieszCoefficient M s)
     rw [simpleRootLsbTangentScalarTest_riesz_eq_rootTangentAtlasState_norm_sq,
       finiteNormalizedLsbVelocitySynthesis_riesz_eq_rootTangentAtlasState] at htest
-    have hnorm0 :
-        0 ≤ ‖genuineRootTangentPrimeCarryDefectAtlasState M s S‖ :=
-      norm_nonneg _
     have hsq0 :
         0 ≤ ‖genuineRootTangentPrimeCarryDefectAtlasState M s S‖ ^ 2 :=
       sq_nonneg _
     rw [abs_of_nonneg hsq0] at htest
-    nlinarith
+    by_cases hzero :
+        ‖genuineRootTangentPrimeCarryDefectAtlasState M s S‖ = 0
+    · rw [hzero]
+      exact hbound.1
+    · have hpos :
+          0 < ‖genuineRootTangentPrimeCarryDefectAtlasState M s S‖ :=
+        lt_of_le_of_ne (norm_nonneg _) (Ne.symm hzero)
+      have hmul :
+          ‖genuineRootTangentPrimeCarryDefectAtlasState M s S‖ *
+              ‖genuineRootTangentPrimeCarryDefectAtlasState M s S‖ ≤
+            L * ‖genuineRootTangentPrimeCarryDefectAtlasState M s S‖ := by
+        simpa [pow_two] using htest
+      exact (mul_le_mul_right hpos).mp hmul
   · rintro ⟨hL, hatlas⟩
     refine ⟨hL, ?_⟩
     intro S coeff
