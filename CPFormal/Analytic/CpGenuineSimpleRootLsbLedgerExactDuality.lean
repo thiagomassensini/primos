@@ -173,7 +173,7 @@ theorem simpleRootLsbLedgerFunctionalBoundAt_iff_rootTangentAtlas_norm_le
       abs_real_inner_le_norm
         (finiteNormalizedLsbVelocitySynthesis S coeff)
         (genuineRootTangentPrimeCarryDefectAtlasState M s S)
-    rw [inner_finiteNormalizedLsbVelocitySynthesis_rootTangentAtlasState]
+    rw [inner_finiteNormalizedLsbVelocitySynthesis_rootTangentAtlasState] at hinner
     calc
       |simpleRootLsbTangentScalarTest M s S coeff| ≤
           ‖finiteNormalizedLsbVelocitySynthesis S coeff‖ *
