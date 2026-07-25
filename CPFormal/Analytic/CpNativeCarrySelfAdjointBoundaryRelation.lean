@@ -1,5 +1,6 @@
 import CPFormal.Analytic.CpNativeCarrySelfAdjointBoundaryPencil
 import CPFormal.Analytic.CpGenuineBoundaryPencil
+import CPFormal.Analytic.CpCarryWeightedVerticalBoundaryPencil
 
 /-!
 # Native carry complex time as slope of a self-adjoint boundary relation
@@ -13,6 +14,11 @@ Thus the exact native construction target is a fixed boundary pencil whose
 value--flux relation is self-adjoint and whose slopes are precisely the native
 carry complex-time resonances.  In this formulation `z`, not the scalar readout
 `G(z)`, is the characteristic parameter.
+
+The final block also records a scope guard: the free vertical TFVD relation is
+the whole boundary plane and is not self-adjoint.  The required relation must
+therefore arise only after a genuine restriction/gluing of the free carry
+boundary by the bracket and provenance channels.
 -/
 
 open scoped ComplexConjugate
@@ -63,6 +69,20 @@ theorem characteristicSlope_im_eq_zero_of_isSelfAdjointRelation
   simp only [Complex.conj_im] at him
   linarith
 
+/-- The full scalar boundary plane is not a self-adjoint relation.  Its
+symplectic adjoint cannot contain even the direction `(1,0)` while the full
+plane itself does. -/
+theorem complex_top_not_isSelfAdjointRelation :
+    ¬ IsSelfAdjointRelation (⊤ : Submodule ℂ (ℂ × ℂ)) := by
+  intro htop
+  have hadj : ((1 : ℂ), 0) ∈ (⊤ : Submodule ℂ (ℂ × ℂ)).adjoint := by
+    rw [htop]
+    simp
+  have hgreen :=
+    (Submodule.mem_adjoint_iff (⊤ : Submodule ℂ (ℂ × ℂ)) ((1 : ℂ), 0)).1
+      hadj 0 1 (by simp)
+  norm_num at hgreen
+
 end Submodule
 
 namespace LinearBoundaryPencil
@@ -81,6 +101,15 @@ theorem relationHasSlope_im_eq_zero_of_relation_isSelfAdjoint
   exact hz
 
 end LinearBoundaryPencil
+
+/-- The free carry boundary relation cannot be the desired spectral relation:
+it is the whole boundary plane, so every complex slope is allowed and the
+relation is not self-adjoint. -/
+theorem carryWeightedVerticalBoundaryRelation_not_isSelfAdjoint
+    (q : ℝ) (hqpos : 0 < q) (hq1 : q < 1) :
+    ¬ (carryWeightedVerticalBoundaryPencil q).relation.IsSelfAdjointRelation := by
+  rw [carryWeightedVerticalBoundaryRelation_eq_top q hqpos hq1]
+  exact Submodule.complex_top_not_isSelfAdjointRelation
 
 /-- Exact boundary-relation realization target for the native carry spectrum.
 The pencil is fixed and independent of `z`; a complex time is a resonance iff
