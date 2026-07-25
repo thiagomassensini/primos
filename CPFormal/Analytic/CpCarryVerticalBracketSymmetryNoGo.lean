@@ -82,11 +82,9 @@ theorem carryWeightedVerticalCenteredBracket_not_isSymmetric
     have hre := congrArg Complex.re hpair
     simpa using hre
   have hqne : q ≠ 0 := ne_of_gt hqpos
-  have hsq : q ^ 2 = 1 := by
-    calc
-      q ^ 2 = q * q := by ring
-      _ = q⁻¹ * q := by rw [hqeq]
-      _ = 1 := inv_mul_cancel₀ hqne
+  have hmul := congrArg (fun r : ℝ => r * q) hqeq
+  have hsq : q * q = 1 := by
+    simpa [hqne] using hmul
   nlinarith
 
 end
