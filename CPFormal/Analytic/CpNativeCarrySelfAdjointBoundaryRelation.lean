@@ -5,22 +5,16 @@ import CPFormal.Analytic.CpCarryWeightedVerticalBoundaryPencil
 /-!
 # Native carry complex time as slope of a self-adjoint boundary relation
 
-This module states the target directly at the boundary-relation level.  A
-symmetric linear relation `R ⊆ B × B` satisfies the Green identity on its own
+A symmetric linear relation `R ⊆ B × B` satisfies the Green identity on its own
 directions.  If it contains a nonzero direction `(u, z u)`, applying that
 identity to the same direction forces `z = conj z`, hence `Im z = 0`.
-Self-adjointness adds the maximality condition `R† = R`, but symmetry already
-contains the exact reality mechanism.
+Self-adjointness adds maximality, but symmetry already contains the exact
+reality mechanism.
 
-Thus the native construction target is a fixed boundary pencil whose
-value--flux relation is symmetric (ultimately self-adjoint) and whose slopes are
-precisely the native carry complex-time resonances.  In this formulation `z`,
-not the scalar readout `G(z)`, is the characteristic parameter.
-
-The final block also records a scope guard: the free vertical TFVD relation is
-the whole boundary plane and is not even symmetric.  The required relation must
-therefore arise only after a genuine restriction/gluing of the free carry
-boundary by the bracket and provenance channels.
+The free vertical TFVD relation is the whole boundary plane and is not even
+symmetric.  The required spectral relation must therefore arise only after a
+genuine restriction/gluing of the free carry boundary by bracket and
+provenance.
 -/
 
 open scoped ComplexConjugate
@@ -29,41 +23,43 @@ namespace CPFormal.Analytic.Cp
 
 noncomputable section
 
-namespace Submodule
-
-variable {B : Type*}
-  [NormedAddCommGroup B] [InnerProductSpace ℂ B] [CompleteSpace B]
-
-/-- A characteristic slope of a boundary relation is a nonzero direction
-`(u, z u)` contained in the relation. -/
-def HasCharacteristicSlope (R : Submodule ℂ (B × B)) (z : ℂ) : Prop :=
+/-- A characteristic slope is a nonzero direction `(u, z u)` in a boundary
+relation. -/
+def NativeBoundaryRelationHasCharacteristicSlope
+    {B : Type*} [NormedAddCommGroup B] [InnerProductSpace ℂ B]
+    (R : Submodule ℂ (B × B)) (z : ℂ) : Prop :=
   ∃ u : B, u ≠ 0 ∧ (u, z • u) ∈ R
 
-/-- A boundary relation is symmetric when every one of its directions belongs
-to its symplectic adjoint. -/
-def IsSymmetricRelation (R : Submodule ℂ (B × B)) : Prop :=
+/-- Symmetry means that every relation direction belongs to the symplectic
+adjoint relation. -/
+def NativeBoundaryRelationIsSymmetric
+    {B : Type*} [NormedAddCommGroup B] [InnerProductSpace ℂ B]
+    (R : Submodule ℂ (B × B)) : Prop :=
   R ≤ R.adjoint
 
-/-- A boundary relation is self-adjoint when it equals its symplectic adjoint. -/
-def IsSelfAdjointRelation (R : Submodule ℂ (B × B)) : Prop :=
+/-- Self-adjointness is equality with the symplectic adjoint. -/
+def NativeBoundaryRelationIsSelfAdjoint
+    {B : Type*} [NormedAddCommGroup B] [InnerProductSpace ℂ B]
+    (R : Submodule ℂ (B × B)) : Prop :=
   R.adjoint = R
 
 /-- A self-adjoint relation is symmetric. -/
-theorem IsSelfAdjointRelation.isSymmetric
+theorem nativeBoundaryRelation_isSymmetric_of_isSelfAdjoint
+    {B : Type*} [NormedAddCommGroup B] [InnerProductSpace ℂ B]
     {R : Submodule ℂ (B × B)}
-    (hR : R.IsSelfAdjointRelation) :
-    R.IsSymmetricRelation := by
+    (hR : NativeBoundaryRelationIsSelfAdjoint R) :
+    NativeBoundaryRelationIsSymmetric R := by
   intro x hx
   rw [hR]
   exact hx
 
-/-- Every characteristic slope of a symmetric boundary relation is real.  This
-is the boundary Green identity with the characteristic direction paired
-against itself. -/
-theorem characteristicSlope_im_eq_zero_of_isSymmetricRelation
+/-- Every characteristic slope of a symmetric boundary relation is real. -/
+theorem nativeBoundaryCharacteristicSlope_im_eq_zero_of_symmetric
+    {B : Type*}
+    [NormedAddCommGroup B] [InnerProductSpace ℂ B]
     {R : Submodule ℂ (B × B)}
-    (hR : R.IsSymmetricRelation)
-    {z : ℂ} (hz : R.HasCharacteristicSlope z) :
+    (hR : NativeBoundaryRelationIsSymmetric R)
+    {z : ℂ} (hz : NativeBoundaryRelationHasCharacteristicSlope R z) :
     z.im = 0 := by
   rcases hz with ⟨u, hu, hmem⟩
   have hadj : (u, z • u) ∈ R.adjoint := hR hmem
@@ -83,86 +79,90 @@ theorem characteristicSlope_im_eq_zero_of_isSymmetricRelation
   simp only [Complex.conj_im] at him
   linarith
 
-/-- Self-adjointness supplies the preceding symmetry gate automatically. -/
-theorem characteristicSlope_im_eq_zero_of_isSelfAdjointRelation
+/-- Self-adjointness supplies the preceding symmetry gate. -/
+theorem nativeBoundaryCharacteristicSlope_im_eq_zero_of_selfAdjoint
+    {B : Type*}
+    [NormedAddCommGroup B] [InnerProductSpace ℂ B]
     {R : Submodule ℂ (B × B)}
-    (hR : R.IsSelfAdjointRelation)
-    {z : ℂ} (hz : R.HasCharacteristicSlope z) :
+    (hR : NativeBoundaryRelationIsSelfAdjoint R)
+    {z : ℂ} (hz : NativeBoundaryRelationHasCharacteristicSlope R z) :
     z.im = 0 :=
-  characteristicSlope_im_eq_zero_of_isSymmetricRelation hR.isSymmetric hz
+  nativeBoundaryCharacteristicSlope_im_eq_zero_of_symmetric
+    (nativeBoundaryRelation_isSymmetric_of_isSelfAdjoint hR) hz
 
-/-- The full scalar boundary plane is not a symmetric relation.  Its symplectic
-adjoint cannot contain even the direction `(1,0)` while the full plane itself
-does. -/
-theorem complex_top_not_isSymmetricRelation :
-    ¬ IsSymmetricRelation (⊤ : Submodule ℂ (ℂ × ℂ)) := by
+/-- The whole scalar boundary plane is not symmetric. -/
+theorem complex_top_not_nativeBoundaryRelationIsSymmetric :
+    ¬ NativeBoundaryRelationIsSymmetric
+      (⊤ : Submodule ℂ (ℂ × ℂ)) := by
   intro htop
-  have hadj : ((1 : ℂ), 0) ∈ (⊤ : Submodule ℂ (ℂ × ℂ)).adjoint :=
+  have hadj : ((1 : ℂ), 0) ∈
+      (⊤ : Submodule ℂ (ℂ × ℂ)).adjoint :=
     htop (by simp)
   have hgreen :=
-    (Submodule.mem_adjoint_iff (⊤ : Submodule ℂ (ℂ × ℂ)) ((1 : ℂ), 0)).1
+    (Submodule.mem_adjoint_iff
+      (⊤ : Submodule ℂ (ℂ × ℂ)) ((1 : ℂ), 0)).1
       hadj 0 1 (by simp)
   norm_num at hgreen
 
-/-- In particular, the full boundary plane is not self-adjoint. -/
-theorem complex_top_not_isSelfAdjointRelation :
-    ¬ IsSelfAdjointRelation (⊤ : Submodule ℂ (ℂ × ℂ)) := by
+/-- Hence the whole boundary plane is not self-adjoint. -/
+theorem complex_top_not_nativeBoundaryRelationIsSelfAdjoint :
+    ¬ NativeBoundaryRelationIsSelfAdjoint
+      (⊤ : Submodule ℂ (ℂ × ℂ)) := by
   intro htop
-  exact complex_top_not_isSymmetricRelation htop.isSymmetric
-
-end Submodule
+  exact complex_top_not_nativeBoundaryRelationIsSymmetric
+    (nativeBoundaryRelation_isSymmetric_of_isSelfAdjoint htop)
 
 namespace LinearBoundaryPencil
 
 variable {X B : Type*}
   [AddCommGroup X] [Module ℂ X]
-  [NormedAddCommGroup B] [InnerProductSpace ℂ B] [CompleteSpace B]
+  [NormedAddCommGroup B] [InnerProductSpace ℂ B]
 
-/-- A slope of a symmetric value--flux relation must be real. -/
-theorem relationHasSlope_im_eq_zero_of_relation_isSymmetric
+/-- A relation slope of a symmetric value--flux pencil is real. -/
+theorem relationHasSlope_im_eq_zero_of_nativeRelationSymmetric
     (P : LinearBoundaryPencil X B)
-    (hP : P.relation.IsSymmetricRelation)
+    (hP : NativeBoundaryRelationIsSymmetric P.relation)
     {z : ℂ} (hz : P.RelationHasSlope z) :
     z.im = 0 := by
-  apply Submodule.characteristicSlope_im_eq_zero_of_isSymmetricRelation hP
+  apply nativeBoundaryCharacteristicSlope_im_eq_zero_of_symmetric hP
   exact hz
 
-/-- The self-adjoint version of the same boundary-slope theorem. -/
-theorem relationHasSlope_im_eq_zero_of_relation_isSelfAdjoint
+/-- The self-adjoint version of the same result. -/
+theorem relationHasSlope_im_eq_zero_of_nativeRelationSelfAdjoint
     (P : LinearBoundaryPencil X B)
-    (hP : P.relation.IsSelfAdjointRelation)
+    (hP : NativeBoundaryRelationIsSelfAdjoint P.relation)
     {z : ℂ} (hz : P.RelationHasSlope z) :
     z.im = 0 :=
-  P.relationHasSlope_im_eq_zero_of_relation_isSymmetric hP.isSymmetric hz
+  P.relationHasSlope_im_eq_zero_of_nativeRelationSymmetric
+    (nativeBoundaryRelation_isSymmetric_of_isSelfAdjoint hP) hz
 
 end LinearBoundaryPencil
 
-/-- The free carry boundary relation cannot be the desired spectral relation:
-it is the whole boundary plane, so every complex slope is allowed and the
-relation is not even symmetric. -/
-theorem carryWeightedVerticalBoundaryRelation_not_isSymmetric
+/-- The free carry boundary relation is not symmetric: it is the whole boundary
+plane and permits every complex slope. -/
+theorem carryWeightedVerticalBoundaryRelation_not_symmetric
     (q : ℝ) (hqpos : 0 < q) (hq1 : q < 1) :
-    ¬ (carryWeightedVerticalBoundaryPencil q).relation.IsSymmetricRelation := by
+    ¬ NativeBoundaryRelationIsSymmetric
+      (carryWeightedVerticalBoundaryPencil q).relation := by
   rw [carryWeightedVerticalBoundaryRelation_eq_top q hqpos hq1]
-  exact Submodule.complex_top_not_isSymmetricRelation
+  exact complex_top_not_nativeBoundaryRelationIsSymmetric
 
-/-- Consequently the free carry boundary relation is not self-adjoint either. -/
-theorem carryWeightedVerticalBoundaryRelation_not_isSelfAdjoint
+/-- Consequently the free relation is not self-adjoint either. -/
+theorem carryWeightedVerticalBoundaryRelation_not_selfAdjoint
     (q : ℝ) (hqpos : 0 < q) (hq1 : q < 1) :
-    ¬ (carryWeightedVerticalBoundaryPencil q).relation.IsSelfAdjointRelation := by
+    ¬ NativeBoundaryRelationIsSelfAdjoint
+      (carryWeightedVerticalBoundaryPencil q).relation := by
   intro hself
-  exact carryWeightedVerticalBoundaryRelation_not_isSymmetric q hqpos hq1
-    hself.isSymmetric
+  exact carryWeightedVerticalBoundaryRelation_not_symmetric q hqpos hq1
+    (nativeBoundaryRelation_isSymmetric_of_isSelfAdjoint hself)
 
-/-- Exact symmetric boundary-relation realization target for the native carry
-spectrum.  Symmetry is the minimal Green-identity hypothesis needed to force
-reality of characteristic slopes. -/
+/-- Minimal symmetric boundary-relation realization target. -/
 structure NativeCarrySymmetricBoundaryRelationRealization
     (X B : Type*)
     [AddCommGroup X] [Module ℂ X]
-    [NormedAddCommGroup B] [InnerProductSpace ℂ B] [CompleteSpace B] where
+    [NormedAddCommGroup B] [InnerProductSpace ℂ B] where
   pencil : LinearBoundaryPencil X B
-  relation_isSymmetric : pencil.relation.IsSymmetricRelation
+  relation_isSymmetric : NativeBoundaryRelationIsSymmetric pencil.relation
   resonance_iff_relationHasSlope :
     ∀ {z : ℂ}, carryComplexTimeParameter z ∈ genuineCriticalStrip →
       (IsNativeCarryComplexTimeResonance z ↔ pencil.RelationHasSlope z)
@@ -171,15 +171,14 @@ namespace NativeCarrySymmetricBoundaryRelationRealization
 
 variable {X B : Type*}
   [AddCommGroup X] [Module ℂ X]
-  [NormedAddCommGroup B] [InnerProductSpace ℂ B] [CompleteSpace B]
+  [NormedAddCommGroup B] [InnerProductSpace ℂ B]
 
-/-- A symmetric native boundary relation already forces complex-time zero
-rigidity. -/
+/-- Symmetry forces complex-time zero rigidity. -/
 theorem complexTimeZeroRigidity
     (R : NativeCarrySymmetricBoundaryRelationRealization X B) :
     NativeCarryComplexTimeZeroRigidity := by
   intro z hz hres
-  apply R.pencil.relationHasSlope_im_eq_zero_of_relation_isSymmetric
+  apply R.pencil.relationHasSlope_im_eq_zero_of_nativeRelationSymmetric
     R.relation_isSymmetric
   exact (R.resonance_iff_relationHasSlope hz).1 hres
 
@@ -206,15 +205,13 @@ theorem strongNonvanishing
 
 end NativeCarrySymmetricBoundaryRelationRealization
 
-/-- Exact self-adjoint boundary-relation realization target for the native carry
-spectrum.  The pencil is fixed and independent of `z`; a complex time is a
-resonance iff it is the slope of the same maximal symmetric relation. -/
+/-- Maximal self-adjoint boundary-relation realization target. -/
 structure NativeCarrySelfAdjointBoundaryRelationRealization
     (X B : Type*)
     [AddCommGroup X] [Module ℂ X]
-    [NormedAddCommGroup B] [InnerProductSpace ℂ B] [CompleteSpace B] where
+    [NormedAddCommGroup B] [InnerProductSpace ℂ B] where
   pencil : LinearBoundaryPencil X B
-  relation_isSelfAdjoint : pencil.relation.IsSelfAdjointRelation
+  relation_isSelfAdjoint : NativeBoundaryRelationIsSelfAdjoint pencil.relation
   resonance_iff_relationHasSlope :
     ∀ {z : ℂ}, carryComplexTimeParameter z ∈ genuineCriticalStrip →
       (IsNativeCarryComplexTimeResonance z ↔ pencil.RelationHasSlope z)
@@ -223,36 +220,37 @@ namespace NativeCarrySelfAdjointBoundaryRelationRealization
 
 variable {X B : Type*}
   [AddCommGroup X] [Module ℂ X]
-  [NormedAddCommGroup B] [InnerProductSpace ℂ B] [CompleteSpace B]
+  [NormedAddCommGroup B] [InnerProductSpace ℂ B]
 
-/-- Forgetting maximality gives the exact symmetric gate above. -/
+/-- Forgetting maximality yields the symmetric realization. -/
 def toSymmetric
     (R : NativeCarrySelfAdjointBoundaryRelationRealization X B) :
     NativeCarrySymmetricBoundaryRelationRealization X B where
   pencil := R.pencil
-  relation_isSymmetric := R.relation_isSelfAdjoint.isSymmetric
+  relation_isSymmetric :=
+    nativeBoundaryRelation_isSymmetric_of_isSelfAdjoint
+      R.relation_isSelfAdjoint
   resonance_iff_relationHasSlope := R.resonance_iff_relationHasSlope
 
-/-- A self-adjoint native boundary relation forces complex-time zero rigidity. -/
+/-- Self-adjointness forces complex-time zero rigidity. -/
 theorem complexTimeZeroRigidity
     (R : NativeCarrySelfAdjointBoundaryRelationRealization X B) :
     NativeCarryComplexTimeZeroRigidity :=
   R.toSymmetric.complexTimeZeroRigidity
 
-/-- The relation-level construction forces preservation of the critical carry
-amplitude at every scalar resonance. -/
+/-- Self-adjointness forces preservation of critical amplitude. -/
 theorem zeroPreservesCriticalAmplitude
     (R : NativeCarrySelfAdjointBoundaryRelationRealization X B) :
     NativeCarryComplexTimeZeroPreservesCriticalAmplitude :=
   R.toSymmetric.zeroPreservesCriticalAmplitude
 
-/-- The real native spectrum exhausts the continued zero set. -/
+/-- The real native spectrum exhausts the continuation. -/
 theorem spectrumExhaustsGenuine
     (R : NativeCarrySelfAdjointBoundaryRelationRealization X B) :
     NativeCarrySpectrumExhaustsGenuine :=
   R.toSymmetric.spectrumExhaustsGenuine
 
-/-- The boundary-relation construction closes the strong scalar theorem. -/
+/-- The self-adjoint realization closes strong nonvanishing. -/
 theorem strongNonvanishing
     (R : NativeCarrySelfAdjointBoundaryRelationRealization X B) :
     GenuineStrongNonvanishingInStrip :=
