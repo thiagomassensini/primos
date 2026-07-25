@@ -97,6 +97,14 @@ theorem nativeGpreHilbertGluedGreenDefect_eq_verticalWronskian
     carryWeightedVerticalBoundaryGreenDefect_eq_wronskian q x y
   have hprovenance :=
     nativeGpreHilbertProvenanceBoundaryPencil_greenSymmetry S x y
+  change
+    inner ℂ
+        (nativeGpreHilbertBoundaryNumberFluxLift S y)
+        (nativeGpreHilbertBoundaryValueLift S x) =
+      inner ℂ
+        (nativeGpreHilbertBoundaryValueLift S y)
+        (nativeGpreHilbertBoundaryNumberFluxLift S x)
+    at hprovenance
   rw [WithLp.prod_inner_apply, WithLp.prod_inner_apply]
   change
     (inner ℂ
