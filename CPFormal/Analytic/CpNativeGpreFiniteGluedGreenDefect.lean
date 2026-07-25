@@ -115,8 +115,6 @@ theorem nativeGpreFiniteGluedHilbertGreenDefect_eq_verticalWronskian
   have hprovenance :=
     nativeGpreFiniteHilbertProvenanceBoundaryPencil_greenSymmetry S x y
   rw [WithLp.prod_inner_apply, WithLp.prod_inner_apply]
-  simp only [nativeGpreFiniteGluedHilbertValueTrace_ofLp,
-    nativeGpreFiniteGluedHilbertFluxTrace_ofLp, Prod.fst, Prod.snd]
   change
     (inner ℂ
         ((carryWeightedVerticalBoundaryPencil q).fluxTrace
