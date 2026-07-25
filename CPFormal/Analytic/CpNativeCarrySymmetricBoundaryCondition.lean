@@ -90,7 +90,8 @@ theorem onBoundaryCondition_relation_isSymmetric
     (P : LinearBoundaryPencil X B) (T : B →ₗ[ℂ] B)
     (hT : T.IsSymmetric) :
     NativeBoundaryRelationIsSymmetric (P.onBoundaryCondition T).relation :=
-  P.onBoundaryCondition_relation_isSymmetric_of_satisfiesGreenSymmetry
+  LinearBoundaryPencil.relation_isSymmetric_of_satisfiesGreenSymmetry
+    (P.onBoundaryCondition T)
     (P.onBoundaryCondition_satisfiesGreenSymmetry T hT)
 
 /-- Real scalar Robin operators form a canonical symmetric family on every
