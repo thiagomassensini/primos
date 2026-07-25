@@ -11,13 +11,13 @@ of the continued readout can occur only at real carry time.
 This module records the operator-theoretic root of that statement.  A fixed
 self-adjoint partially defined operator has only real characteristic values.
 Consequently, if the native bracket/Genuine resonance condition is realized as
-an eigenvalue equation
+a nontrivial kernel of the fixed pencil
 
-`A x = z x`
+`A - z I`,
 
-for one fixed self-adjoint boundary realization `A`, then complex-time zero
-rigidity, preservation of the critical carry amplitude, spectral exhaustion,
-and strong off-critical nonvanishing all follow immediately.
+then complex-time zero rigidity, preservation of the critical carry amplitude,
+spectral exhaustion, and strong off-critical nonvanishing all follow
+immediately.
 
 The relation is the graph of `A`; self-adjointness of the operator makes this a
 self-adjoint linear relation.  No instance of the realization is declared here.
@@ -37,11 +37,37 @@ namespace LinearPMap
 variable {H : Type*}
   [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H]
 
-/-- `z` is a characteristic value of a partially defined operator when it has
-one nonzero eigenvector in the operator domain.  Unlike the older scalar
-Genuine pencil, the parameter here is `z` itself. -/
+/-- The fixed spectral pencil `A - z I`, with `z` itself as the characteristic
+parameter.  Its domain is the fixed domain of `A`. -/
+def spectralPencilOperator (A : H →ₗ.[ℂ] H) (z : ℂ) :
+    A.domain →ₗ[ℂ] H :=
+  A.toFun - z • A.domain.subtype
+
+@[simp] theorem spectralPencilOperator_apply
+    (A : H →ₗ.[ℂ] H) (z : ℂ) (x : A.domain) :
+    A.spectralPencilOperator z x = A x - z • (x : H) := by
+  rfl
+
+/-- `z` is a characteristic value when `A - z I` has one nontrivial kernel
+vector.  Unlike the older scalar Genuine pencil, the parameter is `z`, not the
+readout value. -/
 def IsCharacteristicValue (A : H →ₗ.[ℂ] H) (z : ℂ) : Prop :=
-  ∃ x : A.domain, (x : H) ≠ 0 ∧ A x = z • (x : H)
+  ∃ x : A.domain, (x : H) ≠ 0 ∧ A.spectralPencilOperator z x = 0
+
+/-- Characteristic values are equivalently ordinary eigenpairs in the fixed
+operator domain. -/
+theorem isCharacteristicValue_iff_eigenpair
+    (A : H →ₗ.[ℂ] H) (z : ℂ) :
+    A.IsCharacteristicValue z ↔
+      ∃ x : A.domain, (x : H) ≠ 0 ∧ A x = z • (x : H) := by
+  constructor
+  · rintro ⟨x, hx, hzero⟩
+    refine ⟨x, hx, ?_⟩
+    rw [spectralPencilOperator_apply] at hzero
+    exact sub_eq_zero.mp hzero
+  · rintro ⟨x, hx, heigen⟩
+    refine ⟨x, hx, ?_⟩
+    rw [spectralPencilOperator_apply, heigen, sub_self]
 
 /-- The spectral boundary relation associated with a partially defined
 operator is its graph in `H × H`. -/
@@ -67,7 +93,7 @@ theorem characteristicValue_im_eq_zero_of_isSelfAdjoint
     {A : H →ₗ.[ℂ] H} (hA : IsSelfAdjoint A)
     {z : ℂ} (hz : A.IsCharacteristicValue z) :
     z.im = 0 := by
-  rcases hz with ⟨x, hx, hAx⟩
+  rcases (A.isCharacteristicValue_iff_eigenpair z).1 hz with ⟨x, hx, hAx⟩
   have hformal : A.IsFormalAdjoint A := by
     have h := LinearPMap.adjoint_isFormalAdjoint hA.dense_domain
     rw [LinearPMap.isSelfAdjoint_def.mp hA] at h
@@ -89,9 +115,9 @@ end LinearPMap
 /-- A genuine self-adjoint realization of the native carry boundary pencil.
 
 The operator is fixed: it does not depend on `z`.  The last field states that
-native complex-time resonances are exactly its characteristic values.  This is
-the non-tautological construction target for the bracket--trace--provenance
-program. -/
+native complex-time resonances are exactly the characteristic parameters of
+`operator - z I`.  This is the non-tautological construction target for the
+bracket--trace--provenance program. -/
 structure NativeCarrySelfAdjointBoundaryPencilRealization
     (H : Type*)
     [NormedAddCommGroup H] [InnerProductSpace ℂ H] [CompleteSpace H] where
