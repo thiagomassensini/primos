@@ -114,6 +114,14 @@ theorem nativeGpreFiniteGluedHilbertGreenDefect_eq_verticalWronskian
       (nativeGpreCanonicalVerticalRealization y)
   have hprovenance :=
     nativeGpreFiniteHilbertProvenanceBoundaryPencil_greenSymmetry S x y
+  change
+    inner ℂ
+        (nativeGpreFiniteHilbertBoundaryNumberFluxLift S y)
+        (nativeGpreFiniteHilbertBoundaryValueLift S x) =
+      inner ℂ
+        (nativeGpreFiniteHilbertBoundaryValueLift S y)
+        (nativeGpreFiniteHilbertBoundaryNumberFluxLift S x)
+    at hprovenance
   rw [WithLp.prod_inner_apply, WithLp.prod_inner_apply]
   change
     (inner ℂ
