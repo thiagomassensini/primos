@@ -55,7 +55,8 @@ theorem nativeCarrySingleLogBoundaryIsotropic_eq_bot
     have hx0 : x = 0 := by
       rcases mul_eq_zero.mp hxx with hconj | hxzero
       · have hback := congrArg (starRingEnd ℂ) hconj
-        simpa using hback
+        simp at hback
+        exact hback
       · exact hxzero
     simpa [hx0]
   · exact bot_le
@@ -170,7 +171,7 @@ theorem reflectedParameter_carryComplexTimeParameter
       carryComplexTimeParameter ((starRingEnd ℂ) z) := by
   unfold reflectedParameter carryComplexTimeParameter
   simp
-  ring
+  ring_nf
 
 /-- Direct/reflected native log-wave values at the common inner endpoint. -/
 def nativeCarryReflectedLogBoundaryValue
@@ -204,7 +205,7 @@ theorem nativeCarryReflectedLogBoundaryFlux_mem_diagonal_iff
         nativeCarryReflectedLogDiagonal ↔
       z.im = 0 := by
   rw [mem_nativeCarryReflectedLogDiagonal]
-  simp only [nativeCarryReflectedLogBoundaryFlux_eq, Prod.fst, Prod.snd]
+  simp only [nativeCarryReflectedLogBoundaryFlux_eq]
   constructor
   · intro hz
     have him := congrArg Complex.im hz
