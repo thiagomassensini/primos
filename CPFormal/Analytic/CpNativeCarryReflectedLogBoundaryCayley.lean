@@ -88,8 +88,7 @@ theorem nativeCarryReflectedLogCayley_greenDefect
     nativeCarryReflectedLogBoundaryForm,
     RCLike.inner_apply]
   have htwo : (starRingEnd ℂ) (2 : ℂ) = 2 := by
-    change (2 : ℂ).conj = 2
-    norm_num
+    simpa using (Complex.conj_ofNat 2)
   rw [htwo]
   ring
 
