@@ -167,9 +167,7 @@ theorem nativeCarryRealPlaneEnergy_sample
       ((n : ℝ))⁻¹ := by
   rw [nativeCarryRealPlaneSample,
     nativeCarryRealPlaneEnergy_sampleAt ((1 : ℝ) / 2) t hn]
-  have hnR : 0 ≤ (n : ℝ) := by
-    exact_mod_cast (le_of_lt hn)
-  simpa using Real.rpow_neg hnR (1 : ℝ)
+  norm_num [Real.rpow_neg_one]
 
 /--
 An exponent belongs to the native real-vector domain when every positive
