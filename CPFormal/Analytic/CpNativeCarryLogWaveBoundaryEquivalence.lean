@@ -51,7 +51,7 @@ theorem hasDerivAt_nativeCarryLogWave (z u : ℂ) :
       HasDerivAt (fun v : ℂ => -(carryComplexTimeParameter z) * v)
         (-(carryComplexTimeParameter z)) u := by
     simpa using (hasDerivAt_id u).const_mul (-(carryComplexTimeParameter z))
-  simpa [nativeCarryLogWave] using
+  simpa [nativeCarryLogWave, Function.comp_apply, mul_comm] using
     (Complex.hasDerivAt_exp
       (-(carryComplexTimeParameter z) * u)).comp u hlinear
 
@@ -63,9 +63,28 @@ theorem nativeCarryLogDilationExpression_wave_eq
         (nativeCarryLogWave z u)
         (-(carryComplexTimeParameter z) * nativeCarryLogWave z u) =
       z * nativeCarryLogWave z u := by
+  have hzi : (-Complex.I * z) * Complex.I = z := by
+    calc
+      (-Complex.I * z) * Complex.I =
+          -z * (Complex.I * Complex.I) := by ring
+      _ = -z * (-1) := by rw [Complex.I_mul_I]
+      _ = z := by ring
   unfold nativeCarryLogDilationExpression carryComplexTimeParameter
-  simp only [neg_mul, add_mul, Complex.I_mul_I]
-  ring
+  calc
+    Complex.I *
+          (-((((1 / 2 : ℝ) : ℂ) + z * Complex.I)) *
+            nativeCarryLogWave z u) +
+        Complex.I / 2 * nativeCarryLogWave z u =
+      ((-Complex.I) * (((1 / 2 : ℝ) : ℂ) + z * Complex.I) +
+          Complex.I / 2) * nativeCarryLogWave z u := by ring
+    _ = z * nativeCarryLogWave z u := by
+      rw [mul_add]
+      change
+        ((-Complex.I) * ((1 / 2 : ℝ) : ℂ) +
+            (-Complex.I * z) * Complex.I + Complex.I / 2) *
+            nativeCarryLogWave z u = _
+      rw [hzi]
+      ring
 
 /-- Positive-integer samples of the log wave are exactly the Dirichlet monomials
 used by the bracket camera. -/
@@ -75,13 +94,15 @@ theorem nativeCarryLogWave_log_nat_eq_dirichletTerm
       dirichletTerm (carryComplexTimeParameter z) (n : ℤ) := by
   have hnR : (0 : ℝ) < (n : ℝ) := by exact_mod_cast hn
   have hnC : ((n : ℂ) ≠ 0) := by exact_mod_cast (Nat.ne_of_gt hn)
+  have hlog :
+      Complex.log (n : ℂ) = (Real.log (n : ℝ) : ℂ) := by
+    simpa using (Complex.ofReal_log hnR.le).symm
   unfold nativeCarryLogWave dirichletTerm
   change
     Complex.exp
         (-(carryComplexTimeParameter z) * (Real.log (n : ℝ) : ℂ)) =
       (n : ℂ) ^ (-(carryComplexTimeParameter z))
-  rw [Complex.cpow_def_of_ne_zero hnC]
-  rw [← Complex.ofReal_log hnR.le]
+  rw [Complex.cpow_def_of_ne_zero hnC, hlog]
   congr 1
   ring
 
