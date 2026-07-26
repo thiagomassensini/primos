@@ -51,9 +51,15 @@ theorem hasDerivAt_nativeCarryLogWave (z u : ℂ) :
       HasDerivAt (fun v : ℂ => -(carryComplexTimeParameter z) * v)
         (-(carryComplexTimeParameter z)) u := by
     simpa using (hasDerivAt_id u).const_mul (-(carryComplexTimeParameter z))
-  simpa [nativeCarryLogWave, Function.comp_apply, mul_comm] using
+  unfold nativeCarryLogWave
+  change
+    HasDerivAt
+      (fun v : ℂ => Complex.exp (-(carryComplexTimeParameter z) * v))
+      (-(carryComplexTimeParameter z) *
+        Complex.exp (-(carryComplexTimeParameter z) * u)) u
+  convert
     (Complex.hasDerivAt_exp
-      (-(carryComplexTimeParameter z) * u)).comp u hlinear
+      (-(carryComplexTimeParameter z) * u)).comp u hlinear using 1 <;> ring
 
 /-- The native wave solves the fixed linear interior equation with characteristic
 parameter `z`. -/
@@ -69,6 +75,17 @@ theorem nativeCarryLogDilationExpression_wave_eq
           -z * (Complex.I * Complex.I) := by ring
       _ = -z * (-1) := by rw [Complex.I_mul_I]
       _ = z := by ring
+  have hcoeff :
+      (-Complex.I) * (((1 / 2 : ℝ) : ℂ) + z * Complex.I) +
+          Complex.I / 2 = z := by
+    calc
+      (-Complex.I) * (((1 / 2 : ℝ) : ℂ) + z * Complex.I) +
+          Complex.I / 2 =
+        (-Complex.I) * ((1 / 2 : ℝ) : ℂ) +
+          (-Complex.I * z) * Complex.I + Complex.I / 2 := by ring
+      _ = (-Complex.I) * ((1 / 2 : ℝ) : ℂ) + z +
+          Complex.I / 2 := by rw [hzi]
+      _ = z := by ring
   unfold nativeCarryLogDilationExpression carryComplexTimeParameter
   calc
     Complex.I *
@@ -77,14 +94,7 @@ theorem nativeCarryLogDilationExpression_wave_eq
         Complex.I / 2 * nativeCarryLogWave z u =
       ((-Complex.I) * (((1 / 2 : ℝ) : ℂ) + z * Complex.I) +
           Complex.I / 2) * nativeCarryLogWave z u := by ring
-    _ = z * nativeCarryLogWave z u := by
-      rw [mul_add]
-      change
-        ((-Complex.I) * ((1 / 2 : ℝ) : ℂ) +
-            (-Complex.I * z) * Complex.I + Complex.I / 2) *
-            nativeCarryLogWave z u = _
-      rw [hzi]
-      ring
+    _ = z * nativeCarryLogWave z u := by rw [hcoeff]
 
 /-- Positive-integer samples of the log wave are exactly the Dirichlet monomials
 used by the bracket camera. -/
@@ -95,8 +105,8 @@ theorem nativeCarryLogWave_log_nat_eq_dirichletTerm
   have hnR : (0 : ℝ) < (n : ℝ) := by exact_mod_cast hn
   have hnC : ((n : ℂ) ≠ 0) := by exact_mod_cast (Nat.ne_of_gt hn)
   have hlog :
-      Complex.log (n : ℂ) = (Real.log (n : ℝ) : ℂ) := by
-    simpa using (Complex.ofReal_log hnR.le).symm
+      Complex.log (n : ℂ) = (Real.log (n : ℝ) : ℂ) :=
+    (Complex.ofReal_log hnR.le).symm
   unfold nativeCarryLogWave dirichletTerm
   change
     Complex.exp
