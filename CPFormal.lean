@@ -20,6 +20,7 @@ import CPFormal.Genuine.Cp
 import CPFormal.Genuine.CpFiniteChart
 import CPFormal.Genuine.CpBracketPairing
 import CPFormal.Analytic.CpBranchNorm
+import CPFormal.Analytic.CpPositionalCarryQuadraticRigidity
 import CPFormal.Analytic.CpTilt
 import CPFormal.Analytic.CpTiltRigidity
 import CPFormal.Analytic.CpGreenBridge
