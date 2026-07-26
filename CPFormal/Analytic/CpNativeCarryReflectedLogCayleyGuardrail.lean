@@ -86,7 +86,6 @@ theorem nativeCarryReflectedLogCayleyFlux_boundaryFlux_eq_displacement
   · simp
     ring
   · simp
-    ring
 
 /-- The raw zero-flux relation has one characteristic slope only: zero. -/
 theorem nativeCarryZeroFluxBoundaryRelation_hasCharacteristicSlope_iff
