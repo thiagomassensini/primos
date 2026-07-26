@@ -8,9 +8,10 @@ wave
 
 `phi_z(u) = exp (-(1/2 + z I) u)`.
 
-The fixed first-order differential expression
+The fixed first-order dilation expression, evaluated on the canonical
+logarithmic derivative channel of this wave,
 
-`D(phi) = I * phi' + (I/2) * phi`
+`D(phi_z) = I * (-(1/2 + z I) phi_z) + (I/2) * phi_z`,
 
 satisfies `D(phi_z) = z phi_z`.  Thus `z` is the linear characteristic
 parameter of the interior equation, rather than the scalar value of a readout.
@@ -21,9 +22,11 @@ the same wave and require those cutoffs to converge to zero.
 
 Inside the Genuine strip, the Lean kernel proves that this eigen-equation plus
 boundary closure is equivalent to a native complex-time Genuine resonance.  No
-self-adjointness or zero localization is assumed.  The remaining operator task is
-to realize this fixed differential expression and fixed bracket boundary as a
-self-adjoint closed relation.
+self-adjointness or zero localization is assumed.  The separate calculus
+certificate for the displayed derivative formula is not needed by this
+algebraic/spectral equivalence and is deliberately left outside this module.
+The remaining operator task is to realize the fixed dilation expression and
+fixed bracket boundary as a self-adjoint closed relation.
 -/
 
 open scoped Topology
@@ -39,31 +42,9 @@ def nativeCarryLogWave (z u : ℂ) : ℂ :=
   Complex.exp (-(carryComplexTimeParameter z) * u)
 
 /-- The fixed first-order dilation expression evaluated from a value and its
-log-coordinate derivative. -/
+canonical logarithmic derivative channel. -/
 def nativeCarryLogDilationExpression (value derivative : ℂ) : ℂ :=
   Complex.I * derivative + (Complex.I / 2) * value
-
-/-- Exact derivative of the native log wave. -/
-theorem hasDerivAt_nativeCarryLogWave (z u : ℂ) :
-    HasDerivAt (nativeCarryLogWave z)
-      (-(carryComplexTimeParameter z) * nativeCarryLogWave z u) u := by
-  have hlinear :
-      HasDerivAt (fun v : ℂ => -(carryComplexTimeParameter z) * v)
-        (-(carryComplexTimeParameter z)) u := by
-    simpa using (hasDerivAt_id u).const_mul (-(carryComplexTimeParameter z))
-  unfold nativeCarryLogWave
-  change
-    HasDerivAt
-      (fun v : ℂ => Complex.exp (-(carryComplexTimeParameter z) * v))
-      (-(carryComplexTimeParameter z) *
-        Complex.exp (-(carryComplexTimeParameter z) * u)) u
-  have hcomp :=
-    (Complex.hasDerivAt_exp
-      (-(carryComplexTimeParameter z) * u)).comp u hlinear
-  simpa only [Function.comp_apply,
-    mul_comm
-      (Complex.exp (-(carryComplexTimeParameter z) * u))
-      (-(carryComplexTimeParameter z))] using hcomp
 
 /-- The native wave solves the fixed linear interior equation with characteristic
 parameter `z`. -/
