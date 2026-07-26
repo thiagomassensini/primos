@@ -57,9 +57,9 @@ theorem hasDerivAt_nativeCarryLogWave (z u : ℂ) :
       (fun v : ℂ => Complex.exp (-(carryComplexTimeParameter z) * v))
       (-(carryComplexTimeParameter z) *
         Complex.exp (-(carryComplexTimeParameter z) * u)) u
-  convert
+  simpa only [Function.comp_apply, mul_comm] using
     (Complex.hasDerivAt_exp
-      (-(carryComplexTimeParameter z) * u)).comp u hlinear using 1 <;> ring
+      (-(carryComplexTimeParameter z) * u)).comp u hlinear
 
 /-- The native wave solves the fixed linear interior equation with characteristic
 parameter `z`. -/
@@ -75,6 +75,8 @@ theorem nativeCarryLogDilationExpression_wave_eq
           -z * (Complex.I * Complex.I) := by ring
       _ = -z * (-1) := by rw [Complex.I_mul_I]
       _ = z := by ring
+  have hhalf : (((1 / 2 : ℝ) : ℂ)) = (1 / 2 : ℂ) := by
+    norm_num
   have hcoeff :
       (-Complex.I) * (((1 / 2 : ℝ) : ℂ) + z * Complex.I) +
           Complex.I / 2 = z := by
@@ -85,7 +87,7 @@ theorem nativeCarryLogDilationExpression_wave_eq
           (-Complex.I * z) * Complex.I + Complex.I / 2 := by ring
       _ = (-Complex.I) * ((1 / 2 : ℝ) : ℂ) + z +
           Complex.I / 2 := by rw [hzi]
-      _ = z := by ring
+      _ = z := by rw [hhalf]; ring
   unfold nativeCarryLogDilationExpression carryComplexTimeParameter
   calc
     Complex.I *
