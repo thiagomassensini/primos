@@ -265,7 +265,9 @@ theorem nativeCarryRealPlaneEnergy_eq_zero_iff
       · exact hy
     rw [hx, hy]
   · intro h
-    rw [h]
+    have hx : x = 0 := congrArg Prod.fst h
+    have hy : y = 0 := congrArg Prod.snd h
+    rw [hx, hy]
     norm_num
 
 /--
