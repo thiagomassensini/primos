@@ -53,8 +53,8 @@ theorem nativeCarryBracketClosureForcesCoupledGreenFluxClosure_iff_reflectedFlux
       criticalDisplacement_eq_zero_of_coupledFlux_tendsto_zero
         3 (by norm_num) hz hzero (hflux hz hboundary)
     have him : z.im = 0 := by
-      have hneg : -z.im = 0 := by
-        simpa using hcritical
+      rw [carryComplexTimeParameter_re] at hcritical
+      unfold criticalDisplacement at hcritical
       linarith
     exact
       (nativeCarryReflectedLogFluxMatches_iff_im_eq_zero z).2 him
@@ -69,7 +69,9 @@ theorem nativeCarryBracketClosureForcesCoupledGreenFluxClosure_iff_reflectedFlux
         (hmatching hz hboundary)
     have hcritical :
         criticalDisplacement (carryComplexTimeParameter z).re = 0 := by
-      simp [him]
+      rw [carryComplexTimeParameter_re]
+      unfold criticalDisplacement
+      linarith
     exact finiteBracketCoupledCpGreenFlux_tendsto_zero_of_critical
       3 (by norm_num) hz hzero hcritical
 
