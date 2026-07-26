@@ -60,9 +60,10 @@ theorem hasDerivAt_nativeCarryLogWave (z u : ℂ) :
   have hcomp :=
     (Complex.hasDerivAt_exp
       (-(carryComplexTimeParameter z) * u)).comp u hlinear
-  convert hcomp using 1
-  · rfl
-  · rw [mul_comm u (-(carryComplexTimeParameter z))]
+  simpa only [Function.comp_apply,
+    mul_comm
+      (Complex.exp (-(carryComplexTimeParameter z) * u))
+      (-(carryComplexTimeParameter z))] using hcomp
 
 /-- The native wave solves the fixed linear interior equation with characteristic
 parameter `z`. -/
