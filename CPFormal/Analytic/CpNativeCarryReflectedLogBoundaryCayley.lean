@@ -87,7 +87,11 @@ theorem nativeCarryReflectedLogCayley_greenDefect
     nativeCarryReflectedLogCayleyFlux,
     nativeCarryReflectedLogBoundaryForm,
     RCLike.inner_apply]
-  ring_nf
+  have htwo : (starRingEnd ℂ) (2 : ℂ) = 2 := by
+    change (2 : ℂ).conj = 2
+    norm_num
+  rw [htwo]
+  ring
 
 /-- The Cayley pencil restricted to the fixed reflected diagonal condition. -/
 def nativeCarryReflectedLogDiagonalCayleyPencil :
