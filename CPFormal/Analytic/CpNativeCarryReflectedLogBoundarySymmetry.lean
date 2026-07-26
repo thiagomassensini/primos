@@ -58,7 +58,7 @@ theorem nativeCarrySingleLogBoundaryIsotropic_eq_bot
         simp at hback
         exact hback
       · exact hxzero
-    simpa [hx0]
+    simp [hx0]
   · exact bot_le
 
 /-- Direct and reflected endpoint channels. -/
@@ -169,9 +169,8 @@ theorem reflectedParameter_carryComplexTimeParameter
     (z : ℂ) :
     reflectedParameter (carryComplexTimeParameter z) =
       carryComplexTimeParameter ((starRingEnd ℂ) z) := by
-  unfold reflectedParameter carryComplexTimeParameter
-  simp
-  ring_nf
+  apply Complex.ext <;>
+    simp [reflectedParameter, carryComplexTimeParameter] <;> ring
 
 /-- Direct/reflected native log-wave values at the common inner endpoint. -/
 def nativeCarryReflectedLogBoundaryValue
