@@ -36,7 +36,7 @@ theorem finiteCanonicalAngularGreenCorrection_eq_scalar_sub_green
         finiteReflectedGradientPairing (3 * M) s := by
   have hbudget :=
     finiteCanonicalAngularScalarPairing_eq_green_add_correction M s
-  linear_combination hbudget
+  linear_combination -hbudget
 
 /-- The cofinal reindexing `M ↦ 3M` tends to infinity. -/
 theorem tendsto_three_mul_atTop :
@@ -141,10 +141,13 @@ theorem scaledAngularGreenCorrection_closes_iff_criticalDisplacement_eq_zero
     have hc : c = 0 := by
       have hnegc : -c = 0 :=
         (mul_eq_zero.mp hproduct).resolve_right hE
-      linarith
+      exact neg_eq_zero.mp hnegc
+    have hcCast :
+        (((cpRadialDifference p (criticalDisplacement s.re) : ℝ) : ℂ)) = 0 := by
+      simpa [c] using hc
     have hradial :
         cpRadialDifference p (criticalDisplacement s.re) = 0 := by
-      exact_mod_cast hc
+      exact_mod_cast hcCast
     exact
       (cpRadialDifference_eq_zero_iff
         p hp (criticalDisplacement s.re)).mp hradial
@@ -153,8 +156,7 @@ theorem scaledAngularGreenCorrection_closes_iff_criticalDisplacement_eq_zero
         cpRadialDifference p (criticalDisplacement s.re) = 0 :=
       (cpRadialDifference_eq_zero_iff
         p hp (criticalDisplacement s.re)).2 hcritical
-    simpa [hradial] using
-      (tendsto_const_nhds : Tendsto (fun _ : ℕ => (0 : ℂ)) atTop (nhds 0))
+    simp [hradial]
 
 /-- Consequently the old one-sided correction bridge is exactly the strong
 complex-time zero-rigidity statement, not a weaker decay lemma. -/
@@ -181,7 +183,7 @@ theorem genuineOneSidedAngularGreenBridge_iff_zeroRigidity
     have hres : IsNativeCarryComplexTimeResonance z := by
       unfold IsNativeCarryComplexTimeResonance carryComplexTimeGenuine
       simpa [hz] using hzero
-    have him : z.im = 0 := hrigid z (by simpa [hz] using hs) hres
+    have him : z.im = 0 := hrigid (by simpa [hz] using hs) hres
     have hcritical : criticalDisplacement s.re = 0 := by
       have hzIm := carryComplexTimeOfParameter_im s
       dsimp [z] at him
