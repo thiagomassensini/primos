@@ -35,6 +35,11 @@ theorem norm_realSpectralState_le_one (t : ℝ) (n : ℕ) :
   · exact_mod_cast Nat.succ_le_succ (Nat.zero_le n)
   · norm_num
 
+/-- The first native spectral vertex is the unit seed. -/
+@[simp] theorem realSpectralState_zero (t : ℝ) :
+    realSpectralState t 0 = 1 := by
+  simp [realSpectralState, positiveDirichletValue]
+
 /-- Infinite native real-spectral state dressed by the vertical carry amplitude
 ratio `q^n`. -/
 def nativeCarryWeightedRealSpectralState
@@ -59,8 +64,7 @@ def nativeCarryWeightedRealSpectralState
 @[simp] theorem nativeCarryWeightedRealSpectralState_zero
     (q : ℝ) (hq0 : 0 ≤ q) (hq1 : q < 1) (t : ℝ) :
     nativeCarryWeightedRealSpectralState q hq0 hq1 t 0 = 1 := by
-  simp [nativeCarryWeightedRealSpectralState, realSpectralState,
-    positiveDirichletValue]
+  simp
 
 /-- The first positive coordinate is `q` times the first real-spectral vertex. -/
 @[simp] theorem nativeCarryWeightedRealSpectralState_one
@@ -96,7 +100,6 @@ theorem carryWeightedVerticalCenteredBracket_nativeSpectralState_succ
   have hqC : (q : ℂ) ≠ 0 := Complex.ofReal_ne_zero.mpr hqpos.ne'
   simp only [pow_succ]
   field_simp [hqC]
-  ring
 
 /-- Specialization to the material carry ratio of a base `p`. -/
 def primeCarryWeightedRealSpectralState
