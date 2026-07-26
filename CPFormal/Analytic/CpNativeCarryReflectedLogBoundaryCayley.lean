@@ -87,7 +87,8 @@ theorem nativeCarryReflectedLogCayley_greenDefect
     nativeCarryReflectedLogCayleyFlux,
     nativeCarryReflectedLogBoundaryForm,
     RCLike.inner_apply]
-  norm_num
+  have htwo : (starRingEnd ℂ) (2 : ℂ) = 2 := by simp
+  rw [htwo]
   ring
 
 /-- The Cayley pencil restricted to the fixed reflected diagonal condition. -/
