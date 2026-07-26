@@ -23,6 +23,7 @@ import CPFormal.Analytic.CpBranchNorm
 import CPFormal.Analytic.CpPositionalCarryQuadraticRigidity
 import CPFormal.Analytic.CpNativeCarryRealPlaneBracket
 import CPFormal.Analytic.CpNativeCarryRealPlaneComplexPackaging
+import CPFormal.Analytic.CpNativeCarryRealPlaneGreenRigidity
 import CPFormal.Analytic.CpTilt
 import CPFormal.Analytic.CpTiltRigidity
 import CPFormal.Analytic.CpGreenBridge
