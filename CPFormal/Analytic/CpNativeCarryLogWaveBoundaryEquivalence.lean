@@ -1,4 +1,4 @@
-import CPFormal.Analytic.CpNativeCarryWeightedRealSpectralState
+import CPFormal.Analytic.CpNativeCarryWeightedSpectralState
 
 /-!
 # Native log-wave eigen-boundary equivalence
