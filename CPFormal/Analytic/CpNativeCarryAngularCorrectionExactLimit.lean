@@ -158,6 +158,51 @@ theorem scaledAngularGreenCorrection_closes_iff_criticalDisplacement_eq_zero
         p hp (criticalDisplacement s.re)).2 hcritical
     simp [hradial]
 
+/-- On a bracket-closing native log wave, the exact Abel residual closes if and
+only if the reflected characteristic flux belongs to the fixed diagonal
+self-adjoint relation.  This is the precise final plug point. -/
+theorem scaledAngularGreenCorrection_closes_iff_reflectedLogFluxMatches
+    (p : ℕ) (hp : Nat.Prime p)
+    {z : ℂ} (hz : carryComplexTimeParameter z ∈ genuineCriticalStrip)
+    (hclose : NativeCarryLogWaveBoundaryCloses z) :
+    Tendsto
+        (fun M : ℕ =>
+          ((cpRadialDifference p
+            (criticalDisplacement (carryComplexTimeParameter z).re) : ℝ) : ℂ) *
+            finiteCanonicalAngularGreenCorrection M
+              (carryComplexTimeParameter z))
+        atTop (nhds 0) ↔
+      NativeCarryReflectedLogFluxMatches z := by
+  have hres : IsNativeCarryComplexTimeResonance z :=
+    (nativeCarryLogWaveBoundaryCloses_iff_resonance hz).1 hclose
+  have hzero :
+      genuineContinuation (carryComplexTimeParameter z) = 0 := by
+    simpa [IsNativeCarryComplexTimeResonance, carryComplexTimeGenuine] using hres
+  rw [scaledAngularGreenCorrection_closes_iff_criticalDisplacement_eq_zero
+      p hp hz hzero,
+    nativeCarryReflectedLogFluxMatches_iff_im_eq_zero,
+    criticalDisplacement_carryComplexTimeParameter_re]
+  constructor <;> intro h <;> linarith
+
+/-- The requested final implication follows immediately once the exact Abel
+residual is proved to close.  No scalar Genuine coefficient is inserted into
+the reflected boundary relation. -/
+theorem nativeCarryLogWaveBoundaryCloses_implies_reflectedLogFluxMatches_of_abelResidual
+    (p : ℕ) (hp : Nat.Prime p)
+    {z : ℂ} (hz : carryComplexTimeParameter z ∈ genuineCriticalStrip)
+    (hclose : NativeCarryLogWaveBoundaryCloses z)
+    (habel :
+      Tendsto
+        (fun M : ℕ =>
+          ((cpRadialDifference p
+            (criticalDisplacement (carryComplexTimeParameter z).re) : ℝ) : ℂ) *
+            finiteCanonicalAngularGreenCorrection M
+              (carryComplexTimeParameter z))
+        atTop (nhds 0)) :
+    NativeCarryReflectedLogFluxMatches z :=
+  (scaledAngularGreenCorrection_closes_iff_reflectedLogFluxMatches
+    p hp hz hclose).1 habel
+
 /-- Consequently the old one-sided correction bridge is exactly the strong
 complex-time zero-rigidity statement, not a weaker decay lemma. -/
 theorem genuineOneSidedAngularGreenBridge_iff_zeroRigidity
