@@ -82,7 +82,11 @@ theorem nativeCarryReflectedLogCayleyFlux_boundaryFlux_eq_displacement
     nativeCarryReflectedLogBoundaryFlux_eq]
   change (Complex.I / 2) * (z - (starRingEnd ℂ) z) =
     ((-z.im : ℝ) : ℂ)
-  apply Complex.ext <;> simp <;> ring
+  apply Complex.ext
+  · simp
+    ring
+  · simp
+    ring
 
 /-- The raw zero-flux relation has one characteristic slope only: zero. -/
 theorem nativeCarryZeroFluxBoundaryRelation_hasCharacteristicSlope_iff
