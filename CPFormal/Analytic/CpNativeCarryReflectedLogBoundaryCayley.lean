@@ -87,6 +87,7 @@ theorem nativeCarryReflectedLogCayley_greenDefect
     nativeCarryReflectedLogCayleyFlux,
     nativeCarryReflectedLogBoundaryForm,
     RCLike.inner_apply]
+  norm_num
   ring
 
 /-- The Cayley pencil restricted to the fixed reflected diagonal condition. -/
@@ -160,8 +161,10 @@ theorem nativeCarryReflectedLogDiagonalCayley_relation_eq_zeroFlux :
       ⟨(boundary.1, boundary.1), rfl⟩
     refine ⟨x, ?_⟩
     apply Prod.ext
-    · simpa [x] using nativeCarryReflectedLogDiagonalCayleyValue_eq x
-    · rw [nativeCarryReflectedLogDiagonalCayleyFlux_eq_zero, hboundary]
+    · change nativeCarryReflectedLogDiagonalCayleyPencil.valueTrace x = boundary.1
+      simp [x]
+    · change nativeCarryReflectedLogDiagonalCayleyPencil.fluxTrace x = boundary.2
+      rw [nativeCarryReflectedLogDiagonalCayleyFlux_eq_zero, hboundary]
 
 /-- The scalar zero-flux relation equals its symplectic adjoint. -/
 theorem nativeCarryZeroFluxBoundaryRelation_isSelfAdjoint :
@@ -179,8 +182,10 @@ theorem nativeCarryZeroFluxBoundaryRelation_isSelfAdjoint :
     rw [mem_nativeCarryZeroFluxBoundaryRelation] at hboundary
     rw [Submodule.mem_adjoint_iff]
     intro a b hab
-    rw [mem_nativeCarryZeroFluxBoundaryRelation] at hab
-    simp [hboundary, hab]
+    have hb : b = 0 := hab
+    change inner ℂ b boundary.1 - inner ℂ a boundary.2 = 0
+    rw [hb, hboundary]
+    simp
 
 /-- The fixed direct/reflected diagonal boundary relation is genuinely
 self-adjoint after the Cayley transform. -/
