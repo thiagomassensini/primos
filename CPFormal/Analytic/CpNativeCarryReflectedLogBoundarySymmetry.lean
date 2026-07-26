@@ -171,6 +171,7 @@ theorem reflectedParameter_carryComplexTimeParameter
       carryComplexTimeParameter ((starRingEnd ℂ) z) := by
   apply Complex.ext
   · simp [reflectedParameter, carryComplexTimeParameter]
+    ring
   · simp [reflectedParameter, carryComplexTimeParameter]
 
 /-- Direct/reflected native log-wave values at the common inner endpoint. -/
