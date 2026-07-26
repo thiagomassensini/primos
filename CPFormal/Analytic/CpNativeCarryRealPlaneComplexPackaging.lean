@@ -70,6 +70,49 @@ theorem nativeCarryRealPlaneComplexPackaging_finiteChartAt
     (nativeCarryRealPlaneSampleAt sigma t)
 
 /--
+For every camera width, prime or composite, packaging preserves the zero
+predicate of an arbitrary real-plane input field.
+-/
+theorem nativeCarryFiniteSaturatedChart_zero_iff_packaged_zero
+    (p M : ℕ) (f : ℤ → NativeCarryRealPlane) :
+    nativeCarryFiniteSaturatedChart p M f = 0 ↔
+      nativeCarryFiniteSaturatedChart p M
+        (fun n => nativeCarryRealPlaneComplexPackaging (f n)) = 0 := by
+  constructor
+  · intro hreal
+    have hpack :=
+      map_nativeCarryFiniteSaturatedChart
+        nativeCarryRealPlaneComplexPackaging p M f
+    rw [hreal] at hpack
+    simpa using hpack.symm
+  · intro hpackaged
+    apply nativeCarryRealPlaneComplexPackaging_injective
+    rw [map_zero]
+    calc
+      nativeCarryRealPlaneComplexPackaging
+          (nativeCarryFiniteSaturatedChart p M f) =
+          nativeCarryFiniteSaturatedChart p M
+            (fun n => nativeCarryRealPlaneComplexPackaging (f n)) :=
+        map_nativeCarryFiniteSaturatedChart
+          nativeCarryRealPlaneComplexPackaging p M f
+      _ = 0 := hpackaged
+
+/--
+For every camera width, packaging also preserves the quadratic energy of the
+resultant.
+-/
+theorem normSq_packaged_nativeCarryFiniteSaturatedChart
+    (p M : ℕ) (f : ℤ → NativeCarryRealPlane) :
+    Complex.normSq
+        (nativeCarryFiniteSaturatedChart p M
+          (fun n => nativeCarryRealPlaneComplexPackaging (f n))) =
+      nativeCarryRealPlaneEnergy
+        (nativeCarryFiniteSaturatedChart p M f) := by
+  rw [← map_nativeCarryFiniteSaturatedChart
+    nativeCarryRealPlaneComplexPackaging p M f]
+  exact normSq_nativeCarryRealPlaneComplexPackaging _
+
+/--
 For an odd prime camera, the packaged real resultant is literally the generic
 finite Genuine chart evaluated on the packaged real samples.
 -/
