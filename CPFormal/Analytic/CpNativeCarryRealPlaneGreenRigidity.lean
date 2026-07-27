@@ -270,7 +270,7 @@ theorem relationHasConformalSlope_time_unique
     exact nativeCarryRealPlaneOrientedPair_ne_zero hv hu
   have hcoordinate : pairing.1 ≠ 0 ∨ pairing.2 ≠ 0 := by
     by_contra h
-    push_neg at h
+    push Not at h
     apply hpairing
     exact Prod.ext h.1 h.2
   rcases hcoordinate with hfirst | hsecond
