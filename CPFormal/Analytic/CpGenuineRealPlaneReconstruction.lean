@@ -1,6 +1,6 @@
 import CPFormal.Analytic.CpNativeCarryRealPrecompressionBoundaryWitness
 import CPFormal.Analytic.CpNativeCarryRealPlaneComplexPackaging
-import CPFormal.Analytic.CpNativeCarryLogWaveBoundaryEquivalence
+import CPFormal.Analytic.CpGenuineCompatibility
 
 /-!
 # Genuine closure and native real-plane reconstruction
