@@ -214,9 +214,29 @@ theorem nativeCarryRealPlaneBoundaryClosesAt_iff_genuineContinuation_zero
         (fun M : ℕ =>
           nativeCarryRealPlaneFiniteChartAt 3 M sigma time)).1 hpackaged
 
-/-- Clean reconstruction theorem for the isolated Genuine operator: a scalar
-zero cannot occur off the critical line when its native real camera closure
-reconstructs the retained pre-compression state. -/
+/-- Minimal quadratic reconstruction theorem for the isolated Genuine
+operator.  Once a closing bracket is known to preserve the native carry mass,
+the quadratic rigidity proved before complex packaging forces `sigma = 1/2`. -/
+theorem genuineContinuation_ne_zero_off_critical_of_quadratic_mass_reconstruction
+    {sigma time : ℝ}
+    (hsigma0 : 0 < sigma) (hsigma1 : sigma < 1)
+    (hoff : sigma ≠ (1 : ℝ) / 2)
+    (hmass :
+      NativeCarryRealPlaneBoundaryClosesAt sigma time →
+        NativeCarryRealPlaneMassCompatible sigma time) :
+    genuineContinuation
+        (((sigma : ℂ) + (time : ℂ) * Complex.I)) ≠ 0 := by
+  intro hzero
+  have hclose :
+      NativeCarryRealPlaneBoundaryClosesAt sigma time :=
+    (nativeCarryRealPlaneBoundaryClosesAt_iff_genuineContinuation_zero
+      hsigma0 hsigma1).2 hzero
+  exact hoff
+    ((nativeCarryRealPlaneMassCompatible_iff sigma time).1
+      (hmass hclose))
+
+/-- State-level form of the same result.  A retained pre-compression witness
+supplies the quadratic mass premise without any completed operator. -/
 theorem genuineContinuation_ne_zero_off_critical_of_precompression_reconstruction
     {sigma time : ℝ}
     (hsigma0 : 0 < sigma) (hsigma1 : sigma < 1)
@@ -226,16 +246,12 @@ theorem genuineContinuation_ne_zero_off_critical_of_precompression_reconstructio
         NativeCarryRealPlaneBoundaryClosureHasPrecompressionLift sigma time) :
     genuineContinuation
         (((sigma : ℂ) + (time : ℂ) * Complex.I)) ≠ 0 := by
-  intro hzero
-  have hclose :
-      NativeCarryRealPlaneBoundaryClosesAt sigma time :=
-    (nativeCarryRealPlaneBoundaryClosesAt_iff_genuineContinuation_zero
-      hsigma0 hsigma1).2 hzero
-  have hmass : NativeCarryRealPlaneMassCompatible sigma time :=
-    boundaryClosurePrecompressionLift_massCompatible
-      (hreconstruct hclose)
-  exact hoff
-    ((nativeCarryRealPlaneMassCompatible_iff sigma time).1 hmass)
+  apply
+    genuineContinuation_ne_zero_off_critical_of_quadratic_mass_reconstruction
+      hsigma0 hsigma1 hoff
+  intro hclose
+  exact boundaryClosurePrecompressionLift_massCompatible
+    (hreconstruct hclose)
 
 end
 
