@@ -42,7 +42,7 @@ theorem nativeCarryRealPlaneComplexPackaging_sampleAt_eq_dirichletTerm
   rw [nativeCarryRealPlaneSampleAt_of_pos sigma time hn]
   unfold dirichletTerm
   rw [Complex.cpow_def_of_ne_zero hnC,
-    Complex.ofReal_log hnR.le]
+    ← Complex.ofReal_log hnR.le]
   let z : ℂ :=
     (Real.log (n : ℝ) : ℂ) *
       (-((sigma : ℂ) + (time : ℂ) * Complex.I))
