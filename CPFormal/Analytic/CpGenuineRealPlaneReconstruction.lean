@@ -39,9 +39,12 @@ theorem nativeCarryRealPlaneComplexPackaging_sampleAt_eq_dirichletTerm
     exact_mod_cast hn
   have hnC : (n : ℂ) ≠ 0 := by
     exact_mod_cast (ne_of_gt hn)
+  have hnCast : (n : ℂ) = ((n : ℝ) : ℂ) := by
+    norm_cast
   rw [nativeCarryRealPlaneSampleAt_of_pos sigma time hn]
   unfold dirichletTerm
   rw [Complex.cpow_def_of_ne_zero hnC,
+    hnCast,
     ← Complex.ofReal_log hnR.le]
   let z : ℂ :=
     (Real.log (n : ℝ) : ℂ) *
@@ -103,20 +106,31 @@ theorem tendsto_nativeCarryRealPlaneComplexPackaging_zero_iff
         atTop (nhds 0) ↔
       Tendsto u atTop (nhds 0) := by
   let unpack : ℂ → NativeCarryRealPlane := fun z => (z.re, z.im)
+  have hpackEq :
+      (fun v : NativeCarryRealPlane =>
+        nativeCarryRealPlaneComplexPackaging v) =
+      (fun v : NativeCarryRealPlane =>
+        (v.1 : ℂ) + (v.2 : ℂ) * Complex.I) := by
+    funext v
+    apply Complex.ext <;>
+      simp [nativeCarryRealPlaneComplexPackaging]
   have hpack :
       Continuous
         (fun v : NativeCarryRealPlane =>
           nativeCarryRealPlaneComplexPackaging v) := by
+    rw [hpackEq]
     fun_prop
   have hunpack : Continuous unpack := by
     fun_prop
   constructor
   · intro h
     have h' := hunpack.continuousAt.tendsto.comp h
-    simpa [unpack, nativeCarryRealPlaneComplexPackaging] using h'
+    simpa [Function.comp_def, unpack,
+      nativeCarryRealPlaneComplexPackaging] using h'
   · intro h
     have h' := hpack.continuousAt.tendsto.comp h
-    simpa [nativeCarryRealPlaneComplexPackaging] using h'
+    simpa [Function.comp_def,
+      nativeCarryRealPlaneComplexPackaging] using h'
 
 /-- In the open critical strip, closure of the primitive real camera is
 exactly zero of the isolated scalar Genuine operator. -/
@@ -127,16 +141,16 @@ theorem nativeCarryRealPlaneBoundaryClosesAt_iff_genuineContinuation_zero
         (((sigma : ℂ) + (time : ℂ) * Complex.I)) = 0 := by
   let s : ℂ := (sigma : ℂ) + (time : ℂ) * Complex.I
   have hs : s ∈ genuineCriticalStrip := by
-    constructor <;> simpa [s] using ‹_›
+    constructor
+    · simpa [s] using (show -1 < sigma by linarith)
+    · simpa [s] using hsigma1
   have hlimit :
       Tendsto
         (fun M : ℕ =>
           CPFormal.Genuine.Cp.finiteChart 3 M (dirichletTerm s))
         atTop (nhds (bracketedDirichletChart 3 s)) :=
     finiteChart_dirichlet_tendsto_bracketedDirichletChart
-      3 (by norm_num) (by norm_num) (by
-        dsimp [s]
-        linarith)
+      3 (by norm_num) (by norm_num) hs.1
   have hzero :
       bracketedDirichletChart 3 s = 0 ↔
         genuineContinuation s = 0 :=
@@ -202,9 +216,11 @@ theorem genuineContinuation_ne_zero_off_critical_of_precompression_reconstructio
       NativeCarryRealPlaneBoundaryClosesAt sigma time :=
     (nativeCarryRealPlaneBoundaryClosesAt_iff_genuineContinuation_zero
       hsigma0 hsigma1).2 hzero
+  have hmass : NativeCarryRealPlaneMassCompatible sigma time :=
+    boundaryClosurePrecompressionLift_massCompatible
+      (hreconstruct hclose)
   exact hoff
-    (boundaryClosurePrecompressionLift_sigma_eq_half
-      (hreconstruct hclose))
+    ((nativeCarryRealPlaneMassCompatible_iff sigma time).1 hmass)
 
 end
 
