@@ -1,4 +1,5 @@
 import CPFormal.Analytic.CpNativeCarryRealPlaneGreenRigidity
+import CPFormal.Analytic.CpNativeCarryRealSpectralBoundaryCarrier
 
 /-!
 # Exact confinement of the native real carry operator
