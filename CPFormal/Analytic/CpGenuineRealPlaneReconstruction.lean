@@ -60,15 +60,23 @@ theorem nativeCarryRealPlaneComplexPackaging_sampleAt_eq_dirichletTerm
   have hzim : z.im = -time * Real.log (n : ℝ) := by
     simp [z]
     ring
+  have hamp :
+      (n : ℝ) ^ (-sigma) =
+        Real.exp (-sigma * Real.log (n : ℝ)) := by
+    rw [Real.rpow_def_of_pos hnR]
+    congr 1
+    ring
   apply Complex.ext
-  · rw [Complex.exp_re, hzre, hzim]
-    simp [nativeCarryRealPlaneComplexPackaging,
-      Real.rpow_def_of_pos hnR]
-    ring
-  · rw [Complex.exp_im, hzre, hzim]
-    simp [nativeCarryRealPlaneComplexPackaging,
-      Real.rpow_def_of_pos hnR]
-    ring
+  · change
+      (n : ℝ) ^ (-sigma) *
+          Real.cos (-time * Real.log (n : ℝ)) =
+        (Complex.exp z).re
+    rw [Complex.exp_re, hzre, hzim, hamp]
+  · change
+      (n : ℝ) ^ (-sigma) *
+          Real.sin (-time * Real.log (n : ℝ)) =
+        (Complex.exp z).im
+    rw [Complex.exp_im, hzre, hzim, hamp]
 
 /-- A finite primitive real camera packages to the literal finite Dirichlet
 camera at `sigma + time * I`. -/
@@ -125,10 +133,15 @@ theorem tendsto_nativeCarryRealPlaneComplexPackaging_zero_iff
   constructor
   · intro h
     have h' := hunpack.continuousAt.tendsto.comp h
+    change Tendsto u atTop (nhds ((0, 0) : NativeCarryRealPlane))
     simpa [Function.comp_def, unpack,
       nativeCarryRealPlaneComplexPackaging] using h'
   · intro h
     have h' := hpack.continuousAt.tendsto.comp h
+    change
+      Tendsto
+        (fun M => nativeCarryRealPlaneComplexPackaging (u M))
+        atTop (nhds ({ re := 0, im := 0 } : ℂ))
     simpa [Function.comp_def,
       nativeCarryRealPlaneComplexPackaging] using h'
 
@@ -142,15 +155,17 @@ theorem nativeCarryRealPlaneBoundaryClosesAt_iff_genuineContinuation_zero
   let s : ℂ := (sigma : ℂ) + (time : ℂ) * Complex.I
   have hs : s ∈ genuineCriticalStrip := by
     constructor
-    · simpa [s] using (show -1 < sigma by linarith)
+    · simpa [s] using hsigma0
     · simpa [s] using hsigma1
+  have hsMinusOne : -1 < s.re :=
+    lt_trans (by norm_num) hs.1
   have hlimit :
       Tendsto
         (fun M : ℕ =>
           CPFormal.Genuine.Cp.finiteChart 3 M (dirichletTerm s))
         atTop (nhds (bracketedDirichletChart 3 s)) :=
     finiteChart_dirichlet_tendsto_bracketedDirichletChart
-      3 (by norm_num) (by norm_num) hs.1
+      3 (by norm_num) (by norm_num) hsMinusOne
   have hzero :
       bracketedDirichletChart 3 s = 0 ↔
         genuineContinuation s = 0 :=
