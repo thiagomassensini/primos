@@ -119,7 +119,7 @@ theorem relationHasConformalSlope_transverse_eq_zero
   rw [hvalue, hflux] at hgreen
   have hactive : ∃ i : ι, u i ≠ 0 := by
     by_contra h
-    push_neg at h
+    push Not at h
     apply hu
     funext i
     exact h i
@@ -203,10 +203,7 @@ theorem nativeCarryRealTimeMultiplicationBoundaryPencil_relationHasSlope
   have hu : u ≠ 0 := by
     intro hzero
     have hatTime := congrFun hzero time
-    have hone : (((1 : ℝ), (0 : ℝ)) : NativeCarryRealPlane) ≠ 0 := by
-      norm_num
-    apply hone
-    simpa [u] using hatTime
+    simp [u] at hatTime
   refine ⟨u, hu, ?_⟩
   change
     (u, nativeCarryRealPlaneFamilyConformalAction time 0 u) ∈
