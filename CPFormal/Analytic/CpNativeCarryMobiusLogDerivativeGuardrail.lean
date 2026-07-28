@@ -65,7 +65,7 @@ theorem primePowerSignal_divisorSum_eq_integerLog (n : ℕ) :
 
 /-- The extracted signal is supported exactly on prime powers. -/
 theorem primePowerSignal_ne_zero_iff_primePower {n : ℕ} :
-    Λ n ≠ 0 ↔ Nat.IsPrimePow n :=
+    Λ n ≠ 0 ↔ IsPrimePow n :=
   ArithmeticFunction.vonMangoldt_ne_zero_iff
 
 /-- On the half-plane of absolute convergence, the L-series of the extracted
