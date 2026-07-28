@@ -168,3 +168,4 @@ import CPFormal.Analytic.CpGenuineSecondDifferenceIdentity
 import CPFormal.Analytic.CpFiniteScalarSynthesis
 import CPFormal.Analytic.CpFiniteScalarSynthesisSummationByParts
 import CPFormal.Analytic.CpFiniteScalarSynthesisClosedDefectObstruction
+import CPFormal.Analytic.CpNativeCarryMobiusLogDerivativeGuardrail
