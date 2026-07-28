@@ -234,7 +234,19 @@ theorem nativeCarryRealBoundaryClosure_to_genuineContinuation_zero
             (nativeCarryRealPlaneFiniteChartAt 3 M s.re s.im))
         atTop (nhds 0) := by
     have hcomplex := hre.ofReal.add (him.ofReal.mul_const Complex.I)
-    simpa [nativeCarryRealPlaneComplexPackaging, Complex.ext_iff] using hcomplex
+    have hfun :
+        (fun M : ℕ =>
+          nativeCarryRealPlaneComplexPackaging
+            (nativeCarryRealPlaneFiniteChartAt 3 M s.re s.im)) =
+          (fun M : ℕ =>
+            ((nativeCarryRealPlaneFiniteChartAt 3 M s.re s.im).1 : ℂ) +
+              ((nativeCarryRealPlaneFiniteChartAt 3 M s.re s.im).2 : ℂ) *
+                Complex.I) := by
+      funext M
+      apply Complex.ext <;>
+        simp [nativeCarryRealPlaneComplexPackaging]
+    rw [hfun]
+    simpa using hcomplex
   have hdirichlet :
       Tendsto
         (fun M : ℕ =>
