@@ -57,18 +57,18 @@ theorem nativeCarryRealPlaneComplexPackaging_sampleAt_eq_dirichletTerm
   apply Complex.ext
   · rw [nativeCarryRealPlaneComplexPackaging_re, Complex.exp_re]
     simp only [Complex.mul_re, Complex.mul_im, Complex.ofReal_re,
-      Complex.ofReal_im, Complex.neg_re, Complex.neg_im, mul_zero,
-      zero_mul, zero_add, add_zero, sub_zero]
+      Complex.ofReal_im, Complex.neg_re, Complex.neg_im, zero_mul,
+      add_zero, sub_zero]
     rw [← Real.rpow_def_of_pos hnR]
     congr 1
-    ring
+    ring_nf
   · rw [nativeCarryRealPlaneComplexPackaging_im, Complex.exp_im]
     simp only [Complex.mul_re, Complex.mul_im, Complex.ofReal_re,
-      Complex.ofReal_im, Complex.neg_re, Complex.neg_im, mul_zero,
-      zero_mul, zero_add, add_zero, sub_zero]
+      Complex.ofReal_im, Complex.neg_re, Complex.neg_im, zero_mul,
+      add_zero, sub_zero]
     rw [← Real.rpow_def_of_pos hnR]
     congr 1
-    ring
+    ring_nf
 
 /-- The packaged finite primitive resultant is the finite Dirichlet Genuine
 chart at the same `(sigma,time)` parameter. -/
