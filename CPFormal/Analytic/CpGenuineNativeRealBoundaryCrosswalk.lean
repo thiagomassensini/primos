@@ -207,6 +207,73 @@ theorem genuineContinuation_zero_to_nativeCarryRealBoundaryClosure
   exact hre.prodMk_nhds him
 
 
+
+/-- Conversely, a closing primitive real boundary packages to a closing
+Dirichlet chart and therefore is a Genuine zero. -/
+theorem nativeCarryRealBoundaryClosure_to_genuineContinuation_zero
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip)
+    (hclose :
+      NativeCarryRealOperatorBoundaryClosesAt 3 s.re s.im) :
+    genuineContinuation s = 0 := by
+  have hre :
+      Tendsto
+        (fun M : ℕ =>
+          (nativeCarryRealPlaneFiniteChartAt 3 M s.re s.im).1)
+        atTop (nhds 0) := by
+    exact continuous_fst.continuousAt.tendsto.comp hclose
+  have him :
+      Tendsto
+        (fun M : ℕ =>
+          (nativeCarryRealPlaneFiniteChartAt 3 M s.re s.im).2)
+        atTop (nhds 0) := by
+    exact continuous_snd.continuousAt.tendsto.comp hclose
+  have hpackaged :
+      Tendsto
+        (fun M : ℕ =>
+          nativeCarryRealPlaneComplexPackaging
+            (nativeCarryRealPlaneFiniteChartAt 3 M s.re s.im))
+        atTop (nhds 0) := by
+    have hcomplex := hre.ofReal.add (him.ofReal.mul_const Complex.I)
+    simpa [nativeCarryRealPlaneComplexPackaging, Complex.ext_iff] using hcomplex
+  have hdirichlet :
+      Tendsto
+        (fun M : ℕ =>
+          CPFormal.Genuine.Cp.finiteChart 3 M (dirichletTerm s))
+        atTop (nhds 0) := by
+    have hfinite :
+        (fun M : ℕ =>
+          nativeCarryRealPlaneComplexPackaging
+            (nativeCarryRealPlaneFiniteChartAt 3 M s.re s.im)) =
+          (fun M : ℕ =>
+            CPFormal.Genuine.Cp.finiteChart 3 M (dirichletTerm s)) := by
+      funext M
+      simpa [nativeCarryRealPlaneParameter] using
+        (nativeCarryRealPlaneComplexPackaging_finiteChartAt_eq_dirichlet
+          3 M (by norm_num) (by norm_num) s.re s.im)
+    rw [← hfinite]
+    exact hpackaged
+  have hhalf : -1 < s.re := by
+    linarith [hs.1]
+  have hlimit :=
+    finiteChart_dirichlet_tendsto_bracketedDirichletChart
+      3 (by norm_num) (by norm_num) hhalf
+  have hchart : bracketedDirichletChart 3 s = 0 :=
+    tendsto_nhds_unique hlimit hdirichlet
+  exact
+    (bracketedDirichletChart_zero_iff_genuineContinuation_zero
+      3 (by norm_num) (by norm_num) hs).1 hchart
+
+/-- The scalar Genuine and the primitive real-plane camera have exactly the
+same zero set in the open strip; complex notation only packages two real
+coordinates. -/
+theorem nativeCarryRealBoundaryClosure_iff_genuineContinuation_zero
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
+    NativeCarryRealOperatorBoundaryClosesAt 3 s.re s.im ↔
+      genuineContinuation s = 0 := by
+  constructor
+  · exact nativeCarryRealBoundaryClosure_to_genuineContinuation_zero hs
+  · exact genuineContinuation_zero_to_nativeCarryRealBoundaryClosure hs
+
 end
 
 end CPFormal.Analytic.Cp
