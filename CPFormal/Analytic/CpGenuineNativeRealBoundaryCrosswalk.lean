@@ -206,6 +206,20 @@ theorem genuineContinuation_zero_to_nativeCarryRealBoundaryClosure
   unfold NativeCarryRealOperatorBoundaryClosesAt
   exact hre.prodMk_nhds him
 
+
+/--
+Terminal composition experiment: the Genuine zero already supplies the
+primitive boundary-closing component of a native operator zero.  The
+remaining component is intentionally left to Lean so the kernel reports the
+precise state-level obligation needed for confinement.
+-/
+theorem genuineContinuation_zero_re_eq_half_terminalExperiment
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip)
+    (hzero : genuineContinuation s = 0) :
+    s.re = (1 : ℝ) / 2 := by
+  apply nativeCarryRealOperatorZero_sigma_eq_half
+  refine ⟨?_, genuineContinuation_zero_to_nativeCarryRealBoundaryClosure hs hzero⟩
+
 end
 
 end CPFormal.Analytic.Cp
