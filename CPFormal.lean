@@ -27,6 +27,7 @@ import CPFormal.Analytic.CpNativeCarryRealPlaneGreenRigidity
 import CPFormal.Analytic.CpNativeCarryRealOperatorConfinement
 import CPFormal.Analytic.CpNativeCarryRealSpectralBoundaryCarrier
 import CPFormal.Analytic.CpNativeCarryRealPrecompressionBoundaryWitness
+import CPFormal.Analytic.CpGenuineNativeRealBoundaryCrosswalk
 import CPFormal.Analytic.CpTilt
 import CPFormal.Analytic.CpTiltRigidity
 import CPFormal.Analytic.CpGreenBridge
