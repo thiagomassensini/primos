@@ -52,19 +52,20 @@ theorem nativeCarryRealPlaneComplexPackaging_sampleAt_eq_dirichletTerm
       Complex.log (n : ℂ) = (Real.log (n : ℝ) : ℂ) :=
     (Complex.ofReal_log hnR.le).symm
   rw [nativeCarryRealPlaneSampleAt_of_pos sigma time hn]
-  unfold nativeCarryRealPlaneComplexPackaging dirichletTerm
-    nativeCarryRealPlaneParameter
+  unfold dirichletTerm nativeCarryRealPlaneParameter
   rw [Complex.cpow_def_of_ne_zero hnC, hlog]
   apply Complex.ext
-  · rw [Complex.exp_re]
-    simp only [Complex.mul_re, Complex.ofReal_re, Complex.neg_re,
-      Complex.ofReal_im, mul_zero, zero_mul, sub_zero]
+  · rw [nativeCarryRealPlaneComplexPackaging_re, Complex.exp_re]
+    simp only [Complex.mul_re, Complex.mul_im, Complex.ofReal_re,
+      Complex.ofReal_im, Complex.neg_re, Complex.neg_im, mul_zero,
+      zero_mul, zero_add, add_zero, sub_zero]
     rw [← Real.rpow_def_of_pos hnR]
     congr 1
     ring
-  · rw [Complex.exp_im]
-    simp only [Complex.mul_im, Complex.ofReal_re, Complex.neg_re,
-      Complex.ofReal_im, mul_zero, zero_mul, add_zero]
+  · rw [nativeCarryRealPlaneComplexPackaging_im, Complex.exp_im]
+    simp only [Complex.mul_re, Complex.mul_im, Complex.ofReal_re,
+      Complex.ofReal_im, Complex.neg_re, Complex.neg_im, mul_zero,
+      zero_mul, zero_add, add_zero, sub_zero]
     rw [← Real.rpow_def_of_pos hnR]
     congr 1
     ring
@@ -179,15 +180,29 @@ theorem genuineContinuation_zero_to_nativeCarryRealBoundaryClosure
         (fun M : ℕ =>
           (nativeCarryRealPlaneFiniteChartAt 3 M s.re s.im).1)
         atTop (nhds 0) := by
-    simpa using
+    have h :=
       Complex.continuous_re.continuousAt.tendsto.comp hpackaged
+    change
+      Tendsto
+        (fun M : ℕ =>
+          (nativeCarryRealPlaneComplexPackaging
+            (nativeCarryRealPlaneFiniteChartAt 3 M s.re s.im)).re)
+        atTop (nhds 0) at h
+    simpa only [nativeCarryRealPlaneComplexPackaging_re] using h
   have him :
       Tendsto
         (fun M : ℕ =>
           (nativeCarryRealPlaneFiniteChartAt 3 M s.re s.im).2)
         atTop (nhds 0) := by
-    simpa using
+    have h :=
       Complex.continuous_im.continuousAt.tendsto.comp hpackaged
+    change
+      Tendsto
+        (fun M : ℕ =>
+          (nativeCarryRealPlaneComplexPackaging
+            (nativeCarryRealPlaneFiniteChartAt 3 M s.re s.im)).im)
+        atTop (nhds 0) at h
+    simpa only [nativeCarryRealPlaneComplexPackaging_im] using h
   unfold NativeCarryRealOperatorBoundaryClosesAt
   exact hre.prodMk_nhds him
 
