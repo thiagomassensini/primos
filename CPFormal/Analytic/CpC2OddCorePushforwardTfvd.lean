@@ -64,6 +64,20 @@ def c2OddCoreFourScaleDefect (M m : ℕ) : ℚ :=
 def c2OddCoreFourScaleDefectReal (M m : ℕ) : ℝ :=
   (c2OddCoreFourScaleDefect M m : ℝ)
 
+/-- Every concrete four-scale defect is strictly positive.  This is a finite
+geometric fact and needs no primality, Genuine-zero, or localization
+hypothesis. -/
+theorem c2OddCoreFourScaleDefect_pos (M m : ℕ) :
+    0 < c2OddCoreFourScaleDefect M m := by
+  unfold c2OddCoreFourScaleDefect
+  exact sub_pos.mpr
+    (CPFormal.Carry.C2.oddCoreTruncatedMass_lt_one (4 * M) m)
+
+/-- Real-cast form of strict positivity of the concrete four-scale defect. -/
+theorem c2OddCoreFourScaleDefectReal_pos (M m : ℕ) :
+    0 < c2OddCoreFourScaleDefectReal M m := by
+  exact_mod_cast c2OddCoreFourScaleDefect_pos M m
+
 /--
 Actual connected Richardson identity at the three cores `p`, `q`, and `pq`.
 The hypotheses state exactly where the concrete dyadic correction is used.
