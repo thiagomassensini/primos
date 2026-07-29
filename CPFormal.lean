@@ -92,6 +92,7 @@ import CPFormal.Analytic.CpGenuineGreenCompletedOperator
 import CPFormal.Analytic.CpGenuineCrossPrimeObservability
 import CPFormal.Analytic.CpGenuinePrimeGreenBessel
 import CPFormal.Analytic.CpGenuineKernelPrimeState
+import CPFormal.Analytic.CpNativeGprePrimeCarryContraction
 import CPFormal.Analytic.CpGenuineGreenKernelInclusion
 import CPFormal.Analytic.CpNativeCarrySpectrumExhaustion
 import CPFormal.Analytic.CpNativeCarrySelfAdjointBoundaryPencil
