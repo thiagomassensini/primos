@@ -76,6 +76,7 @@ theorem c2OddCoreFourScaleDefect_pos (M m : ℕ) :
 /-- Real-cast form of strict positivity of the concrete four-scale defect. -/
 theorem c2OddCoreFourScaleDefectReal_pos (M m : ℕ) :
     0 < c2OddCoreFourScaleDefectReal M m := by
+  unfold c2OddCoreFourScaleDefectReal
   exact_mod_cast c2OddCoreFourScaleDefect_pos M m
 
 /--
