@@ -160,10 +160,10 @@ theorem inner_canonicalProvenanceState_eq_norm_sq_of_realizesOn
     have h := hrealizes p hp
     rw [inner_primeCriticalCenteredCarryGlobalAxis] at h
     exact h
-  rw [lp.inner_single_left]
+  rw [lp.inner_single_left, real_inner_comm]
   unfold finiteEnrichedPrimeCarryDefectProvenanceState
     primeCriticalCenteredCarryDualAxis
-  rw [inner_smul_left, inner_smul_left, hlocal]
+  rw [inner_smul_right, inner_smul_right, real_inner_comm, hlocal]
   ring
 
 /--
