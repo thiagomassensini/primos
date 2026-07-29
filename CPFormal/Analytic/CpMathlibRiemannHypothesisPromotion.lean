@@ -116,6 +116,7 @@ theorem nontrivialRiemannZetaZero_mem_genuineCriticalStrip
       intro hkzero
       apply hk_ne_zero
       rw [← hk_int, hkzero]
+      norm_num
     obtain ⟨n, hn⟩ :=
       Nat.exists_eq_succ_of_ne_zero hk_toNat_ne_zero
     have hk_complex : (k.toNat : ℂ) = (k : ℂ) := by
