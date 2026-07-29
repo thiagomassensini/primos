@@ -30,7 +30,7 @@ def residueAtDepth (b k n : ℕ) : ℕ :=
 Maximal vertical depth of `n` in base `b`.  For `b > 1` and `n > 0`, this is
 the greatest exponent whose base power divides `n`.
 -/
-def positionalDepth (b n : ℕ) : ℕ :=
+noncomputable def positionalDepth (b n : ℕ) : ℕ :=
   multiplicity b n
 
 /--
