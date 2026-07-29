@@ -31,7 +31,7 @@ theorem nontrivialRiemannZetaZero_mem_genuineCriticalStrip
     {s : ℂ}
     (hzero : riemannZeta s = 0)
     (htrivial : ¬ ∃ n : ℕ, s = -2 * (n + 1))
-    (hone : s ≠ 1) :
+    (_hone : s ≠ 1) :
     s ∈ genuineCriticalStrip := by
   constructor
   · by_contra hnot
@@ -148,8 +148,7 @@ theorem mathlibRiemannHypothesis_iff_openCriticalStripConfinement :
       have hre := congrArg Complex.re hsone
       norm_num at hre
       linarith [hs.2]
-  · intro hstrip
-    intro s hzero htrivial hone
+  · intro hstrip s hzero htrivial hone
     exact hstrip
       (nontrivialRiemannZetaZero_mem_genuineCriticalStrip
         hzero htrivial hone)
