@@ -99,7 +99,7 @@ theorem nativeGprePrimeCarryContractionMajorant_tsum :
         HasSum
           (fun n : ℕ =>
             nativeGprePrimeCarryContractionMajorant (n + 1))
-          (3 / 8 : ℝ) := by
+          ((3 / 8 : ℝ) * 1) := by
       refine hscaled.congr ?_
       intro n
       have hn : n + 1 ≠ 0 := by omega
@@ -107,7 +107,7 @@ theorem nativeGprePrimeCarryContractionMajorant_tsum :
         nativeGpreTelescopingSquareMajorant]
       push_cast
       ring
-    exact htailHasSum.tsum_eq
+    simpa only [mul_one] using htailHasSum.tsum_eq
   rw [Finset.sum_range_one, htail] at hsplit
   norm_num [nativeGprePrimeCarryContractionMajorant] at hsplit ⊢
   linarith
@@ -191,8 +191,10 @@ theorem nativeGpreTowerProfileVector_two_one_norm_sq_le :
       nativeUnitMassTowerProfile_pow_identity]
     norm_num
     rw [div_eq_mul_inv]
-    exact mul_le_mul_of_nonneg_left hinv
-      (pow_nonneg (by norm_num : (0 : ℝ) ≤ 1 / 4) _)
+    have hmul :=
+      mul_le_mul_of_nonneg_left hinv
+        (pow_nonneg (by norm_num : (0 : ℝ) ≤ 1 / 4) (j + 2))
+    simpa [Nat.cast_add, mul_comm] using hmul
   have hmajorSummable :
       Summable
         (fun j : ℕ =>
@@ -312,15 +314,17 @@ theorem nativeGprePrimeCarryProfileCost_le_majorant
       rw [primeCriticalCenteredCarryDualAxis_norm_sq]
       norm_num [hpTwo]
     rw [nativeGprePrimeCarryProfileCost, hdual]
-    have hprofile :
-        ‖nativeGpreTowerProfileVector (p : ℕ) 1‖ ^ 2 ≤
-          (13 / 48 : ℝ) := by
-      simpa [hpTwo] using
-        nativeGpreTowerProfileVector_two_one_norm_sq_le
+    have hprofileTwo :
+        ‖nativeGpreTowerProfileVector 2 1‖ ^ 2 ≤
+          (13 / 48 : ℝ) :=
+      nativeGpreTowerProfileVector_two_one_norm_sq_le
     simp only [nativeGprePrimeCarryContractionIndex, hpTwo, if_pos,
       nativeGprePrimeCarryContractionMajorant]
-    norm_num
-    nlinarith
+    calc
+      2 * ‖nativeGpreTowerProfileVector 2 1‖ ^ 2 ≤
+          2 * (13 / 48 : ℝ) :=
+        mul_le_mul_of_nonneg_left hprofileTwo (by norm_num)
+      _ = (13 / 24 : ℝ) := by norm_num
   · have hpOdd : Odd (p : ℕ) :=
       Nat.odd_iff.mpr (p.property.eq_two_or_odd.resolve_left hpTwo)
     rcases hpOdd with ⟨k, hk⟩
