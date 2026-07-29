@@ -27,7 +27,6 @@ import CPFormal.Analytic.CpNativeCarryRealPlaneGreenRigidity
 import CPFormal.Analytic.CpNativeCarryRealOperatorConfinement
 import CPFormal.Analytic.CpNativeCarryRealSpectralBoundaryCarrier
 import CPFormal.Analytic.CpNativeCarryRealPrecompressionBoundaryWitness
-import CPFormal.Analytic.CpGenuineNativeRealBoundaryCrosswalk
 import CPFormal.Analytic.CpTilt
 import CPFormal.Analytic.CpTiltRigidity
 import CPFormal.Analytic.CpGreenBridge
@@ -170,3 +169,7 @@ import CPFormal.Analytic.CpFiniteScalarSynthesis
 import CPFormal.Analytic.CpFiniteScalarSynthesisSummationByParts
 import CPFormal.Analytic.CpFiniteScalarSynthesisClosedDefectObstruction
 import CPFormal.Analytic.CpNativeCarryMobiusLogDerivativeGuardrail
+import CPFormal.Carry.PositionalDecomposition
+import CPFormal.Carry.UniformCarryProbability
+import CPFormal.Analytic.CpQuadraticDomainCrosswalk
+import CPFormal.Analytic.CpGenuineNativeRealBoundaryCrosswalk
