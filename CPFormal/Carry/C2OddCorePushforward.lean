@@ -2,6 +2,7 @@ import Mathlib.Algebra.BigOperators.Intervals
 import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Data.Nat.Log
 import Mathlib.Data.Rat.Cast.Order
+import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.NormNum
 import Mathlib.Tactic.Positivity
 import Mathlib.Tactic.Ring
@@ -262,6 +263,28 @@ theorem oddCoreBranchMass_succ
     ring
   · intro a _ b _ hab
     exact Nat.add_right_cancel hab
+
+/-- Every finite branch mass stays strictly below the geometric limit `1/2`. -/
+theorem oddCoreBranchMass_lt_half (K : ℕ) :
+    oddCoreBranchMass K < (1 / 2 : ℚ) := by
+  induction K with
+  | zero =>
+      norm_num [oddCoreBranchMass]
+  | succ K ih =>
+      by_cases hK : K = 0
+      · subst K
+        norm_num [oddCoreBranchMass]
+      · rw [oddCoreBranchMass_succ (Nat.one_le_iff_ne_zero.mpr hK)]
+        linarith
+
+/-- The two finite odd-core branches never exhaust their total limiting mass
+`1`. -/
+theorem oddCoreTruncatedMass_lt_one (cutoff m : ℕ) :
+    oddCoreTruncatedMass cutoff m < 1 := by
+  unfold oddCoreTruncatedMass
+  linarith [
+    oddCoreBranchMass_lt_half (oddCoreMinusDepth cutoff m),
+    oddCoreBranchMass_lt_half (oddCorePlusDepth cutoff m)]
 
 /-- Both concrete branch masses at `8M` are obtained by one finite shift. -/
 theorem oddCoreTruncatedMass_eight_mul_eq
