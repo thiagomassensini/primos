@@ -56,14 +56,15 @@ def nativeGprePrimeCarryContractionMajorant (k : ℕ) : ℝ :=
 theorem nativeGprePrimeCarryContractionMajorant_nonneg (k : ℕ) :
     0 ≤ nativeGprePrimeCarryContractionMajorant k := by
   by_cases hk : k = 0
-  · simp [nativeGprePrimeCarryContractionMajorant, hk]
+  · norm_num [nativeGprePrimeCarryContractionMajorant, hk]
   · have hkpos : (0 : ℝ) < k := by
       exact_mod_cast Nat.pos_of_ne_zero hk
     have hkle : (k : ℝ) ≤ (k : ℝ) + 1 := by linarith
     have hdiff :
         0 ≤ 1 / (k : ℝ) - 1 / ((k : ℝ) + 1) :=
       sub_nonneg.mpr (one_div_le_one_div_of_le hkpos hkle)
-    simp [nativeGprePrimeCarryContractionMajorant, hk, hdiff]
+    rw [nativeGprePrimeCarryContractionMajorant, if_neg hk]
+    exact mul_nonneg (by norm_num) hdiff
 
 theorem nativeGprePrimeCarryContractionMajorant_summable :
     Summable nativeGprePrimeCarryContractionMajorant := by
@@ -74,8 +75,13 @@ theorem nativeGprePrimeCarryContractionMajorant_summable :
     have hbase := nativeGpreTelescopingSquareMajorant_hasSum.summable
     have hscaled :=
       hbase.mul_left (3 / 8 : ℝ)
-    simpa [nativeGprePrimeCarryContractionMajorant,
-      nativeGpreTelescopingSquareMajorant] using hscaled
+    refine hscaled.congr ?_
+    intro n
+    have hn : n + 1 ≠ 0 := by omega
+    rw [nativeGprePrimeCarryContractionMajorant, if_neg hn,
+      nativeGpreTelescopingSquareMajorant]
+    push_cast
+    ring
   exact (summable_nat_add_iff 1).1 htail
 
 theorem nativeGprePrimeCarryContractionMajorant_tsum :
@@ -89,8 +95,19 @@ theorem nativeGprePrimeCarryContractionMajorant_tsum :
         (3 / 8 : ℝ) := by
     have hbase := nativeGpreTelescopingSquareMajorant_hasSum
     have hscaled := hbase.mul_left (3 / 8 : ℝ)
-    simpa [nativeGprePrimeCarryContractionMajorant,
-      nativeGpreTelescopingSquareMajorant] using hscaled.tsum_eq
+    have htailHasSum :
+        HasSum
+          (fun n : ℕ =>
+            nativeGprePrimeCarryContractionMajorant (n + 1))
+          (3 / 8 : ℝ) := by
+      refine hscaled.congr ?_
+      intro n
+      have hn : n + 1 ≠ 0 := by omega
+      rw [nativeGprePrimeCarryContractionMajorant, if_neg hn,
+        nativeGpreTelescopingSquareMajorant]
+      push_cast
+      ring
+    exact htailHasSum.tsum_eq
   rw [Finset.sum_range_one, htail] at hsplit
   norm_num [nativeGprePrimeCarryContractionMajorant] at hsplit ⊢
   linarith
@@ -147,7 +164,6 @@ theorem nativeGpreTowerProfileVector_one_norm_sq_le_resolvent
     _ = (((p : ℝ) ^ 2 - 1)⁻¹) := by
       dsimp [q]
       field_simp [hp0, hpSqNe]
-      ring
 
 /-- The first native profile of camera `2` has the sharper bound `13/48`. -/
 theorem nativeGpreTowerProfileVector_two_one_norm_sq_le :
@@ -163,8 +179,9 @@ theorem nativeGpreTowerProfileVector_two_one_norm_sq_le :
     intro j
     have hj : j + 2 ≠ 0 := by omega
     have hden : (4 : ℝ) ≤ ((j + 2 : ℕ) : ℝ) ^ 2 := by
-      norm_num
-      nlinarith
+      push_cast
+      have hj0 : (0 : ℝ) ≤ (j : ℝ) := by positivity
+      nlinarith [sq_nonneg (j : ℝ)]
     have hinv :
         ((((j + 2 : ℕ) : ℝ) ^ 2)⁻¹) ≤ (1 / 4 : ℝ) := by
       rw [show (1 / 4 : ℝ) = (4 : ℝ)⁻¹ by norm_num]
@@ -174,7 +191,8 @@ theorem nativeGpreTowerProfileVector_two_one_norm_sq_le :
       nativeUnitMassTowerProfile_pow_identity]
     norm_num
     rw [div_eq_mul_inv]
-    exact mul_le_mul_of_nonneg_left hinv (by positivity)
+    exact mul_le_mul_of_nonneg_left hinv
+      (pow_nonneg (by norm_num : (0 : ℝ) ≤ 1 / 4) _)
   have hmajorSummable :
       Summable
         (fun j : ℕ =>
@@ -196,7 +214,7 @@ theorem nativeGpreTowerProfileVector_two_one_norm_sq_le :
       _ = (1 / 48 : ℝ) := by
         rw [tsum_mul_left]
         simp_rw [pow_add]
-        rw [tsum_mul_left,
+        rw [tsum_mul_right,
           tsum_geometric_of_lt_one
             (by norm_num : (0 : ℝ) ≤ 1 / 4)
             (by norm_num : (1 / 4 : ℝ) < 1)]
@@ -218,14 +236,16 @@ theorem nativeGprePrimeCarryContractionIndex_injective :
   rcases p.property.eq_two_or_odd with hpTwo | hpOdd
   · rcases q.property.eq_two_or_odd with hqTwo | hqOdd
     · exact hpTwo.trans hqTwo.symm
-    · rcases hqOdd with ⟨k, hk⟩
+    · have hqOdd' : Odd (q : ℕ) := Nat.odd_iff.mpr hqOdd
+      rcases hqOdd' with ⟨k, hk⟩
       have hqNe : (q : ℕ) ≠ 2 := by omega
       have hkpos : 0 < k := by
         have hqTwoLe := q.property.two_le
         omega
       simp [nativeGprePrimeCarryContractionIndex, hpTwo, hqNe] at hpq
       omega
-  · rcases hpOdd with ⟨kp, hkp⟩
+  · have hpOdd' : Odd (p : ℕ) := Nat.odd_iff.mpr hpOdd
+    rcases hpOdd' with ⟨kp, hkp⟩
     have hpNe : (p : ℕ) ≠ 2 := by omega
     rcases q.property.eq_two_or_odd with hqTwo | hqOdd
     · have hkpos : 0 < kp := by
@@ -233,7 +253,8 @@ theorem nativeGprePrimeCarryContractionIndex_injective :
         omega
       simp [nativeGprePrimeCarryContractionIndex, hpNe, hqTwo] at hpq
       omega
-    · rcases hqOdd with ⟨kq, hkq⟩
+    · have hqOdd' : Odd (q : ℕ) := Nat.odd_iff.mpr hqOdd
+      rcases hqOdd' with ⟨kq, hkq⟩
       have hqNe : (q : ℕ) ≠ 2 := by omega
       simp [nativeGprePrimeCarryContractionIndex, hpNe, hqNe] at hpq
       omega
@@ -296,11 +317,12 @@ theorem nativeGprePrimeCarryProfileCost_le_majorant
           (13 / 48 : ℝ) := by
       simpa [hpTwo] using
         nativeGpreTowerProfileVector_two_one_norm_sq_le
-    have hscaled := mul_le_mul_of_nonneg_left hprofile (by norm_num : (0 : ℝ) ≤ 2)
-    simpa [nativeGprePrimeCarryContractionIndex,
-      nativeGprePrimeCarryContractionMajorant, hpTwo] using hscaled
+    simp only [nativeGprePrimeCarryContractionIndex, hpTwo, if_pos,
+      nativeGprePrimeCarryContractionMajorant]
+    norm_num
+    nlinarith
   · have hpOdd : Odd (p : ℕ) :=
-      p.property.eq_two_or_odd.resolve_left hpTwo
+      Nat.odd_iff.mpr (p.property.eq_two_or_odd.resolve_left hpTwo)
     rcases hpOdd with ⟨k, hk⟩
     have hkpos : 0 < k := by
       have hpTwoLe := p.property.two_le
@@ -331,7 +353,8 @@ theorem nativeGprePrimeCarryProfileCost_le_majorant
           (sq_nonneg _) (by norm_num : (0 : ℝ) ≤ 3 / 2))
     have hindex :
         nativeGprePrimeCarryContractionIndex p = k := by
-      simp [nativeGprePrimeCarryContractionIndex, hpTwo, hk]
+      rw [nativeGprePrimeCarryContractionIndex, if_neg hpTwo, hk]
+      omega
     rw [hindex]
     have hkR : (0 : ℝ) < k := by exact_mod_cast hkpos
     have hk1R : (0 : ℝ) < (k : ℝ) + 1 := by positivity
@@ -339,8 +362,13 @@ theorem nativeGprePrimeCarryProfileCost_le_majorant
         (3 / 2 : ℝ) * (((p : ℝ) ^ 2 - 1)⁻¹) =
           nativeGprePrimeCarryContractionMajorant k := by
       rw [nativeGprePrimeCarryContractionMajorant, if_neg hkpos.ne']
-      rw [hk]
-      push_cast
+      have hpFactor :
+          (p : ℝ) ^ 2 - 1 =
+            4 * (k : ℝ) * ((k : ℝ) + 1) := by
+        rw [hk]
+        push_cast
+        ring
+      rw [hpFactor]
       field_simp [ne_of_gt hkR, ne_of_gt hk1R]
       ring
     exact hcost.trans_eq hformula
