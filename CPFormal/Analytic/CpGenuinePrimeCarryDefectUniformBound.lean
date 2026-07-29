@@ -133,6 +133,126 @@ theorem canonicalProvenanceState_norm_sq_le_of_realizesOn
           (E := fun p : Nat.Primes => PrimeCarryResidueHilbert p)
           (p := (2 : ℝ≥0∞)) (by norm_num) x S)
 
+/--
+The canonical provenance state is the orthogonal projection of any common
+realization onto the active centered-carry directions.  Equivalently, its
+inner product with the realizing state is exactly its squared norm.
+
+No Genuine-zero, critical-localization, or uniform-atlas hypothesis is used.
+-/
+theorem inner_canonicalProvenanceState_eq_norm_sq_of_realizesOn
+    (M : ℕ) (s : ℂ) (S : Finset Nat.Primes)
+    (x : PrimeCarryDefectGlobalHilbert)
+    (hrealizes :
+      IsCanonicalEnrichedPrimeCarryDefectReadoutRealizationOn M s S x) :
+    inner ℝ
+        (canonicalEnrichedPrimeCarryDefectProvenanceState M s S) x =
+      ‖canonicalEnrichedPrimeCarryDefectProvenanceState M s S‖ ^ 2 := by
+  rw [canonicalEnrichedPrimeCarryDefectProvenanceState_norm_sq]
+  unfold canonicalEnrichedPrimeCarryDefectProvenanceState
+  rw [sum_inner]
+  apply Finset.sum_congr rfl
+  intro p hp
+  have hlocal :
+      inner ℝ (primeCriticalCenteredCarryAxis p) (x p) =
+        finiteEnrichedNativeGpreLogJetGreenBulkReadout
+          p M 1 (fun _ => 1) s := by
+    have h := hrealizes p hp
+    rw [inner_primeCriticalCenteredCarryGlobalAxis] at h
+    exact h
+  rw [lp.inner_single_left, real_inner_comm]
+  unfold finiteEnrichedPrimeCarryDefectProvenanceState
+    primeCriticalCenteredCarryDualAxis
+  rw [inner_smul_right, inner_smul_right, real_inner_comm, hlocal]
+  ring
+
+/--
+The unused part of a common realization is orthogonal to the canonical active
+prime-camera state.  This is the exact Hilbert-space form of the information
+that remains after the active readouts have been extracted.
+-/
+theorem inner_canonicalProvenanceState_residual_eq_zero_of_realizesOn
+    (M : ℕ) (s : ℂ) (S : Finset Nat.Primes)
+    (x : PrimeCarryDefectGlobalHilbert)
+    (hrealizes :
+      IsCanonicalEnrichedPrimeCarryDefectReadoutRealizationOn M s S x) :
+    inner ℝ
+        (canonicalEnrichedPrimeCarryDefectProvenanceState M s S)
+        (x - canonicalEnrichedPrimeCarryDefectProvenanceState M s S) = 0 := by
+  rw [inner_sub_right,
+    inner_canonicalProvenanceState_eq_norm_sq_of_realizesOn
+      M s S x hrealizes,
+    real_inner_self_eq_norm_sq]
+  ring
+
+/--
+Exact Pythagorean ledger for every finite camera atlas:
+
+`total energy = active camera energy + unused residual energy`.
+
+This strengthens the preceding minimal-norm inequality.  It does not construct
+a global realization and does not identify a scalar residual majorant with a
+Hilbert norm.
+-/
+theorem canonicalProvenanceState_pythagoras_of_realizesOn
+    (M : ℕ) (s : ℂ) (S : Finset Nat.Primes)
+    (x : PrimeCarryDefectGlobalHilbert)
+    (hrealizes :
+      IsCanonicalEnrichedPrimeCarryDefectReadoutRealizationOn M s S x) :
+    ‖x‖ ^ 2 =
+      ‖canonicalEnrichedPrimeCarryDefectProvenanceState M s S‖ ^ 2 +
+        ‖x - canonicalEnrichedPrimeCarryDefectProvenanceState M s S‖ ^ 2 := by
+  let X : PrimeCarryDefectGlobalHilbert :=
+    canonicalEnrichedPrimeCarryDefectProvenanceState M s S
+  let R : PrimeCarryDefectGlobalHilbert := x - X
+  have horth : inner ℝ X R = 0 := by
+    dsimp [X, R]
+    exact inner_canonicalProvenanceState_residual_eq_zero_of_realizesOn
+      M s S x hrealizes
+  have horth' : inner ℝ R X = 0 := by
+    rw [real_inner_comm]
+    exact horth
+  have hx : x = X + R := by
+    dsimp [R]
+    abel
+  calc
+    ‖x‖ ^ 2 = ‖X + R‖ ^ 2 := by rw [hx]
+    _ = inner ℝ (X + R) (X + R) :=
+      (real_inner_self_eq_norm_sq _).symm
+    _ =
+        (inner ℝ X X + inner ℝ X R) +
+          (inner ℝ R X + inner ℝ R R) := by
+      rw [inner_add_left, inner_add_right, inner_add_right]
+    _ = ‖X‖ ^ 2 + ‖R‖ ^ 2 := by
+      rw [horth, horth', real_inner_self_eq_norm_sq,
+        real_inner_self_eq_norm_sq]
+      ring
+    _ =
+        ‖canonicalEnrichedPrimeCarryDefectProvenanceState M s S‖ ^ 2 +
+          ‖x -
+            canonicalEnrichedPrimeCarryDefectProvenanceState M s S‖ ^ 2 := by
+      rfl
+
+/--
+Coordinate expansion of the Pythagorean ledger.  The active term is literally
+the weighted sum of squared camera readouts, while the second term is the
+orthogonal information not used by those readouts.
+-/
+theorem canonicalProvenanceState_pythagoras_ledger_of_realizesOn
+    (M : ℕ) (s : ℂ) (S : Finset Nat.Primes)
+    (x : PrimeCarryDefectGlobalHilbert)
+    (hrealizes :
+      IsCanonicalEnrichedPrimeCarryDefectReadoutRealizationOn M s S x) :
+    ‖x‖ ^ 2 =
+      (∑ p ∈ S,
+        ((p : ℝ) / ((p : ℝ) - 1)) *
+          (finiteEnrichedNativeGpreLogJetGreenBulkReadout
+            p M 1 (fun _ => 1) s) ^ 2) +
+        ‖x - canonicalEnrichedPrimeCarryDefectProvenanceState M s S‖ ^ 2 := by
+  rw [canonicalProvenanceState_pythagoras_of_realizesOn
+    M s S x hrealizes,
+    canonicalEnrichedPrimeCarryDefectProvenanceState_norm_sq]
+
 /-- A single global realization immediately supplies the required uniform
 atlas bound, with the squared norm of the realizing state as constant. -/
 theorem canonicalProvenanceStatesBounded_of_global_realization
