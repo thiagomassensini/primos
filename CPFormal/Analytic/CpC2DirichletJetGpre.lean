@@ -294,6 +294,17 @@ def c2OddCoreCofinalMassScale (M p q : ℕ) : ℂ :=
     c2OddCoreFourScaleDefectReal M p *
       c2OddCoreFourScaleDefectReal M q : ℝ) : ℂ)
 
+/-- The concrete connected support mass never degenerates.  Its two marginal
+defects are strictly positive finite geometric remainders. -/
+theorem c2OddCoreCofinalMassScale_ne_zero (M p q : ℕ) :
+    c2OddCoreCofinalMassScale M p q ≠ 0 := by
+  unfold c2OddCoreCofinalMassScale
+  apply Complex.ofReal_ne_zero.mpr
+  exact mul_ne_zero
+    (mul_ne_zero (by norm_num)
+      (ne_of_gt (c2OddCoreFourScaleDefectReal_pos M p)))
+    (ne_of_gt (c2OddCoreFourScaleDefectReal_pos M q))
+
 /-- Richardson after transport through active `G_pre` provenance retains the
 same exact connected spectral cell. -/
 theorem c2OddCoreDirichletLogGpreReadout_richardson_exact
@@ -336,7 +347,6 @@ theorem c2OddCoreNormalizedCofinalGpreReadout_eq_natLogDirichletTerm
     (hp : Nat.Prime p) (hpodd : Odd p)
     (hq : Nat.Prime q) (hqodd : Odd q)
     (hpM : p ≤ M) (hqM : q ≤ M) (hpqM : p * q ≤ M)
-    (hscale : c2OddCoreCofinalMassScale M p q ≠ 0)
     (s : ℂ) :
     c2OddCoreNormalizedCofinalGpreReadout
         verticalRatio S atlas M s =
@@ -344,19 +354,17 @@ theorem c2OddCoreNormalizedCofinalGpreReadout_eq_natLogDirichletTerm
   unfold c2OddCoreNormalizedCofinalGpreReadout
   rw [c2OddCoreDirichletLogGpreReadout_richardson_exact
     verticalRatio S atlas hp hpodd hq hqodd hpM hqM hpqM s]
-  field_simp [hscale]
+  field_simp [c2OddCoreCofinalMassScale_ne_zero M p q]
 
-/-- Under eventual nondegeneracy of the connected support mass, the normalized
-single-cell sequence converges to its fixed logarithmic Dirichlet frequency,
-not to zero merely because the unnormalized area decays. -/
+/-- The normalized single-cell sequence converges to its fixed logarithmic
+Dirichlet frequency, not to zero merely because the unnormalized area decays.
+Nondegeneracy of the connected support mass is now unconditional. -/
 theorem c2OddCoreNormalizedCofinalGpreReadout_tendsto_natLogDirichletTerm
     (verticalRatio : ℝ) (S : Finset NativeGpreBoundaryContext)
     {p q : ℕ} (atlas : C2GpreActiveSpectralAtlas S p q)
     (hp : Nat.Prime p) (hpodd : Odd p)
     (hq : Nat.Prime q) (hqodd : Odd q)
-    (s : ℂ)
-    (hscale : ∀ᶠ M : ℕ in atTop,
-      c2OddCoreCofinalMassScale M p q ≠ 0) :
+    (s : ℂ) :
     Tendsto
       (fun M : ℕ =>
         c2OddCoreNormalizedCofinalGpreReadout
@@ -368,7 +376,7 @@ theorem c2OddCoreNormalizedCofinalGpreReadout_tendsto_natLogDirichletTerm
       c2OddCoreNormalizedCofinalGpreReadout
           verticalRatio S atlas M s =
         natLogDirichletTerm s (p * q) := by
-    filter_upwards [hbound, hscale] with M hpqM hscaleM
+    filter_upwards [hbound] with M hpqM
     have hp_le_pq : p ≤ p * q := by
       calc
         p = p * 1 := by simp
@@ -379,7 +387,7 @@ theorem c2OddCoreNormalizedCofinalGpreReadout_tendsto_natLogDirichletTerm
         _ ≤ p * q := Nat.mul_le_mul_right q hp.one_le
     exact c2OddCoreNormalizedCofinalGpreReadout_eq_natLogDirichletTerm
       verticalRatio S atlas hp hpodd hq hqodd
-        (hp_le_pq.trans hpqM) (hq_le_pq.trans hpqM) hpqM hscaleM s
+        (hp_le_pq.trans hpqM) (hq_le_pq.trans hpqM) hpqM s
   exact tendsto_const_nhds.congr'
     (heq.mono fun _ h => h.symm)
 
