@@ -1,5 +1,5 @@
 import CPFormal.Analytic.CpPrimitiveGenuineZetaZeroSet
-import CPFormal.Analytic.CpNativeCarryRealOperatorConfinement
+import CPFormal.Analytic.CpNativeCarryRealSpectralBoundaryCarrier
 import Mathlib.Analysis.SpecialFunctions.Gamma.Beta
 import Mathlib.Analysis.SpecialFunctions.Trigonometric.Complex
 import Mathlib.NumberTheory.LSeries.Nonvanishing
@@ -162,17 +162,20 @@ theorem nativeCarryRealPlaneZeroRigidity_iff_mathlibRiemannHypothesis :
   nativeCarryRealPlaneZeroRigidity_iff_riemannZeta.trans
     mathlibRiemannHypothesis_iff_openCriticalStripConfinement.symm
 
-/--
-Direct kernel probe requested by the project: promote the already compiled
-native-operator confinement theorem to Mathlib's `RiemannHypothesis`.
--/
-theorem mathlibRiemannHypothesis_from_existingNativeOperatorConfinement :
-    RiemannHypothesis := by
-  apply nativeCarryRealPlaneZeroRigidity_iff_mathlibRiemannHypothesis.mp
-  intro sigma time _hsigma0 _hsigma1 hclose
-  exact
-    nativeCarryRealOperatorZero_sigma_eq_half
-      (camera := 3) hclose
+/-- Under the repository's current definitions, reconstructing native mass
+from every raw scalar boundary closure is exactly Mathlib's RH proposition. -/
+theorem
+    nativeCarryRealPlaneBoundaryClosurePreservesMass_iff_mathlibRiemannHypothesis :
+    NativeCarryRealPlaneBoundaryClosurePreservesMass ↔ RiemannHypothesis :=
+  nativeCarryRealPlaneBoundaryClosurePreservesMass_iff_zeroRigidity.trans
+    nativeCarryRealPlaneZeroRigidity_iff_mathlibRiemannHypothesis
+
+/-- The exact conditional promotion exposed by the direct kernel probe. -/
+theorem mathlibRiemannHypothesis_of_nativeBoundaryClosurePreservesMass
+    (hpreserves : NativeCarryRealPlaneBoundaryClosurePreservesMass) :
+    RiemannHypothesis :=
+  nativeCarryRealPlaneBoundaryClosurePreservesMass_iff_mathlibRiemannHypothesis.mp
+    hpreserves
 
 end
 
