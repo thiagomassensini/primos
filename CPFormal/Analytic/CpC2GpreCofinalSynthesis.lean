@@ -79,7 +79,6 @@ theorem c2GpreNormalizedLogAtom_eq_connectedC2Readout
     (hp : Nat.Prime p) (hpodd : Odd p)
     (hq : Nat.Prime q) (hqodd : Odd q)
     (hpM : p ≤ M) (hqM : q ≤ M) (hpqM : p * q ≤ M)
-    (hscale : c2OddCoreCofinalMassScale M p q ≠ 0)
     (s : ℂ) :
     c2GpreNormalizedLogAtom (p * q) s =
       c2OddCoreNormalizedCofinalGpreReadout
@@ -87,7 +86,7 @@ theorem c2GpreNormalizedLogAtom_eq_connectedC2Readout
   symm
   exact c2OddCoreNormalizedCofinalGpreReadout_eq_natLogDirichletTerm
     verticalRatio S atlas hp hpodd hq hqodd
-      hpM hqM hpqM hscale s
+      hpM hqM hpqM s
 
 /-! ## Finite camera synthesis -/
 
