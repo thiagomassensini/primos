@@ -60,7 +60,7 @@ jobs:
 
       - name: Install numerical test dependency
         run: |
-          python -m pip install --disable-pip-version-check "numpy>=2,<3"
+          python -m pip install --disable-pip-version-check "numpy>=2,<3" "scipy>=1.14,<2"
 
       - name: Test real-rotation empirical operators
         shell: bash
