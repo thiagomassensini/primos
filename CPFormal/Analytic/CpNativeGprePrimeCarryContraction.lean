@@ -94,20 +94,25 @@ theorem nativeGprePrimeCarryContractionMajorant_tsum :
           nativeGprePrimeCarryContractionMajorant (n + 1)) =
         (3 / 8 : ℝ) := by
     have hbase := nativeGpreTelescopingSquareMajorant_hasSum
-    have hscaled := hbase.mul_left (3 / 8 : ℝ)
-    have htailHasSum :
-        HasSum
-          (fun n : ℕ =>
-            nativeGprePrimeCarryContractionMajorant (n + 1))
-          ((3 / 8 : ℝ) * 1) := by
-      refine hscaled.congr ?_
-      intro n
-      have hn : n + 1 ≠ 0 := by omega
-      rw [nativeGprePrimeCarryContractionMajorant, if_neg hn,
-        nativeGpreTelescopingSquareMajorant]
-      push_cast
-      ring
-    simpa only [mul_one] using htailHasSum.tsum_eq
+    calc
+      (∑' n : ℕ,
+          nativeGprePrimeCarryContractionMajorant (n + 1)) =
+          ∑' n : ℕ,
+            (3 / 8 : ℝ) *
+              nativeGpreTelescopingSquareMajorant n := by
+        apply tsum_congr
+        intro n
+        have hn : n + 1 ≠ 0 := by omega
+        rw [nativeGprePrimeCarryContractionMajorant, if_neg hn,
+          nativeGpreTelescopingSquareMajorant]
+        push_cast
+        ring
+      _ = (3 / 8 : ℝ) *
+          ∑' n : ℕ, nativeGpreTelescopingSquareMajorant n := by
+        rw [tsum_mul_left]
+      _ = (3 / 8 : ℝ) := by
+        rw [hbase.tsum_eq]
+        norm_num
   rw [Finset.sum_range_one, htail] at hsplit
   norm_num [nativeGprePrimeCarryContractionMajorant] at hsplit ⊢
   linarith
