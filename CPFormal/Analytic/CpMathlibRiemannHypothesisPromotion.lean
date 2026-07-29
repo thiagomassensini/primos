@@ -21,6 +21,7 @@ zero-set identity.
 namespace CPFormal.Analytic.Cp
 
 open Complex
+open scoped Real
 
 noncomputable section
 
@@ -43,7 +44,8 @@ theorem nontrivialRiemannZetaZero_mem_genuineCriticalStrip
       intro n hu
       have hure := congrArg Complex.re hu
       simp at hure
-      linarith [Nat.cast_nonneg n]
+      have hn : (0 : ℝ) ≤ n := Nat.cast_nonneg n
+      linarith
     have hu_ne_one : 1 - s ≠ 1 := by
       intro hu
       apply hs_ne_zero
@@ -86,15 +88,15 @@ theorem nontrivialRiemannZetaZero_mem_genuineCriticalStrip
     obtain ⟨k, hk⟩ := Complex.cos_eq_zero_iff.mp hcos
     have hk_scaled :
         (π : ℂ) * (1 - s) =
-          (((2 * k + 1 : ℤ) : ℂ) * π) := by
+          (2 * (k : ℂ) + 1) * π := by
       linear_combination 2 * hk
     have harg :
-        1 - s = ((2 * k + 1 : ℤ) : ℂ) := by
+        1 - s = 2 * (k : ℂ) + 1 := by
       apply mul_left_cancel₀ hpi
       calc
         (π : ℂ) * (1 - s) =
-            (((2 * k + 1 : ℤ) : ℂ) * π) := hk_scaled
-        _ = (π : ℂ) * ((2 * k + 1 : ℤ) : ℂ) := by ring
+            (2 * (k : ℂ) + 1) * π := hk_scaled
+        _ = (π : ℂ) * (2 * (k : ℂ) + 1) := by ring
     have hs_k : s = -2 * (k : ℂ) := by
       linear_combination -harg
     have hs_k_re := congrArg Complex.re hs_k
@@ -108,14 +110,14 @@ theorem nontrivialRiemannZetaZero_mem_genuineCriticalStrip
       apply hs_ne_zero
       rw [hs_k, hkzero]
       norm_num
-    have hk_pos : 0 < k :=
-      lt_of_le_of_ne hk_nonneg (Ne.symm hk_ne_zero)
-    have hk_toNat_pos : 0 < k.toNat :=
-      Int.toNat_pos.mpr hk_pos
-    obtain ⟨n, hn⟩ :=
-      Nat.exists_eq_succ_of_ne_zero (ne_of_gt hk_toNat_pos)
     have hk_int : (k.toNat : ℤ) = k :=
       Int.toNat_of_nonneg hk_nonneg
+    have hk_toNat_ne_zero : k.toNat ≠ 0 := by
+      intro hkzero
+      apply hk_ne_zero
+      rw [← hk_int, hkzero]
+    obtain ⟨n, hn⟩ :=
+      Nat.exists_eq_succ_of_ne_zero hk_toNat_ne_zero
     have hk_complex : (k.toNat : ℂ) = (k : ℂ) := by
       exact_mod_cast hk_int
     apply htrivial
@@ -123,7 +125,7 @@ theorem nontrivialRiemannZetaZero_mem_genuineCriticalStrip
     calc
       s = -2 * (k : ℂ) := hs_k
       _ = -2 * (k.toNat : ℂ) := by rw [hk_complex]
-      _ = -2 * ((n + 1 : ℕ) : ℂ) := by rw [hn]
+      _ = -2 * ((n : ℂ) + 1) := by rw [hn]; norm_num
   · by_contra hnot
     have hre : 1 ≤ s.re := le_of_not_gt hnot
     exact (riemannZeta_ne_zero_of_one_le_re hre) hzero
