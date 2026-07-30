@@ -1,22 +1,21 @@
 # Índice canônico da teoria nativa do carry
 
-## Escopo congelado
+## Base certificada e candidato seguinte
 
 Este índice lê o tronco importado por `CPFormal.lean`, tomando como base o
-checkpoint publicado `v0.49.0` e o `main` em
-`e4f36c94c5d9208b65f7f603f7966c27d59d851e`.
+checkpoint publicado `v0.52.0` em
+`7d8d0b345b329935674edc24e5ac08ad9f7b5804`.
 
-Na base desse checkpoint:
+O checkpoint `v0.52.0` passou pela auditoria estática, pelos testes numéricos
+finitos e por `lake build --wfail`. Os números de inventário foram removidos
+deste índice porque envelheciam a cada checkpoint sem acrescentar força
+matemática. A autoridade de cada resultado continua sendo seu tipo Lean e sua
+elaboração pelo kernel.
 
-- 174 arquivos Lean formam a superfície `CPFormal`;
-- 37.976 linhas Lean estão no núcleo;
-- o índice sintático encontra 2.501 declarações:
-  1.638 `theorem`, 773 `def`, 46 `structure`, 34 `abbrev`,
-  5 `inductive`, 4 `lemma` e 1 `instance`;
-- a auditoria estática encontra zero `axiom`, `sorry` ou `admit`.
-
-Os números são inventário, não argumento matemático. A autoridade de cada
-resultado é seu tipo Lean e a elaboração pelo kernel.
+Os elos de resíduo probabilístico e do crosswalk nativo--Genuine--Green
+identificados abaixo são candidatos pós-`v0.52.0`. Eles não pertencem à tag
+publicada e só recebem estado `KERNEL_CHECKED` quando o CI da branch
+correspondente termina verde.
 
 Este documento separa:
 
@@ -33,6 +32,8 @@ dependência do teorema nativo consolidado.
 |---|---|---|---|
 | Incidência | inteiro, centro, perna e offset | `oddLegEquivIncidence`, `balancedOffsetEquivNonzeroResidue`, `nonmultipleEquivIncidence` | `Carry/C2Adjacent.lean`, `Carry/CpBalancedResidue.lean`, `Carry/CpGlobalIncidence.lean` |
 | Profundidade | valuation do centro carregado | `effectiveDepth_eq_centerDepth`, `dvd_sub_iff_eq_offset` | `Carry/C2Depth.lean`, `Carry/CpDepth.lean` |
+| Resíduo posicional | quociente, resíduo e evento de carry | `positionalDecompositionAtDepth`, `residueClassAtDepth_mem_uniformCarryEvent_iff_pow_dvd` | `Carry/PositionalDecomposition.lean`, `Carry/UniformCarryProbability.lean` |
+| Probabilidade uniforme | singleton de carry com massa `b⁻ᵏ` | `uniformCarryEvent_probability` | `Carry/UniformCarryProbability.lean` |
 | Transporte | soma por pernas sem perda de bordo | `weighted_reindex_alignedBox` | `Carry/C2AlignedBox.lean`, `Carry/CpAlignedBox.lean` |
 | Massa | custo posicional `b⁻ᵏ` | `criticalMass`, `criticalMass_reindex_alignedBox` | `Carry/CpBranchWeight.lean` |
 | Amplitude | raiz quadrática `b⁻ᵏ⧸²` | `criticalAmplitude`, `criticalAmplitude_sq_eq_mass` | `Carry/CpBranchWeight.lean` |
@@ -45,6 +46,8 @@ dependência do teorema nativo consolidado.
 | Fase real | grupo unitário e gerador logarítmico | `finiteRealSpectralStateVector_eq_evolution_zero`, `infiniteRealSpectralGenerator_isSelfAdjoint` | `Analytic/CpNativeCarryLogPhaseOrbit.lean`, `Analytic/CpInfiniteRealSpectralGenerator.lean` |
 | Readout nativo | ressonância parametrizada apenas por `t : ℝ` | `IsRealSpectralResonance`, `isRealSpectralResonance_iff_nativeGpreGenuineLimit_zeroCharacteristic` | `Analytic/CpRealSpectralGenerator.lean`, `Analytic/CpNativeGpreTfvdGenuineCompression.lean` |
 | Confinamento | zero nativo tem uma única fibra radial | `isNativeCarryRealOperatorZero_iff`, `nativeCarryRealOperatorZero_sigma_eq_half` | `Analytic/CpNativeCarryRealOperatorConfinement.lean` |
+| Crosswalk bruto | bordo primitivo da câmera `3` e zero Genuine têm o mesmo locus | `nativeCarryRealBoundaryClosure_iff_genuineContinuation_zero` | `Analytic/CpGenuineNativeRealBoundaryCrosswalk.lean` |
+| Green completado | na faixa, para a câmera nativa `3` e blocos Green primos, os predicados de zero nativo, Genuine mais Green e operador completado têm o mesmo locus | `isNativeCarryRealOperatorZero_three_iff_genuineContinuation_zero_and_greenClosure`, `isNativeCarryRealOperatorZero_three_iff_genuineGreenCompletedLimitOperator_zero` | `Analytic/CpNativeGenuineGreenCompletedCrosswalk.lean` |
 
 ## O novo teorema consolidado
 
@@ -104,20 +107,30 @@ theorem nativeCarryRealOperatorZero_sigma_eq_half
     sigma = (1 : ℝ) / 2
 ```
 
-## Dependência formal mínima do confinamento
+## Cadeia canônica e dependência mínima do confinamento
 
 ```text
 branchAmplitude b sigma k
         │ energia quadrática
         ▼
 branchAmplitude_sq_eq_criticalMass_iff_of_one_lt
-        │ realização em R × R
+        │ domínio posicional
+        ▼
+positionalCarryMassCompatible_iff
+        │ igualdade dos domínios admissíveis
+        ▼
+positionalCarryMassCompatible_iff_realEnergyCompatible
+        │ domínio do estado real
         ▼
 nativeCarryRealPlaneMassCompatible_iff
         │ domínio do operador nativo
         ▼
 isNativeCarryRealOperatorZero_iff
 ```
+
+Essa é a cadeia canônica disponível no root. O proof term do último teorema
+usa diretamente apenas `nativeCarryRealPlaneMassCompatible_iff`, pois a
+compatibilidade de massa já é um conjuncto da definição do zero nativo.
 
 O bracket aparece no predicado de ressonância, mas não é usado para escolher
 a casca radial. Isso expressa no tipo Lean a ordem causal da teoria:
@@ -169,17 +182,32 @@ das compressões nativas. Esse endpoint classifica os tempos em
 | Apresentação radial do operador nativo | `camera`, `sigma`, `time` com compatibilidade de massa no domínio | permite provar que toda apresentação reduz a `sigma = 1/2` |
 | Continuação escalar ambiente | parâmetro não real livre | objeto auxiliar mais forte; não é necessário para o confinamento nativo |
 
-O operador completado `Genuine ⊕ Green` também permanece um quarto objeto
-distinto. Seus teoremas são válidos, mas não participam da prova
-`isNativeCarryRealOperatorZero_iff`.
+O operador completado `Genuine ⊕ Green` permanece um quarto objeto distinto e
+não participa da prova radial `isNativeCarryRealOperatorZero_iff`. Entretanto,
+o novo crosswalk compõe os teoremas já auditados e identifica exatamente seu
+locus de anulação como endomorfismo com o zero nativo completo da câmera `3`,
+dentro da faixa e para blocos Green primos:
+
+```text
+zero nativo
+↔ zero Genuine e Re(s)=1/2
+↔ zero Genuine e fechamento Green
+↔ zero do operador Genuine ⊕ Green.
+```
+
+Essa composição não promove um zero Genuine bruto a zero nativo. O primeiro
+lembra apenas o fechamento escalar; o segundo retém também o domínio
+quadrático de massa.
 
 ## Rotas paralelas
 
 As famílias abaixo permanecem formalizadas e disponíveis, mas não são
-dependências do novo teorema:
+dependências do teorema de confinamento radial
+`isNativeCarryRealOperatorZero_iff`:
 
 - continuação escalar, tempo não real e exaustão;
-- Green cruzado e operador completado;
+- construções Green que não participam do teorema radial, embora algumas sejam
+  dependências transitivas do crosswalk do locus de anulação completado;
 - boundary relation refletida e Cayley;
 - correção angular/Abel;
 - Bessel, estado global e domínio de traço;

@@ -27,12 +27,47 @@ def uniformFiniteProbability
 
 /--
 The distinguished congruence class in a nonempty residue space.  Translating
-this singleton gives any other specified carry congruence class with the same
-probability.
+the singleton would give the analogous event for another congruence class;
+this module formalizes only the residual-zero carry event used below.
 -/
 def uniformCarryEvent
     (N : ℕ) (hN : 0 < N) : Finset (Fin N) :=
   {⟨0, hN⟩}
+
+/--
+The residue of `n` at depth `k`, regarded as an element of the finite
+base-`b` residue space.
+
+This is the explicit seam between the Euclidean positional decomposition and
+the finite probability space used by the carry law.
+-/
+def residueClassAtDepth
+    (b k n : ℕ) (hb : 0 < b) : Fin (b ^ k) :=
+  ⟨residueAtDepth b k n,
+    (positionalDecompositionAtDepth b k n hb).2⟩
+
+/--
+The distinguished uniform carry event is exactly the event that the canonical
+depth-`k` residue vanishes.
+-/
+@[simp] theorem residueClassAtDepth_mem_uniformCarryEvent_iff
+    (b k n : ℕ) (hb : 0 < b) :
+    residueClassAtDepth b k n hb ∈
+        uniformCarryEvent (b ^ k) (pow_pos hb k) ↔
+      residueAtDepth b k n = 0 := by
+  simp [residueClassAtDepth, uniformCarryEvent]
+
+/--
+Arithmetic form of the same carry event: membership of the zero-residue class
+is equivalent to divisibility by the complete depth modulus.
+-/
+theorem residueClassAtDepth_mem_uniformCarryEvent_iff_pow_dvd
+    (b k n : ℕ) (hb : 0 < b) :
+    residueClassAtDepth b k n hb ∈
+        uniformCarryEvent (b ^ k) (pow_pos hb k) ↔
+      b ^ k ∣ n := by
+  rw [residueClassAtDepth_mem_uniformCarryEvent_iff,
+    residueAtDepth_eq_zero_iff_pow_dvd]
 
 /-- A carry event occupies exactly one residue class. -/
 @[simp] theorem card_uniformCarryEvent
