@@ -3,7 +3,9 @@ import CPFormal.Carry.PositionalCarryInverseCausalInheritance
 import CPFormal.Analytic.CpQuadraticDomainCrosswalk
 import CPFormal.Analytic.CpNativeCarryRealOperatorConfinement
 import CPFormal.Analytic.CpNativeCarryRealPlaneComplexPackaging
+import CPFormal.Analytic.CpNativeCarryFiniteCameraAlgebra
 import CPFormal.Analytic.CpNaturalCameraFactor
+import CPFormal.Analytic.CpNaturalEvenCameraRegularity
 import CPFormal.Analytic.CpCarryAmplitudeIdentification
 import CPFormal.Analytic.CpCarryWeightedVerticalTfvdIdentity
 import CPFormal.Analytic.CpCarryVerticalBoundaryGreenDefect
@@ -332,6 +334,36 @@ structure CarryStructuralPersistenceCertificate
           (fun n =>
             nativeCarryRealPlaneComplexPackaging
               (nativeCarryRealPlaneSampleAt sigma time n)) = 0
+  aligned_c2_is_width_four :
+    ∀ cutoff : ℕ, ∀ f : ℤ → ℂ,
+      nativeCarryAlignedC2Chart cutoff f =
+        nativeCarryFiniteSaturatedChart 4 cutoff f
+  odd_camera_finite_normal_form :
+    ∀ camera cutoff : ℕ,
+      Odd camera → 1 < camera → ∀ f : ℤ → ℂ,
+        nativeCarryFiniteSaturatedChart camera cutoff f =
+          nativeCarryPositivePrefix
+              ((camera : ℤ) * (cutoff : ℤ) +
+                (CPFormal.Genuine.Cp.halfRange camera : ℤ)) f -
+            camera • nativeCarryCenterChannel camera cutoff f
+  even_camera_finite_normal_form :
+    ∀ camera cutoff : ℕ,
+      Even camera → 2 < camera → ∀ f : ℤ → ℂ,
+        nativeCarryFiniteSaturatedChart camera cutoff f =
+          nativeCarryPositivePrefix
+              ((camera : ℤ) * (cutoff : ℤ) +
+                (CPFormal.Genuine.Cp.halfRange camera : ℤ)) f -
+            nativeCarryDilationChannel (camera / 2) (2 * cutoff) f -
+            (camera - 2) •
+              nativeCarryCenterChannel camera cutoff f
+  odd_composite_camera_decomposition :
+    ∀ a c cutoff : ℕ,
+      Odd a → Odd c → 1 < a → 1 < c → ∀ f : ℤ → ℂ,
+        nativeCarryFiniteSaturatedChart (a * c) cutoff f =
+          nativeCarryFiniteSaturatedChart a
+              (c * cutoff + CPFormal.Genuine.Cp.halfRange c) f +
+            a • nativeCarryFiniteSaturatedChart c cutoff
+              (fun n => f ((a : ℤ) * n))
   odd_camera_factor_regular :
     ∀ camera : ℕ, Odd camera → 1 < camera → ∀ time : ℝ,
       naturalOddCameraFactor camera
@@ -339,6 +371,10 @@ structure CarryStructuralPersistenceCertificate
   aligned_c2_camera_factor_regular :
     ∀ time : ℝ,
       naturalEvenCameraFactor 4
+        (nativeCarryCriticalParameter time) ≠ 0
+  even_camera_factor_regular :
+    ∀ camera : ℕ, Even camera → 6 ≤ camera → ∀ time : ℝ,
+      naturalEvenCameraFactor camera
         (nativeCarryCriticalParameter time) ≠ 0
   green_bracket_return_reconstruction :
     baseCarryVerticalL2WeightedGreen b ∘L
@@ -420,6 +456,20 @@ def carryStructuralPersistenceCertificate
     exact
       nativeCarryRealPlaneFiniteChartAt_zero_iff_packaged_zero_all_cameras
         camera cutoff sigma time
+  aligned_c2_is_width_four :=
+    nativeCarryAlignedC2Chart_eq_width_four
+  odd_camera_finite_normal_form := by
+    intro camera cutoff hodd hcamera f
+    exact nativeCarryFiniteSaturatedChart_odd_normal_form
+      camera cutoff hodd hcamera f
+  even_camera_finite_normal_form := by
+    intro camera cutoff heven hcamera f
+    exact nativeCarryFiniteSaturatedChart_even_normal_form
+      camera cutoff heven hcamera f
+  odd_composite_camera_decomposition := by
+    intro a c cutoff haodd hcodd ha hc f
+    exact nativeCarryFiniteSaturatedChart_odd_mul_decomposition
+      a c cutoff haodd hcodd ha hc f
   odd_camera_factor_regular := by
     intro camera hodd hcamera time
     exact
@@ -431,6 +481,11 @@ def carryStructuralPersistenceCertificate
     exact
       naturalEvenCameraFactor_four_ne_zero_on_criticalLine
         (nativeCarryCriticalParameter_re time)
+  even_camera_factor_regular := by
+    intro camera heven hcamera time
+    exact
+      naturalEvenCameraFactor_nativeCarryCriticalParameter_ne_zero
+        camera heven hcamera time
   green_bracket_return_reconstruction :=
     baseCarryWeightedVerticalTfvd_identity b hb
   trace_recovers_return :=

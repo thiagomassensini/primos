@@ -179,4 +179,7 @@ import CPFormal.Analytic.CpQuadraticDomainCrosswalk
 import CPFormal.Analytic.CpGenuineNativeRealBoundaryCrosswalk
 import CPFormal.Analytic.CpNativeGprePrimeCarryContraction
 import CPFormal.Analytic.CpGenuineRealPlaneReconstruction
+import CPFormal.Analytic.CpNativeCarryFiniteCameraAlgebra
+import CPFormal.Analytic.CpNaturalCameraFactor
+import CPFormal.Analytic.CpNaturalEvenCameraRegularity
 import CPFormal.Analytic.CpUniversalCarryStructuralPersistence

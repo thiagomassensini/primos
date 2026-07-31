@@ -9,6 +9,17 @@ O projeto nunca usa `sorry`, `axiom` ou um zero conhecido para fabricar o
 operador que deveria explica-lo. Uma afirmacao so recebe o estado
 `KERNEL_CHECKED` depois que `lake build` termina sem erros.
 
+## Sintese estrutural em desenvolvimento
+
+A formulacao que liga carry posicional, cameras naturais, empacotamento
+real--complexo, Green--bracket--retorno, bordo e defeitos explicitos esta em
+`docs/UNIVERSAL_CARRY_STRUCTURAL_PERSISTENCE.md`.
+
+Esse documento distingue identidades finitas exatas, continuacoes ja
+certificadas, evidencias numericas e pontes ainda abertas. Em particular, ele
+registra as formas normais de cameras impares e pares, a identidade alinhada
+`C2 = C4` e a decomposicao de cameras compostas impares sem usar primalidade.
+
 ## Nucleo ativo
 
 - linguagem certificada de presenca causal por compressao, distinguindo
