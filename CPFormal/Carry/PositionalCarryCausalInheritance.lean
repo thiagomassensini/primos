@@ -296,36 +296,42 @@ def positionalArithmeticSystem
   ExplicitlyDisplays := arithmeticExplicitlyDisplays
 
 /-- Certified path from carry normalization to positional addition. -/
-def carryToAdditionPath
+theorem carryToAdditionPath
     (b : ℕ) (hb : 1 < b) :
     (positionalArithmeticSystem b).CompressionPath
       ArithmeticCarrier.carryNormalization
       ArithmeticCarrier.positionalAddition := by
-  apply CausalCompressionSystem.CompressionPath.tail
-  · exact
-      CausalCompressionSystem.CompressionPath.refl
-        ArithmeticCarrier.carryNormalization
-  · exact ⟨carryToAdditionCertificate b hb⟩
+  exact
+    CausalCompressionSystem.CompressionPath.tail
+      (G := positionalArithmeticSystem b)
+      (CausalCompressionSystem.CompressionPath.refl
+        (G := positionalArithmeticSystem b)
+        ArithmeticCarrier.carryNormalization)
+      ⟨carryToAdditionCertificate b hb⟩
 
 /-- Certified path from carry normalization to multiplication. -/
-def carryToMultiplicationPath
+theorem carryToMultiplicationPath
     (b : ℕ) (hb : 1 < b) :
     (positionalArithmeticSystem b).CompressionPath
       ArithmeticCarrier.carryNormalization
       ArithmeticCarrier.multiplication := by
-  apply CausalCompressionSystem.CompressionPath.tail
-  · exact carryToAdditionPath b hb
-  · exact ⟨additionToMultiplicationCertificate⟩
+  exact
+    CausalCompressionSystem.CompressionPath.tail
+      (G := positionalArithmeticSystem b)
+      (carryToAdditionPath b hb)
+      ⟨additionToMultiplicationCertificate⟩
 
 /-- Certified path from carry normalization to natural power. -/
-def carryToNaturalPowerPath
+theorem carryToNaturalPowerPath
     (b : ℕ) (hb : 1 < b) :
     (positionalArithmeticSystem b).CompressionPath
       ArithmeticCarrier.carryNormalization
       ArithmeticCarrier.naturalPower := by
-  apply CausalCompressionSystem.CompressionPath.tail
-  · exact carryToMultiplicationPath b hb
-  · exact ⟨multiplicationToPowerCertificate⟩
+  exact
+    CausalCompressionSystem.CompressionPath.tail
+      (G := positionalArithmeticSystem b)
+      (carryToMultiplicationPath b hb)
+      ⟨multiplicationToPowerCertificate⟩
 
 /-- Primitive carry is inherited by the addition carrier. -/
 theorem carry_reinstantiated_in_addition
@@ -412,6 +418,7 @@ theorem positionalArithmetic_generatedByCarry
       exact
         ⟨ArithmeticCarrier.carryNormalization, ⟨PUnit.unit⟩,
           CausalCompressionSystem.CompressionPath.refl
+            (G := positionalArithmeticSystem b)
             ArithmeticCarrier.carryNormalization⟩
   | positionalAddition =>
       exact carry_reinstantiated_in_addition b hb
