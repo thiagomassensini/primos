@@ -13,9 +13,10 @@ matemática. A autoridade de cada resultado continua sendo seu tipo Lean e sua
 elaboração pelo kernel.
 
 Os elos de resíduo probabilístico e do crosswalk nativo--Genuine--Green
-identificados abaixo são candidatos pós-`v0.52.0`. Eles não pertencem à tag
-publicada e só recebem estado `KERNEL_CHECKED` quando o CI da branch
-correspondente termina verde.
+identificados abaixo são pós-`v0.52.0` e não pertencem à tag publicada. O
+commit matemático `e43a42f52308d488d46e71316e5a919e4678da6b` foi aceito pelo
+`Lean kernel audit` no run #728 (`30592046379`), permitindo classificá-los
+como `KERNEL_CHECKED`.
 
 Este documento separa:
 

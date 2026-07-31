@@ -705,3 +705,44 @@ Este checkpoint nao prova que o defeito telescopa ou se anula, nao formaliza
 ainda o comutador log-jet do bloco Cp, nao trata a soma off-diagonal, nao
 prova `Green-to-zero`, nao passa ao limite, nao constroi operador
 Hilbert--Polya e nao prova RH.
+
+## Checkpoint pos-v0.52 do crosswalk nativo--Genuine--Green
+
+- commit matematico certificado:
+  `e43a42f52308d488d46e71316e5a919e4678da6b`;
+- workflow run: `30592046379` (`Lean kernel audit`, run #728);
+- job: `91036267615` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado:
+  `CPFormal.Analytic.CpNativeGenuineGreenCompletedCrosswalk`.
+
+O kernel fechou primeiro o elo aritmetico entre a decomposicao posicional e
+o evento probabilistico: o residuo canonico de `n` na profundidade `k`
+pertence ao singleton uniforme de carry se e somente se `b^k` divide `n`.
+Esse singleton possui a probabilidade finita uniforme `criticalMass b k`.
+Isto nao e uma afirmacao de equidistribuicao assintotica dos naturais.
+
+Na faixa Genuine, para a camera nativa `3` e blocos Green indexados por
+primos `p,q`, o kernel verificou:
+
+```text
+zero nativo
+  <-> zero Genuine bruto e Re(s)=1/2
+  <-> zero Genuine bruto e fechamento Green alinhado
+  <-> genuineGreenCompletedLimitOperator(p,q,s)=0.
+```
+
+A ultima igualdade significa que o endomorfismo completado inteiro e o mapa
+zero naquele parametro. Nao foi provada igualdade dos operadores como mapas,
+nem igualdade de seus subespacos `LinearMap.ker`.
+
+Tambem foi provado que, num zero nativo, o vetor Green limite zera e os
+operadores finitos completados convergem fortemente a zero ponto a ponto em
+cada vetor do espaco completado.
+
+O guardrail central permanece explicito: um zero Genuine bruto equivale ao
+fechamento bruto da camera, mas nao fornece sozinho a compatibilidade de
+massa pre-compressao exigida pelo predicado de zero nativo. Portanto este
+checkpoint nao prova a seta global `zero Genuine bruto -> zero nativo`; ele
+fecha a equivalencia entre o zero nativo completo e o locus de anulacao do
+operador completado que conserva os dois canais.
