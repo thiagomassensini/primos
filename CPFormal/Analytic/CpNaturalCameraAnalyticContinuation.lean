@@ -530,9 +530,7 @@ theorem nativeCarryFiniteSaturatedChart_dirichlet_tendsto_even_factor
   have hhalf :
       dirichletTerm s ((b / 2 : ℕ) : ℤ) =
         ((b / 2 : ℕ) : ℂ) ^ (-s) := by
-    unfold dirichletTerm
-    apply congrArg (fun z : ℂ ↦ z ^ (-s))
-    norm_num
+    simp [dirichletTerm]
   have hbase :
       dirichletTerm s (b : ℤ) = (b : ℂ) ^ (-s) := by
     simp [dirichletTerm]
