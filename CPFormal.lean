@@ -177,3 +177,4 @@ import CPFormal.Analytic.CpNativeGprePrimeCarryContraction
 import CPFormal.Analytic.CpGenuineRealPlaneReconstruction
 import CPFormal.Analytic.CpNativeGenuineGreenCompletedCrosswalk
 import CPFormal.Analytic.CpGenuineZeroConfinementAttempt
+import CPFormal.Analytic.CpGenuineC2QuadraticBridgeAttempt
