@@ -148,10 +148,10 @@ to the canonical window `[0,b)`.
 -/
 theorem borrowedDigit_mem_window
     (b x y : ℤ)
-    (hb : 0 < b)
+    (_hb : 0 < b)
     (hx0 : 0 ≤ x)
-    (hy0 : 0 ≤ y)
-    (hxb : x < b)
+    (_hy0 : 0 ≤ y)
+    (_hxb : x < b)
     (hyb : y < b)
     (hxy : x < y) :
     0 ≤ borrowedDigit b x y ∧
