@@ -17,6 +17,19 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
   toda base `b>1`, com certificados de decomposicao e iteracao;
 - conexao dessa heranca causal com a massa uniforme `b^(-k)`, amplitude
   quadratica e rigidez do expoente `1/2`;
+- interface `RestrictedInverseCertificate`, separada da linguagem causal, que
+  exige dominios de origem e destino preservados e os dois round-trips;
+- certificados restritos `carryBorrowReverseCertificate`,
+  `borrowSubtractionCertificate`, `addSubTranslationCertificate`,
+  `euclideanSplitCertificate`, `mulDivOnMultiplesCertificate`,
+  `powerNthRootOnPerfectPowersCertificate` e
+  `basePowerLogOnExactPowersCertificate`;
+- leis `floorLog_power_window`, `floorLog_division_step` e
+  `repeatedExactDivisionDepth_spec`, mantendo o logaritmo de piso separado da
+  profundidade de divisibilidade exata;
+- bundle `positionalInverseArithmeticCertificates` para toda base `b>1`,
+  limitado aos dominios declarados por cada certificado e sem alegacao de
+  inversa global ou de universalidade matematica;
 - pares simetricos e segunda diferenca centrada;
 - bracket saturado finito e sua aditividade;
 - comutacao dos shifts multiplicativos, primeiro esqueleto da planura;
@@ -196,12 +209,21 @@ verificacao no commit `6bc5ce00305450de54fafeeebca21ab483a18944`, workflow
 run `30601161334`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
+A familia de inversas restritas preparada para o checkpoint v0.54.0 permanece
+com estado `LEAN_STATEMENT` ate que o novo import passe pela mesma auditoria
+estatica e por `lake build --wfail` no GitHub Actions. Ela usa
+`RestrictedInverseCertificate` e o bundle
+`positionalInverseArithmeticCertificates`; nao cria outro
+`CausalCompressionSystem`, nao percorre `CompressionPath` ao contrario e nao
+afirma uma inversa global ou uma lei sobre toda a matematica.
+
 ## Ordem de leitura
 
 Para uma visao completa deste checkpoint, comece por
 `docs/RESUMO_GERAL_HERANCA_CAUSAL_DO_CARRY.md`. A formulacao tecnica esta em
 `docs/CARRY_CAUSAL_INHERITANCE.md`, e o snapshot publicavel esta documentado
-em `docs/RELEASE_0.53.0.md`.
+em `docs/RELEASE_0.53.0.md`. A extensao inversa certificada e seus limites de
+dominio estao registrados em `docs/RELEASE_0.54.0.md`.
 
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`

@@ -746,3 +746,49 @@ parametro complexo. O predicado `GeneratedBy` registra a forma da tese geral,
 mas o checkpoint instancia esse predicado somente para a torre aritmetica
 explicitamente certificada. Outros sistemas exigem seus proprios portadores e
 testemunhos antes de receberem estado `KERNEL_CHECKED`.
+
+## Checkpoint da familia inversa certificada do carry
+
+- pull request: aguardando;
+- head commit: aguardando;
+- workflow run: aguardando (`Lean kernel audit`);
+- job: aguardando (`Build CPFormal`);
+- estado atual: `LEAN_STATEMENT`;
+- alvo em auditoria:
+  `CPFormal.Carry.PositionalCarryInverseCausalInheritance`.
+
+O novo alvo foi importado pelo nucleo ativo e aguarda a auditoria estatica e
+`lake build --wfail` no GitHub Actions antes de qualquer promocao para
+`KERNEL_CHECKED`.
+
+O checkpoint proposto introduz `RestrictedInverseCertificate`, cuja interface
+exige dominios de origem e destino preservados e os dois round-trips dentro
+desses dominios. Essa camada e independente da linguagem causal anterior:
+nenhum novo `CausalCompressionSystem` ou `CompressionPath` e construido.
+
+Os enunciados aguardando o kernel sao:
+
+- `carryBorrowReverseCertificate`, para a reversao relacional local entre
+  carry e borrow com conservacao de valor;
+- `positionalBorrow_reconstruction`, `borrowedDigit_mem_window` e
+  `borrowSubtractionCertificate`, para uma coluna escolar de borrow;
+- `addSubTranslationCertificate`, para somar e subtrair um parametro fixo em
+  `ℤ`;
+- `euclideanSplitCertificate`, preservando quociente e resto;
+- `mulDivOnMultiplesCertificate`, restrito aos multiplos de um divisor
+  positivo;
+- `powerNthRootOnPerfectPowersCertificate`, com grau nao nulo e dominio de
+  potencias perfeitas;
+- `basePowerLogOnExactPowersCertificate`, para base `b>1` e potencias exatas;
+- `floorLog_power_window` e `floorLog_division_step`, para a semantica de piso
+  de `Nat.log`;
+- `repeatedExactDivisionDepth_spec`, para a coordenada distinta de
+  divisibilidade exata;
+- `positionalInverseArithmeticCertificates`, reunindo esses certificados sem
+  ampliar seus dominios.
+
+O checkpoint nao declara inversa funcional global da torre aritmetica direta,
+nao usa `Nat.sub` como subtracao inversa, nao apaga o resto da divisao, nao
+apresenta raiz n-esima arbitraria como compressao de divisoes e nao identifica
+`Nat.log b n` com `repeatedExactDivisionDepth b n`. Nenhuma afirmacao sobre
+toda operacao inversa ou toda a matematica recebe estado de teorema.
