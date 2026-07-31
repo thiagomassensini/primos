@@ -1,7 +1,6 @@
 import CPFormal.Analytic.CpGenuineNativeRealBoundaryCrosswalk
 import CPFormal.Analytic.CpGenuineGreenCompletedOperator
 import CPFormal.Analytic.CpNativeCarryRealOperatorConfinement
-import Mathlib.Tactic.Aesop
 
 /-!
 # Diagnostic probe: can an off-critical Genuine zero survive the carry cost?
@@ -64,7 +63,7 @@ theorem genuine_zero_off_critical_cost_contradiction_probe
   have hnative :
       IsNativeCarryRealOperatorZero 3 s.re s.im := by
     constructor
-    · aesop
+    · simp only
     · exact hreal
 
   have hcritical : s.re = (1 : ℝ) / 2 :=
