@@ -2,16 +2,19 @@
 
 ## Release status
 
-- integrated pull request: `PR #TBD`;
-- audited source commit: `commit TBD`;
-- Lean kernel workflow: `workflow TBD`;
-- Lean kernel job: `job TBD`;
+- integrated pull request:
+  [#29](https://github.com/thiagomassensini/primos/pull/29);
+- audited mathematical-source commit:
+  [`8a351323c7476d70e701bed6ab4137d2c5137f2d`](https://github.com/thiagomassensini/primos/commit/8a351323c7476d70e701bed6ab4137d2c5137f2d);
+- Lean kernel workflow:
+  [30607820730](https://github.com/thiagomassensini/primos/actions/runs/30607820730);
+- Lean kernel job: `91083828864`;
 - planned annotated tag: `v0.54.0`.
 
-These placeholders must be replaced with exact GitHub identifiers after the
-source-and-documentation head passes continuous integration. Until then, this
-file defines the intended release scope but does not claim final publication
-or kernel certification of the new module.
+The audited source head completed both the static audit and
+`lake build --wfail`. The release workflow after merge remains the
+authoritative validation of the exact `main` commit that may be tagged as
+`v0.54.0`.
 
 ## Parent checkpoint
 
@@ -479,11 +482,11 @@ The historical files `docs/RELEASE_0.53.0.md` and
 
 | Integrated PR | Audited head | Lean kernel workflow | Lean kernel job | Parent |
 |---|---|---|---|---|
-| `PR #TBD` | `commit TBD` | `workflow TBD` | `job TBD` | `v0.53.0` |
+| [#29](https://github.com/thiagomassensini/primos/pull/29) | [`8a351323c7476d70e701bed6ab4137d2c5137f2d`](https://github.com/thiagomassensini/primos/commit/8a351323c7476d70e701bed6ab4137d2c5137f2d) | [30607820730](https://github.com/thiagomassensini/primos/actions/runs/30607820730) | `91083828864` | `v0.53.0` |
 
-The placeholders must be resolved from the final green
-source-and-documentation head. The release workflow after merge is the
-authoritative validation of the exact `main` commit tagged as `v0.54.0`.
+That run is the source-level kernel certificate. The release workflow after
+merge is the authoritative validation of the exact `main` commit tagged as
+`v0.54.0`.
 
 ## Release verification
 

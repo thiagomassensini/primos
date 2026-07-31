@@ -2,14 +2,18 @@
 
 ## Estado deste checkpoint
 
-- versão planejada: `v0.54.0`;
-- pull request: `PR #TBD`;
-- commit auditado: `commit TBD`;
-- GitHub Actions: `workflow TBD`;
-- job de kernel: `job TBD`.
+- versão: `v0.54.0`;
+- pull request: [#29](https://github.com/thiagomassensini/primos/pull/29);
+- commit auditado:
+  [`8a351323c7476d70e701bed6ab4137d2c5137f2d`](https://github.com/thiagomassensini/primos/commit/8a351323c7476d70e701bed6ab4137d2c5137f2d);
+- GitHub Actions:
+  [workflow 30607820730](https://github.com/thiagomassensini/primos/actions/runs/30607820730);
+- job de kernel: `91083828864`.
 
-Enquanto esses campos permanecerem como `TBD`, este documento registra o
-escopo pretendido, mas não promove a nova extensão a `KERNEL_CHECKED`.
+Nesse head, a auditoria estática e `lake build --wfail` terminaram com
+sucesso. As declarações descritas abaixo estão, portanto, em estado
+`KERNEL_CHECKED`. O workflow de release ainda verifica separadamente o commit
+integrado ao `main` antes de publicar a tag.
 
 ## Visão geral
 
@@ -495,8 +499,8 @@ O checkpoint não afirma:
 
 ## Próximos passos
 
-1. Executar auditoria estática e `lake build --wfail`.
-2. Substituir os quatro campos `TBD` pelos identificadores imutáveis.
+1. Incorporar o PR somente depois do CI final de documentação.
+2. Verificar a tag anotada e a release `v0.54.0` no commit integrado.
 3. Criar outros certificados apenas com domínios e dados retidos explícitos.
 4. Ligar uma profundidade recuperada à massa somente por novo teorema.
 5. Manter separadas ancestralidade causal e inversão restrita.

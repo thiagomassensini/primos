@@ -11,19 +11,23 @@
 ## Registro desta versão
 
 - Repositório: `thiagomassensini/primos`
-- Pull request de origem: `PR #TBD`
-- Versão planejada: `v0.54.0`
-- Commit auditado: `commit TBD`
-- GitHub Actions: `workflow TBD`
-- Job de kernel: `job TBD`
+- Pull request de origem:
+  [#29](https://github.com/thiagomassensini/primos/pull/29)
+- Versão: `v0.54.0`
+- Commit matemático auditado:
+  [`8a351323c7476d70e701bed6ab4137d2c5137f2d`](https://github.com/thiagomassensini/primos/commit/8a351323c7476d70e701bed6ab4137d2c5137f2d)
+- GitHub Actions:
+  [workflow 30607820730](https://github.com/thiagomassensini/primos/actions/runs/30607820730)
+- Job de kernel: `91083828864`
 - Release:
   [v0.54.0](https://github.com/thiagomassensini/primos/releases/tag/v0.54.0)
 - Verificação final exigida: auditoria estática e `lake build --wfail`
-- Estado da extensão inversa: aguardando resolução dos campos `TBD` e CI verde
+- Estado da extensão inversa: `KERNEL_CHECKED`
 
-Os campos `TBD` devem ser substituídos pelos identificadores exatos do head
-auditado. Até isso acontecer, as novas declarações não são apresentadas neste
-resumo como `KERNEL_CHECKED`.
+Nesse head, a auditoria estática e `lake build --wfail` terminaram com
+sucesso. A certificação cobre o novo módulo por meio do import ativo em
+`CPFormal.lean`. Depois da incorporação, o workflow de release continua sendo
+a autoridade sobre o commit exato publicado pela tag.
 
 O checkpoint pai `v0.53.0` permanece certificado. Seu código matemático foi
 inicialmente verificado no commit
@@ -51,7 +55,7 @@ carry posicional
     -> potência natural
 ```
 
-A extensão inversa planejada para `v0.54.0` é pareada e ramificada:
+A extensão inversa de `v0.54.0` é pareada e ramificada:
 
 ```text
 carry <-> borrow
@@ -783,15 +787,17 @@ Está formalmente certificado que:
 
 ### Estado da extensão `v0.54.0`
 
-A família inversa só deve ser promovida a `KERNEL_CHECKED` depois que:
+A família inversa está em `KERNEL_CHECKED` no commit
+`8a351323c7476d70e701bed6ab4137d2c5137f2d`. O workflow `30607820730`, job
+`91083828864`, verificou no mesmo head:
 
-- `commit TBD` for substituído pelo head exato;
-- `workflow TBD` for substituído pelo run verde;
-- `job TBD` for substituído pelo job do kernel;
-- a auditoria estática e `lake build --wfail` passarem nesse mesmo head.
+- o import no alvo ativo;
+- a auditoria estática;
+- a ausência local de `axiom`, `sorry` e `admit`;
+- a elaboração completa por `lake build --wfail`.
 
-Até essa resolução, este documento não usa o sucesso da `v0.53.0` como
-certificação automática do novo módulo.
+Essa certificação é própria da extensão: ela não foi inferida automaticamente
+do sucesso da `v0.53.0`.
 
 ### Fronteira ainda aberta
 
@@ -861,7 +867,7 @@ reversão de causalidade ou reversão de `CompressionPath`.
 | Explicação técnica da família inversa | [`docs/CARRY_INVERSE_CAUSAL_INHERITANCE.md`](CARRY_INVERSE_CAUSAL_INHERITANCE.md) |
 | Este resumo geral | [`docs/RESUMO_GERAL_HERANCA_CAUSAL_DO_CARRY.md`](RESUMO_GERAL_HERANCA_CAUSAL_DO_CARRY.md) |
 | Checkpoint imutável da família direta | [`docs/RELEASE_0.53.0.md`](RELEASE_0.53.0.md) |
-| Notas planejadas da extensão inversa | [`docs/RELEASE_0.54.0.md`](RELEASE_0.54.0.md) |
+| Notas da extensão inversa | [`docs/RELEASE_0.54.0.md`](RELEASE_0.54.0.md) |
 | Estado auditável das alegações | [`docs/CLAIM_LEDGER.md`](CLAIM_LEDGER.md) |
 | Registro de compilação e auditoria | [`docs/AUDIT.md`](AUDIT.md) |
 
@@ -910,8 +916,9 @@ A extensão inversa não modifica essa lei anterior. Ela esclarece dois modos de
 descer escala: `Nat.log` por divisões piso e `positionalDepth` por divisões
 exatas.
 
-A família direta já está transformada em matemática verificada na `v0.53.0`.
-A família inversa será promovida somente após a resolução de `commit TBD`,
-`workflow TBD` e `job TBD`. `GeneratedBy` e `RestrictedInverseCertificate`
-mantêm separadas a ancestralidade causal e a inversão restrita, permitindo
-avançar sem substituir certificados por declarações universais.
+A família direta está transformada em matemática verificada desde a
+`v0.53.0`, e a família inversa recebeu certificação própria no head
+`8a351323c7476d70e701bed6ab4137d2c5137f2d`. `GeneratedBy` e
+`RestrictedInverseCertificate` mantêm separadas a ancestralidade causal e a
+inversão restrita, permitindo avançar sem substituir certificados por
+declarações universais.

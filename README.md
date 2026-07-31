@@ -209,11 +209,11 @@ verificacao no commit `6bc5ce00305450de54fafeeebca21ab483a18944`, workflow
 run `30601161334`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
-A familia de inversas restritas preparada para o checkpoint v0.54.0 permanece
-com estado `LEAN_STATEMENT` ate que o novo import passe pela mesma auditoria
-estatica e por `lake build --wfail` no GitHub Actions. Ela usa
-`RestrictedInverseCertificate` e o bundle
-`positionalInverseArithmeticCertificates`; nao cria outro
+A familia de inversas restritas do checkpoint v0.54.0 esta
+`KERNEL_CHECKED` no commit
+`8a351323c7476d70e701bed6ab4137d2c5137f2d`, workflow run
+`30607820730`, job `91083828864`. Ela usa `RestrictedInverseCertificate` e o
+bundle `positionalInverseArithmeticCertificates`; nao cria outro
 `CausalCompressionSystem`, nao percorre `CompressionPath` ao contrario e nao
 afirma uma inversa global ou uma lei sobre toda a matematica.
 
