@@ -793,3 +793,72 @@ nao usa `Nat.sub` como subtracao inversa, nao apaga o resto da divisao, nao
 apresenta raiz n-esima arbitraria como compressao de divisoes e nao identifica
 `Nat.log b n` com `repeatedExactDivisionDepth b n`. Nenhuma afirmacao sobre
 toda operacao inversa ou toda a matematica recebe estado de teorema.
+
+## Checkpoint v0.55.0 da persistencia estrutural e das cameras naturais
+
+- pull request de origem: `#30`;
+- commit de fonte matematica auditado:
+  `6744f44bf0308af11952ef9e8629357c6be60fcf`;
+- workflow run: `30618216161` (`Lean kernel audit`, run number 748);
+- job: `91116286122` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- superficie certificada: todos os imports ativos de `CPFormal.lean`.
+
+Os novos alvos compilados sao:
+
+- `CPFormal.Logic.StructuralPersistence`;
+- `CPFormal.Analytic.CpNativeCarryFiniteCameraAlgebra`;
+- `CPFormal.Analytic.CpNaturalCameraFactor`;
+- `CPFormal.Analytic.CpNaturalEvenCameraRegularity`;
+- `CPFormal.Analytic.CpNaturalCameraAnalyticContinuation`;
+- `CPFormal.Analytic.CpUniversalCarryStructuralPersistence`.
+
+Com esse run, os seguintes IDs do ledger foram promovidos para
+`KERNEL_CHECKED`:
+
+- `PERSIST-ATLAS`;
+- `NATCAM-C2-ALIGN`;
+- `NATCAM-ODD-NORMAL`;
+- `NATCAM-EVEN-NORMAL`;
+- `NATCAM-ODD-COMPOSITE`;
+- `NATCAM-FACTOR-REG`;
+- `NATCAM-ANALYTIC-ALL`;
+- `NATCAM-COMMON-FACTOR`;
+- `NATCAM-GLOBAL-ZERO-EQ`;
+- `CARRY-STRUCT-PERSIST-CERT`.
+
+O kernel verificou formas normais finitas impares e pares sem hipotese de
+primalidade, a decomposicao exata de larguras impares compostas, a igualdade
+entre a C2 alinhada do scanner e a geometria nativa de largura 4, convergencia
+e holomorfia de toda largura `b>=2` em `Re(s)>-1`, e fatoracao por um unico
+`genuineContinuation` para toda largura nativa `b>=3` na faixa critica. Na
+linha `Re(s)=1/2`, os fatores sao nao nulos e o zero da carta e equivalente ao
+zero Genuine. A C2 alinhada participa por largura 4.
+
+O certificado agregado reune essas leis com carry posicional, heranca causal
+direta e inversa, massa, amplitude, reconstrucao Green--TFVD e defeitos
+explicitos. Ele preserva a separacao de tipos entre estado, leitura, zero,
+energia, interior, bordo e defeito; a agregacao nao cria uma ponte ausente.
+
+Limites preservados neste checkpoint:
+
+- a largura nativa literal 2 e degenerada e nao e a C2 alinhada;
+- a decomposicao composta impar usa cutoff deslocado e nao iguala cameras no
+  mesmo cutoff;
+- a equivalencia de zeros acima vale na linha critica e nao prova que todo
+  zero esteja nessa linha;
+- nenhum cutoff experimental finito foi provado exatamente nulo;
+- evidencia numerica nao e premissa de nenhum teorema Lean;
+- `GREEN-NATCAM-INTERTWINER` e `C2-CUMULANT-GREEN-BRIDGE` permanecem
+  `OPEN_BRIDGE`;
+- nao foram provados `Green-to-zero`, coercividade, igualdade
+  cumulante--Wronskiano, operador Hilbert--Polya ou RH;
+- `CARRY-CAUSAL-UNIVERSAL` permanece `VISION`: o certificado nao afirma que
+  toda a matematica e gerada por carry;
+- as inversas herdadas continuam restritas aos dominios certificados;
+- `CPFormal.ResearchReserve` permanece fora da certificacao ativa.
+
+O SHA acima identifica o head matematico anterior a esta consolidacao
+documental. Isso evita circularidade de autorreferencia. O workflow de release
+da `v0.55.0` valida o `GITHUB_SHA` do `main` remoto depois da incorporacao e
+e a autoridade sobre o commit exato marcado pela tag anotada.

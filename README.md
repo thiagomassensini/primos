@@ -9,7 +9,7 @@ O projeto nunca usa `sorry`, `axiom` ou um zero conhecido para fabricar o
 operador que deveria explica-lo. Uma afirmacao so recebe o estado
 `KERNEL_CHECKED` depois que `lake build` termina sem erros.
 
-## Sintese estrutural em desenvolvimento
+## Checkpoint v0.55.0 — sintese estrutural
 
 A formulacao que liga carry posicional, cameras naturais, empacotamento
 real--complexo, Green--bracket--retorno, bordo e defeitos explicitos esta em
@@ -235,9 +235,15 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 marcadas como abertas no ledger.
 
 O checkpoint matematico mais recente do nucleo ativo passou por essa
-verificacao no commit `6bc5ce00305450de54fafeeebca21ab483a18944`, workflow
-run `30601161334`. A certificacao cobre os imports de `CPFormal.lean`;
+verificacao no commit de fonte matematica
+`6744f44bf0308af11952ef9e8629357c6be60fcf`, workflow run `30618216161`,
+job `91116286122`. A certificacao cobre os imports de `CPFormal.lean`,
+incluindo as cameras naturais e o certificado de persistencia estrutural;
 `CPFormal.ResearchReserve` permanece fora dela.
+
+O workflow de release da `v0.55.0` repete a auditoria sobre o `main` exato
+antes de criar a tag anotada e a GitHub Release. Essa verificacao final do
+commit publicado e separada do registro do head matematico acima.
 
 A familia de inversas restritas do checkpoint v0.54.0 esta
 `KERNEL_CHECKED` no commit
@@ -250,10 +256,23 @@ afirma uma inversa global ou uma lei sobre toda a matematica.
 ## Ordem de leitura
 
 Para uma visao completa deste checkpoint, comece por
-`docs/RESUMO_GERAL_HERANCA_CAUSAL_DO_CARRY.md`. A formulacao tecnica esta em
-`docs/CARRY_CAUSAL_INHERITANCE.md`, e o snapshot publicavel esta documentado
-em `docs/RELEASE_0.53.0.md`. A extensao inversa certificada e seus limites de
-dominio estao registrados em `docs/RELEASE_0.54.0.md`.
+`docs/UNIVERSAL_CARRY_STRUCTURAL_PERSISTENCE.md`; a proveniencia publicavel
+esta em `docs/RELEASE_0.55.0.md`. O resumo da familia causal direta e inversa
+permanece em `docs/RESUMO_GERAL_HERANCA_CAUSAL_DO_CARRY.md`, e os limites da
+extensao inversa estao registrados em `docs/RELEASE_0.54.0.md`.
+
+Arquivos centrais da sintese `v0.55.0`:
+
+1. `CPFormal/Logic/StructuralPersistence.lean`
+2. `CPFormal/Analytic/CpNativeCarryFiniteCameraAlgebra.lean`
+3. `CPFormal/Analytic/CpNaturalCameraFactor.lean`
+4. `CPFormal/Analytic/CpNaturalEvenCameraRegularity.lean`
+5. `CPFormal/Analytic/CpNaturalCameraAnalyticContinuation.lean`
+6. `CPFormal/Analytic/CpUniversalCarryStructuralPersistence.lean`
+7. `docs/UNIVERSAL_CARRY_STRUCTURAL_PERSISTENCE.md`
+8. `docs/RELEASE_0.55.0.md`
+
+Ordem historica do nucleo:
 
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`

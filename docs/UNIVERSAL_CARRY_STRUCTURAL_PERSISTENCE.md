@@ -1,5 +1,19 @@
 # Persistência estrutural universal do carry
 
+## Estado de certificação
+
+O núcleo matemático desta síntese foi verificado no commit
+`6744f44bf0308af11952ef9e8629357c6be60fcf` pelo GitHub Actions, run
+`30618216161`, job `91116286122`. A auditoria estática e
+`lake build --wfail` terminaram com sucesso, cobrindo os imports ativos de
+`CPFormal.lean`.
+
+Esse commit é o *audited mathematical-source commit*: ele evita a
+circularidade de tentar gravar num documento o SHA do próprio commit que
+contém o documento. Depois da incorporação do PR #30, o workflow da
+`v0.55.0` valida dinamicamente o `main` exato antes de criar a tag anotada e
+a GitHub Release.
+
 ## Resultado central
 
 O núcleo que permanece invariável não é um rótulo de câmera, a primalidade
