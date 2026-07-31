@@ -1,5 +1,6 @@
 import CPFormal.Logic.Status
 import CPFormal.Logic.CausalCompression
+import CPFormal.Logic.StructuralPersistence
 import CPFormal.Finite.SymmetricPair
 import CPFormal.Finite.Bracket
 import CPFormal.Carry.Shift
@@ -178,3 +179,4 @@ import CPFormal.Analytic.CpQuadraticDomainCrosswalk
 import CPFormal.Analytic.CpGenuineNativeRealBoundaryCrosswalk
 import CPFormal.Analytic.CpNativeGprePrimeCarryContraction
 import CPFormal.Analytic.CpGenuineRealPlaneReconstruction
+import CPFormal.Analytic.CpUniversalCarryStructuralPersistence
