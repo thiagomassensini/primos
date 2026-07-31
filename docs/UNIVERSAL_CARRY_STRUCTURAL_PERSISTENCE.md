@@ -200,9 +200,27 @@ Na linha crítica:
 
 Consequentemente, após transportar a fatoração por continuação analítica, a
 linha crítica possui o mesmo predicado de zero em toda câmera natural. A
-parte finita e a regularidade ímpar/C2 já foram isoladas em Lean; a
-generalização analítica das larguras pares deve manter o canal de meio passo
-explícito.
+passagem completa foi formalizada preservando o canal de meio passo:
+
+\[
+\operatorname{Chart}_b(s)
+=\Phi_b(s)\operatorname{genuineContinuation}(s)
+\]
+
+para toda largura nativa `b ≥ 3` na faixa crítica. Quando
+`Re(s)=1/2`, `Φ_b(s) ≠ 0`; portanto
+
+\[
+\operatorname{Chart}_b(s)=0
+\quad\Longleftrightarrow\quad
+\operatorname{genuineContinuation}(s)=0.
+\]
+
+A C2 alinhada participa por sua igualdade literal com a largura 4. A câmera
+nativa literal de largura 2 é degenerada e não deve ser confundida com ela.
+Essa equivalência é do limite analítico na linha crítica; não afirma que
+algum cutoff finito zere exatamente, nem que os fatores pares sejam regulares
+em toda a faixa.
 
 ## Relação com a ontologia da presença causal
 
@@ -340,6 +358,16 @@ Os módulos desta síntese são:
   - fatores ímpar e par;
   - regularidade sem primalidade;
   - fatorização e regularidade crítica de C2/C4.
+- `CPFormal.Analytic.CpNaturalEvenCameraRegularity`
+  - dominação estrita do canal central;
+  - não anulamento crítico dos fatores pares `b ≥ 6`.
+- `CPFormal.Analytic.CpNaturalCameraAnalyticContinuation`
+  - convergência e holomorfia para toda largura `b ≥ 2`;
+  - limites fatorados ímpar e par em `Re(s)>1`;
+  - identidade cruzada com a câmera 3 antes de qualquer divisão;
+  - fatoração comum na faixa crítica;
+  - equivalência de zeros na linha crítica para toda largura `b ≥ 3`;
+  - C2 alinhada transportada pela largura 4.
 - `CPFormal.Analytic.CpUniversalCarryStructuralPersistence`
   - certificado agregado de decomposição posicional;
   - conservação de valor;
@@ -351,21 +379,34 @@ Os módulos desta síntese são:
   - Wronskiano de bordo;
   - defeito conectado C2.
 
+## O que entendemos agora
+
+A geometria finita não altera o núcleo analítico: ela seleciona um fator
+explícito determinado pela paridade. Para toda largura nativa `b ≥ 3`, a
+carta converge, é holomorfa e, na faixa crítica, é o produto desse fator pelo
+mesmo `genuineContinuation`. Na linha `Re(s)=1/2`, todos os fatores são não
+nulos. Logo todas as câmeras naturais, incluindo a C2 alinhada como largura
+4, detectam exatamente o mesmo predicado de zero.
+
+A primalidade pertence à apresentação histórica por resíduos balanceados,
+não ao scanner saturado nativo. Isso estabelece independência da câmera para
+a leitura analítica crítica. Não identifica a carta com o estado Green
+completo, não elimina bordo ou defeito e não transforma cancelamento visível
+em energia nula.
+
 ## Próximos teoremas
 
-1. Generalizar a somabilidade e holomorfia de
-   `bracketedDirichletChart b` de largura prima para toda `b ≥ 3`.
-2. Transportar as formas normais par/ímpar para a continuação
-   `genuineContinuation`.
-3. Fechar em Lean `Φ_b ≠ 0` na linha crítica para toda largura par `b ≥ 6`.
-4. Deduzir o teorema uniforme
-   `cameraLimit b s = 0 ↔ genuineContinuation s = 0`.
-5. Provar a assíntota rotativa de cutoff
+1. Provar a assíntota rotativa de cutoff
    `M^(-3/2-it)` a partir da segunda diferença, sem assumir sua ordem no
    extrapolador.
-6. Construir um intertwiner explícito entre o resultante de câmera e o
+2. Classificar os zeros dos fatores pares fora da linha crítica, buscando
+   equivalência de zeros em toda a faixa.
+3. Construir um intertwiner explícito entre o resultante de câmera e o
    traço Green. Sem esse mapa, a semelhança entre fechamento de câmera e
    fechamento Green permanece uma direção de pesquisa.
-7. Instanciar a ontologia causal com os tipos concretos acima, mantendo
+4. Formular uma hipótese de observabilidade/coercividade, ou provar
+   precisamente sua impossibilidade.
+5. Relacionar o cumulante Richardson e o Wronskiano somente por um mapa
+   tipado e um diagrama comutativo.
+6. Instanciar a ontologia causal com os tipos concretos acima, mantendo
    separados estado, leitura, zero, energia, bordo e defeito.
-

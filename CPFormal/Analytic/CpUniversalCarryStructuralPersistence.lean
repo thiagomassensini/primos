@@ -6,6 +6,7 @@ import CPFormal.Analytic.CpNativeCarryRealPlaneComplexPackaging
 import CPFormal.Analytic.CpNativeCarryFiniteCameraAlgebra
 import CPFormal.Analytic.CpNaturalCameraFactor
 import CPFormal.Analytic.CpNaturalEvenCameraRegularity
+import CPFormal.Analytic.CpNaturalCameraAnalyticContinuation
 import CPFormal.Analytic.CpCarryAmplitudeIdentification
 import CPFormal.Analytic.CpCarryWeightedVerticalTfvdIdentity
 import CPFormal.Analytic.CpCarryVerticalBoundaryGreenDefect
@@ -376,6 +377,24 @@ structure CarryStructuralPersistenceCertificate
     ∀ camera : ℕ, Even camera → 6 ≤ camera → ∀ time : ℝ,
       naturalEvenCameraFactor camera
         (nativeCarryCriticalParameter time) ≠ 0
+  natural_camera_analytic_factorization :
+    ∀ camera : ℕ, 3 ≤ camera → ∀ s : ℂ,
+      s ∈ genuineCriticalStrip →
+        bracketedDirichletChart camera s =
+          naturalCameraFactor camera s * genuineContinuation s
+  natural_camera_critical_zero_iff :
+    ∀ camera : ℕ, 3 ≤ camera → ∀ s : ℂ,
+      s.re = (1 : ℝ) / 2 →
+        (bracketedDirichletChart camera s = 0 ↔
+          genuineContinuation s = 0)
+  aligned_c2_analytic_factorization :
+    ∀ s : ℂ, s ∈ genuineCriticalStrip →
+      bracketedDirichletChart 4 s =
+        naturalEvenCameraFactor 4 s * genuineContinuation s
+  aligned_c2_critical_zero_iff :
+    ∀ s : ℂ, s.re = (1 : ℝ) / 2 →
+      (bracketedDirichletChart 4 s = 0 ↔
+        genuineContinuation s = 0)
   green_bracket_return_reconstruction :
     baseCarryVerticalL2WeightedGreen b ∘L
           baseCarryWeightedVerticalCenteredBracket b +
@@ -486,6 +505,24 @@ def carryStructuralPersistenceCertificate
     exact
       naturalEvenCameraFactor_nativeCarryCriticalParameter_ne_zero
         camera heven hcamera time
+  natural_camera_analytic_factorization := by
+    intro camera hcamera s hs
+    exact
+      bracketedDirichletChart_eq_naturalCameraFactor_mul_genuineContinuation
+        camera hcamera hs
+  natural_camera_critical_zero_iff := by
+    intro camera hcamera s hs
+    exact
+      bracketedDirichletChart_zero_iff_genuineContinuation_zero_of_three_le
+        camera hcamera hs
+  aligned_c2_analytic_factorization := by
+    intro s hs
+    exact
+      alignedC2BracketedDirichletChart_eq_factor_mul_genuineContinuation hs
+  aligned_c2_critical_zero_iff := by
+    intro s hs
+    exact
+      alignedC2BracketedDirichletChart_zero_iff_genuineContinuation_zero hs
   green_bracket_return_reconstruction :=
     baseCarryWeightedVerticalTfvd_identity b hb
   trace_recovers_return :=

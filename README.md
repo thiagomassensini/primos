@@ -1,7 +1,7 @@
 # CPFormal
 
-Formalizacao limpa, incremental e auditavel da geometria de carry, brackets e
-cartas primas, seguindo a ordem **Genuine first**.
+Formalizacao limpa, incremental e auditavel da geometria de carry, brackets,
+cameras naturais e cartas Genuine, seguindo a ordem **Genuine first**.
 
 ## Regra central
 
@@ -19,6 +19,13 @@ Esse documento distingue identidades finitas exatas, continuacoes ja
 certificadas, evidencias numericas e pontes ainda abertas. Em particular, ele
 registra as formas normais de cameras impares e pares, a identidade alinhada
 `C2 = C4` e a decomposicao de cameras compostas impares sem usar primalidade.
+O modulo `CpNaturalCameraAnalyticContinuation` leva essas identidades ao
+limite: toda largura `b>=2` produz uma carta convergente e holomorfa em
+`Re(s)>-1`; para toda largura nativa nao degenerada `b>=3`, a carta e o fator
+de paridade vezes o mesmo `genuineContinuation` na faixa critica. Na linha
+`Re(s)=1/2`, todas essas cameras possuem exatamente o mesmo predicado de zero.
+A C2 experimental entra como largura 4; a largura nativa literal 2 permanece
+separada e degenerada.
 
 ## Nucleo ativo
 
@@ -125,6 +132,18 @@ registra as formas normais de cameras impares e pares, a identidade alinhada
   Genuine original em `Re(s)>1` e independente da carta prima escolhida;
 - equivalencia global, na faixa, entre zero de qualquer carta prima impar e
   zero do mesmo `genuineContinuation`;
+- formas normais nativas sem primalidade: prefixo de duas parcelas para toda
+  largura impar, prefixo de tres parcelas com canal `D_(b/2)` para toda
+  largura par e decomposicao multiplicativa exata de cameras impares
+  compostas;
+- convergencia absoluta e holomorfia da carta saturada nativa para toda
+  largura `b>=2` em `Re(s)>-1`;
+- fator unificado `naturalCameraFactor`, identidade cruzada analitica com a
+  camera 3 e fatoracao por um unico `genuineContinuation` para toda largura
+  nativa `b>=3` na faixa critica;
+- nao anulamento de todo fator natural na linha critica e equivalencia entre
+  zero da carta e zero Genuine nessa linha, incluindo a C2 alinhada por sua
+  igualdade exata com a largura 4;
 - criterio Green assinado que transforma um certificado concreto de
   fluxo--energia--bordo numa ponte `zero Genuine -> saturacao do ramo`;
 - identidade Green finita com bordo literal, autovetor exato

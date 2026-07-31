@@ -451,7 +451,7 @@ theorem nativeCarryCenterChannel_dilation
   unfold nativeCarryCenterChannel CPFormal.Genuine.Cp.alignedCenter
   apply Finset.sum_congr rfl
   intro k hk
-  congr 1
+  apply congrArg f
   push_cast
   ring
 
@@ -569,21 +569,29 @@ lemma nativeCarryDilationChannel_even_succ
   rw [show 2 * (M + 1) = (2 * M + 1) + 1 by omega,
     Finset.sum_range_succ,
     Finset.sum_range_succ]
-  have htwoInt : 2 * ((b / 2 : ℕ) : ℤ) = (b : ℤ) := by
-    exact_mod_cast htwo
   have hgap :
       ((b / 2 : ℕ) : ℤ) * (((2 * M) + 1 : ℕ) : ℤ) =
         (b : ℤ) * (M : ℤ) + ((b / 2 : ℕ) : ℤ) := by
-    push_cast
-    rw [← htwoInt]
-    ring
+    have hgapNat :
+        (b / 2) * ((2 * M) + 1) =
+          b * M + b / 2 := by
+      calc
+        (b / 2) * ((2 * M) + 1) =
+            (2 * (b / 2)) * M + b / 2 := by ring
+        _ = b * M + b / 2 := by rw [htwo]
+    exact_mod_cast hgapNat
   have hcenter :
       ((b / 2 : ℕ) : ℤ) * (((2 * M + 1) + 1 : ℕ) : ℤ) =
         CPFormal.Genuine.Cp.alignedCenter b M := by
+    have hcenterNat :
+        (b / 2) * ((2 * M + 1) + 1) =
+          b * (M + 1) := by
+      calc
+        (b / 2) * ((2 * M + 1) + 1) =
+            (2 * (b / 2)) * (M + 1) := by ring
+        _ = b * (M + 1) := by rw [htwo]
     unfold CPFormal.Genuine.Cp.alignedCenter
-    push_cast
-    rw [← htwoInt]
-    ring
+    exact_mod_cast hcenterNat
   rw [hgap, hcenter]
 
 /--
@@ -628,8 +636,9 @@ theorem nativeCarryFiniteSaturatedChart_even_normal_form
               (CPFormal.Genuine.Cp.halfRange b : ℤ) =
             ((b : ℤ) * (M : ℤ) + ((b / 2 : ℕ) : ℤ)) + 1 := by
         unfold CPFormal.Genuine.Cp.alignedCenter
+        rw [hgap]
         push_cast
-        rw [hbformInt, hdformInt]
+        rw [hbformInt]
         ring
       have hupper :
           CPFormal.Genuine.Cp.alignedCenter b M +
