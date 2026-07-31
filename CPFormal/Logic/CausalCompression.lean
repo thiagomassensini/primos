@@ -25,7 +25,7 @@ only for a concrete system after all required witnesses have been built.
 
 namespace CPFormal.Logic
 
-universe uPattern uCarrier uInput uOutput uPrimitive uCompression
+universe u
 
 /--
 A family of observable carriers connected by certified compressions.
@@ -35,13 +35,13 @@ A family of observable carriers connected by certified compressions.
 the target is a compressed realization of the source.
 -/
 structure CausalCompressionSystem where
-  Pattern : Type uPattern
-  Carrier : Type uCarrier
-  Input : Type uInput
-  Output : Type uOutput
+  Pattern : Type u
+  Carrier : Type u
+  Input : Type u
+  Output : Type u
   eval : Carrier → Input → Output
-  PrimitiveWitness : Carrier → Pattern → Type uPrimitive
-  CompressionWitness : Carrier → Carrier → Type uCompression
+  PrimitiveWitness : Carrier → Pattern → Type u
+  CompressionWitness : Carrier → Carrier → Type u
   ExplicitlyDisplays : Carrier → Pattern → Prop
 
 namespace CausalCompressionSystem

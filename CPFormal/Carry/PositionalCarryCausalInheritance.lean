@@ -2,7 +2,6 @@ import CPFormal.Logic.CausalCompression
 import CPFormal.Carry.PositionalDecomposition
 import CPFormal.Carry.UniformCarryProbability
 import CPFormal.Analytic.CpPositionalCarryQuadraticRigidity
-import Mathlib.Tactic.Omega
 
 /-!
 # Causal inheritance of positional carry through arithmetic
