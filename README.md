@@ -11,6 +11,12 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
 
 ## Nucleo ativo
 
+- linguagem certificada de presenca causal por compressao, distinguindo
+  ausencia na notacao de ausencia na cadeia operacional;
+- torre posicional `carry -> soma -> multiplicacao -> potencia natural` para
+  toda base `b>1`, com certificados de decomposicao e iteracao;
+- conexao dessa heranca causal com a massa uniforme `b^(-k)`, amplitude
+  quadratica e rigidez do expoente `1/2`;
 - pares simetricos e segunda diferenca centrada;
 - bracket saturado finito e sua aditividade;
 - comutacao dos shifts multiplicativos, primeiro esqueleto da planura;
@@ -191,6 +197,9 @@ run `29711460431`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
 ## Ordem de leitura
+
+Para a formalizacao conceitual do carry, leia primeiro
+`docs/CARRY_CAUSAL_INHERITANCE.md`.
 
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
