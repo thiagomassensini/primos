@@ -63,7 +63,8 @@ theorem genuine_zero_off_critical_cost_contradiction_probe
   have hnative :
       IsNativeCarryRealOperatorZero 3 s.re s.im := by
     constructor
-    · simp only
+    · trace_state
+      fail "diagnostic stop after exposing the missing carry-cost goal"
     · exact hreal
 
   have hcritical : s.re = (1 : ℝ) / 2 :=
