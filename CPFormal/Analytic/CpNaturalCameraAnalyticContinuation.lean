@@ -531,7 +531,7 @@ theorem nativeCarryFiniteSaturatedChart_dirichlet_tendsto_even_factor
       dirichletTerm s ((b / 2 : ℕ) : ℤ) =
         ((b / 2 : ℕ) : ℂ) ^ (-s) := by
     unfold dirichletTerm
-    rw [Int.cast_ofNat]
+    rw [Int.cast_natCast]
   have hbase :
       dirichletTerm s (b : ℤ) = (b : ℂ) ^ (-s) := by
     simp [dirichletTerm]
