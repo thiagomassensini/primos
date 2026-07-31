@@ -705,3 +705,44 @@ Este checkpoint nao prova que o defeito telescopa ou se anula, nao formaliza
 ainda o comutador log-jet do bloco Cp, nao trata a soma off-diagonal, nao
 prova `Green-to-zero`, nao passa ao limite, nao constroi operador
 Hilbert--Polya e nao prova RH.
+
+## Checkpoint da heranca causal do carry
+
+- commit matematico certificado:
+  `6bc5ce00305450de54fafeeebca21ab483a18944`;
+- workflow run: `30601161334` (`Lean kernel audit`, run number 733);
+- job: `91063922928` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novos alvos compilados:
+  `CPFormal.Logic.CausalCompression` e
+  `CPFormal.Carry.PositionalCarryCausalInheritance`.
+
+O kernel verificou uma linguagem generica de heranca causal por caminhos de
+compressao certificados e sua instancia aritmetica concreta
+
+```text
+carry posicional -> soma -> multiplicacao -> potencia natural.
+```
+
+Para toda base `b>1`, a soma e reconstruida por digito mais `b*carry`, a
+multiplicacao satisfaz o certificado de iteracao da soma e a potencia natural
+satisfaz o certificado de iteracao da multiplicacao. Cada portador possui
+acao observavel nao constante. Assim, o carry e causalmente presente em toda a
+torre e fica oculto, mas nao causalmente ausente, na notacao de multiplicacao
+e potencia.
+
+O mesmo checkpoint verifica a conservacao de valor
+
+```text
+b * b^k = b^(k+1)
+```
+
+entre configuracoes posicionais distintas e conecta essa heranca aos teoremas
+ja existentes de massa uniforme `b^(-k)`, amplitude quadratica e rigidez
+`sigma=1/2`.
+
+Esses resultados nao usam primalidade, paridade, camera distinguida ou
+parametro complexo. O predicado `GeneratedBy` registra a forma da tese geral,
+mas o checkpoint instancia esse predicado somente para a torre aritmetica
+explicitamente certificada. Outros sistemas exigem seus proprios portadores e
+testemunhos antes de receberem estado `KERNEL_CHECKED`.

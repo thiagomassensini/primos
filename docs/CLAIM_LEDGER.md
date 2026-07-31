@@ -117,10 +117,10 @@ Estados usados:
 | C2-GPRE-INTERTWINER | um cumulante conectado normalizado em `G_pre` transporta o zero Genuine para a proveniencia `same-s` com erro coercivamente controlado | OPEN_BRIDGE | C2-LOGJET-GPRE-LIFT preserva o prefixo e popula o atlas, mas deixa o coeficiente externo; C2-LOGJET-PRODUCT-CROSSWALK abre sementes e bordos; GREEN-TFVD-GREEN-DIAGONAL identifica o alvo | construir o readout ponderado/cofinal das pernas de proveniencia entre fatores semiprimos e bases de cameras, com controle relativo que sobreviva ao decaimento C2-DYADIC-DECAY-GUARD |
 | TATE-CARRY-LOCAL | o carrier local do caracter nao ramificado trivial, sua torre e a covariancia geometrica da TFVD satisfazem as identidades locais de bracket, traco e Green | KERNEL_CHECKED | diferenca ponderada finita, normalizacao de fase | manter como dicionario local, nao como observabilidade global |
 | TATE-RADIAL-GUARD | fechar o bracket radial critico em todo zero Genuine equivale a nao anulacao forte off-critical | KERNEL_CHECKED/OPEN_BRIDGE | TATE-CARRY-LOCAL, rigidez da amplitude do ramo | nenhuma instancia declarada; a rota C2 pode substituir esta linguagem |
-| CARRY-CAUSAL-CONSERVATION | uma unidade de carry transforma `b` unidades na profundidade `k` em uma unidade na profundidade `k+1`, mudando a configuracao e preservando exatamente o valor `b*b^k=b^(k+1)` | LEAN_STATEMENT | aritmetica natural, potencia sucessora | certificar no GitHub Actions |
-| CARRY-CAUSAL-ADDITION | para toda base `b>1`, a soma posicional e reconstruida exatamente por digito mais `b*carry`, e o carry e positivo exatamente quando a coluna satura a base | LEAN_STATEMENT | decomposicao euclidiana posicional | certificar no GitHub Actions |
-| CARRY-CAUSAL-TOWER | para toda base `b>1`, certificados concretos de carry--soma, soma--multiplicacao e multiplicacao--potencia natural tornam o carry causalmente presente em todos os portadores; em multiplicacao e potencia ele fica oculto na notacao | LEAN_STATEMENT | CARRY-CAUSAL-ADDITION, recursao de multiplicacao e potencia, nao constancia dos portadores | certificar no GitHub Actions |
-| CARRY-CAUSAL-MASS | a mesma geometria causal se combina com a massa uniforme ja provada `b^(-k)`, a identidade `amplitude^2=massa` e a rigidez `sigma=1/2`, sem primalidade, paridade ou camera distinguida | LEAN_STATEMENT | CARRY-CAUSAL-TOWER, GEN-WEIGHT-CP, rigidez posicional quadratica | certificar no GitHub Actions |
+| CARRY-CAUSAL-CONSERVATION | uma unidade de carry transforma `b` unidades na profundidade `k` em uma unidade na profundidade `k+1`, mudando a configuracao e preservando exatamente o valor `b*b^k=b^(k+1)` | KERNEL_CHECKED | aritmetica natural, potencia sucessora | usar como lei local de mudanca de escala |
+| CARRY-CAUSAL-ADDITION | para toda base `b>1`, a soma posicional e reconstruida exatamente por digito mais `b*carry`, e o carry e positivo exatamente quando a coluna satura a base | KERNEL_CHECKED | decomposicao euclidiana posicional | reutilizar em outras operacoes posicionais |
+| CARRY-CAUSAL-TOWER | para toda base `b>1`, certificados concretos de carry--soma, soma--multiplicacao e multiplicacao--potencia natural tornam o carry causalmente presente em todos os portadores; em multiplicacao e potencia ele fica oculto na notacao | KERNEL_CHECKED | CARRY-CAUSAL-ADDITION, recursao de multiplicacao e potencia, nao constancia dos portadores | instanciar novos portadores somente com certificados |
+| CARRY-CAUSAL-MASS | a mesma geometria causal se combina com a massa uniforme ja provada `b^(-k)`, a identidade `amplitude^2=massa` e a rigidez `sigma=1/2`, sem primalidade, paridade ou camera distinguida | KERNEL_CHECKED | CARRY-CAUSAL-TOWER, GEN-WEIGHT-CP, rigidez posicional quadratica | usar como crosswalk causal da massa |
 | CARRY-CAUSAL-UNIVERSAL | todo sistema matematico e gerado pelo carry | VISION | instancias concretas do predicado `GeneratedBy` para cada sistema pretendido | construir certificados antes de promover o quantificador |
 | HIL-001 | sintese possui vetor de Riesz ponderado | PAPER_ARGUMENT | somabilidade dos pesos | construir espaco |
 | HIL-002 | `P_syn` e projecao ortogonal autoadjunta | PAPER_ARGUMENT | HIL-001 | formalizar API mathlib |
@@ -132,7 +132,7 @@ Estados usados:
 | RH-001 | todo zero Genuine esta na linha critica | BLOQUEADO | BRG-001 ou SPC-001+SPC-002 | nao enunciar como provado |
 
 O checkpoint matematico mais recente do nucleo ativo foi compilado pelo GitHub
-Actions no commit `946d8579cb6a2557721e72be2e51676f1899d629`, run
-`29717563536`, job `88273712912`.
+Actions no commit `6bc5ce00305450de54fafeeebca21ab483a18944`, run
+`30601161334`, job `91063922928`.
 Modulos mantidos apenas em `CPFormal.ResearchReserve` nao fazem parte dessa
 certificacao. Consulte `AUDIT.md`.
