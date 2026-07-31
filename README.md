@@ -1,13 +1,31 @@
 # CPFormal
 
-Formalizacao limpa, incremental e auditavel da geometria de carry, brackets e
-cartas primas, seguindo a ordem **Genuine first**.
+Formalizacao limpa, incremental e auditavel da geometria de carry, brackets,
+cameras naturais e cartas Genuine, seguindo a ordem **Genuine first**.
 
 ## Regra central
 
 O projeto nunca usa `sorry`, `axiom` ou um zero conhecido para fabricar o
 operador que deveria explica-lo. Uma afirmacao so recebe o estado
 `KERNEL_CHECKED` depois que `lake build` termina sem erros.
+
+## Checkpoint v0.55.0 — sintese estrutural
+
+A formulacao que liga carry posicional, cameras naturais, empacotamento
+real--complexo, Green--bracket--retorno, bordo e defeitos explicitos esta em
+`docs/UNIVERSAL_CARRY_STRUCTURAL_PERSISTENCE.md`.
+
+Esse documento distingue identidades finitas exatas, continuacoes ja
+certificadas, evidencias numericas e pontes ainda abertas. Em particular, ele
+registra as formas normais de cameras impares e pares, a identidade alinhada
+`C2 = C4` e a decomposicao de cameras compostas impares sem usar primalidade.
+O modulo `CpNaturalCameraAnalyticContinuation` leva essas identidades ao
+limite: toda largura `b>=2` produz uma carta convergente e holomorfa em
+`Re(s)>-1`; para toda largura nativa nao degenerada `b>=3`, a carta e o fator
+de paridade vezes o mesmo `genuineContinuation` na faixa critica. Na linha
+`Re(s)=1/2`, todas essas cameras possuem exatamente o mesmo predicado de zero.
+A C2 experimental entra como largura 4; a largura nativa literal 2 permanece
+separada e degenerada.
 
 ## Nucleo ativo
 
@@ -114,6 +132,18 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
   Genuine original em `Re(s)>1` e independente da carta prima escolhida;
 - equivalencia global, na faixa, entre zero de qualquer carta prima impar e
   zero do mesmo `genuineContinuation`;
+- formas normais nativas sem primalidade: prefixo de duas parcelas para toda
+  largura impar, prefixo de tres parcelas com canal `D_(b/2)` para toda
+  largura par e decomposicao multiplicativa exata de cameras impares
+  compostas;
+- convergencia absoluta e holomorfia da carta saturada nativa para toda
+  largura `b>=2` em `Re(s)>-1`;
+- fator unificado `naturalCameraFactor`, identidade cruzada analitica com a
+  camera 3 e fatoracao por um unico `genuineContinuation` para toda largura
+  nativa `b>=3` na faixa critica;
+- nao anulamento de todo fator natural na linha critica e equivalencia entre
+  zero da carta e zero Genuine nessa linha, incluindo a C2 alinhada por sua
+  igualdade exata com a largura 4;
 - criterio Green assinado que transforma um certificado concreto de
   fluxo--energia--bordo numa ponte `zero Genuine -> saturacao do ramo`;
 - identidade Green finita com bordo literal, autovetor exato
@@ -205,9 +235,15 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 marcadas como abertas no ledger.
 
 O checkpoint matematico mais recente do nucleo ativo passou por essa
-verificacao no commit `6bc5ce00305450de54fafeeebca21ab483a18944`, workflow
-run `30601161334`. A certificacao cobre os imports de `CPFormal.lean`;
+verificacao no commit de fonte matematica
+`6744f44bf0308af11952ef9e8629357c6be60fcf`, workflow run `30618216161`,
+job `91116286122`. A certificacao cobre os imports de `CPFormal.lean`,
+incluindo as cameras naturais e o certificado de persistencia estrutural;
 `CPFormal.ResearchReserve` permanece fora dela.
+
+O workflow de release da `v0.55.0` repete a auditoria sobre o `main` exato
+antes de criar a tag anotada e a GitHub Release. Essa verificacao final do
+commit publicado e separada do registro do head matematico acima.
 
 A familia de inversas restritas do checkpoint v0.54.0 esta
 `KERNEL_CHECKED` no commit
@@ -220,10 +256,23 @@ afirma uma inversa global ou uma lei sobre toda a matematica.
 ## Ordem de leitura
 
 Para uma visao completa deste checkpoint, comece por
-`docs/RESUMO_GERAL_HERANCA_CAUSAL_DO_CARRY.md`. A formulacao tecnica esta em
-`docs/CARRY_CAUSAL_INHERITANCE.md`, e o snapshot publicavel esta documentado
-em `docs/RELEASE_0.53.0.md`. A extensao inversa certificada e seus limites de
-dominio estao registrados em `docs/RELEASE_0.54.0.md`.
+`docs/UNIVERSAL_CARRY_STRUCTURAL_PERSISTENCE.md`; a proveniencia publicavel
+esta em `docs/RELEASE_0.55.0.md`. O resumo da familia causal direta e inversa
+permanece em `docs/RESUMO_GERAL_HERANCA_CAUSAL_DO_CARRY.md`, e os limites da
+extensao inversa estao registrados em `docs/RELEASE_0.54.0.md`.
+
+Arquivos centrais da sintese `v0.55.0`:
+
+1. `CPFormal/Logic/StructuralPersistence.lean`
+2. `CPFormal/Analytic/CpNativeCarryFiniteCameraAlgebra.lean`
+3. `CPFormal/Analytic/CpNaturalCameraFactor.lean`
+4. `CPFormal/Analytic/CpNaturalEvenCameraRegularity.lean`
+5. `CPFormal/Analytic/CpNaturalCameraAnalyticContinuation.lean`
+6. `CPFormal/Analytic/CpUniversalCarryStructuralPersistence.lean`
+7. `docs/UNIVERSAL_CARRY_STRUCTURAL_PERSISTENCE.md`
+8. `docs/RELEASE_0.55.0.md`
+
+Ordem historica do nucleo:
 
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
