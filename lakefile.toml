@@ -4,6 +4,7 @@ defaultTargets = ["CPFormal"]
 
 [[lean_lib]]
 name = "CPFormal"
+roots = ["CPFormal", "CPFormal.Analytic.CpGenuineOffCriticalCostContradictionProbe"]
 
 [[require]]
 name = "mathlib"
