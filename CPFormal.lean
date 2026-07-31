@@ -173,6 +173,7 @@ import CPFormal.Analytic.CpNativeCarryMobiusLogDerivativeGuardrail
 import CPFormal.Carry.PositionalDecomposition
 import CPFormal.Carry.UniformCarryProbability
 import CPFormal.Carry.PositionalCarryCausalInheritance
+import CPFormal.Carry.PositionalCarryInverseCausalInheritance
 import CPFormal.Analytic.CpQuadraticDomainCrosswalk
 import CPFormal.Analytic.CpGenuineNativeRealBoundaryCrosswalk
 import CPFormal.Analytic.CpNativeGprePrimeCarryContraction

@@ -1,23 +1,36 @@
-# Resumo geral — Herança causal do carry
+# Resumo geral — Herança causal direta e inversa do carry
 
 > O que não muda quando a representação muda?
 >
 > No passo elementar de carry, mudam as coordenadas posicionais, mas o valor
 > representado é conservado. Nas operações seguintes, o símbolo pode
-> desaparecer, mas sua ancestralidade operacional permanece certificada.
+> desaparecer, mas sua ancestralidade operacional permanece certificada. No
+> sentido pareado, borrow desdobra a escala e as operações inversas recuperam
+> estados somente nos domínios e com os dados que seus certificados retêm.
 
 ## Registro desta versão
 
 - Repositório: `thiagomassensini/primos`
-- Pull request de origem: `#28`
-- Versão: `v0.53.0`
-- Commit no `main`: o commit resolvido pela tag anotada `v0.53.0`
+- Pull request de origem:
+  [#29](https://github.com/thiagomassensini/primos/pull/29)
+- Versão: `v0.54.0`
+- Commit matemático auditado:
+  [`8a351323c7476d70e701bed6ab4137d2c5137f2d`](https://github.com/thiagomassensini/primos/commit/8a351323c7476d70e701bed6ab4137d2c5137f2d)
+- GitHub Actions:
+  [workflow 30607820730](https://github.com/thiagomassensini/primos/actions/runs/30607820730)
+- Job de kernel: `91083828864`
 - Release:
-  [v0.53.0](https://github.com/thiagomassensini/primos/releases/tag/v0.53.0)
-- Verificação: auditoria estática e `lake build --wfail`
-- `sorry`, `axiom` ou `admit` adicionados neste checkpoint: nenhum
+  [v0.54.0](https://github.com/thiagomassensini/primos/releases/tag/v0.54.0)
+- Verificação final exigida: auditoria estática e `lake build --wfail`
+- Estado da extensão inversa: `KERNEL_CHECKED`
 
-O código matemático foi inicialmente certificado no commit
+Nesse head, a auditoria estática e `lake build --wfail` terminaram com
+sucesso. A certificação cobre o novo módulo por meio do import ativo em
+`CPFormal.lean`. Depois da incorporação, o workflow de release continua sendo
+a autoridade sobre o commit exato publicado pela tag.
+
+O checkpoint pai `v0.53.0` permanece certificado. Seu código matemático foi
+inicialmente verificado no commit
 `6bc5ce00305450de54fafeeebca21ab483a18944`, pelo
 [workflow 30601161334](https://github.com/thiagomassensini/primos/actions/runs/30601161334),
 job `91063922928`.
@@ -26,14 +39,14 @@ O primeiro pacote de documentação técnica da branch chegou ao commit
 `c66f56edaf328f852cdd3fdc15dbb5c620adea88`, também com CI verde no
 [workflow 30601498672](https://github.com/thiagomassensini/primos/actions/runs/30601498672).
 
-Esses dois runs registram a certificação de origem. Para a versão publicada, o
-workflow de release é a fonte autoritativa da validação final: a publicação da
-release `v0.53.0` somente ocorre depois do sucesso das verificações exigidas
-nesse workflow.
+Esses dois runs registram a certificação da família direta em `v0.53.0`. Para
+`v0.54.0`, o workflow de release será a fonte autoritativa da validação final:
+a tag e a release só podem ser publicadas depois do sucesso das verificações
+exigidas nesse workflow.
 
 ## A percepção traduzida para matemática
 
-A estrutura estudada é:
+A família direta certificada em `v0.53.0` é:
 
 ```text
 carry posicional
@@ -42,13 +55,44 @@ carry posicional
     -> potência natural
 ```
 
-A afirmação formal não depende apenas de colocar esses nomes em sequência.
-Cada seta guarda um certificado matemático concreto:
+A extensão inversa de `v0.54.0` é pareada e ramificada:
+
+```text
+carry <-> borrow
+
+soma por y <-> subtração de y, sobre Z
+
+dividendo <-> (quociente, resto)
+
+multiplicação por d <-> divisão por d, nos múltiplos
+
+potência de grau e <-> Nat.nthRoot e, nos perfect powers
+
+potência de base b <-> Nat.log b, nas potências exatas
+```
+
+Não existe uma aresta artificial de raiz para logaritmo, nem uma reversão de
+`CompressionPath`. A extensão inversa usa certificados restritos separados e
+não constrói um novo caminho causal.
+
+Na família direta, cada seta guarda um certificado matemático concreto:
 
 1. o carry muda a escala posicional preservando exatamente o valor;
 2. a soma é reconstruída por dígito restante mais base vezes carry;
 3. a multiplicação satisfaz as equações de iteração da soma;
 4. a potência natural satisfaz as equações de iteração da multiplicação.
+
+Na família inversa:
+
+1. borrow expande uma unidade superior em `b` unidades inferiores sem mudar o
+   valor;
+2. subtração inverte adição sobre `ℤ` quando o outro operando é retido;
+3. divisão euclidiana é lossless somente com quociente e resto;
+4. divisão exata recupera o fator somente em múltiplos e com divisor positivo;
+5. raiz natural inverte potência somente nos perfect powers certificados;
+6. `Nat.log` inverte potência de base fixa somente nas potências exatas;
+7. `Nat.log` conta divisões piso, enquanto `positionalDepth` conta divisões
+   exatas.
 
 Portanto, existem duas formas diferentes de presença:
 
@@ -57,8 +101,9 @@ Portanto, existem duas formas diferentes de presença:
   o portador atual, e esse portador possui ação observável não constante.
 
 Multiplicação e potência natural não exibem o carry em sua notação
-superficial. Mesmo assim, no sistema formal construído, ambas mantêm sua
-ancestralidade causal.
+superficial, mas mantêm a ancestralidade certificada pela família direta. Na
+camada inversa, a questão é outra: cada round-trip declara seu domínio e seus
+dados retidos, sem inferir presença causal por um novo `CompressionPath`.
 
 ## 1. Conservação de valor entre escalas
 
@@ -286,7 +331,310 @@ Esses resultados estão em:
 
 - [`CPFormal/Carry/PositionalCarryCausalInheritance.lean`](../CPFormal/Carry/PositionalCarryCausalInheritance.lean)
 
-## 7. A massa já pertence ao evento de carry
+## 7. Certificados inversos restritos
+
+A extensão mantém duas linguagens separadas.
+
+`CausalCompressionSystem` responde se um portador possui ancestralidade
+causal certificada desde um padrão primitivo e se sua ação observável é não
+constante.
+
+`RestrictedInverseCertificate` responde outra pergunta:
+
+```text
+sob quais hipóteses,
+com quais parâmetros fixos
+e com quais dados retidos
+uma operação recupera exatamente um estado anterior?
+```
+
+Um certificado inverso restrito não reverte um caminho causal e não declara
+uma bijeção global. Ele registra o domínio correto do round-trip.
+
+Essa separação impede que:
+
+- uma inversa parcial seja promovida a inversa universal;
+- um resultado escalar recupere dados descartados;
+- quociente seja confundido com o par quociente-resto;
+- raiz piso seja confundida com raiz exata;
+- logaritmo piso seja confundido com inversa exata em todo natural.
+
+## 8. Carry e borrow
+
+Carry e borrow leem a mesma conservação em sentidos operacionais pareados:
+
+```text
+carry:
+b unidades na profundidade k
+  ->
+1 unidade na profundidade k+1
+
+borrow:
+1 unidade na profundidade k+1
+  ->
+b unidades na profundidade k
+```
+
+Em ambos os sentidos:
+
+```text
+b * b^k = 1 * b^(k+1)
+```
+
+Relações e certificado:
+
+- `PositionalCarryStep`
+- `PositionalBorrowStep`
+- `CarryBorrowReverseCertificate`
+- `carryBorrowReverseCertificate`
+
+O certificado demonstra que borrow troca os extremos da relação carry, que
+os dois sentidos preservam valor e que as configurações são distintas.
+
+As coordenadas mudam; o valor não. Borrow não cria uma quantidade externa,
+assim como carry não cria.
+
+## 9. Soma e subtração sobre `ℤ`
+
+### Borrow na coluna posicional
+
+Quando `x < y`, define-se:
+
+```text
+borrowedDigit b x y = x + b - y
+```
+
+e o valor completo da subtração é preservado:
+
+```text
+(high - 1)*b + borrowedDigit b x y
+  =
+high*b + x - y.
+```
+
+Sob `0 <= x < b`, `0 <= y < b` e `x < y`, o dígito emprestado volta à
+janela `[0,b)`.
+
+Declarações:
+
+- `borrowedDigit`
+- `positionalBorrow_reconstruction`
+- `borrowedDigit_mem_window`
+- `BorrowSubtractionCertificate`
+- `borrowSubtractionCertificate`
+
+### Translação por um operando fixo
+
+A inversão é formulada com um operando fixo:
+
+```text
+(x + y) - y = x
+(x - y) + y = x
+```
+
+Também se registra:
+
+```text
+x - y = x + (-y)
+```
+
+Declarações:
+
+- `addTranslation`
+- `subTranslation`
+- `subTranslation_eq_add_inverse`
+- `AddSubTranslationCertificate`
+- `addSubTranslationCertificate`
+
+O uso de `ℤ` evita a truncagem de `Nat.sub`. Isso não significa que uma soma
+isolada determine seus dois operandos: o round-trip exige que o deslocamento
+`y` permaneça retido.
+
+## 10. Divisão com quociente e resto
+
+Para `d > 0`, define-se:
+
+```text
+euclideanSplit d n = (n / d, n % d)
+euclideanReconstruct d (q,r) = r + d*q
+```
+
+Teoremas:
+
+- `euclideanSplit_reconstruction`
+- `euclideanSplit_remainder_lt`
+- `euclideanSplit_recovers_canonicalPair`
+
+Certificado:
+
+- `IsCanonicalEuclideanPair`
+- `EuclideanSplitCertificate`
+- `euclideanSplitCertificate`
+
+O decoder lossless é o ledger `(d,q,r)`, com `r < d`. O split reconstrói todo
+dividendo e recupera toda dupla canônica após a reconstrução. O quociente
+sozinho não reconstrói o dividendo.
+
+Nos múltiplos exatos:
+
+```text
+(d*q) / d = q
+```
+
+sob `d > 0`.
+
+Declarações:
+
+- `mulBy`
+- `divBy`
+- `IsMultipleImage`
+- `exactDivision_recovers_factor`
+- `MulDivOnMultiplesCertificate`
+- `mulDivOnMultiplesCertificate`
+
+Essa é a inversa restrita correta da multiplicação pelo divisor fixo.
+
+## 11. Potência e raiz nos perfect powers
+
+Para grau fixo:
+
+```text
+powerByDegree degree value = value^degree
+nthRootByDegree degree value = Nat.nthRoot degree value
+```
+
+O domínio de destino é explicitamente:
+
+```text
+IsPerfectPowerImage degree value
+```
+
+Para `degree != 0`:
+
+```text
+Nat.nthRoot degree (value^degree) = value
+```
+
+Declarações:
+
+- `nthRoot_exact_on_powers`
+- `nthRoot_reconstructs_iff_perfectPower`
+- `PowerNthRootOnPerfectPowersCertificate`
+- `powerNthRootOnPerfectPowersCertificate`
+
+O round-trip da direita só vale nos perfect powers correspondentes. Fora
+dessa imagem, `Nat.nthRoot` é uma raiz piso e não é declarada inversa exata
+universal.
+
+## 12. Potência e `Nat.log` nas potências exatas
+
+O logaritmo usado aqui é discreto:
+
+```text
+floorLogByBase b n = Nat.log b n
+```
+
+Para `b > 1`, ele recupera exatamente o expoente na imagem de potência:
+
+```text
+Nat.log b (b^k) = k
+```
+
+Declarações:
+
+- `powerByBase`
+- `floorLogByBase`
+- `IsExactBasePower`
+- `floorLog_exact_on_basePowers`
+- `BasePowerLogOnExactPowersCertificate`
+- `basePowerLogOnExactPowersCertificate`
+
+Para um natural positivo arbitrário, ele identifica apenas a janela de
+magnitude:
+
+```text
+b^(Nat.log b n) <= n
+n < b^(Nat.log b n + 1)
+```
+
+Teorema:
+
+- `floorLog_power_window`
+
+Quando `b <= n`, uma divisão piso pela base reduz essa coordenada em uma
+unidade:
+
+```text
+Nat.log b n = Nat.log b (n / b) + 1
+```
+
+Teorema:
+
+- `floorLog_division_step`
+
+Assim, `Nat.log` conta semanticamente divisões piso pela base. Ele não é o
+logaritmo analítico real.
+
+## 13. Divisão piso e divisão exata não são a mesma profundidade
+
+Foram mantidas duas coordenadas:
+
+```text
+floorLogByBase b n
+repeatedExactDivisionDepth b n
+```
+
+A primeira mede magnitude. A segunda reutiliza `positionalDepth` e mede
+divisibilidade exata:
+
+```text
+b^k divide n
+b^(k+1) não divide n
+```
+
+Teoremas:
+
+- `repeatedExactDivisionDepth_spec`
+- `repeatedExactDivisionDepth_factorization_existsUnique`
+
+Nenhuma igualdade geral entre `Nat.log b n` e `positionalDepth b n` é
+afirmada. Em base `2`, por exemplo:
+
+```text
+positionalDepth 2 12 = 2
+Nat.log 2 12 = 3
+```
+
+Eles coincidem em potências puras `n = b^k`, mas carregam informações
+diferentes em geral.
+
+### Bundle de certificados
+
+A estrutura:
+
+- `PositionalInverseArithmeticCertificates`
+
+reúne:
+
+- carry/borrow;
+- borrow na subtração posicional;
+- translação por soma/subtração;
+- split euclidiano;
+- multiplicação/divisão nos múltiplos;
+- potência/`Nat.nthRoot` nos perfect powers;
+- potência/`Nat.log` nas potências exatas;
+- janela de magnitude;
+- passo de divisão piso;
+- profundidade de divisão exata.
+
+A instância:
+
+- `positionalInverseArithmeticCertificates`
+
+preserva as hipóteses de base não degenerada, divisor positivo e grau não
+nulo. Nenhum novo `CausalCompressionSystem` ou `CompressionPath` é construído.
+
+## 14. A massa já pertence ao evento de carry
 
 Na profundidade `k`, o espaço de resíduos possui `b^k` classes. Um evento de
 carry especificado ocupa uma dessas classes. Sob a medida uniforme finita:
@@ -328,7 +676,7 @@ Arquivo:
 Portanto, a massa não é introduzida posteriormente por uma câmera ou operador.
 Ela já é a medida uniforme do evento posicional na profundidade considerada.
 
-## 8. Por que aparece o expoente `1/2`
+## 15. Por que aparece o expoente `1/2`
 
 Para uma amplitude deformada
 
@@ -362,7 +710,7 @@ O expoente `1/2` não foi escolhido por ajuste numérico neste encadeamento. Ele
 é o único expoente real compatível com a realização quadrática da massa
 `b^(-k)` em uma profundidade positiva.
 
-## 9. Certificado consolidado
+## 16. Certificado consolidado
 
 O teorema
 
@@ -398,7 +746,7 @@ Importante: o teorema consolidado conecta resultados certificados que usam os
 mesmos parâmetros posicionais. Ele não afirma que a definição abstrata de
 presença causal, sozinha, deriva uma medida de probabilidade.
 
-## 10. Independências já estabelecidas
+## 17. Independências já estabelecidas
 
 Todo esse checkpoint vale para qualquer base natural não degenerada:
 
@@ -419,9 +767,9 @@ Ele não exige:
 A base é um sistema de coordenadas posicionais. A conservação e os
 certificados não dependem de uma base especial.
 
-## 11. Escopo exato do que foi provado
+## 18. Escopo exato do que foi provado
 
-### Estado `KERNEL_CHECKED`
+### Estado `KERNEL_CHECKED` herdado de `v0.53.0`
 
 Está formalmente certificado que:
 
@@ -436,6 +784,20 @@ Está formalmente certificado que:
 - a massa uniforme do evento é `b^(-k)`;
 - a amplitude `b^(-k/2)` realiza essa massa quadraticamente;
 - a compatibilidade quadrática força `sigma = 1/2`.
+
+### Estado da extensão `v0.54.0`
+
+A família inversa está em `KERNEL_CHECKED` no commit
+`8a351323c7476d70e701bed6ab4137d2c5137f2d`. O workflow `30607820730`, job
+`91083828864`, verificou no mesmo head:
+
+- o import no alvo ativo;
+- a auditoria estática;
+- a ausência local de `axiom`, `sorry` e `admit`;
+- a elaboração completa por `lake build --wfail`.
+
+Essa certificação é própria da extensão: ela não foi inferida automaticamente
+do sucesso da `v0.53.0`.
 
 ### Fronteira ainda aberta
 
@@ -465,7 +827,7 @@ Essa fronteira não descarta a percepção geral. Ela mostra exatamente o que
 precisa ser construído para que cada nova extensão deixe de ser visão e passe
 a ser um resultado verificado pelo kernel.
 
-## 12. O que “compressão” significa aqui
+## 19. O que “compressão” e “inversa” significam aqui
 
 Neste checkpoint, compressão significa empacotamento operacional e
 genealógico:
@@ -479,28 +841,40 @@ nem uma afirmação de que operações diferentes têm o mesmo valor. O objeto
 conservado no passo primitivo é o valor posicional; nas camadas seguintes, o
 que é conservado formalmente é a ancestralidade certificada do mecanismo.
 
-## 13. Mapa dos arquivos
+Na extensão inversa, “inversa” significa round-trip restrito:
+
+- com um operando fixo em soma/subtração;
+- com divisor positivo e quociente-resto na divisão lossless;
+- em múltiplos exatos para recuperar um fator;
+- em perfect powers para raiz;
+- em potências exatas da base para `Nat.log`.
+
+Não significa inversa funcional universal, recuperação de operandos apagados,
+reversão de causalidade ou reversão de `CompressionPath`.
+
+## 20. Mapa dos arquivos
 
 | Função | Arquivo |
 |---|---|
 | Linguagem abstrata de presença causal | [`CPFormal/Logic/CausalCompression.lean`](../CPFormal/Logic/CausalCompression.lean) |
 | Instância carry → soma → multiplicação → potência | [`CPFormal/Carry/PositionalCarryCausalInheritance.lean`](../CPFormal/Carry/PositionalCarryCausalInheritance.lean) |
+| Certificados inversos restritos ligados a carry/borrow | [`CPFormal/Carry/PositionalCarryInverseCausalInheritance.lean`](../CPFormal/Carry/PositionalCarryInverseCausalInheritance.lean) |
 | Decomposição posicional por quociente e resíduo | [`CPFormal/Carry/PositionalDecomposition.lean`](../CPFormal/Carry/PositionalDecomposition.lean) |
 | Probabilidade uniforme do evento de carry | [`CPFormal/Carry/UniformCarryProbability.lean`](../CPFormal/Carry/UniformCarryProbability.lean) |
 | Massa e amplitude crítica | [`CPFormal/Carry/CpBranchWeight.lean`](../CPFormal/Carry/CpBranchWeight.lean) |
 | Rigidez quadrática do expoente `1/2` | [`CPFormal/Analytic/CpPositionalCarryQuadraticRigidity.lean`](../CPFormal/Analytic/CpPositionalCarryQuadraticRigidity.lean) |
-| Explicação técnica do checkpoint | [`docs/CARRY_CAUSAL_INHERITANCE.md`](CARRY_CAUSAL_INHERITANCE.md) |
+| Explicação técnica da família direta | [`docs/CARRY_CAUSAL_INHERITANCE.md`](CARRY_CAUSAL_INHERITANCE.md) |
+| Explicação técnica da família inversa | [`docs/CARRY_INVERSE_CAUSAL_INHERITANCE.md`](CARRY_INVERSE_CAUSAL_INHERITANCE.md) |
 | Este resumo geral | [`docs/RESUMO_GERAL_HERANCA_CAUSAL_DO_CARRY.md`](RESUMO_GERAL_HERANCA_CAUSAL_DO_CARRY.md) |
-| Notas da versão imutável | [`docs/RELEASE_0.53.0.md`](RELEASE_0.53.0.md) |
+| Checkpoint imutável da família direta | [`docs/RELEASE_0.53.0.md`](RELEASE_0.53.0.md) |
+| Notas da extensão inversa | [`docs/RELEASE_0.54.0.md`](RELEASE_0.54.0.md) |
 | Estado auditável das alegações | [`docs/CLAIM_LEDGER.md`](CLAIM_LEDGER.md) |
 | Registro de compilação e auditoria | [`docs/AUDIT.md`](AUDIT.md) |
 
 ## Conclusão
 
-O resultado formal não diz apenas que usamos carry para escrever contas na
-escola.
-
-Ele mostra uma cadeia precisa:
+O resultado formal direto não diz apenas que usamos carry para escrever
+contas na escola. Ele mostra uma cadeia precisa:
 
 ```text
 saturação posicional
@@ -510,15 +884,41 @@ saturação posicional
     -> iteração certificada na potência natural
 ```
 
-Ao longo dessa cadeia, a forma explícita muda. O carry pode deixar de aparecer
-na superfície. O que permanece é a ligação certificada com o mecanismo
-primitivo.
+O complemento inverso organiza outra família:
+
+```text
+carry <-> borrow com conservação de valor
+
+soma por y <-> subtração de y
+
+dividendo <-> (quociente, resto)
+
+multiplicação <-> divisão nos múltiplos
+
+potência <-> nthRoot nos perfect powers
+
+potência de base b <-> Nat.log nas potências exatas
+```
+
+O desenho formal correto é ramificado, e cada round-trip conserva as
+hipóteses e os dados necessários.
+
+Na cadeia direta, a forma explícita muda e o carry pode deixar de aparecer na
+superfície, embora sua ancestralidade permaneça certificada. Na camada
+inversa, o que permanece explícito é o domínio de cada round-trip. Isso não
+autoriza recuperar dados que um observador escalar descartou.
 
 Na geometria de profundidade, o mesmo evento possui massa `b^(-k)`. Sua
 realização como amplitude quadrática exige `b^(-k/2)`, e a compatibilidade
 rigidamente seleciona `1/2`.
 
-Essa é a parte já transformada de percepção estrutural em matemática
-verificada. `GeneratedBy` deixa preparada a fronteira formal para investigar
-até onde essa herança pode ser estendida sem substituir certificados por
-declarações.
+A extensão inversa não modifica essa lei anterior. Ela esclarece dois modos de
+descer escala: `Nat.log` por divisões piso e `positionalDepth` por divisões
+exatas.
+
+A família direta está transformada em matemática verificada desde a
+`v0.53.0`, e a família inversa recebeu certificação própria no head
+`8a351323c7476d70e701bed6ab4137d2c5137f2d`. `GeneratedBy` e
+`RestrictedInverseCertificate` mantêm separadas a ancestralidade causal e a
+inversão restrita, permitindo avançar sem substituir certificados por
+declarações universais.
