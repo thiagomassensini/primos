@@ -228,7 +228,7 @@ theorem differentiable_realCpPairBracket_of_two_le
     exact mul_pos hbpos (by positivity)
   have hright :
       0 < (b : ℝ) * ((k + 1 : ℕ) : ℝ) + (radius : ℝ) :=
-    exact add_pos_of_pos_of_nonneg hcenter (by positivity)
+    add_pos_of_pos_of_nonneg hcenter (by positivity)
   have hleftDiff :=
     differentiable_realDirichletPower_in_parameter (ne_of_gt hleft)
   have hcenterDiff :=
@@ -530,7 +530,9 @@ theorem nativeCarryFiniteSaturatedChart_dirichlet_tendsto_even_factor
   have hhalf :
       dirichletTerm s ((b / 2 : ℕ) : ℤ) =
         ((b / 2 : ℕ) : ℂ) ^ (-s) := by
-    simp [dirichletTerm]
+    unfold dirichletTerm
+    apply congrArg (fun z : ℂ ↦ z ^ (-s))
+    norm_num
   have hbase :
       dirichletTerm s (b : ℤ) = (b : ℂ) ^ (-s) := by
     simp [dirichletTerm]
@@ -628,9 +630,17 @@ theorem differentiable_naturalCameraFactor
     (b : ℕ) (hb : 2 ≤ b) :
     Differentiable ℂ (naturalCameraFactor b) := by
   by_cases hmod : b % 2 = 0
-  · simp only [naturalCameraFactor, hmod, if_pos]
+  · have hfun :
+        naturalCameraFactor b = naturalEvenCameraFactor b := by
+      funext s
+      simp [naturalCameraFactor, hmod]
+    rw [hfun]
     exact differentiable_naturalEvenCameraFactor b hb
-  · simp only [naturalCameraFactor, hmod, if_neg]
+  · have hfun :
+        naturalCameraFactor b = naturalOddCameraFactor b := by
+      funext s
+      simp [naturalCameraFactor, hmod]
+    rw [hfun]
     exact differentiable_naturalOddCameraFactor b (by omega)
 
 /-- Analytic form of unified factor regularity. -/
