@@ -197,7 +197,7 @@ An operation `higher` packages iteration of `lower`, starting at `seed`.
 -/
 structure IterationCompression
     (lower higher : NatBinaryOperation)
-    (seed : ℕ) where
+    (seed : ℕ) : Type where
   zero :
     ∀ a, higher (a, 0) = seed
   succ :
@@ -299,106 +299,120 @@ def positionalArithmeticSystem
 def carryToAdditionPath
     (b : ℕ) (hb : 1 < b) :
     (positionalArithmeticSystem b).CompressionPath
-      .carryNormalization .positionalAddition :=
-  CausalCompressionSystem.CompressionPath.tail
-    (CausalCompressionSystem.CompressionPath.refl
-      .carryNormalization)
-    ⟨carryToAdditionCertificate b hb⟩
+      ArithmeticCarrier.carryNormalization
+      ArithmeticCarrier.positionalAddition := by
+  apply CausalCompressionSystem.CompressionPath.tail
+  · exact
+      CausalCompressionSystem.CompressionPath.refl
+        ArithmeticCarrier.carryNormalization
+  · exact ⟨carryToAdditionCertificate b hb⟩
 
 /-- Certified path from carry normalization to multiplication. -/
 def carryToMultiplicationPath
     (b : ℕ) (hb : 1 < b) :
     (positionalArithmeticSystem b).CompressionPath
-      .carryNormalization .multiplication :=
-  CausalCompressionSystem.CompressionPath.tail
-    (carryToAdditionPath b hb)
-    ⟨additionToMultiplicationCertificate⟩
+      ArithmeticCarrier.carryNormalization
+      ArithmeticCarrier.multiplication := by
+  apply CausalCompressionSystem.CompressionPath.tail
+  · exact carryToAdditionPath b hb
+  · exact ⟨additionToMultiplicationCertificate⟩
 
 /-- Certified path from carry normalization to natural power. -/
 def carryToNaturalPowerPath
     (b : ℕ) (hb : 1 < b) :
     (positionalArithmeticSystem b).CompressionPath
-      .carryNormalization .naturalPower :=
-  CausalCompressionSystem.CompressionPath.tail
-    (carryToMultiplicationPath b hb)
-    ⟨multiplicationToPowerCertificate⟩
+      ArithmeticCarrier.carryNormalization
+      ArithmeticCarrier.naturalPower := by
+  apply CausalCompressionSystem.CompressionPath.tail
+  · exact carryToMultiplicationPath b hb
+  · exact ⟨multiplicationToPowerCertificate⟩
 
 /-- Primitive carry is inherited by the addition carrier. -/
 theorem carry_reinstantiated_in_addition
     (b : ℕ) (hb : 1 < b) :
     (positionalArithmeticSystem b).Reinstantiates
-      .positionalCarry .positionalAddition := by
+      CarryPattern.positionalCarry
+      ArithmeticCarrier.positionalAddition := by
   exact
-    ⟨.carryNormalization, ⟨PUnit.unit⟩,
+    ⟨ArithmeticCarrier.carryNormalization, ⟨PUnit.unit⟩,
       carryToAdditionPath b hb⟩
 
 /-- Primitive carry is inherited by the multiplication carrier. -/
 theorem carry_reinstantiated_in_multiplication
     (b : ℕ) (hb : 1 < b) :
     (positionalArithmeticSystem b).Reinstantiates
-      .positionalCarry .multiplication := by
+      CarryPattern.positionalCarry
+      ArithmeticCarrier.multiplication := by
   exact
-    ⟨.carryNormalization, ⟨PUnit.unit⟩,
+    ⟨ArithmeticCarrier.carryNormalization, ⟨PUnit.unit⟩,
       carryToMultiplicationPath b hb⟩
 
 /-- Primitive carry is inherited by the natural-power carrier. -/
 theorem carry_reinstantiated_in_naturalPower
     (b : ℕ) (hb : 1 < b) :
     (positionalArithmeticSystem b).Reinstantiates
-      .positionalCarry .naturalPower := by
+      CarryPattern.positionalCarry
+      ArithmeticCarrier.naturalPower := by
   exact
-    ⟨.carryNormalization, ⟨PUnit.unit⟩,
+    ⟨ArithmeticCarrier.carryNormalization, ⟨PUnit.unit⟩,
       carryToNaturalPowerPath b hb⟩
 
 /-- Carry normalization has a nonconstant quotient observable. -/
 theorem carryNormalization_operationallyNontrivial
     (b : ℕ) (hb : 1 < b) :
     (positionalArithmeticSystem b).OperationallyNontrivial
-      .carryNormalization := by
+      ArithmeticCarrier.carryNormalization := by
   refine ⟨(0, 0), (b, 0), ?_⟩
-  have hb0 : b ≠ 0 :=
-    Nat.ne_of_gt (lt_trans Nat.zero_lt_one hb)
-  simp [positionalArithmeticSystem, arithmeticEval,
-    positionalAdditionCarry, quotientAtDepth, hb0]
+  change
+    positionalAdditionCarry b (0, 0) ≠
+      positionalAdditionCarry b (b, 0)
+  have hzero :
+      positionalAdditionCarry b (0, 0) = 0 := by
+    simp [positionalAdditionCarry, quotientAtDepth]
+  rw [hzero]
+  exact ne_of_lt
+    ((positionalAdditionCarry_pos_iff_saturated
+      b (lt_trans Nat.zero_lt_one hb) (b, 0)).2 (by simp))
 
 /-- Addition has a nonconstant observable action. -/
 theorem addition_operationallyNontrivial
     (b : ℕ) :
     (positionalArithmeticSystem b).OperationallyNontrivial
-      .positionalAddition := by
+      ArithmeticCarrier.positionalAddition := by
   refine ⟨(0, 0), (1, 0), ?_⟩
-  norm_num [positionalArithmeticSystem, arithmeticEval, additionEval]
+  change additionEval (0, 0) ≠ additionEval (1, 0)
+  norm_num [additionEval]
 
 /-- Multiplication has a nonconstant observable action. -/
 theorem multiplication_operationallyNontrivial
     (b : ℕ) :
     (positionalArithmeticSystem b).OperationallyNontrivial
-      .multiplication := by
+      ArithmeticCarrier.multiplication := by
   refine ⟨(0, 1), (1, 1), ?_⟩
-  norm_num [positionalArithmeticSystem, arithmeticEval,
-    multiplicationEval]
+  change multiplicationEval (0, 1) ≠ multiplicationEval (1, 1)
+  norm_num [multiplicationEval]
 
 /-- Natural power has a nonconstant observable action. -/
 theorem naturalPower_operationallyNontrivial
     (b : ℕ) :
     (positionalArithmeticSystem b).OperationallyNontrivial
-      .naturalPower := by
+      ArithmeticCarrier.naturalPower := by
   refine ⟨(0, 1), (1, 1), ?_⟩
-  norm_num [positionalArithmeticSystem, arithmeticEval,
-    naturalPowerEval]
+  change naturalPowerEval (0, 1) ≠ naturalPowerEval (1, 1)
+  norm_num [naturalPowerEval]
 
 /-- Every carrier in the certified tower inherits the positional-carry pattern. -/
 theorem positionalArithmetic_generatedByCarry
     (b : ℕ) (hb : 1 < b) :
     (positionalArithmeticSystem b).GeneratedBy
-      .positionalCarry := by
+      CarryPattern.positionalCarry := by
   intro carrier
   cases carrier with
   | carryNormalization =>
       exact
-        ⟨.carryNormalization, ⟨PUnit.unit⟩,
+        ⟨ArithmeticCarrier.carryNormalization, ⟨PUnit.unit⟩,
           CausalCompressionSystem.CompressionPath.refl
-            .carryNormalization⟩
+            ArithmeticCarrier.carryNormalization⟩
   | positionalAddition =>
       exact carry_reinstantiated_in_addition b hb
   | multiplication =>
@@ -432,7 +446,7 @@ theorem positionalCarry_causallyPresent_through_arithmeticTower
     (b : ℕ) (hb : 1 < b) :
     ∀ carrier,
       (positionalArithmeticSystem b).CausallyPresentIn
-        .positionalCarry carrier :=
+        CarryPattern.positionalCarry carrier :=
   (positionalArithmeticSystem b).causallyPresentIn_all_of_generatedBy
     (positionalArithmetic_generatedByCarry b hb)
     (positionalArithmetic_operationallyNontrivial b hb)
@@ -441,20 +455,22 @@ theorem positionalCarry_causallyPresent_through_arithmeticTower
 theorem positionalCarry_hiddenButCausallyPresent_in_multiplication
     (b : ℕ) (hb : 1 < b) :
     (positionalArithmeticSystem b).HiddenButCausallyPresentIn
-      .positionalCarry .multiplication := by
+      CarryPattern.positionalCarry
+      ArithmeticCarrier.multiplication := by
   refine
     ⟨positionalCarry_causallyPresent_through_arithmeticTower
-      b hb .multiplication, ?_⟩
+      b hb ArithmeticCarrier.multiplication, ?_⟩
   simp [positionalArithmeticSystem, arithmeticExplicitlyDisplays]
 
 /-- Natural power hides the carry symbol but retains its causal ancestry. -/
 theorem positionalCarry_hiddenButCausallyPresent_in_naturalPower
     (b : ℕ) (hb : 1 < b) :
     (positionalArithmeticSystem b).HiddenButCausallyPresentIn
-      .positionalCarry .naturalPower := by
+      CarryPattern.positionalCarry
+      ArithmeticCarrier.naturalPower := by
   refine
     ⟨positionalCarry_causallyPresent_through_arithmeticTower
-      b hb .naturalPower, ?_⟩
+      b hb ArithmeticCarrier.naturalPower, ?_⟩
   simp [positionalArithmeticSystem, arithmeticExplicitlyDisplays]
 
 /-! ## Existing mass and quadratic rigidity carried by the same geometry -/
@@ -488,7 +504,8 @@ Consolidated certificate for the user's structural observation:
 theorem positionalCarry_causalInheritance_mass_and_rigidity
     (b k : ℕ) (hb : 1 < b) (hk : 0 < k) (sigma : ℝ) :
     (positionalArithmeticSystem b).HiddenButCausallyPresentIn
-        .positionalCarry .naturalPower ∧
+        CarryPattern.positionalCarry
+        ArithmeticCarrier.naturalPower ∧
       positionalValue (saturatedCarryConfiguration b k) =
         positionalValue (normalizedCarryConfiguration b k) ∧
       uniformFiniteProbability
