@@ -198,8 +198,10 @@ run `30601161334`. A certificacao cobre os imports de `CPFormal.lean`;
 
 ## Ordem de leitura
 
-Para a formalizacao conceitual do carry, leia primeiro
-`docs/CARRY_CAUSAL_INHERITANCE.md`.
+Para uma visao completa deste checkpoint, comece por
+`docs/RESUMO_GERAL_HERANCA_CAUSAL_DO_CARRY.md`. A formulacao tecnica esta em
+`docs/CARRY_CAUSAL_INHERITANCE.md`, e o snapshot publicavel esta documentado
+em `docs/RELEASE_0.53.0.md`.
 
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
