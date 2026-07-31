@@ -1,4 +1,5 @@
 import CPFormal.Logic.Status
+import CPFormal.Logic.CausalCompression
 import CPFormal.Finite.SymmetricPair
 import CPFormal.Finite.Bracket
 import CPFormal.Carry.Shift
@@ -171,6 +172,7 @@ import CPFormal.Analytic.CpFiniteScalarSynthesisClosedDefectObstruction
 import CPFormal.Analytic.CpNativeCarryMobiusLogDerivativeGuardrail
 import CPFormal.Carry.PositionalDecomposition
 import CPFormal.Carry.UniformCarryProbability
+import CPFormal.Carry.PositionalCarryCausalInheritance
 import CPFormal.Analytic.CpQuadraticDomainCrosswalk
 import CPFormal.Analytic.CpGenuineNativeRealBoundaryCrosswalk
 import CPFormal.Analytic.CpNativeGprePrimeCarryContraction

@@ -11,6 +11,12 @@ operador que deveria explica-lo. Uma afirmacao so recebe o estado
 
 ## Nucleo ativo
 
+- linguagem certificada de presenca causal por compressao, distinguindo
+  ausencia na notacao de ausencia na cadeia operacional;
+- torre posicional `carry -> soma -> multiplicacao -> potencia natural` para
+  toda base `b>1`, com certificados de decomposicao e iteracao;
+- conexao dessa heranca causal com a massa uniforme `b^(-k)`, amplitude
+  quadratica e rigidez do expoente `1/2`;
 - pares simetricos e segunda diferenca centrada;
 - bracket saturado finito e sua aditividade;
 - comutacao dos shifts multiplicativos, primeiro esqueleto da planura;
@@ -186,11 +192,16 @@ permite promover os lemas compilados de `LEAN_STATEMENT` para
 marcadas como abertas no ledger.
 
 O checkpoint matematico mais recente do nucleo ativo passou por essa
-verificacao no commit `60d8885e8959066a1f035651e7a573cc2c80edb0`, workflow
-run `29711460431`. A certificacao cobre os imports de `CPFormal.lean`;
+verificacao no commit `6bc5ce00305450de54fafeeebca21ab483a18944`, workflow
+run `30601161334`. A certificacao cobre os imports de `CPFormal.lean`;
 `CPFormal.ResearchReserve` permanece fora dela.
 
 ## Ordem de leitura
+
+Para uma visao completa deste checkpoint, comece por
+`docs/RESUMO_GERAL_HERANCA_CAUSAL_DO_CARRY.md`. A formulacao tecnica esta em
+`docs/CARRY_CAUSAL_INHERITANCE.md`, e o snapshot publicavel esta documentado
+em `docs/RELEASE_0.53.0.md`.
 
 1. `docs/WORKING_AGREEMENT.md`
 2. `docs/FORMALIZATION_PLAN.md`
