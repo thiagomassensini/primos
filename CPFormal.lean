@@ -182,4 +182,5 @@ import CPFormal.Analytic.CpGenuineRealPlaneReconstruction
 import CPFormal.Analytic.CpNativeCarryFiniteCameraAlgebra
 import CPFormal.Analytic.CpNaturalCameraFactor
 import CPFormal.Analytic.CpNaturalEvenCameraRegularity
+import CPFormal.Analytic.CpNaturalCameraAnalyticContinuation
 import CPFormal.Analytic.CpUniversalCarryStructuralPersistence

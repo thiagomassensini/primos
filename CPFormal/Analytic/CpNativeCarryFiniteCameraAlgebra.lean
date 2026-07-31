@@ -279,11 +279,10 @@ theorem nativeCarryFiniteSaturatedChart_odd_normal_form
       simp [nativeCarryFiniteSaturatedChart, nativeCarryPositivePrefix,
         nativeCarryCenterChannel]
   | succ M ih =>
-      have hh : 1 ≤ CPFormal.Genuine.Cp.halfRange p := by
-        unfold CPFormal.Genuine.Cp.halfRange
-        omega
       have hpformNat :=
         CPFormal.Carry.Cp.two_mul_halfRange_add_one hpodd
+      have hh : 1 ≤ CPFormal.Genuine.Cp.halfRange p := by
+        omega
       have hpformInt :
           (p : ℤ) =
             2 * (CPFormal.Genuine.Cp.halfRange p : ℤ) + 1 := by
@@ -395,9 +394,11 @@ lemma halfRange_mul_of_odd
     calc
       2 * (a * CPFormal.Genuine.Cp.halfRange b +
           CPFormal.Genuine.Cp.halfRange a) + 1 =
-          a * (2 * CPFormal.Genuine.Cp.halfRange b + 1) := by
-            rw [← haform]
-            ring
+          2 * a * CPFormal.Genuine.Cp.halfRange b +
+            (2 * CPFormal.Genuine.Cp.halfRange a + 1) := by ring
+      _ = 2 * a * CPFormal.Genuine.Cp.halfRange b + a := by
+        rw [haform]
+      _ = a * (2 * CPFormal.Genuine.Cp.halfRange b + 1) := by ring
       _ = a * b := by rw [hbform]
       _ = 2 * CPFormal.Genuine.Cp.halfRange (a * b) + 1 :=
         habform.symm
@@ -421,16 +422,18 @@ theorem nativeCarryCenterChannel_eq_dilated_positivePrefix
     · exact_mod_cast (show 1 ≤ k + 1 by omega)
     · exact_mod_cast (show k + 1 ≤ M by omega)
   · intro k₁ hk₁ k₂ hk₂ heq
-    exact_mod_cast heq
+    have hsucc : k₁ + 1 = k₂ + 1 := by
+      exact_mod_cast heq
+    omega
   · intro n hn
     have hnBounds := Finset.mem_Icc.mp hn
     have hnNonneg : 0 ≤ n := le_trans (by norm_num) hnBounds.1
     have hcast : ((n.toNat : ℕ) : ℤ) = n :=
       Int.toNat_of_nonneg hnNonneg
     have hnOne : 1 ≤ n.toNat := by
-      exact_mod_cast (show (1 : ℤ) ≤ n by exact hnBounds.1)
+      simpa using Int.toNat_le_toNat hnBounds.1
     have hnUpper : n.toNat ≤ M := by
-      exact_mod_cast (show n ≤ (M : ℤ) by exact hnBounds.2)
+      simpa using Int.toNat_le_toNat hnBounds.2
     refine ⟨n.toNat - 1, ?_, ?_⟩
     · simp only [Finset.mem_range]
       omega
@@ -556,7 +559,7 @@ lemma nativeCarryDilationChannel_even_succ
     (b M : ℕ) (hbeven : Even b) (f : ℤ → A) :
     nativeCarryDilationChannel (b / 2) (2 * (M + 1)) f =
       nativeCarryDilationChannel (b / 2) (2 * M) f +
-        f ((b : ℤ) * (M : ℤ) + (b / 2 : ℤ)) +
+        f ((b : ℤ) * (M : ℤ) + ((b / 2 : ℕ) : ℤ)) +
         f (CPFormal.Genuine.Cp.alignedCenter b M) := by
   classical
   have htwo : 2 * (b / 2) = b := by
@@ -566,16 +569,16 @@ lemma nativeCarryDilationChannel_even_succ
   rw [show 2 * (M + 1) = (2 * M + 1) + 1 by omega,
     Finset.sum_range_succ,
     Finset.sum_range_succ]
-  have htwoInt : 2 * (b / 2 : ℤ) = (b : ℤ) := by
+  have htwoInt : 2 * ((b / 2 : ℕ) : ℤ) = (b : ℤ) := by
     exact_mod_cast htwo
   have hgap :
-      (b / 2 : ℤ) * (((2 * M) + 1 : ℕ) : ℤ) =
-        (b : ℤ) * (M : ℤ) + (b / 2 : ℤ) := by
+      ((b / 2 : ℕ) : ℤ) * (((2 * M) + 1 : ℕ) : ℤ) =
+        (b : ℤ) * (M : ℤ) + ((b / 2 : ℕ) : ℤ) := by
     push_cast
     rw [← htwoInt]
     ring
   have hcenter :
-      (b / 2 : ℤ) * (((2 * M + 1) + 1 : ℕ) : ℤ) =
+      ((b / 2 : ℕ) : ℤ) * (((2 * M + 1) + 1 : ℕ) : ℤ) =
         CPFormal.Genuine.Cp.alignedCenter b M := by
     unfold CPFormal.Genuine.Cp.alignedCenter
     push_cast
@@ -600,23 +603,22 @@ theorem nativeCarryFiniteSaturatedChart_even_normal_form
       simp [nativeCarryFiniteSaturatedChart, nativeCarryPositivePrefix,
         nativeCarryDilationChannel, nativeCarryCenterChannel]
   | succ M ih =>
-      have hh : 1 ≤ CPFormal.Genuine.Cp.halfRange b := by
-        unfold CPFormal.Genuine.Cp.halfRange
-        omega
       have hbformNat :=
         two_mul_halfRange_add_two_of_even hbeven hb
       have hdformNat :=
         div_two_eq_halfRange_add_one_of_even hbeven hb
+      have hh : 1 ≤ CPFormal.Genuine.Cp.halfRange b := by
+        omega
       have hbformInt :
           (b : ℤ) =
             2 * (CPFormal.Genuine.Cp.halfRange b : ℤ) + 2 := by
         exact_mod_cast hbformNat.symm
       have hdformInt :
-          (b / 2 : ℤ) =
+          ((b / 2 : ℕ) : ℤ) =
             (CPFormal.Genuine.Cp.halfRange b : ℤ) + 1 := by
         exact_mod_cast hdformNat
       have hgap :
-          (b : ℤ) * (M : ℤ) + (b / 2 : ℤ) =
+          (b : ℤ) * (M : ℤ) + ((b / 2 : ℕ) : ℤ) =
             ((b : ℤ) * (M : ℤ) +
               (CPFormal.Genuine.Cp.halfRange b : ℤ)) + 1 := by
         rw [hdformInt]
@@ -624,7 +626,7 @@ theorem nativeCarryFiniteSaturatedChart_even_normal_form
       have hlower :
           CPFormal.Genuine.Cp.alignedCenter b M -
               (CPFormal.Genuine.Cp.halfRange b : ℤ) =
-            ((b : ℤ) * (M : ℤ) + (b / 2 : ℤ)) + 1 := by
+            ((b : ℤ) * (M : ℤ) + ((b / 2 : ℕ) : ℤ)) + 1 := by
         unfold CPFormal.Genuine.Cp.alignedCenter
         push_cast
         rw [hbformInt, hdformInt]
@@ -662,14 +664,14 @@ theorem nativeCarryFiniteSaturatedChart_even_normal_form
         rw [hstep]
         exact lt_add_of_pos_right _ hbIntPos
       have hgapRight :
-          (b : ℤ) * (M : ℤ) + (b / 2 : ℤ) <
+          (b : ℤ) * (M : ℤ) + ((b / 2 : ℕ) : ℤ) <
             (b : ℤ) * ((M + 1 : ℕ) : ℤ) +
               (CPFormal.Genuine.Cp.halfRange b : ℤ) := by
         rw [hstep, hgap]
         have hbLarge : (3 : ℤ) ≤ (b : ℤ) := by exact_mod_cast hb
         omega
       have htail :
-          f ((b : ℤ) * (M : ℤ) + (b / 2 : ℤ)) +
+          f ((b : ℤ) * (M : ℤ) + ((b / 2 : ℕ) : ℤ)) +
               nativeCarryCompleteBlock
                 (CPFormal.Genuine.Cp.halfRange b) f
                 (CPFormal.Genuine.Cp.alignedCenter b M) =
@@ -681,13 +683,13 @@ theorem nativeCarryFiniteSaturatedChart_even_normal_form
         rw [nativeCarryCompleteBlock_eq_sum_Icc, hlower, hupper, ← hgap]
         simpa using
           (nativeCarry_sum_Icc_split_adjacent f
-            (le_refl ((b : ℤ) * (M : ℤ) + (b / 2 : ℤ)))
+            (le_refl ((b : ℤ) * (M : ℤ) + ((b / 2 : ℕ) : ℤ)))
             hgapRight).symm
       have htile :
           nativeCarryPositivePrefix
-                ((b : ℤ) * (M : ℤ) +
+              ((b : ℤ) * (M : ℤ) +
                   (CPFormal.Genuine.Cp.halfRange b : ℤ)) f +
-              f ((b : ℤ) * (M : ℤ) + (b / 2 : ℤ)) +
+              f ((b : ℤ) * (M : ℤ) + ((b / 2 : ℕ) : ℤ)) +
               nativeCarryCompleteBlock
                 (CPFormal.Genuine.Cp.halfRange b) f
                 (CPFormal.Genuine.Cp.alignedCenter b M) =

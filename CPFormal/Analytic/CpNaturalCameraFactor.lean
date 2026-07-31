@@ -145,6 +145,9 @@ theorem naturalEvenCameraFactor_ne_zero_of_criticalLine_of_domination
   intro hzero
   have hbpos : 0 < b := by omega
   have hhalfpos : 0 < b / 2 := by omega
+  have hnegHalf :
+      -((1 : ℝ) / 2) = (-(1 : ℝ)) / 2 := by
+    ring
   have heq :
       ((b - 2 : ℕ) : ℂ) * (b : ℂ) ^ (-s) =
         1 - ((b / 2 : ℕ) : ℂ) ^ (-s) := by
@@ -154,6 +157,7 @@ theorem naturalEvenCameraFactor_ne_zero_of_criticalLine_of_domination
       ‖((b - 2 : ℕ) : ℂ) * (b : ℂ) ^ (-s)‖ =
         ((b - 2 : ℕ) : ℝ) * (b : ℝ) ^ (-(1 : ℝ) / 2) := by
     rw [norm_mul, norm_nat_cpow_neg b hbpos s, hs]
+    rw [hnegHalf]
     simp
   have hright :
       ‖1 - ((b / 2 : ℕ) : ℂ) ^ (-s)‖ ≤
@@ -165,6 +169,7 @@ theorem naturalEvenCameraFactor_ne_zero_of_criticalLine_of_domination
       _ = 1 + ((b / 2 : ℕ) : ℝ) ^ (-(1 : ℝ) / 2) := by
         rw [norm_one,
           norm_nat_cpow_neg (b / 2) hhalfpos s, hs]
+        rw [hnegHalf]
   rw [heq] at hleft
   linarith
 
@@ -187,8 +192,8 @@ theorem naturalEvenCameraFactor_four_eq
   have hpow :
       (4 : ℂ) ^ (-s) =
         (2 : ℂ) ^ (-s) * (2 : ℂ) ^ (-s) := by
-    simpa using
-      (Complex.natCast_mul_natCast_cpow 2 2 (-s))
+    convert (Complex.natCast_mul_natCast_cpow 2 2 (-s)) using 1 <;>
+      norm_num
   rw [hlinear, hpow]
   ring
 
@@ -205,7 +210,12 @@ theorem naturalEvenCameraFactor_four_ne_zero_on_openStrip
     have hpow : (2 : ℂ) ^ (-s) = -1 := by
       linear_combination hzero
     have hnorm := congrArg norm hpow
-    rw [norm_nat_cpow_neg 2 (by norm_num) s, norm_neg, norm_one] at hnorm
+    have hnormTwo :
+        ‖(2 : ℂ) ^ (-s)‖ = (2 : ℝ) ^ (-s.re) := by
+      simpa using
+        (Complex.norm_cpow_eq_rpow_re_of_pos
+          (x := (2 : ℝ)) (by norm_num) (-s))
+    rw [hnormTwo, norm_neg, norm_one] at hnorm
     have htwo : (1 : ℝ) < 2 := by norm_num
     have hstrict :=
       Real.rpow_lt_one_of_one_lt_of_neg htwo

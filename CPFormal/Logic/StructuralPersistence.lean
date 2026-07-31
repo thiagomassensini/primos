@@ -120,8 +120,14 @@ theorem normalizedRead_transport
     (hcode : (atlas.codec source).Valid code) :
     atlas.normalizedRead target (atlas.transport source target code) =
       atlas.normalizedRead source code := by
-  rw [atlas.normalizedRead_encode]
-  exact (atlas.read_valid source code hcode).symm
+  calc
+    atlas.normalizedRead target (atlas.transport source target code) =
+        atlas.semanticRead ((atlas.codec source).decode code) := by
+      simpa [transport] using
+        atlas.normalizedRead_encode target
+          ((atlas.codec source).decode code)
+    _ = atlas.normalizedRead source code :=
+      (atlas.read_valid source code hcode).symm
 
 /-- Closing means only that the declared normalized readout is zero. -/
 def Closes
