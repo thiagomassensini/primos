@@ -1,0 +1,333 @@
+name: Verify v0.57.0 complete mirror preservation
+
+on:
+  push:
+    branches:
+      - ops/verify-v0.57.0-complete-mirror
+    paths:
+      - .github/workflows/verify-v0.57.0-complete-mirror.yml
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  verify:
+    name: Verify GitHub bundle, Zenodo copy, and repository locks
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout operational verification branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Poll GitHub and Zenodo and download preservation assets
+        shell: bash
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p ops github-assets zenodo-assets
+
+          python3 - <<'PY'
+          import datetime as dt
+          import hashlib
+          import json
+          import os
+          import pathlib
+          import time
+          import urllib.parse
+          import urllib.request
+
+          repo = "thiagomassensini/primos"
+          tag = "v0.57.0"
+          expected_tag_commit = "05aa03d81383b7bc82e5364ebecf8a2db3f461d7"
+          expected_assets = {
+              "primos-complete-v0.57.0.bundle",
+              "primos-complete-v0.57.0-refs.txt",
+              "primos-complete-v0.57.0-heads.txt",
+              "primos-complete-v0.57.0-verify.txt",
+              "primos-complete-v0.57.0-RESTORE.txt",
+              "primos-complete-v0.57.0-SHA256SUMS.txt",
+          }
+          github_token = os.environ["GITHUB_TOKEN"]
+
+          def request_json(url, *, token=None):
+              headers = {
+                  "Accept": "application/vnd.github+json",
+                  "User-Agent": "CPFormal-v0.57.0-preservation-verifier/1.0",
+                  "X-GitHub-Api-Version": "2022-11-28",
+              }
+              if token:
+                  headers["Authorization"] = f"Bearer {token}"
+              req = urllib.request.Request(url, headers=headers)
+              with urllib.request.urlopen(req, timeout=60) as response:
+                  return json.load(response)
+
+          def download(url, target, *, token=None):
+              headers = {
+                  "Accept": "application/octet-stream",
+                  "User-Agent": "CPFormal-v0.57.0-preservation-verifier/1.0",
+              }
+              if token:
+                  headers["Authorization"] = f"Bearer {token}"
+              req = urllib.request.Request(url, headers=headers)
+              with urllib.request.urlopen(req, timeout=180) as response:
+                  pathlib.Path(target).write_bytes(response.read())
+
+          release = None
+          release_observations = []
+          for attempt in range(1, 61):
+              try:
+                  candidate = request_json(
+                      f"https://api.github.com/repos/{repo}/releases/tags/{tag}",
+                      token=github_token,
+                  )
+                  asset_names = {a.get("name") for a in candidate.get("assets", [])}
+                  release_observations.append({
+                      "attempt": attempt,
+                      "draft": candidate.get("draft"),
+                      "prerelease": candidate.get("prerelease"),
+                      "immutable": candidate.get("immutable"),
+                      "asset_names": sorted(n for n in asset_names if n),
+                  })
+                  if (
+                      candidate.get("draft") is False
+                      and candidate.get("prerelease") is False
+                      and expected_assets.issubset(asset_names)
+                  ):
+                      release = candidate
+                      break
+              except Exception as exc:
+                  release_observations.append({
+                      "attempt": attempt,
+                      "error": f"{type(exc).__name__}: {exc}",
+                  })
+              time.sleep(10)
+
+          if release is None:
+              raise SystemExit("GitHub release did not become public with all six assets")
+
+          for asset in release.get("assets", []):
+              name = asset.get("name")
+              if name not in expected_assets:
+                  continue
+              api_url = asset.get("url")
+              if not api_url:
+                  raise SystemExit(f"Missing API URL for release asset {name}")
+              download(api_url, pathlib.Path("github-assets") / name, token=github_token)
+
+          branch = request_json(
+              f"https://api.github.com/repos/{repo}/branches/main",
+              token=github_token,
+          )
+
+          ref = request_json(
+              f"https://api.github.com/repos/{repo}/git/ref/tags/{tag}",
+              token=github_token,
+          )
+          tag_object = ref.get("object", {})
+          if tag_object.get("type") == "tag":
+              annotated = request_json(tag_object["url"], token=github_token)
+              tag_commit_sha = (annotated.get("object") or {}).get("sha")
+              tag_object_sha = tag_object.get("sha")
+              annotated_tag = True
+          else:
+              tag_commit_sha = tag_object.get("sha")
+              tag_object_sha = None
+              annotated_tag = False
+
+          if tag_commit_sha != expected_tag_commit:
+              raise SystemExit(
+                  f"Tag resolves to {tag_commit_sha}, expected {expected_tag_commit}"
+              )
+          if not annotated_tag:
+              raise SystemExit("v0.57.0 is not an annotated Git tag")
+
+          zenodo = None
+          zenodo_observations = []
+          queries = [
+              '"CPFormal v0.57.0"',
+              '"Complete Git mirror preservation"',
+              'conceptdoi:"10.5281/zenodo.21483474"',
+          ]
+
+          for attempt in range(1, 61):
+              hits = []
+              for query in queries:
+                  url = "https://zenodo.org/api/records?" + urllib.parse.urlencode({
+                      "q": query,
+                      "size": 25,
+                      "sort": "mostrecent",
+                  })
+                  try:
+                      payload = request_json(url)
+                      found = payload.get("hits", {}).get("hits", [])
+                      hits.extend(found)
+                      zenodo_observations.append({
+                          "attempt": attempt,
+                          "query": query,
+                          "hit_count": len(found),
+                      })
+                  except Exception as exc:
+                      zenodo_observations.append({
+                          "attempt": attempt,
+                          "query": query,
+                          "error": f"{type(exc).__name__}: {exc}",
+                      })
+
+              seen = set()
+              for record in hits:
+                  rid = str(record.get("id", ""))
+                  if rid in seen:
+                      continue
+                  seen.add(rid)
+                  metadata = record.get("metadata", {}) or {}
+                  version = str(metadata.get("version", ""))
+                  title = str(metadata.get("title", ""))
+                  if version == tag or "v0.57.0" in title:
+                      file_names = {f.get("key") for f in record.get("files", [])}
+                      if expected_assets.issubset(file_names):
+                          zenodo = record
+                          break
+              if zenodo is not None:
+                  break
+              time.sleep(10)
+
+          if zenodo is None:
+              raise SystemExit("Zenodo did not ingest all six preservation assets")
+
+          for file_entry in zenodo.get("files", []):
+              key = file_entry.get("key")
+              if key not in expected_assets:
+                  continue
+              links = file_entry.get("links", {}) or {}
+              url = links.get("self") or links.get("download")
+              if not url:
+                  raise SystemExit(f"Missing Zenodo download URL for {key}")
+              download(url, pathlib.Path("zenodo-assets") / key)
+
+          github_assets = []
+          for name in sorted(expected_assets):
+              path = pathlib.Path("github-assets") / name
+              data = path.read_bytes()
+              github_assets.append({
+                  "name": name,
+                  "size": len(data),
+                  "sha256": hashlib.sha256(data).hexdigest(),
+              })
+
+          zenodo_files = []
+          for item in zenodo.get("files", []):
+              key = item.get("key")
+              if key in expected_assets:
+                  local = pathlib.Path("zenodo-assets") / key
+                  data = local.read_bytes()
+                  zenodo_files.append({
+                      "name": key,
+                      "size": len(data),
+                      "sha256": hashlib.sha256(data).hexdigest(),
+                      "zenodo_checksum": item.get("checksum"),
+                  })
+
+          github_hashes = {i["name"]: i["sha256"] for i in github_assets}
+          zenodo_hashes = {i["name"]: i["sha256"] for i in zenodo_files}
+          if github_hashes != zenodo_hashes:
+              raise SystemExit("GitHub and Zenodo preservation assets differ")
+
+          metadata = zenodo.get("metadata", {}) or {}
+          links = zenodo.get("links", {}) or {}
+          output = {
+              "status": "complete_git_mirror_confirmed",
+              "checked_at_utc": dt.datetime.now(dt.timezone.utc).isoformat(),
+              "repository": repo,
+              "main_branch": {
+                  "sha": (branch.get("commit") or {}).get("sha"),
+                  "protected": branch.get("protected"),
+                  "protection_url": branch.get("protection_url"),
+              },
+              "github_release": {
+                  "id": release.get("id"),
+                  "name": release.get("name"),
+                  "tag": release.get("tag_name"),
+                  "draft": release.get("draft"),
+                  "prerelease": release.get("prerelease"),
+                  "immutable": release.get("immutable"),
+                  "published_at": release.get("published_at"),
+                  "html_url": release.get("html_url"),
+                  "tag_object_sha": tag_object_sha,
+                  "tag_commit_sha": tag_commit_sha,
+                  "annotated_tag": annotated_tag,
+                  "assets": github_assets,
+                  "observations": release_observations,
+              },
+              "zenodo": {
+                  "record_id": zenodo.get("id"),
+                  "doi": zenodo.get("doi") or metadata.get("doi"),
+                  "conceptdoi": zenodo.get("conceptdoi") or metadata.get("conceptdoi"),
+                  "title": metadata.get("title"),
+                  "version": metadata.get("version"),
+                  "record_url": links.get("html") or links.get("self_html"),
+                  "created": zenodo.get("created"),
+                  "updated": zenodo.get("updated"),
+                  "files": sorted(zenodo_files, key=lambda x: x["name"]),
+                  "observations": zenodo_observations,
+              },
+          }
+
+          with open(
+              "ops/v0.57.0-complete-mirror-confirmed.json",
+              "w",
+              encoding="utf-8",
+          ) as handle:
+              json.dump(output, handle, ensure_ascii=False, indent=2, sort_keys=True)
+              handle.write("\n")
+          PY
+
+      - name: Verify downloaded Git bundle and checksums
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd github-assets
+          sha256sum -c primos-complete-v0.57.0-SHA256SUMS.txt
+          git bundle verify primos-complete-v0.57.0.bundle \
+            2>&1 | tee ../ops/v0.57.0-bundle-verify.txt
+
+          RESTORED="${RUNNER_TEMP}/primos-v0.57.0-independent-restore.git"
+          rm -rf "${RESTORED}"
+          git clone --mirror \
+            primos-complete-v0.57.0.bundle \
+            "${RESTORED}" \
+            2>&1 | tee -a ../ops/v0.57.0-bundle-verify.txt
+          git -C "${RESTORED}" fsck --full --strict \
+            2>&1 | tee -a ../ops/v0.57.0-bundle-verify.txt
+
+          cmp \
+            primos-complete-v0.57.0.bundle \
+            ../zenodo-assets/primos-complete-v0.57.0.bundle
+
+      - name: Persist independent preservation proof
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            ops/v0.57.0-complete-mirror-confirmed.json \
+            ops/v0.57.0-bundle-verify.txt
+          git commit -m \
+            "chore(archive): confirm v0.57.0 complete Git mirror preservation"
+          git push origin "HEAD:ops/verify-v0.57.0-complete-mirror"
+
+      - name: Upload independent verification evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: v0.57.0-independent-preservation-proof
+          path: |
+            ops/v0.57.0-complete-mirror-confirmed.json
+            ops/v0.57.0-bundle-verify.txt
+          if-no-files-found: error
+          retention-days: 90
