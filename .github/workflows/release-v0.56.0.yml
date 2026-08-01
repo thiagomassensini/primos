@@ -1,0 +1,181 @@
+name: Publish v0.56.0
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/release-v0.56.0.yml
+      - docs/RELEASE_0.56.0.md
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-v0.56.0
+  cancel-in-progress: false
+
+jobs:
+  verify-and-release:
+    name: Verify and publish v0.56.0
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify main release ref
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git fetch --force origin \
+            "+refs/heads/main:refs/remotes/origin/main" \
+            "+refs/tags/*:refs/tags/*"
+
+          CHECKED_OUT_SHA="$(git rev-parse HEAD)"
+          REMOTE_MAIN_SHA="$(git rev-parse refs/remotes/origin/main)"
+
+          if [[ "${CHECKED_OUT_SHA}" != "${GITHUB_SHA}" ]]; then
+            echo "Checked-out HEAD does not match GITHUB_SHA." >&2
+            exit 1
+          fi
+
+          if [[ "${REMOTE_MAIN_SHA}" != "${GITHUB_SHA}" ]]; then
+            echo "This run is not auditing the current remote main head." >&2
+            exit 1
+          fi
+
+          PRESERVED=(
+            c90db393791a34846f002c7bdd526ac39e99b43d
+            fca2eb91cd63bb85544f32b6ce2218b9f27d0c30
+            e68cad52604e6957e19cd7cce8b1a9f21cafacad
+            0519d4629aa82a46aad22d85ce1c8acaad974707
+            d2b36a2f7689684c97b3c73b0122f2369bb1d14b
+            68724075d7d44f7c6efb6cfabfc70030bb295945
+            8d7a65824a56ed7e690d276c64b1929ef4cd021b
+            9038d18de17a9008a93c04385fcabab3e4d3b6c4
+            f21517a027b2ef130102f5c72ab979e88b305dea
+            30c3e3018d1bb91d85c63d28324e97bfda31a994
+            8bbab0b04d73c1a37914e369b1146853ba968b73
+          )
+
+          for SHA in "${PRESERVED[@]}"; do
+            git cat-file -e "${SHA}^{commit}"
+            if ! git merge-base --is-ancestor "${SHA}" "${GITHUB_SHA}"; then
+              echo "Preserved research commit ${SHA} is not reachable from release head." >&2
+              exit 1
+            fi
+          done
+
+      - name: Static audit
+        run: bash scripts/static_audit.sh
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install numerical test dependencies
+        run: |
+          python -m pip install --disable-pip-version-check "numpy>=2,<3" "scipy>=1.14,<2"
+
+      - name: Test real-rotation empirical operators
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest -v \
+            experiments/test_c2_real_rotation_operator.py \
+            experiments/test_c2_real_rotation_minimal.py \
+            2>&1 | tee python-release-tests.log
+
+      - name: Set up Lean and mathlib cache
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
+
+      - name: Elaborate with Lean kernel
+        shell: bash
+        run: |
+          set -euo pipefail
+          lake build --wfail 2>&1 | tee lean-release-build.log
+
+      - name: Preserve validation failure logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-validation-logs-${{ github.run_id }}
+          path: |
+            python-release-tests.log
+            lean-release-build.log
+          if-no-files-found: ignore
+          retention-days: 14
+
+      - name: Create annotated tag and publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: v0.56.0
+          TITLE: "CPFormal v0.56.0 — Complete research-history preservation"
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git fetch --force origin \
+            "+refs/heads/main:refs/remotes/origin/main" \
+            "+refs/tags/*:refs/tags/*"
+
+          REMOTE_MAIN_SHA="$(git rev-parse refs/remotes/origin/main)"
+          if [[ "${REMOTE_MAIN_SHA}" != "${GITHUB_SHA}" ]]; then
+            echo "Remote main moved after validation; refusing stale release." >&2
+            exit 1
+          fi
+
+          if git show-ref --verify --quiet "refs/tags/${TAG}"; then
+            TAG_TYPE="$(git cat-file -t "refs/tags/${TAG}")"
+            TAG_COMMIT="$(git rev-parse "${TAG}^{commit}")"
+
+            if [[ "${TAG_TYPE}" != "tag" ]]; then
+              echo "Existing ${TAG} is not an annotated tag." >&2
+              exit 1
+            fi
+
+            if [[ "${TAG_COMMIT}" != "${GITHUB_SHA}" ]]; then
+              echo "Existing ${TAG} points to ${TAG_COMMIT}, not ${GITHUB_SHA}." >&2
+              exit 1
+            fi
+          else
+            git tag -a "${TAG}" "${GITHUB_SHA}" -m "${TITLE}"
+            git push origin "refs/tags/${TAG}"
+          fi
+
+          if gh release view "${TAG}" >/dev/null 2>&1; then
+            RELEASE_STATE="$(
+              gh release view "${TAG}" \
+                --json isDraft,isPrerelease \
+                --jq '[.isDraft, .isPrerelease] | join(" ")'
+            )"
+
+            if [[ "${RELEASE_STATE}" != "false false" ]]; then
+              echo "Existing ${TAG} release is draft or prerelease." >&2
+              exit 1
+            fi
+
+            exit 0
+          fi
+
+          gh release create "${TAG}" \
+            --verify-tag \
+            --title "${TITLE}" \
+            --notes-file docs/RELEASE_0.56.0.md
