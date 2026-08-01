@@ -105,13 +105,15 @@ theorem inner_nativeGpreTowerProfileVector_boundaryContextTowerSource
       unfold nativeGpreBoundaryContextTowerSource
       rw [lp.inner_single_right]
       simp [nativeGpreTowerProfileVector_apply, RCLike.inner_apply]
+      ring
     _ = (x c.cell).re *
         nativeGpreTowerCoordinateCoefficient (c.withRole .value) := by
       rw [nativeGpreTowerCoordinateCoefficient_eq_kernel_mul_profile]
+      simp [NativeGpreBoundaryContext.withRole]
       ring
     _ = (nativeGpreBoundaryValueLift x c).re := by
       rw [nativeGpreBoundaryValueLift_apply]
-      simp
+      simp [Complex.mul_re]
 
 /-- Weighted extraction of one provenance coordinate.  This is the finite
 Riesz-adjoint operation needed by the ordinary/log-jet wedges: the weight is
@@ -147,13 +149,23 @@ theorem inner_nativeGpreTowerProfileVector_weightedBoundaryContextTowerSource
       unfold nativeGpreWeightedBoundaryContextTowerSource
       rw [lp.inner_single_right]
       simp [nativeGpreTowerProfileVector_apply, RCLike.inner_apply]
+      ring
     _ = (weight * x c.cell).re *
         nativeGpreTowerCoordinateCoefficient (c.withRole .value) := by
       rw [nativeGpreTowerCoordinateCoefficient_eq_kernel_mul_profile]
+      simp [NativeGpreBoundaryContext.withRole]
       ring
     _ = (weight * nativeGpreBoundaryValueLift x c).re := by
-      rw [nativeGpreBoundaryValueLift_apply, ← mul_assoc]
+      rw [nativeGpreBoundaryValueLift_apply]
       simp [Complex.mul_re]
+      ring
+
+/-- Finite contexts belonging to one material-prime/arithmetic-time fiber. -/
+def nativeGpreBoundaryFiber
+    (p tau : ℕ)
+    (S : Finset NativeGpreBoundaryContext) :
+    Finset NativeGpreBoundaryContext :=
+  S.filter (fun c => c.towerPrime.val = p ∧ c.time.val = tau)
 
 /-- Finite source obtained by collapsing precisely the contexts of one
 material prime and one arithmetic time. -/
@@ -161,18 +173,16 @@ noncomputable def nativeGpreFiniteBoundaryTowerSourceAt
     (p tau : ℕ)
     (S : Finset NativeGpreBoundaryContext)
     (x : NativeGpreComplexEdgeCore) : NativeGpreTowerHilbert :=
-  ∑ c in S.filter
-      (fun c => c.towerPrime.val = p ∧ c.time.val = tau),
-    nativeGpreBoundaryContextTowerSource x c
+  Finset.sum (nativeGpreBoundaryFiber p tau S)
+    (nativeGpreBoundaryContextTowerSource x)
 
 /-- The corresponding real provenance readout before any camera compression. -/
 def nativeGpreFiniteBoundaryRealReadoutAt
     (p tau : ℕ)
     (S : Finset NativeGpreBoundaryContext)
     (x : NativeGpreComplexEdgeCore) : ℝ :=
-  ∑ c in S.filter
-      (fun c => c.towerPrime.val = p ∧ c.time.val = tau),
-    (nativeGpreBoundaryValueLift x c).re
+  Finset.sum (nativeGpreBoundaryFiber p tau S)
+    (fun c => (nativeGpreBoundaryValueLift x c).re)
 
 /-- Exact finite collapse identity: the common tower moment of the extracted
 source is the complete real provenance readout on the selected fiber. -/
@@ -201,9 +211,8 @@ noncomputable def nativeGpreFiniteWeightedBoundaryTowerSourceAt
     (S : Finset NativeGpreBoundaryContext)
     (weight : NativeGpreBoundaryContext → ℂ)
     (x : NativeGpreComplexEdgeCore) : NativeGpreTowerHilbert :=
-  ∑ c in S.filter
-      (fun c => c.towerPrime.val = p ∧ c.time.val = tau),
-    nativeGpreWeightedBoundaryContextTowerSource (weight c) x c
+  Finset.sum (nativeGpreBoundaryFiber p tau S)
+    (fun c => nativeGpreWeightedBoundaryContextTowerSource (weight c) x c)
 
 /-- The scalar functional read by the preceding weighted source. -/
 def nativeGpreFiniteWeightedBoundaryRealReadoutAt
@@ -211,9 +220,8 @@ def nativeGpreFiniteWeightedBoundaryRealReadoutAt
     (S : Finset NativeGpreBoundaryContext)
     (weight : NativeGpreBoundaryContext → ℂ)
     (x : NativeGpreComplexEdgeCore) : ℝ :=
-  ∑ c in S.filter
-      (fun c => c.towerPrime.val = p ∧ c.time.val = tau),
-    (weight c * nativeGpreBoundaryValueLift x c).re
+  Finset.sum (nativeGpreBoundaryFiber p tau S)
+    (fun c => (weight c * nativeGpreBoundaryValueLift x c).re)
 
 /-- Every finite weighted provenance functional on one material fiber is a
 literal moment of the explicitly extracted tower source. -/
