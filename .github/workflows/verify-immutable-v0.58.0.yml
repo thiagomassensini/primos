@@ -1,0 +1,111 @@
+name: Verify immutable v0.58.0 preservation
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - .github/workflows/verify-immutable-v0.58.0.yml
+  workflow_dispatch:
+
+permissions:
+  attestations: read
+  contents: read
+
+jobs:
+  verify:
+    name: Verify immutable release and complete Git mirror
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Verify branch protection and immutable release setting
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          API_VERSION="2026-03-10"
+          REPO="${GITHUB_REPOSITORY}"
+
+          gh api \
+            -H "X-GitHub-Api-Version: ${API_VERSION}" \
+            "repos/${REPO}/branches/main" \
+            | tee main-branch.json
+
+          gh api \
+            -H "X-GitHub-Api-Version: ${API_VERSION}" \
+            "repos/${REPO}/immutable-releases" \
+            | tee immutable-setting.json
+
+          gh api \
+            -H "X-GitHub-Api-Version: ${API_VERSION}" \
+            "repos/${REPO}/releases/tags/v0.58.0" \
+            | tee release.json
+
+          jq -e '.protected == true' main-branch.json >/dev/null
+          jq -e '.enabled == true' immutable-setting.json >/dev/null
+          jq -e '.draft == false and .prerelease == false and .immutable == true' \
+            release.json >/dev/null
+
+          test "$(jq '.assets | length' release.json)" -ge 6
+
+      - name: Download and verify immutable release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir release-assets
+          cd release-assets
+
+          gh release download v0.58.0 \
+            --repo "${GITHUB_REPOSITORY}" \
+            --pattern 'primos-complete-v0.58.0*'
+
+          for expected in \
+            primos-complete-v0.58.0.bundle \
+            primos-complete-v0.58.0-refs.txt \
+            primos-complete-v0.58.0-heads.txt \
+            primos-complete-v0.58.0-verify.txt \
+            primos-complete-v0.58.0-RESTORE.txt \
+            primos-complete-v0.58.0-SHA256SUMS.txt
+          do
+            test -f "${expected}"
+          done
+
+          sha256sum -c primos-complete-v0.58.0-SHA256SUMS.txt
+          git bundle verify primos-complete-v0.58.0.bundle
+
+          restored="${RUNNER_TEMP}/primos-v0.58.0-restored.git"
+          git clone --mirror primos-complete-v0.58.0.bundle "${restored}"
+          git -C "${restored}" fsck --full --strict
+
+          git -C "${restored}" for-each-ref \
+            --format='%(refname) %(objectname) %(objecttype)' \
+            refs/heads/ refs/tags/ refs/pull/ \
+            | LC_ALL=C sort > restored-refs.txt
+
+          diff -u \
+            primos-complete-v0.58.0-refs.txt \
+            restored-refs.txt
+
+      - name: Verify GitHub release attestation
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          gh release verify v0.58.0 --repo "${GITHUB_REPOSITORY}"
+
+          for asset in release-assets/primos-complete-v0.58.0.bundle \
+            release-assets/primos-complete-v0.58.0-refs.txt \
+            release-assets/primos-complete-v0.58.0-heads.txt \
+            release-assets/primos-complete-v0.58.0-verify.txt \
+            release-assets/primos-complete-v0.58.0-RESTORE.txt \
+            release-assets/primos-complete-v0.58.0-SHA256SUMS.txt
+          do
+            gh release verify-asset v0.58.0 "${asset}" \
+              --repo "${GITHUB_REPOSITORY}"
+          done
