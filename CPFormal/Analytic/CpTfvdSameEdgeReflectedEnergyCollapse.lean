@@ -107,7 +107,7 @@ theorem sameEdgeRecoverRight_of_values
   ring
 
 /-- The canonical log-jet is exactly the weighted endpoint difference used by
-`sameEdgeRecoverLeft` and `sameEdgeRecoverRight`. -/
+the two recovery maps. -/
 theorem positiveLogDirichletGradient_eq_weighted_value_sub_value
     (s : ℂ) (n : ℕ) :
     positiveLogDirichletGradient s n =
@@ -291,14 +291,9 @@ theorem seededTfvdGpreCollapsedSource_sameEdgeReflectedEnergy
     seededTfvdGpreCollapsedSource
         (nativeGpreTfvdSameEdgeReflectedEnergyCollapseAt (3 * M)) M s =
       nativeGpreGreenEnergyFirstLevelState (3 * M) s := by
-  change
-    lp.single 2 1
-        (nativeGpreTfvdSameEdgeRecoveredReflectedEnergyAt (3 * M)
-          (nativeGpreTfvdSameEdgeGlue nativeGpreCanonicalVerticalRealization
-            (c2DirichletGradientPrefixCore s (3 * M)))
-          (nativeGpreTfvdSameEdgeGlue nativeGpreCanonicalVerticalRealization
-            (c2LogJetPrefixCore s (3 * M)))) =
-      lp.single 2 1 (finiteReflectedGradientPairing (3 * M) s).re
+  unfold seededTfvdGpreCollapsedSource
+    nativeGpreTfvdSameEdgeReflectedEnergyCollapseAt
+    nativeGpreGreenEnergyFirstLevelState
   rw [nativeGpreTfvdSameEdgeRecoveredReflectedEnergyAt_canonical]
 
 /-- Every prime Green bulk is a moment of this single same-edge state against
