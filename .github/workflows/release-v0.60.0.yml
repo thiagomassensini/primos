@@ -386,8 +386,11 @@ jobs:
               --jq '.name'
           )"
           test "${ACTUAL_TITLE}" = "${TITLE}"
+          # `gh api --jq` terminates its textual output with a newline even
+          # when the JSON string itself has none.  Decode the raw JSON body
+          # with `jq -rj` so this remains a genuinely byte-exact comparison.
           gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${TAG}" \
-            --jq '.body' > actual-release-body.md
+            | jq -rj '.body' > actual-release-body.md
           cmp -- docs/RELEASE_0.60.0.md actual-release-body.md
 
           IMMUTABLE="$(
