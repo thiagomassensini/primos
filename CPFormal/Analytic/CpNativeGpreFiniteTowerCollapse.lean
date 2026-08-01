@@ -16,9 +16,10 @@ material level chooses its coordinate.
 
 Taking the moment of that source vector against the native profile of the same
 camera and arithmetic time recovers exactly the real part of the original
-provenance value coordinate.  Summing over an arbitrary finite fiber gives a
-finite tower source whose moment is the complete real provenance readout on
-that fiber.
+provenance value coordinate.  The weighted version recovers every finite real
+linear functional of those coordinates.  Summing over an arbitrary finite
+fiber therefore gives a finite tower source whose moment is the corresponding
+complete provenance readout.
 
 No Green target, Genuine zero, critical displacement, `sorry`, `axiom` or
 `admit` is used.  The construction is the algebraic source extraction needed
@@ -112,6 +113,48 @@ theorem inner_nativeGpreTowerProfileVector_boundaryContextTowerSource
       rw [nativeGpreBoundaryValueLift_apply]
       simp
 
+/-- Weighted extraction of one provenance coordinate.  This is the finite
+Riesz-adjoint operation needed by the ordinary/log-jet wedges: the weight is
+chosen before the moment is evaluated. -/
+noncomputable def nativeGpreWeightedBoundaryContextTowerSource
+    (weight : ℂ)
+    (x : NativeGpreComplexEdgeCore)
+    (c : NativeGpreBoundaryContext) : NativeGpreTowerHilbert :=
+  lp.single 2 c.towerLevel.val
+    ((weight * x c.cell).re *
+      nativeGpreTowerCoordinateKernel (c.withRole .value))
+
+/-- The weighted source reads back the real part of the weighted provenance
+coordinate, without defining the source from that scalar target. -/
+theorem inner_nativeGpreTowerProfileVector_weightedBoundaryContextTowerSource
+    (weight : ℂ)
+    (x : NativeGpreComplexEdgeCore)
+    (c : NativeGpreBoundaryContext) :
+    inner ℝ
+        (nativeGpreTowerProfileVector
+          c.towerPrime.val c.time.val)
+        (nativeGpreWeightedBoundaryContextTowerSource weight x c) =
+      (weight * nativeGpreBoundaryValueLift x c).re := by
+  calc
+    inner ℝ
+        (nativeGpreTowerProfileVector
+          c.towerPrime.val c.time.val)
+        (nativeGpreWeightedBoundaryContextTowerSource weight x c) =
+      nativeUnitMassTowerProfile
+          c.towerPrime.val c.time.val c.towerLevel.val *
+        ((weight * x c.cell).re *
+          nativeGpreTowerCoordinateKernel (c.withRole .value)) := by
+      unfold nativeGpreWeightedBoundaryContextTowerSource
+      rw [lp.inner_single_right]
+      simp [nativeGpreTowerProfileVector_apply, RCLike.inner_apply]
+    _ = (weight * x c.cell).re *
+        nativeGpreTowerCoordinateCoefficient (c.withRole .value) := by
+      rw [nativeGpreTowerCoordinateCoefficient_eq_kernel_mul_profile]
+      ring
+    _ = (weight * nativeGpreBoundaryValueLift x c).re := by
+      rw [nativeGpreBoundaryValueLift_apply, ← mul_assoc]
+      simp [Complex.mul_re]
+
 /-- Finite source obtained by collapsing precisely the contexts of one
 material prime and one arithmetic time. -/
 noncomputable def nativeGpreFiniteBoundaryTowerSourceAt
@@ -150,6 +193,51 @@ theorem inner_nativeGpreTowerProfileVector_finiteBoundaryTowerSourceAt
   rcases hfiber with ⟨hp, htau⟩
   simpa [hp, htau] using
     (inner_nativeGpreTowerProfileVector_boundaryContextTowerSource x c)
+
+/-- Weighted finite source for an arbitrary context-dependent functional on one
+material fiber. -/
+noncomputable def nativeGpreFiniteWeightedBoundaryTowerSourceAt
+    (p tau : ℕ)
+    (S : Finset NativeGpreBoundaryContext)
+    (weight : NativeGpreBoundaryContext → ℂ)
+    (x : NativeGpreComplexEdgeCore) : NativeGpreTowerHilbert :=
+  ∑ c in S.filter
+      (fun c => c.towerPrime.val = p ∧ c.time.val = tau),
+    nativeGpreWeightedBoundaryContextTowerSource (weight c) x c
+
+/-- The scalar functional read by the preceding weighted source. -/
+def nativeGpreFiniteWeightedBoundaryRealReadoutAt
+    (p tau : ℕ)
+    (S : Finset NativeGpreBoundaryContext)
+    (weight : NativeGpreBoundaryContext → ℂ)
+    (x : NativeGpreComplexEdgeCore) : ℝ :=
+  ∑ c in S.filter
+      (fun c => c.towerPrime.val = p ∧ c.time.val = tau),
+    (weight c * nativeGpreBoundaryValueLift x c).re
+
+/-- Every finite weighted provenance functional on one material fiber is a
+literal moment of the explicitly extracted tower source. -/
+theorem inner_nativeGpreTowerProfileVector_finiteWeightedBoundaryTowerSourceAt
+    (p tau : ℕ)
+    (S : Finset NativeGpreBoundaryContext)
+    (weight : NativeGpreBoundaryContext → ℂ)
+    (x : NativeGpreComplexEdgeCore) :
+    inner ℝ (nativeGpreTowerProfileVector p tau)
+        (nativeGpreFiniteWeightedBoundaryTowerSourceAt
+          p tau S weight x) =
+      nativeGpreFiniteWeightedBoundaryRealReadoutAt
+        p tau S weight x := by
+  classical
+  unfold nativeGpreFiniteWeightedBoundaryTowerSourceAt
+    nativeGpreFiniteWeightedBoundaryRealReadoutAt
+  rw [inner_sum]
+  apply Finset.sum_congr rfl
+  intro c hc
+  have hfiber := (Finset.mem_filter.mp hc).2
+  rcases hfiber with ⟨hp, htau⟩
+  simpa [hp, htau] using
+    (inner_nativeGpreTowerProfileVector_weightedBoundaryContextTowerSource
+      (weight c) x c)
 
 end
 
