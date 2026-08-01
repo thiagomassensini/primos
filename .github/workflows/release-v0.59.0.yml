@@ -222,12 +222,13 @@ jobs:
           if-no-files-found: error
           retention-days: 90
 
-      - name: Create draft, attach assets, and publish immutable release
+      - name: Verify tag, repair release metadata, and verify assets
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           GH_TOKEN: ${{ github.token }}
           TAG: v0.59.0
           TITLE: "CPFormal v0.59.0 — Carry-first active integration and immutable mirror"
+          RELEASE_COMMIT: 48e0c3766c4929b9e9613577d2adab1fed0f204c
         shell: bash
         run: |
           set -euo pipefail
@@ -246,62 +247,68 @@ jobs:
             exit 1
           fi
 
-          if git show-ref --verify --quiet "refs/tags/${TAG}"; then
-            TAG_TYPE="$(git cat-file -t "refs/tags/${TAG}")"
-            TAG_COMMIT="$(git rev-parse "${TAG}^{commit}")"
-            test "${TAG_TYPE}" = "tag"
-            test "${TAG_COMMIT}" = "${GITHUB_SHA}"
-          else
-            git tag -a "${TAG}" "${GITHUB_SHA}" -m "${TITLE}"
-            git push origin "refs/tags/${TAG}"
+          if ! git show-ref --verify --quiet "refs/tags/${TAG}"; then
+            echo "Expected audited tag ${TAG} is missing; refusing reconstruction." >&2
+            exit 1
           fi
 
+          TAG_TYPE="$(git cat-file -t "refs/tags/${TAG}")"
+          TAG_COMMIT="$(git rev-parse "${TAG}^{commit}")"
+          test "${TAG_TYPE}" = "tag"
+          test "${TAG_COMMIT}" = "${RELEASE_COMMIT}"
+          git merge-base --is-ancestor "${TAG_COMMIT}" "${GITHUB_SHA}"
+
+          mapfile -t POST_TAG_PATHS < <(
+            git diff --name-only "${TAG_COMMIT}" "${GITHUB_SHA}"
+          )
+          for path in "${POST_TAG_PATHS[@]}"; do
+            case "${path}" in
+              .github/workflows/release-v0.55.0.yml | \
+              .github/workflows/release-v0.59.0.yml)
+                ;;
+              *)
+                echo "Unexpected post-tag change: ${path}" >&2
+                exit 1
+                ;;
+            esac
+          done
+
           if gh release view "${TAG}" >/dev/null 2>&1; then
-            IS_DRAFT="$(gh release view "${TAG}" --json isDraft --jq .isDraft)"
-            if [[ "${IS_DRAFT}" != "true" ]]; then
-              echo "Published release ${TAG} already exists."
-              exit 0
+            RELEASE_STATE="$(
+              gh release view "${TAG}" \
+                --json isDraft,isPrerelease \
+                --jq '[.isDraft, .isPrerelease] | join(" ")'
+            )"
+            if [[ "${RELEASE_STATE}" != "false false" ]]; then
+              echo "Existing ${TAG} release is draft or prerelease." >&2
+              exit 1
             fi
+            gh release edit "${TAG}" \
+              --title "${TITLE}" \
+              --notes-file docs/RELEASE_0.59.0.md \
+              --latest
           else
             gh release create "${TAG}" \
               --verify-tag \
               --draft \
               --title "${TITLE}" \
-              --notes-file docs/RELEASE_0.58.0.md
+              --notes-file docs/RELEASE_0.59.0.md
+
+            gh release upload "${TAG}" \
+              primos-complete-v0.59.0.bundle \
+              primos-complete-v0.59.0-refs.txt \
+              primos-complete-v0.59.0-heads.txt \
+              primos-complete-v0.59.0-verify.txt \
+              primos-complete-v0.59.0-RESTORE.txt \
+              primos-complete-v0.59.0-SHA256SUMS.txt
+
+            gh release edit "${TAG}" --draft=false --latest
           fi
 
-          gh release upload "${TAG}" \
-            primos-complete-v0.59.0.bundle \
-            primos-complete-v0.59.0-refs.txt \
-            primos-complete-v0.59.0-heads.txt \
-            primos-complete-v0.59.0-verify.txt \
-            primos-complete-v0.59.0-RESTORE.txt \
-            primos-complete-v0.59.0-SHA256SUMS.txt \
-            --clobber
-
-          ASSET_COUNT="$(
-            gh release view "${TAG}" \
-              --json assets \
-              --jq '.assets | length'
-          )"
-          if (( ASSET_COUNT < 6 )); then
-            echo "Release draft does not contain all preservation assets." >&2
-            exit 1
-          fi
-
-          gh release edit "${TAG}" --draft=false --latest
-
-          IMMUTABLE="$(
-            gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${TAG}" \
-              --jq '.immutable'
-          )"
-          if [[ "${IMMUTABLE}" != "true" ]]; then
-            echo "Published release is not marked immutable." >&2
-            exit 1
-          fi
-
-          gh release verify "${TAG}"
-          for asset in \
+          mapfile -t RELEASE_ASSETS < <(
+            gh release view "${TAG}" --json assets --jq '.assets[].name'
+          )
+          for expected in \
             primos-complete-v0.59.0.bundle \
             primos-complete-v0.59.0-refs.txt \
             primos-complete-v0.59.0-heads.txt \
@@ -309,8 +316,31 @@ jobs:
             primos-complete-v0.59.0-RESTORE.txt \
             primos-complete-v0.59.0-SHA256SUMS.txt
           do
-            gh release verify-asset "${TAG}" "${asset}"
+            if ! printf '%s\n' "${RELEASE_ASSETS[@]}" | grep -Fxq "${expected}"; then
+              echo "Missing release asset: ${expected}" >&2
+              exit 1
+            fi
           done
+
+          IMMUTABLE="$(
+            gh api "repos/${GITHUB_REPOSITORY}/releases/tags/${TAG}" \
+              --jq '.immutable'
+          )"
+          if [[ "${IMMUTABLE}" = "true" ]]; then
+            gh release verify "${TAG}"
+            for asset in "${RELEASE_ASSETS[@]}"; do
+              gh release verify-asset "${TAG}" "${asset}"
+            done
+          else
+            echo "Repository release immutability is not enabled; verifying downloaded assets."
+            DOWNLOAD_DIR="${RUNNER_TEMP}/v0.59.0-release-assets"
+            mkdir -p "${DOWNLOAD_DIR}"
+            gh release download "${TAG}" --dir "${DOWNLOAD_DIR}"
+            (
+              cd "${DOWNLOAD_DIR}"
+              sha256sum -c primos-complete-v0.59.0-SHA256SUMS.txt
+            )
+          fi
 
       - name: Preserve validation failure logs
         if: failure()
