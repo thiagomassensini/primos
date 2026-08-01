@@ -11,7 +11,8 @@ defaultTargets = [
   "CPFormal.Analytic.CpNativeGpreFiniteTowerCollapse",
   "CPFormal.Analytic.CpNativeGpreTfvdCommutatorTowerSource",
   "CPFormal.Analytic.CpTfvdSameEdgeReflectedEnergyCollapse",
-  "CPFormal.Analytic.CpTfvdSameEdgeReflectedEnergyFixedTimeNoGo"
+  "CPFormal.Analytic.CpTfvdSameEdgeReflectedEnergyFixedTimeNoGo",
+  "CPFormal.Analytic.CpTfvdSameEdgeCompletedPrecompressionCollapse"
 ]
 
 [[lean_lib]]
