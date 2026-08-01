@@ -3,7 +3,8 @@ version = "0.2.0"
 defaultTargets = [
   "CPFormal",
   "CPFormal.Analytic.CpTfvdSeededReconstructionBridgeProbe",
-  "CPFormal.Analytic.CpTfvdSeededFiniteBesselConservation"
+  "CPFormal.Analytic.CpTfvdSeededFiniteBesselConservation",
+  "CPFormal.Analytic.CpTfvdSeededNativeMomentContraction"
 ]
 
 [[lean_lib]]
