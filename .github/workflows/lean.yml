@@ -2,7 +2,9 @@ name: Lean kernel audit
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - agent/genuine-first-tfvd-tower-collapse
   pull_request:
   workflow_dispatch:
 
