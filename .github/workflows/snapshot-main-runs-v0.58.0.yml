@@ -1,0 +1,37 @@
+name: Snapshot v0.58.0 main workflow runs
+
+on:
+  push:
+    branches:
+      - ops/verify-v0.57.0-complete-mirror
+    paths:
+      - .github/workflows/snapshot-main-runs-v0.58.0.yml
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Snapshot Actions API
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p ops
+          gh api \
+            "repos/${GITHUB_REPOSITORY}/actions/runs?head_sha=106767e09c5fbc8687b98068845fe268adb7fc2b&per_page=100" \
+            > ops/v0.58.0-main-runs.json
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add ops/v0.58.0-main-runs.json
+          git commit -m "chore(ops): snapshot v0.58.0 main workflow runs"
+          git push origin "HEAD:ops/verify-v0.57.0-complete-mirror"
