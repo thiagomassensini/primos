@@ -9,7 +9,8 @@ defaultTargets = [
   "CPFormal.Analytic.CpTfvdGpreCollapseInterface",
   "CPFormal.Analytic.CpNaturalCameraGlobalBlindSpot",
   "CPFormal.Analytic.CpNativeGpreFiniteTowerCollapse",
-  "CPFormal.Analytic.CpNativeGpreTfvdCommutatorTowerSource"
+  "CPFormal.Analytic.CpNativeGpreTfvdCommutatorTowerSource",
+  "CPFormal.Analytic.CpTfvdSameEdgeReflectedEnergyCollapse"
 ]
 
 [[lean_lib]]
