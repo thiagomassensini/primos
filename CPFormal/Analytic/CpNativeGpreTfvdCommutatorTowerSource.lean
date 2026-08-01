@@ -75,8 +75,9 @@ theorem inner_nativeGpreTowerProfileVector_scaledReflectedWedgeTowerSource
       (scale * reflectedLogJetEdgeWedge
         (phi c.cell) (psi c.cell)
         (phiSharp c.cell) (psiSharp c.cell)).re := by
-  have hactiveComplex : nativeGpreBoundaryValueCoefficientComplex c ≠ 0 := by
-    unfold nativeGpreBoundaryValueCoefficientComplex
+  have hcoeffC :
+      ((nativeGpreTowerCoordinateCoefficient
+        (c.withRole .value) : ℝ) : ℂ) ≠ 0 := by
     exact_mod_cast hactive
   rw [nativeGpreScaledReflectedWedgeTowerSource, inner_add_right,
     inner_nativeGpreTowerProfileVector_weightedBoundaryContextTowerSource,
@@ -88,8 +89,20 @@ theorem inner_nativeGpreTowerProfileVector_scaledReflectedWedgeTowerSource
       scale * (starRingEnd ℂ) (psi c.cell) * phiSharp c.cell := by
     rw [nativeGpreBoundaryValueLift_apply]
     unfold nativeGpreBoundaryValueCoefficientComplex
-    field_simp [hactiveComplex]
-    ring
+    calc
+      (scale * (starRingEnd ℂ) (psi c.cell) *
+            (((nativeGpreTowerCoordinateCoefficient
+              (c.withRole .value) : ℝ) : ℂ))⁻¹) *
+          (phiSharp c.cell *
+            ((nativeGpreTowerCoordinateCoefficient
+              (c.withRole .value) : ℝ) : ℂ)) =
+        scale * (starRingEnd ℂ) (psi c.cell) * phiSharp c.cell *
+          ((((nativeGpreTowerCoordinateCoefficient
+            (c.withRole .value) : ℝ) : ℂ))⁻¹ *
+            ((nativeGpreTowerCoordinateCoefficient
+              (c.withRole .value) : ℝ) : ℂ)) := by ring
+      _ = scale * (starRingEnd ℂ) (psi c.cell) * phiSharp c.cell := by
+        simp [hcoeffC]
   have hsecond :
       (-(scale * (starRingEnd ℂ) (phi c.cell)) *
           (nativeGpreBoundaryValueCoefficientComplex c)⁻¹) *
@@ -97,12 +110,24 @@ theorem inner_nativeGpreTowerProfileVector_scaledReflectedWedgeTowerSource
       -(scale * (starRingEnd ℂ) (phi c.cell) * psiSharp c.cell) := by
     rw [nativeGpreBoundaryValueLift_apply]
     unfold nativeGpreBoundaryValueCoefficientComplex
-    field_simp [hactiveComplex]
-    ring
+    calc
+      (-(scale * (starRingEnd ℂ) (phi c.cell)) *
+            (((nativeGpreTowerCoordinateCoefficient
+              (c.withRole .value) : ℝ) : ℂ))⁻¹) *
+          (psiSharp c.cell *
+            ((nativeGpreTowerCoordinateCoefficient
+              (c.withRole .value) : ℝ) : ℂ)) =
+        -(scale * (starRingEnd ℂ) (phi c.cell) * psiSharp c.cell) *
+          ((((nativeGpreTowerCoordinateCoefficient
+            (c.withRole .value) : ℝ) : ℂ))⁻¹ *
+            ((nativeGpreTowerCoordinateCoefficient
+              (c.withRole .value) : ℝ) : ℂ)) := by ring
+      _ = -(scale * (starRingEnd ℂ) (phi c.cell) * psiSharp c.cell) := by
+        simp [hcoeffC]
   rw [hfirst, hsecond]
   unfold reflectedLogJetEdgeWedge
   rw [mul_sub]
-  simp only [Complex.add_re, Complex.sub_re, Complex.neg_re]
+  simp only [Complex.sub_re, Complex.neg_re]
   ring
 
 /-- Critical-amplitude/logarithm normalizer used by the finite enriched Green
