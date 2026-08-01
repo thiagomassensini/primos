@@ -1,0 +1,54 @@
+{
+  "checked_at_utc": "2026-08-01T05:59:09.939665+00:00",
+  "github_release": {
+    "draft": false,
+    "id": 363442233,
+    "name": "CPFormal v0.56.0 — Complete research-history preservation",
+    "prerelease": false,
+    "published_at": "2026-08-01T05:51:45Z",
+    "url": "https://github.com/thiagomassensini/primos/releases/tag/v0.56.0"
+  },
+  "observations": [
+    {
+      "attempt": 1,
+      "hit_count": 1,
+      "query": "\"CPFormal v0.56.0\""
+    },
+    {
+      "attempt": 1,
+      "hit_count": 1,
+      "query": "\"Complete research-history preservation\""
+    },
+    {
+      "attempt": 1,
+      "hit_count": 0,
+      "query": "\"thiagomassensini/primos\" AND \"0.56.0\""
+    },
+    {
+      "attempt": 1,
+      "hit_count": 1,
+      "query": "conceptdoi:\"10.5281/zenodo.21483474\""
+    }
+  ],
+  "repository": "thiagomassensini/primos",
+  "status": "confirmed",
+  "tag": "v0.56.0",
+  "tag_commit_sha": "2738672df336eaec71f6504b51207557e4c4271d",
+  "zenodo": {
+    "conceptdoi": "10.5281/zenodo.21483474",
+    "created": "2026-08-01T05:51:49.578153+00:00",
+    "doi": "10.5281/zenodo.21735211",
+    "files": [
+      {
+        "checksum": "md5:0e6a50f6d14746573fed50b78f7999ce",
+        "key": "thiagomassensini/primos-v0.56.0.zip",
+        "size": 836185
+      }
+    ],
+    "record_id": 21735211,
+    "record_url": "https://zenodo.org/records/21735211",
+    "title": "thiagomassensini/primos: CPFormal v0.56.0 — Complete research-history preservation",
+    "updated": "2026-08-01T05:51:49.756667+00:00",
+    "version": "v0.56.0"
+  }
+}
