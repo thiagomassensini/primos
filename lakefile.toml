@@ -7,7 +7,9 @@ defaultTargets = [
   "CPFormal.Analytic.CpTfvdSeededNativeMomentContraction",
   "CPFormal.Analytic.CpTfvdSeededNativeMomentSourceAudit",
   "CPFormal.Analytic.CpTfvdGpreCollapseInterface",
-  "CPFormal.Analytic.CpNaturalCameraGlobalBlindSpot"
+  "CPFormal.Analytic.CpNaturalCameraGlobalBlindSpot",
+  "CPFormal.Analytic.CpNativeGpreFiniteTowerCollapse",
+  "CPFormal.Analytic.CpNativeGpreTfvdCommutatorTowerSource"
 ]
 
 [[lean_lib]]

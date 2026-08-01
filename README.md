@@ -10,6 +10,27 @@ O projeto nunca usa `sorry`, `axiom` ou um zero conhecido para fabricar o
 operador que deveria explica-lo. Uma afirmacao so recebe o estado
 `KERNEL_CHECKED` depois que `lake build` termina sem erros.
 
+## Checkpoint v0.60.0 — fontes finitas explicitas e preservacao completa
+
+`CpNativeGpreFiniteTowerCollapse` constroi, para toda fibra natural de
+proveniencia, fontes finitas cujos momentos recuperam exatamente os readouts
+`G_pre`. Essa camada e base-neutra: os campos legados chamados `Prime` sao
+rotulos naturais, sem certificado de primalidade, e a geometria de carry
+continua valida para toda base inteira `b>1`.
+
+`CpNativeGpreTfvdCommutatorTowerSource` especializa a construcao aos
+observaveis primos do bulk Green log-jet. Cada aresta analitica `n` ocupa a
+celula positiva `p*(n+1)` e o nivel distinto `n+1`; o Lean prova a atividade da
+coordenada e a identidade exata entre o momento da fonte de prefixo e o bulk
+Green finito. O resultado e camera-a-camera: nao postula um estado comum,
+controle uniforme, limite infinito ou confinamento de zeros.
+
+As 22 fontes da sessao interrompida estao preservadas byte a byte em
+`docs/recovered/2026-08-01/raw/`, com SHA-256. O manifesto
+`docs/POST_V059_PRESERVATION_MANIFEST_2026-08-01.md` registra a reavaliacao dos
+PRs e branches posteriores. O escopo publicavel esta em
+`docs/RELEASE_0.60.0.md`.
+
 ## Checkpoint v0.59.0 — fronteira carry--tilt--Genuine
 
 O carry posicional e sua massa quadratica determinam o deslocamento
@@ -286,7 +307,7 @@ job `91116286122`. A certificacao cobre os imports de `CPFormal.lean`,
 incluindo as cameras naturais e o certificado de persistencia estrutural;
 `CPFormal.ResearchReserve` permanece fora dela.
 
-O workflow de release da `v0.59.0` repete a auditoria sobre o `main` exato
+O workflow de release da `v0.60.0` repete a auditoria sobre o `main` exato
 antes de criar a tag anotada e a GitHub Release. Essa verificacao final do
 commit publicado e separada do registro do head matematico acima.
 
@@ -301,14 +322,16 @@ afirma uma inversa global ou uma lei sobre toda a matematica.
 ## Ordem de leitura
 
 Para uma visao completa deste checkpoint, comece por
-`docs/RELEASE_0.59.0.md` e `docs/ZERO_CONFINEMENT_FRONTIER_AUDIT.md`;
+`docs/RELEASE_0.60.0.md`,
+`docs/POST_V059_PRESERVATION_MANIFEST_2026-08-01.md` e
+`docs/ZERO_CONFINEMENT_FRONTIER_AUDIT.md`;
 o material recuperado esta indexado em `docs/recovered/2026-08-01/README.md`.
 A sintese estrutural anterior permanece em
 `docs/UNIVERSAL_CARRY_STRUCTURAL_PERSISTENCE.md`. O resumo da familia causal direta e inversa
 permanece em `docs/RESUMO_GERAL_HERANCA_CAUSAL_DO_CARRY.md`, e os limites da
 extensao inversa estao registrados em `docs/RELEASE_0.54.0.md`.
 
-Arquivos centrais da fronteira `v0.59.0`:
+Arquivos centrais da fronteira `v0.60.0`:
 
 1. `CPFormal/Analytic/CpTiltRigidity.lean`
 2. `CPFormal/Analytic/CpGenuineCarryTiltFrontier.lean`
@@ -318,8 +341,11 @@ Arquivos centrais da fronteira `v0.59.0`:
 6. `CPFormal/Analytic/CpTfvdSeededNativeMomentContraction.lean`
 7. `CPFormal/Analytic/CpTfvdSeededNativeMomentSourceAudit.lean`
 8. `CPFormal/Analytic/CpTfvdGpreCollapseInterface.lean`
-9. `docs/ZERO_CONFINEMENT_FRONTIER_AUDIT.md`
-10. `docs/RELEASE_0.59.0.md`
+9. `CPFormal/Analytic/CpNativeGpreFiniteTowerCollapse.lean`
+10. `CPFormal/Analytic/CpNativeGpreTfvdCommutatorTowerSource.lean`
+11. `docs/ZERO_CONFINEMENT_FRONTIER_AUDIT.md`
+12. `docs/POST_V059_PRESERVATION_MANIFEST_2026-08-01.md`
+13. `docs/RELEASE_0.60.0.md`
 
 Ordem historica do nucleo:
 
