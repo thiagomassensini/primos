@@ -23,6 +23,8 @@ open scoped BigOperators Topology ENNReal
 
 namespace CPFormal.Analytic.Cp
 
+open Filter
+
 noncomputable section
 
 /-- The enriched centered-carry readout is exactly one critical carry amplitude
