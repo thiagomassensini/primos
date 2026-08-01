@@ -25,7 +25,7 @@ No Green target, Genuine zero, critical displacement, `sorry`, `axiom` or
 before the remaining same-edge TFVD/Green identification.
 -/
 
-open scoped BigOperators ENNReal lp
+open scoped BigOperators ENNReal InnerProduct lp
 
 namespace CPFormal.Analytic.Cp
 
