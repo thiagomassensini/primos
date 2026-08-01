@@ -1,8 +1,11 @@
 # Recovered research context — 2026-08-01
 
-This directory preserves, verbatim, the mathematical notes recovered from a
-previous interrupted working session.  Preservation here prevents loss of
-definitions, proposed routes, chronology, and negative diagnostics.
+This directory preserves the mathematical notes recovered from a previous
+interrupted working session.  The readable top-level copies may normalize
+whitespace or correct terminology.  Their 22 byte-exact source payloads,
+including the Python companion and four Lean drafts, are preserved under
+`raw/` with a SHA-256 manifest.  This prevents loss of definitions, proposed
+routes, chronology, negative diagnostics, and original wording.
 
 These Markdown files are research records, not Lean certificates.  They may
 contain proposed identities, numerical evidence, historical terminology, or

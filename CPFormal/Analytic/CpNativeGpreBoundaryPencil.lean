@@ -11,8 +11,10 @@ numero.
 
 O papel `value/numberFlux` deixa de ser uma coordenada esquecivel e passa a
 ser a separacao entre `Gamma_0` e `Gamma_1`. Todos os demais eixos permanecem
-literais: primo aritmetico, tempo aritmetico, celula, canto, orientacao, perna,
-divisor Jordan, primo material e nivel da torre.
+literais: base aritmetica, tempo aritmetico, celula, canto, orientacao, perna,
+divisor Jordan, base material e nivel da torre. Os campos historicamente
+chamados `arithmeticPrime` e `towerPrime` sao rotulos naturais sem hipotese de
+primalidade.
 
 O kernel prova que
 

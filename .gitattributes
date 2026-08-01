@@ -1,0 +1,3 @@
+# The raw recovery archive is byte-exact, including historical trailing spaces,
+# blank EOF lines and literal conflict-marker text.  Do not normalize or flag it.
+docs/recovered/2026-08-01/raw/** -diff -whitespace

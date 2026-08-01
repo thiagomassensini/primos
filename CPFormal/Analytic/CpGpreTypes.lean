@@ -10,7 +10,8 @@ camadas topologica e espectral. Assim, as coordenadas nativas e a completacao
 
 namespace CPFormal.Analytic.Cp
 
-/-- Primo da camera aritmetica. -/
+/-- Rotulo natural da base da camera aritmetica.  O nome do tipo e legado;
+nenhum certificado de primalidade faz parte da estrutura. -/
 structure GpreArithmeticPrime where
   val : ℕ
   deriving Repr, DecidableEq
@@ -25,7 +26,8 @@ structure GpreJordanDivisor where
   val : ℕ
   deriving Repr, DecidableEq
 
-/-- Primo material da torre enriquecida. -/
+/-- Rotulo natural da base material da torre enriquecida.  O nome do tipo e
+legado; nenhum certificado de primalidade faz parte da estrutura. -/
 structure GpreTowerPrime where
   val : ℕ
   deriving Repr, DecidableEq
@@ -35,7 +37,8 @@ structure GpreTowerLevel where
   val : ℕ
   deriving Repr, DecidableEq
 
-/-- Os quatro cantos nativos de uma celula C2. -/
+/-- Os quatro cantos nativos de uma celula C2.  O stencil radial C2 continua
+com uma perna de cada lado; isto nao e a geometria C4 de duas pernas por lado. -/
 inductive GpreCorner where
   | lowerLeft
   | lowerRight
