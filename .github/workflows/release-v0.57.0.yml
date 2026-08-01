@@ -1,0 +1,295 @@
+name: Publish v0.57.0 complete Git mirror
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - .github/workflows/release-v0.57.0.yml
+      - docs/RELEASE_0.57.0.md
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: publish-v0.57.0
+  cancel-in-progress: false
+
+jobs:
+  verify-bundle-and-release:
+    name: Verify, bundle, and publish v0.57.0
+    if: ${{ github.ref == 'refs/heads/main' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout full main history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify exact remote main head
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --force origin "+refs/heads/main:refs/remotes/origin/main"
+          CHECKED_OUT_SHA="$(git rev-parse HEAD)"
+          REMOTE_MAIN_SHA="$(git rev-parse refs/remotes/origin/main)"
+          test "${CHECKED_OUT_SHA}" = "${GITHUB_SHA}"
+          test "${REMOTE_MAIN_SHA}" = "${GITHUB_SHA}"
+
+      - name: Fetch every branch, tag, and pull-request head
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch --force --prune origin \
+            "+refs/heads/*:refs/remotes/origin/*" \
+            "+refs/tags/*:refs/tags/*" \
+            "+refs/pull/*/head:refs/pull/*/head"
+
+          while read -r ref sha; do
+            name="${ref#refs/remotes/origin/}"
+            if [[ "${name}" == "HEAD" ]]; then
+              continue
+            fi
+            git update-ref "refs/heads/${name}" "${sha}"
+          done < <(
+            git for-each-ref \
+              --format='%(refname) %(objectname)' \
+              refs/remotes/origin/
+          )
+
+          git symbolic-ref HEAD refs/heads/main
+
+          BRANCH_COUNT="$(git for-each-ref refs/heads/ | wc -l | tr -d ' ')"
+          TAG_COUNT="$(git for-each-ref refs/tags/ | wc -l | tr -d ' ')"
+          PR_COUNT="$(git for-each-ref refs/pull/ | wc -l | tr -d ' ')"
+
+          echo "branch_count=${BRANCH_COUNT}" | tee preservation-counts.txt
+          echo "tag_count=${TAG_COUNT}" | tee -a preservation-counts.txt
+          echo "pull_request_head_count=${PR_COUNT}" | tee -a preservation-counts.txt
+
+          if (( BRANCH_COUNT < 52 )); then
+            echo "Expected at least 52 branch refs; found ${BRANCH_COUNT}." >&2
+            exit 1
+          fi
+          if (( TAG_COUNT < 12 )); then
+            echo "Expected at least 12 tag refs; found ${TAG_COUNT}." >&2
+            exit 1
+          fi
+          if (( PR_COUNT < 34 )); then
+            echo "Expected at least 34 pull-request head refs; found ${PR_COUNT}." >&2
+            exit 1
+          fi
+
+      - name: Static audit
+        run: bash scripts/static_audit.sh
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install numerical dependencies
+        run: |
+          python -m pip install --disable-pip-version-check \
+            "numpy>=2,<3" "scipy>=1.14,<2"
+
+      - name: Run real-rotation regression tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          python -m unittest -v \
+            experiments/test_c2_real_rotation_operator.py \
+            experiments/test_c2_real_rotation_minimal.py \
+            2>&1 | tee python-release-tests.log
+
+      - name: Set up Lean and mathlib cache
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
+
+      - name: Elaborate with Lean kernel
+        shell: bash
+        run: |
+          set -euo pipefail
+          lake build --wfail 2>&1 | tee lean-release-build.log
+
+      - name: Build and restore complete Git bundle
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          PREFIX="primos-complete-v0.57.0"
+          BUNDLE="${PREFIX}.bundle"
+          REFS="${PREFIX}-refs.txt"
+          HEADS="${PREFIX}-heads.txt"
+          VERIFY="${PREFIX}-verify.txt"
+          RESTORE="${PREFIX}-RESTORE.txt"
+          CHECKSUMS="${PREFIX}-SHA256SUMS.txt"
+
+          git for-each-ref \
+            --format='%(refname) %(objectname) %(objecttype)' \
+            refs/heads/ refs/tags/ refs/pull/ \
+            | LC_ALL=C sort > "${REFS}"
+
+          mapfile -t BUNDLE_REFS < <(
+            git for-each-ref \
+              --format='%(refname)' \
+              refs/heads/ refs/tags/ refs/pull/ \
+              | LC_ALL=C sort
+          )
+
+          if (( ${#BUNDLE_REFS[@]} == 0 )); then
+            echo "No refs available for bundle creation." >&2
+            exit 1
+          fi
+
+          git bundle create "${BUNDLE}" "${BUNDLE_REFS[@]}"
+          git bundle list-heads "${BUNDLE}" > "${HEADS}"
+          git bundle verify "${BUNDLE}" > "${VERIFY}" 2>&1
+
+          RESTORED="${RUNNER_TEMP}/primos-v0.57.0-restored.git"
+          rm -rf "${RESTORED}"
+          git clone --mirror "${BUNDLE}" "${RESTORED}" >> "${VERIFY}" 2>&1
+          git -C "${RESTORED}" fsck --full --strict >> "${VERIFY}" 2>&1
+
+          git -C "${RESTORED}" for-each-ref \
+            --format='%(refname) %(objectname) %(objecttype)' \
+            refs/heads/ refs/tags/ refs/pull/ \
+            | LC_ALL=C sort > restored-refs.txt
+
+          diff -u "${REFS}" restored-refs.txt >> "${VERIFY}"
+          cat preservation-counts.txt >> "${VERIFY}"
+
+          cat > "${RESTORE}" <<'EOF'
+          Complete recovery instructions
+          ==============================
+
+          1. Verify the checksum:
+
+             sha256sum -c primos-complete-v0.57.0-SHA256SUMS.txt
+
+          2. Restore a complete bare mirror:
+
+             git clone --mirror primos-complete-v0.57.0.bundle primos-restored.git
+             git -C primos-restored.git fsck --full --strict
+
+          3. Create a normal working copy:
+
+             git clone primos-restored.git primos-working-copy
+
+          The ref manifest records the exact SHA of every bundled branch, tag,
+          and pull-request head at publication time.
+          EOF
+
+          sha256sum \
+            "${BUNDLE}" \
+            "${REFS}" \
+            "${HEADS}" \
+            "${VERIFY}" \
+            "${RESTORE}" \
+            > "${CHECKSUMS}"
+
+          sha256sum -c "${CHECKSUMS}"
+
+      - name: Upload preservation artifacts to workflow run
+        uses: actions/upload-artifact@v4
+        with:
+          name: primos-complete-v0.57.0
+          path: |
+            primos-complete-v0.57.0.bundle
+            primos-complete-v0.57.0-refs.txt
+            primos-complete-v0.57.0-heads.txt
+            primos-complete-v0.57.0-verify.txt
+            primos-complete-v0.57.0-RESTORE.txt
+            primos-complete-v0.57.0-SHA256SUMS.txt
+            python-release-tests.log
+            lean-release-build.log
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Create annotated tag, attach bundle, and publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: v0.57.0
+          TITLE: "CPFormal v0.57.0 — Complete Git mirror preservation"
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          git config user.name "github-actions[bot]"
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git fetch --force origin \
+            "+refs/heads/main:refs/remotes/origin/main" \
+            "+refs/tags/*:refs/tags/*"
+
+          REMOTE_MAIN_SHA="$(git rev-parse refs/remotes/origin/main)"
+          if [[ "${REMOTE_MAIN_SHA}" != "${GITHUB_SHA}" ]]; then
+            echo "Remote main moved after validation; refusing stale release." >&2
+            exit 1
+          fi
+
+          if git show-ref --verify --quiet "refs/tags/${TAG}"; then
+            TAG_TYPE="$(git cat-file -t "refs/tags/${TAG}")"
+            TAG_COMMIT="$(git rev-parse "${TAG}^{commit}")"
+            test "${TAG_TYPE}" = "tag"
+            test "${TAG_COMMIT}" = "${GITHUB_SHA}"
+          else
+            git tag -a "${TAG}" "${GITHUB_SHA}" -m "${TITLE}"
+            git push origin "refs/tags/${TAG}"
+          fi
+
+          if gh release view "${TAG}" >/dev/null 2>&1; then
+            IS_DRAFT="$(gh release view "${TAG}" --json isDraft --jq .isDraft)"
+            if [[ "${IS_DRAFT}" != "true" ]]; then
+              echo "Published release ${TAG} already exists."
+              exit 0
+            fi
+          else
+            gh release create "${TAG}" \
+              --verify-tag \
+              --draft \
+              --title "${TITLE}" \
+              --notes-file docs/RELEASE_0.57.0.md
+          fi
+
+          gh release upload "${TAG}" \
+            primos-complete-v0.57.0.bundle \
+            primos-complete-v0.57.0-refs.txt \
+            primos-complete-v0.57.0-heads.txt \
+            primos-complete-v0.57.0-verify.txt \
+            primos-complete-v0.57.0-RESTORE.txt \
+            primos-complete-v0.57.0-SHA256SUMS.txt \
+            --clobber
+
+          ASSET_COUNT="$(
+            gh release view "${TAG}" \
+              --json assets \
+              --jq '.assets | length'
+          )"
+          if (( ASSET_COUNT < 6 )); then
+            echo "Release draft does not contain all preservation assets." >&2
+            exit 1
+          fi
+
+          gh release edit "${TAG}" --draft=false --latest
+
+      - name: Preserve validation failure logs
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v0.57.0-failure-logs-${{ github.run_id }}
+          path: |
+            preservation-counts.txt
+            python-release-tests.log
+            lean-release-build.log
+            primos-complete-v0.57.0-verify.txt
+          if-no-files-found: ignore
+          retention-days: 30
