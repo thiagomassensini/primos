@@ -230,8 +230,11 @@ para toda largura nativa `b ≥ 3` na faixa crítica. Quando
 \operatorname{genuineContinuation}(s)=0.
 \]
 
-A C2 alinhada participa por sua igualdade literal com a largura 4. A câmera
-nativa literal de largura 2 é degenerada e não deve ser confundida com ela.
+A C2 alinhada participa por sua igualdade literal com o scanner nativo de
+parametro `4`, que ainda possui `halfRange 4 = 1`: uma perna de cada lado. A
+camera nativa literal de largura `2` e degenerada e nao deve ser confundida
+com ela. Tampouco essa identidade de implementacao identifica a C2 com uma C4
+geometrica de duas pernas por lado.
 Essa equivalência é do limite analítico na linha crítica; não afirma que
 algum cutoff finito zere exatamente, nem que os fatores pares sejam regulares
 em toda a faixa.
@@ -348,7 +351,8 @@ Mas:
   aproximadamente `5,6` e `10,6`, portanto leitura zero não implica estado
   zero sem coercividade;
 - as câmeras 6, 7, 10, 13 e 14 não aparecem no teste longo;
-- C2 e C4 são o mesmo dado, não duas confirmações independentes.
+- a C2 alinhada e o scanner de parametro `4`/raio `1` sao o mesmo dado, nao
+  duas confirmacoes independentes; isso nao e uma igualdade C2--C4 geometrica.
 
 Os experimentos orientam os lemas corretos. A prova deve vir das identidades
 finitas, da somabilidade das segundas diferenças, da continuação analítica e
@@ -366,12 +370,12 @@ Os módulos desta síntese são:
   - transporte com defeito explícito.
 - `CPFormal.Analytic.CpNativeCarryFiniteCameraAlgebra`
   - formas normais finitas;
-  - C2 igual a C4;
+  - C2 alinhada igual ao scanner de parametro `4` e raio `1`;
   - decomposição de compostas.
 - `CPFormal.Analytic.CpNaturalCameraFactor`
   - fatores ímpar e par;
   - regularidade sem primalidade;
-  - fatorização e regularidade crítica de C2/C4.
+  - fatorizacao e regularidade critica da C2 alinhada via parametro `4`.
 - `CPFormal.Analytic.CpNaturalEvenCameraRegularity`
   - dominação estrita do canal central;
   - não anulamento crítico dos fatores pares `b ≥ 6`.
@@ -381,7 +385,7 @@ Os módulos desta síntese são:
   - identidade cruzada com a câmera 3 antes de qualquer divisão;
   - fatoração comum na faixa crítica;
   - equivalência de zeros na linha crítica para toda largura `b ≥ 3`;
-  - C2 alinhada transportada pela largura 4.
+  - C2 alinhada transportada pelo parametro `4`, com raio `1`.
 - `CPFormal.Analytic.CpUniversalCarryStructuralPersistence`
   - certificado agregado de decomposição posicional;
   - conservação de valor;

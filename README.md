@@ -1,7 +1,8 @@
 # CPFormal
 
 Formalizacao limpa, incremental e auditavel da geometria de carry, brackets,
-cameras naturais e cartas Genuine, seguindo a ordem **Genuine first**.
+cameras naturais e cartas Genuine. A massa critica e a meia-abscissa nascem
+**carry first**; a construcao analitica das cartas continua **Genuine first**.
 
 ## Regra central
 
@@ -9,7 +10,48 @@ O projeto nunca usa `sorry`, `axiom` ou um zero conhecido para fabricar o
 operador que deveria explica-lo. Uma afirmacao so recebe o estado
 `KERNEL_CHECKED` depois que `lake build` termina sem erros.
 
-## Checkpoint v0.55.0 — sintese estrutural
+## Checkpoint v0.59.0 — fronteira carry--tilt--Genuine
+
+O carry posicional e sua massa quadratica determinam o deslocamento
+`delta = sigma - 1/2`. A convexidade/concavidade estrita do perfil radial
+prova, antes de qualquer realizacao em espaco de Hilbert,
+
+```text
+cpTiltAtSigma p sigma center = 0  <->  sigma = 1/2.
+```
+
+O modulo `CpGenuineCarryTiltFrontier` prova que transferir todo zero Genuine
+para esse zero do tilt — ou para o zero equivalente do bulk Green refletido —
+e exatamente a afirmacao global de nao anulacao off-critical. Assim a origem
+geometrica de `1/2` esta fechada, enquanto a seta global restante continua
+tipada e visivel, sem ser introduzida como hipotese disfarçada.
+
+O checkpoint tambem incorpora a reconstrucao TFVD semeada, a conservacao
+finita exata da energia de Bessel e a contracao para momentos nativos. A
+existencia do estado nativo de tempo fixo e provada equivalente a
+`sigma = 1/2`; portanto ela nao e usada para escolher um testemunho a partir
+de um zero Genuine bruto. A interface `CpTfvdGpreCollapseInterface` registra
+a lei coordenada ainda necessaria sem declarar uma instancia inexistente.
+
+Essa estrutura nao depende de primalidade. Para toda base inteira `b>1`, o
+carry e a compatibilidade de massa sao base-neutros; para toda camera natural
+nao degenerada `b>=3`, a carta se fatora pelo mesmo
+`genuineContinuation`. O modulo `CpNaturalCameraGlobalBlindSpot` empacota a
+consequencia: no strip, um zero Genuine e exatamente um ponto cego simultaneo
+de todas essas cameras, e todas as suas resultantes finitas convergem a zero.
+Ao mesmo tempo, `infiniteReflectedGreenEnergy_pos` mantem a energia Green
+refletida estritamente positiva. Isso separa invisibilidade global de perda de
+energia, sem afirmar o `GREEN-NATCAM-INTERTWINER` ainda aberto.
+
+Os drafts historicos, inclusive o probe deliberadamente vermelho, foram
+auditados. O dado ausente nesse probe era a compatibilidade de massa
+pre-compressao; a versao integrada o recebe explicitamente. As notas
+recuperadas da sessao interrompida foram preservadas em
+`docs/recovered/2026-08-01/` como registros de pesquisa, separados dos
+certificados do kernel. O escopo publicavel completo esta em
+`docs/RELEASE_0.59.0.md`.
+
+## Checkpoint v0.55.0 — sintese estrutural anterior
 
 A formulacao que liga carry posicional, cameras naturais, empacotamento
 real--complexo, Green--bracket--retorno, bordo e defeitos explicitos esta em
@@ -17,15 +59,18 @@ real--complexo, Green--bracket--retorno, bordo e defeitos explicitos esta em
 
 Esse documento distingue identidades finitas exatas, continuacoes ja
 certificadas, evidencias numericas e pontes ainda abertas. Em particular, ele
-registra as formas normais de cameras impares e pares, a identidade alinhada
-`C2 = C4` e a decomposicao de cameras compostas impares sem usar primalidade.
+registra as formas normais de cameras impares e pares, a identidade da C2
+alinhada com o scanner nativo de parametro `4` e raio `1`, e a decomposicao de
+cameras compostas impares sem usar primalidade. Essa identidade de
+implementacao nao identifica a C2, que tem uma perna por lado, com uma C4
+geometrica de duas pernas por lado.
 O modulo `CpNaturalCameraAnalyticContinuation` leva essas identidades ao
 limite: toda largura `b>=2` produz uma carta convergente e holomorfa em
 `Re(s)>-1`; para toda largura nativa nao degenerada `b>=3`, a carta e o fator
 de paridade vezes o mesmo `genuineContinuation` na faixa critica. Na linha
 `Re(s)=1/2`, todas essas cameras possuem exatamente o mesmo predicado de zero.
-A C2 experimental entra como largura 4; a largura nativa literal 2 permanece
-separada e degenerada.
+A C2 experimental entra pelo parametro nativo `4`, cujo `halfRange` e `1`;
+a largura nativa literal `2` permanece separada e degenerada.
 
 ## Nucleo ativo
 
@@ -143,7 +188,7 @@ separada e degenerada.
   nativa `b>=3` na faixa critica;
 - nao anulamento de todo fator natural na linha critica e equivalencia entre
   zero da carta e zero Genuine nessa linha, incluindo a C2 alinhada por sua
-  igualdade exata com a largura 4;
+  igualdade exata com o scanner de parametro `4` e raio `1`;
 - criterio Green assinado que transforma um certificado concreto de
   fluxo--energia--bordo numa ponte `zero Genuine -> saturacao do ramo`;
 - identidade Green finita com bordo literal, autovetor exato
@@ -200,7 +245,7 @@ separada e degenerada.
 Os modulos projetivo e Hilbert--Polya permanecem preservados em
 `CPFormal.ResearchReserve`, mas nao sao importados pelo nucleo ativo.
 
-## Principio Genuine first
+## Ordem analitica Genuine first
 
 1. cancelamento finito literal;
 2. bijecao carry entre pernas e centros;
@@ -241,7 +286,7 @@ job `91116286122`. A certificacao cobre os imports de `CPFormal.lean`,
 incluindo as cameras naturais e o certificado de persistencia estrutural;
 `CPFormal.ResearchReserve` permanece fora dela.
 
-O workflow de release da `v0.55.0` repete a auditoria sobre o `main` exato
+O workflow de release da `v0.59.0` repete a auditoria sobre o `main` exato
 antes de criar a tag anotada e a GitHub Release. Essa verificacao final do
 commit publicado e separada do registro do head matematico acima.
 
@@ -256,21 +301,25 @@ afirma uma inversa global ou uma lei sobre toda a matematica.
 ## Ordem de leitura
 
 Para uma visao completa deste checkpoint, comece por
-`docs/UNIVERSAL_CARRY_STRUCTURAL_PERSISTENCE.md`; a proveniencia publicavel
-esta em `docs/RELEASE_0.55.0.md`. O resumo da familia causal direta e inversa
+`docs/RELEASE_0.59.0.md` e `docs/ZERO_CONFINEMENT_FRONTIER_AUDIT.md`;
+o material recuperado esta indexado em `docs/recovered/2026-08-01/README.md`.
+A sintese estrutural anterior permanece em
+`docs/UNIVERSAL_CARRY_STRUCTURAL_PERSISTENCE.md`. O resumo da familia causal direta e inversa
 permanece em `docs/RESUMO_GERAL_HERANCA_CAUSAL_DO_CARRY.md`, e os limites da
 extensao inversa estao registrados em `docs/RELEASE_0.54.0.md`.
 
-Arquivos centrais da sintese `v0.55.0`:
+Arquivos centrais da fronteira `v0.59.0`:
 
-1. `CPFormal/Logic/StructuralPersistence.lean`
-2. `CPFormal/Analytic/CpNativeCarryFiniteCameraAlgebra.lean`
-3. `CPFormal/Analytic/CpNaturalCameraFactor.lean`
-4. `CPFormal/Analytic/CpNaturalEvenCameraRegularity.lean`
-5. `CPFormal/Analytic/CpNaturalCameraAnalyticContinuation.lean`
-6. `CPFormal/Analytic/CpUniversalCarryStructuralPersistence.lean`
-7. `docs/UNIVERSAL_CARRY_STRUCTURAL_PERSISTENCE.md`
-8. `docs/RELEASE_0.55.0.md`
+1. `CPFormal/Analytic/CpTiltRigidity.lean`
+2. `CPFormal/Analytic/CpGenuineCarryTiltFrontier.lean`
+3. `CPFormal/Analytic/CpRadialCoercivity.lean`
+4. `CPFormal/Analytic/CpReflectedGreenBridge.lean`
+5. `CPFormal/Analytic/CpTfvdSeededFiniteBesselConservation.lean`
+6. `CPFormal/Analytic/CpTfvdSeededNativeMomentContraction.lean`
+7. `CPFormal/Analytic/CpTfvdSeededNativeMomentSourceAudit.lean`
+8. `CPFormal/Analytic/CpTfvdGpreCollapseInterface.lean`
+9. `docs/ZERO_CONFINEMENT_FRONTIER_AUDIT.md`
+10. `docs/RELEASE_0.59.0.md`
 
 Ordem historica do nucleo:
 

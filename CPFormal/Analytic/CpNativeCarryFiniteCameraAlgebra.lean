@@ -7,7 +7,7 @@ This file stays entirely at finite cutoff and in an additive commutative
 group.  It records four pieces of algebra that are independent of primality:
 
 * the scanner's specially labelled aligned `C₂` camera is exactly the native
-  width-four saturated camera;
+  scanner with width parameter `4` and radius `1`;
 * every nontrivial odd width has a prefix-minus-centres normal form;
 * odd widths satisfy a multiplicative decomposition and the resulting cross
   identity;
@@ -251,7 +251,16 @@ def nativeCarryAlignedC2Chart (M : ℕ) (f : ℤ → A) : A :=
       CPFormal.centeredSecondDifference f
         (CPFormal.Genuine.Cp.alignedCenter 4 k) 1
 
-/-- The explicitly aligned `C₂` chart is exactly the native width-four chart. -/
+/-- The native width parameter `4` still has radius one. Thus the encoding
+below has one leg on each side and must not be read as an equality between the
+geometric `C2` and a four-leg geometric `C4`. -/
+@[simp] theorem nativeCarryWidthFour_halfRange_eq_one :
+    CPFormal.Genuine.Cp.halfRange 4 = 1 := by
+  norm_num [CPFormal.Genuine.Cp.halfRange]
+
+/-- The explicitly aligned `C₂` chart is exactly the native scanner whose
+width/period parameter is `4`. This is an implementation identity between two
+radius-one scanners, not an identification of `C2` and geometric `C4`. -/
 theorem nativeCarryAlignedC2Chart_eq_width_four
     (M : ℕ) (f : ℤ → A) :
     nativeCarryAlignedC2Chart M f =

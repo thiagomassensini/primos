@@ -21,8 +21,9 @@ This file closes the analytic passage without a primality hypothesis:
   `genuineContinuation`;
 * on the critical line the factor never vanishes, so every natural camera
   has exactly the canonical Genuine zeros;
-* the scanner's specially named aligned `C₂` camera is included because it
-  is exactly the native width-four camera.
+* the scanner's specially named aligned `C₂` camera is included through the
+  native width parameter `4`; that parameter has `halfRange 4 = 1`, so this
+  remains a one-leg-per-side scanner and is not geometric `C4`.
 
 No prime-only residue chart is used below.  Primality remains relevant only
 to older presentations through balanced prime offsets, not to the native
@@ -830,7 +831,8 @@ theorem bracketedDirichletChart_zero_iff_genuineContinuation_zero_of_three_le
 /-! ## The aligned camera labelled `C₂` -/
 
 /--
-The finite aligned `C₂` scanner converges because it is exactly width four.
+The finite aligned `C₂` scanner converges through its radius-one native
+encoding with width/period parameter `4`.
 -/
 theorem nativeCarryAlignedC2Chart_dirichlet_tendsto
     {s : ℂ} (hs : -1 < s.re) :
@@ -843,7 +845,8 @@ theorem nativeCarryAlignedC2Chart_dirichlet_tendsto
       (Filter.Eventually.of_forall fun M ↦
         (nativeCarryAlignedC2Chart_eq_width_four M (dirichletTerm s)).symm)
 
-/-- The aligned `C₂` limit has the exact width-four even factor. -/
+/-- The aligned `C₂` limit has the even factor attached to its native
+width/period parameter `4`; this does not change its one-leg geometry. -/
 theorem alignedC2BracketedDirichletChart_eq_factor_mul_genuineContinuation
     {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
     bracketedDirichletChart 4 s =

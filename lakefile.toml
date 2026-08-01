@@ -4,7 +4,10 @@ defaultTargets = [
   "CPFormal",
   "CPFormal.Analytic.CpTfvdSeededReconstructionBridgeProbe",
   "CPFormal.Analytic.CpTfvdSeededFiniteBesselConservation",
-  "CPFormal.Analytic.CpTfvdSeededNativeMomentContraction"
+  "CPFormal.Analytic.CpTfvdSeededNativeMomentContraction",
+  "CPFormal.Analytic.CpTfvdSeededNativeMomentSourceAudit",
+  "CPFormal.Analytic.CpTfvdGpreCollapseInterface",
+  "CPFormal.Analytic.CpNaturalCameraGlobalBlindSpot"
 ]
 
 [[lean_lib]]

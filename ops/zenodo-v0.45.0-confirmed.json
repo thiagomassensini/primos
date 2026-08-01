@@ -1,0 +1,30 @@
+{
+  "checked_at_utc": "2026-07-22T04:02:07.158784+00:00",
+  "conceptdoi": "10.5281/zenodo.21483474",
+  "doi": "10.5281/zenodo.21483475",
+  "observations": [
+    {
+      "attempt": 1,
+      "hit_count": 1,
+      "query": "\"CPFormal v0.45.0\""
+    },
+    {
+      "attempt": 1,
+      "hit_count": 1,
+      "query": "\"thiagomassensini/primos\""
+    },
+    {
+      "attempt": 1,
+      "hit_count": 1,
+      "query": "\"Genuine-first real spectral and enriched TFVD checkpoint\""
+    }
+  ],
+  "published": "2026-07-22T03:56:00.742346+00:00",
+  "record_id": 21483475,
+  "record_url": "https://zenodo.org/records/21483475",
+  "release_tag": "v0.45.0",
+  "repository": "thiagomassensini/primos",
+  "status": "confirmed",
+  "title": "thiagomassensini/primos: CPFormal v0.45.0 — Genuine-first real spectral and enriched TFVD checkpoint",
+  "version": "v0.45.0"
+}

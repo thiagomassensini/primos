@@ -829,11 +829,13 @@ Com esse run, os seguintes IDs do ledger foram promovidos para
 
 O kernel verificou formas normais finitas impares e pares sem hipotese de
 primalidade, a decomposicao exata de larguras impares compostas, a igualdade
-entre a C2 alinhada do scanner e a geometria nativa de largura 4, convergencia
-e holomorfia de toda largura `b>=2` em `Re(s)>-1`, e fatoracao por um unico
-`genuineContinuation` para toda largura nativa `b>=3` na faixa critica. Na
-linha `Re(s)=1/2`, os fatores sao nao nulos e o zero da carta e equivalente ao
-zero Genuine. A C2 alinhada participa por largura 4.
+entre a C2 alinhada e o scanner nativo de parametro `4` e raio `1`,
+convergencia e holomorfia de toda largura `b>=2` em `Re(s)>-1`, e fatoracao
+por um unico `genuineContinuation` para toda largura nativa `b>=3` na faixa
+critica. Na linha `Re(s)=1/2`, os fatores sao nao nulos e o zero da carta e
+equivalente ao zero Genuine. Como `halfRange 4 = 1`, essa identidade de
+implementacao continua tendo uma perna por lado e nao identifica a C2 com uma
+C4 geometrica de duas pernas por lado.
 
 O certificado agregado reune essas leis com carry posicional, heranca causal
 direta e inversa, massa, amplitude, reconstrucao Green--TFVD e defeitos
@@ -862,3 +864,131 @@ O SHA acima identifica o head matematico anterior a esta consolidacao
 documental. Isso evita circularidade de autorreferencia. O workflow de release
 da `v0.55.0` valida o `GITHUB_SHA` do `main` remoto depois da incorporacao e
 e a autoridade sobre o commit exato marcado pela tag anotada.
+## Checkpoint pos-v0.52 do crosswalk nativo--Genuine--Green
+
+- commit matematico certificado:
+  `e43a42f52308d488d46e71316e5a919e4678da6b`;
+- workflow run: `30592046379` (`Lean kernel audit`, run #728);
+- job: `91036267615` (`Build CPFormal`);
+- resultado: `success` em auditoria estatica e `lake build --wfail`;
+- novo alvo compilado:
+  `CPFormal.Analytic.CpNativeGenuineGreenCompletedCrosswalk`.
+
+O kernel fechou primeiro o elo aritmetico entre a decomposicao posicional e
+o evento probabilistico: o residuo canonico de `n` na profundidade `k`
+pertence ao singleton uniforme de carry se e somente se `b^k` divide `n`.
+Esse singleton possui a probabilidade finita uniforme `criticalMass b k`.
+Isto nao e uma afirmacao de equidistribuicao assintotica dos naturais.
+
+Na faixa Genuine, para a camera nativa `3` e blocos Green indexados por
+primos `p,q`, o kernel verificou:
+
+```text
+zero nativo
+  <-> zero Genuine bruto e Re(s)=1/2
+  <-> zero Genuine bruto e fechamento Green alinhado
+  <-> genuineGreenCompletedLimitOperator(p,q,s)=0.
+```
+
+A ultima igualdade significa que o endomorfismo completado inteiro e o mapa
+zero naquele parametro. Nao foi provada igualdade dos operadores como mapas,
+nem igualdade de seus subespacos `LinearMap.ker`.
+
+Tambem foi provado que, num zero nativo, o vetor Green limite zera e os
+operadores finitos completados convergem fortemente a zero ponto a ponto em
+cada vetor do espaco completado.
+
+O guardrail central permanece explicito: um zero Genuine bruto equivale ao
+fechamento bruto da camera, mas nao fornece sozinho a compatibilidade de
+massa pre-compressao exigida pelo predicado de zero nativo. Portanto este
+checkpoint nao prova a seta global `zero Genuine bruto -> zero nativo`; ele
+fecha a equivalencia entre o zero nativo completo e o locus de anulacao do
+operador completado que conserva os dois canais.
+
+## Checkpoint v0.59.0 — auditoria carry-first e integracao ativa dos drafts
+
+O checkpoint `v0.59.0` preserva a ordem causal da meia-abscissa. O kernel ja
+prova, pela convexidade/concavidade estrita do perfil de carry, que o tilt Cp
+zera exatamente em `sigma=1/2`. O espaco de Hilbert e uma linguagem de
+realizacao e energia; ele nao introduz esse valor.
+
+A auditoria historica examinou:
+
+- 39 refs remotos;
+- 201 caminhos Lean nas pontas desses refs;
+- 742 blobs Lean historicos alcancaveis;
+- 8.610 declaracoes, com 2.905 nomes unicos.
+
+Todos os 201 arquivos presentes nas pontas remotas estao semanticamente
+cobertos pela integracao. Dois nomes antigos do PR #12 foram subsumidos por
+teoremas mais gerais de `CpGenuineNativeRealBoundaryCrosswalk`; nenhum conteudo
+matematico unico foi perdido. Os JSON imutaveis de confirmacao da publicacao
+`v0.45.0` foram incorporados, mas os dois workflows branch-specific obsoletos
+nao foram reativados.
+
+Os drafts abertos foram integrados pelas suas pontas de stack:
+
+- PRs #25--#26: comparacao primitivo--Genuine--zeta e equivalencia exata com
+  `RiemannHypothesis` da Mathlib;
+- PRs #27, #31 e #32: crosswalk nativo--Genuine--Green, tentativa de
+  confinamento bruto e fronteira de ativacao C2;
+- PR #33: probe deliberadamente vermelho, reparado com a compatibilidade de
+  massa como hipotese explicita;
+- PR #34: reconstrucao TFVD semeada, conservacao finita de Bessel e contracao
+  de momentos nativos.
+
+O diagnostico historico mais forte foi o commit
+`b5a65f168de787c6ab04cc26288c3018d42d375b`, run `30491613094`. O Lean
+recusou a promocao de boundary closure para zero nativo porque faltava
+`NativeCarryRealPlaneMassCompatible`. O commit corretivo
+`68724075d7d44f7c6efb6cfabfc70030bb295945`, run `30492123997`, registrou o
+enunciado condicional correto e ficou verde. O PR #33 encontrou de forma
+independente o mesmo campo ausente.
+
+Foram reavaliadas as rotas carry/tilt, regra do produto, Green refletido,
+orcamento Green unilateral, ledger TFVD--log-jet, C2 multiescala, operador
+nativo/precompressao, operador completado, simetria refletida, cameras
+multibase, LSB/Parseval, estado fixo de Bessel e bracket radial de Tate. O mapa
+completo esta em `docs/ZERO_CONFINEMENT_FRONTIER_AUDIT.md`.
+
+Tambem foi auditado, em toda a historia de 37 commits, o repositorio externo
+`thiagomassensini/formalizacao_C2`, no SHA
+`dc35555879e3c0f188508c729c4a0ea31be246fb`. Seu unico workflow registrado,
+run `29081538415`, job `86325282214`, esta verde. Os teoremas de tilt,
+saturacao gaussiana e barreira de ramo confirmam independentemente a rigidez
+local em `delta=0`, mas nao ha naquele `main` nem em commits anteriores uma
+ponte de zero Genuine para qualquer desses detectores. O endpoint
+`BulkAntiMiracleTiltData.nonvanishing` depende de decomposicao, forma
+resolvente e dominancia estrita; a curvatura tilt nao e usada para fabricar
+essa dominancia. A versao Cp local ja presente aqui e mais geral, portanto
+nenhum modulo redundante foi importado.
+
+Nenhuma dessas rotas contem uma prova incondicional escondida da seta
+
+```text
+genuineContinuation s = 0 -> cpTiltAtSigma p s.re center = 0.
+```
+
+O novo modulo `CpGenuineCarryTiltFrontier` prova que essa seta global e
+equivalente a `GenuineStrongNonvanishingInStrip`. Analogamente, anular o bulk
+Green refletido em todo zero Genuine tem a mesma forca. O endpoint bracketado
+fecha, mas deixa o bulk radial; a equacao funcional reflete zeros, mas nao os
+torna pontos fixos; e a existencia de uma fonte nativa de momentos e provada
+equivalente a criticidade. Esses guardrails impedem conclusoes circulares.
+
+A generalizacao universal do PR #30 tambem foi revalidada: carry e massa sao
+formulados para toda base inteira `b>1`, e as cartas naturais nao degeneradas
+para toda largura `b>=3`, sem primalidade. O novo modulo
+`CpNaturalCameraGlobalBlindSpot` prova no strip que um zero Genuine e
+equivalente ao ponto cego simultaneo de todas essas cameras e que todas as
+resultantes finitas correspondentes convergem a zero. No mesmo parametro,
+`infiniteReflectedGreenEnergy_pos` mantem energia Green refletida positiva.
+Isso formaliza invisibilidade sem perda total de energia, mas nao fornece um
+estado pre-compressao comum: `GREEN-NATCAM-INTERTWINER` permanece aberto.
+
+A validacao autoritativa do commit publicado e executada em `main` pelos
+workflows `Lean kernel audit` e `Publish v0.59.0`: auditoria estatica, testes
+Python e `lake build --wfail` devem terminar verdes antes da tag anotada e da
+GitHub Release. O publisher tambem reconstrui e verifica o bundle completo de
+refs antes de publicar a release imutavel. O release event e entao consumido
+pela integracao Zenodo do repositorio.
