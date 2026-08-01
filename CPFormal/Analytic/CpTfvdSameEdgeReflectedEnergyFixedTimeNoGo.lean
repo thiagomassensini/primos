@@ -41,6 +41,7 @@ theorem inner_nativeGpreTowerProfileVector_greenEnergyFirstLevelState
   rw [lp.inner_single_right]
   simp [nativeGpreTowerProfileVector_apply,
     nativeUnitMassTowerProfile, RCLike.inner_apply]
+  ring
 
 /-- At every nonempty cutoff in the Genuine strip, that fixed-time readout is
 strictly positive for every prime camera. -/
