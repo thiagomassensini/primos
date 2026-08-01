@@ -1,6 +1,9 @@
 name = "CPFormal"
 version = "0.2.0"
-defaultTargets = ["CPFormal"]
+defaultTargets = [
+  "CPFormal",
+  "CPFormal.Analytic.CpTfvdSeededReconstructionBridgeProbe"
+]
 
 [[lean_lib]]
 name = "CPFormal"
