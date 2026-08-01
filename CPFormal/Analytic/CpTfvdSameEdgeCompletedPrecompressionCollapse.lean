@@ -23,7 +23,7 @@ the completed precompression state is nonzero at every nonempty cutoff in the
 Genuine strip.  This is an exact finite point-blind identity: vanishing of the
 radial observable does not erase the positive state from which it was formed.
 
-No Genuine zero, Zeta, RH, equation functional, `axiom`, `sorry`, `admit` or
+No Genuine zero, Zeta, RH, functional equation, `axiom`, `sorry`, `admit` or
 `unsafe` is used.  The construction is an extension of the TFVD--G_pre energy
 architecture and does not reopen the already-proved native-operator
 confinement.
@@ -100,7 +100,7 @@ theorem nativeGpreTfvdCompletedPrecompressionPrimeReadout_sameEdge
       (0, primeCarryGreenBulkCutoffProfile (3 * M) s p) := by
   rw [seededTfvdGpreCompletedPrecompressionSource_sameEdge]
   unfold nativeGpreTfvdCompletedPrecompressionPrimeReadout
-  simp only [Prod.fst, Prod.snd, inner_zero_right]
+  simp only [inner_zero_right]
   rw [inner_nativeGpreReflectedFirstLevelGapProfile_eq_greenBulk]
 
 /-- At critical displacement both observable coordinates vanish. -/
@@ -141,8 +141,9 @@ theorem seededTfvdGpreCompletedPrecompressionSource_ne_zero
   rw [seededTfvdGpreCompletedPrecompressionSource_sameEdge]
   intro hzero
   have hsnd := congrArg Prod.snd hzero
-  apply nativeGpreGreenEnergyFirstLevelState_ne_zero (by omega) hs
-  simpa using hsnd
+  exact
+    (nativeGpreGreenEnergyFirstLevelState_ne_zero
+      (M := 3 * M) (by omega) hs) (by simpa using hsnd)
 
 /-- Exact point-blind checkpoint: at critical displacement all prime readouts
 of the completed pair vanish, while the underlying completed precompression
