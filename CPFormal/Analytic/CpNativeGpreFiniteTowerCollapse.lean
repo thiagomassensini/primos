@@ -239,6 +239,16 @@ theorem inner_nativeGpreTowerProfileVector_finiteWeightedBoundaryTowerSourceAt
     (inner_nativeGpreTowerProfileVector_weightedBoundaryContextTowerSource
       (weight c) x c)
 
+/-- Zero weighting produces zero scalar readout on every finite fiber. -/
+@[simp] theorem nativeGpreFiniteWeightedBoundaryRealReadoutAt_zero
+    (p tau : ℕ)
+    (S : Finset NativeGpreBoundaryContext)
+    (x : NativeGpreComplexEdgeCore) :
+    nativeGpreFiniteWeightedBoundaryRealReadoutAt
+      p tau S (fun _ => 0) x = 0 := by
+  classical
+  simp [nativeGpreFiniteWeightedBoundaryRealReadoutAt]
+
 end
 
 end CPFormal.Analytic.Cp
