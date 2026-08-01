@@ -335,6 +335,9 @@ structure CarryStructuralPersistenceCertificate
           (fun n =>
             nativeCarryRealPlaneComplexPackaging
               (nativeCarryRealPlaneSampleAt sigma time n)) = 0
+  /-- Encoding identity for the aligned radius-one `C2` scanner. The
+  parameter `4` is its native period/width label; since `halfRange 4 = 1`,
+  this field does not identify `C2` with a four-leg geometric `C4`. -/
   aligned_c2_is_width_four :
     ∀ cutoff : ℕ, ∀ f : ℤ → ℂ,
       nativeCarryAlignedC2Chart cutoff f =

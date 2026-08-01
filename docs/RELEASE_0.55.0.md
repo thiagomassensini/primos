@@ -46,12 +46,15 @@ even b = 2a:
 ```
 
 The odd formula requires oddness, not primality, and therefore includes odd
-composite bases. The scanner label `C2` is aligned with the exact width-`4`
-geometry:
+composite bases. The scanner label `C2` is aligned with the native scanner
+whose width parameter is `4` and whose radius is still `1`:
 
 ```text
-C2 aligned = C4.
+C2 aligned = native parameter 4, halfRange 4 = 1.
 ```
+
+This is an implementation identity for the same one-leg-per-side scanner. It
+does not identify `C2` with a geometric `C4` having two legs on each side.
 
 ## Analytic natural cameras
 
@@ -77,7 +80,8 @@ The kernel-checked source proves that these factors do not vanish on the
 critical line in the required ranges. Consequently, for every natural camera
 `b >= 3`, its continued camera function and the shared genuine continuation
 have equivalent zero predicates on that line. The aligned `C2` statement
-follows through its exact identification with width `4`.
+follows through its exact identification with the parameter-`4`, radius-`1`
+scanner.
 
 This is camera- and primality-independence of the zero predicate under the
 proved factorization. It is not a proof that all zeros of the genuine
