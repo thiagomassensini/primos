@@ -3,23 +3,23 @@ import CPFormal.Analytic.CpNativeGpreTfvdAnalysis
 import CPFormal.Analytic.CpC2LogJetGpreLift
 
 /-!
-# Diagnostic probe: seeded TFVD reconstruction versus the radial Green closure
+# Seeded TFVD reconstruction checkpoint and exact radial gate
 
-This probe tests the native route suggested by the exact identities already in
-`main`:
+This module records the successful part of the diagnostic reconstruction route
+without leaving a deliberately failing theorem in the build.
 
-* the seeded Genuine TFVD readout tends to zero at a Genuine zero;
+At a Genuine zero:
+
+* the seeded TFVD Genuine readout tends to zero;
 * the weighted TFVD analysis has an exact continuous left inverse;
-* both the ordinary Dirichlet-gradient prefix and its log-jet prefix are
-  reconstructed without loss;
-* the moving endpoint tends to zero;
-* the seeded TFVD--Green identity separates the remaining radial observable
-  from the provenance defect.
+* the ordinary Dirichlet-gradient prefix is reconstructed without loss;
+* the log-jet prefix is reconstructed without loss;
+* the moving endpoint tends to zero.
 
-The intended conclusion is `SeededTfvdGreenRadialClosureAt`, hence vanishing of
-the coupled Green flux and finally mass compatibility.  No axiom, `sorry` or
-`admit` is used.  The deliberate diagnostic stop prints the exact goal that
-remains after all available reconstruction facts have been placed in context.
+The final theorem then identifies the remaining seeded radial closure exactly:
+it holds if and only if the real part of the parameter is `1 / 2`.  Thus the
+reconstruction machinery is certified and the residual gate is kept explicit,
+without an axiom, `sorry`, `admit`, or a renamed confinement hypothesis.
 -/
 
 open scoped BigOperators Topology lp ENNReal NNReal
@@ -74,58 +74,79 @@ theorem c2DirichletGradientPrefixEnrichedAnalysis_reconstruction
         (c2DirichletGradientPrefixCore s N))
 
 /--
-Direct test of the proposed final composition.
-
-After the exact identities are introduced, Lean is asked for the coupled Green
-flux limit.  A successful automatic composition would close the theorem.  On
-failure, `trace_state` records the remaining bridge without renaming it as an
-assumption.
+All pieces accepted by the diagnostic kernel run, now packaged as one green
+checkpoint.  The provenance atlas `S` remains arbitrary; no empty-atlas
+shortcut is used in the statement.
 -/
-theorem genuine_zero_tfvd_seeded_reconstruction_bridge_probe
-    (p : ℕ) (hp : Nat.Prime p)
+theorem genuine_zero_tfvd_seeded_reconstruction_checkpoint
     (q : ℝ) (hqpos : 0 < q) (hq1 : q < 1)
     (S : Finset NativeGpreBoundaryContext)
     {kappa : ℂ} (hkappa : kappa ≠ 0)
     (omega : ℕ → ℂ) (homega : ∀ m, omega m ≠ 0)
     {s : ℂ} (hs : s ∈ genuineCriticalStrip)
     (hzero : genuineContinuation s = 0) :
-    SeededTfvdGreenRadialClosureAt p kappa omega s := by
-  have hseededReadout :=
+    Tendsto
+        (fun M : ℕ ↦
+          finiteSeededEnrichedTfvdGenuineReadout M kappa omega
+            (canonicalSeededEnrichedTfvdGenuinePort kappa omega s))
+        atTop (nhds 0) ∧
+      nativeGpreFiniteTfvdReconstruction q hqpos.le hq1 S ∘L
+          nativeGpreFiniteTfvdAnalysis q S =
+        ContinuousLinearMap.id ℂ CarryVerticalL2 ∧
+      (∀ M : ℕ,
+        nativeGpreFiniteTfvdReconstruction q hqpos.le hq1 S
+            (c2DirichletGradientPrefixEnrichedAnalysis q S s (3 * M)) =
+          nativeGpreCanonicalVerticalRealization
+            (c2DirichletGradientPrefixCore s (3 * M))) ∧
+      (∀ M : ℕ,
+        nativeGpreFiniteTfvdReconstruction q hqpos.le hq1 S
+            (c2LogJetPrefixEnrichedAnalysis q S s (3 * M)) =
+          nativeGpreCanonicalVerticalRealization
+            (c2LogJetPrefixCore s (3 * M))) ∧
+      Tendsto
+        (fun M : ℕ ↦ finiteCanonicalSeededTfvdGreenMovingEndpoint M s)
+        atTop (nhds 0) := by
+  refine ⟨
     finiteSeededEnrichedTfvdGenuineReadout_tendsto_zero_of_genuine_zero
-      hs hzero hkappa omega homega
-
-  have htfvdOperatorIdentity :=
-    nativeGpreFiniteTfvdReconstruction_comp_analysis
-      q hqpos hq1 S
-
-  have hvalueReconstruction : ∀ M : ℕ,
-      nativeGpreFiniteTfvdReconstruction q hqpos.le hq1 S
-          (c2DirichletGradientPrefixEnrichedAnalysis q S s (3 * M)) =
-        nativeGpreCanonicalVerticalRealization
-          (c2DirichletGradientPrefixCore s (3 * M)) := by
-    intro M
+      hs hzero hkappa omega homega,
+    nativeGpreFiniteTfvdReconstruction_comp_analysis q hqpos hq1 S,
+    ?_, ?_,
+    finiteCanonicalSeededTfvdGreenMovingEndpoint_tendsto_zero_of_genuine_zero
+      hs hzero⟩
+  · intro M
     exact c2DirichletGradientPrefixEnrichedAnalysis_reconstruction
       q hqpos hq1 S s (3 * M)
-
-  have hlogJetReconstruction : ∀ M : ℕ,
-      nativeGpreFiniteTfvdReconstruction q hqpos.le hq1 S
-          (c2LogJetPrefixEnrichedAnalysis q S s (3 * M)) =
-        nativeGpreCanonicalVerticalRealization
-          (c2LogJetPrefixCore s (3 * M)) := by
-    intro M
+  · intro M
     exact c2LogJetPrefixEnrichedAnalysis_reconstruction
       q hqpos hq1 S s (3 * M)
 
-  have hendpoint :=
-    finiteCanonicalSeededTfvdGreenMovingEndpoint_tendsto_zero_of_genuine_zero
-      hs hzero
-
-  apply
-    (seededTfvdGreenRadialClosureAt_iff_coupledGreenFlux_tendsto_zero_of_genuine_zero
-      p hp hkappa omega homega hs hzero).2
-
-  trace_state
-  fail "diagnostic stop after exposing the TFVD reconstruction-to-radial bridge"
+/--
+Exact kernel-level status of the remaining radial gate.  Once all reconstructed
+pieces and the vanishing moving endpoint are retained, seeded radial closure is
+neither weaker nor stronger than the critical half-abscissa at a Genuine zero.
+-/
+theorem seededTfvdGreenRadialClosureAt_iff_re_eq_half_of_genuine_zero
+    (p : ℕ) (hp : Nat.Prime p)
+    {kappa : ℂ} (hkappa : kappa ≠ 0)
+    (omega : ℕ → ℂ) (homega : ∀ m, omega m ≠ 0)
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip)
+    (hzero : genuineContinuation s = 0) :
+    SeededTfvdGreenRadialClosureAt p kappa omega s ↔
+      s.re = (1 : ℝ) / 2 := by
+  rw [seededTfvdGreenRadialClosureAt_iff_coupledGreenFlux_tendsto_zero_of_genuine_zero
+    p hp hkappa omega homega hs hzero]
+  constructor
+  · intro hflux
+    have hcritical :=
+      criticalDisplacement_eq_zero_of_alignedGenuineGreenFlux_tendsto_zero
+        p hp hs hzero hflux
+    unfold criticalDisplacement at hcritical
+    linarith
+  · intro hre
+    apply alignedGenuineGreenFlux_tendsto_zero_of_criticalDisplacement
+      p hp hs hzero
+    unfold criticalDisplacement
+    linarith
 
 end
 
