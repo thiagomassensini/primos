@@ -16,10 +16,13 @@ At a Genuine zero:
 * the log-jet prefix is reconstructed without loss;
 * the moving endpoint tends to zero.
 
-The final theorem then identifies the remaining seeded radial closure exactly:
-it holds if and only if the real part of the parameter is `1 / 2`.  Thus the
-reconstruction machinery is certified and the residual gate is kept explicit,
-without an axiom, `sorry`, `admit`, or a renamed confinement hypothesis.
+The finite ledger is then simplified before taking any limit: the moving
+endpoint cancels the aligned bracket boundary exactly, so the seeded radial
+observable is the pure radial coefficient times the positive reflected pairing.
+Consequently its closure is equivalent to the critical half-abscissa throughout
+the Genuine strip, independently of a zero hypothesis.
+
+No axiom, `sorry`, `admit`, or renamed confinement hypothesis is used.
 -/
 
 open scoped BigOperators Topology lp ENNReal NNReal
@@ -121,32 +124,116 @@ theorem genuine_zero_tfvd_seeded_reconstruction_checkpoint
       q hqpos hq1 S s (3 * M)
 
 /--
-Exact kernel-level status of the remaining radial gate.  Once all reconstructed
-pieces and the vanishing moving endpoint are retained, seeded radial closure is
-neither weaker nor stronger than the critical half-abscissa at a Genuine zero.
+Exact finite cancellation of the return endpoint against the aligned bracket
+boundary.  The seeded TFVD observable is therefore the pure radial Green bulk,
+with no zero or limiting hypothesis.
 -/
+theorem
+    finiteCanonicalSeededTfvdGreenRadialClosureObservable_eq_radialDifference_mul_pairing
+    (p : ℕ) (hp : Nat.Prime p)
+    (M : ℕ) {kappa : ℂ} (hkappa : kappa ≠ 0)
+    (omega : ℕ → ℂ) (homega : ∀ m, omega m ≠ 0)
+    (s : ℂ) :
+    finiteCanonicalSeededTfvdGreenRadialClosureObservable
+        p M kappa omega s =
+      cpRadialDifference p (criticalDisplacement s.re) *
+        (finiteReflectedGradientPairing (3 * M) s).re := by
+  rw [
+    finiteCanonicalSeededTfvdGreenRadialClosureObservable_eq_flux_add_endpoint
+      p hp M hkappa omega homega s,
+    finiteCanonicalAngularBracketCoupledGenuineGreenFlux_eq_radialDifference_mul_pairing
+      p M hp s,
+    finiteCanonicalSeededTfvdGreenMovingEndpoint_eq_neg_boundary]
+  unfold finiteCanonicalAngularBracketCoupledSignedBoundary
+  simp only [Complex.neg_re]
+  ring
+
+/--
+The radial closure gate itself is exactly the vanishing of the transverse carry
+coefficient.  Positivity and monotonicity of the reflected pairing prevent a
+nonzero constant radial coefficient from converging to zero.
+-/
+theorem seededTfvdGreenRadialClosureAt_iff_criticalDisplacement_eq_zero
+    (p : ℕ) (hp : Nat.Prime p)
+    {kappa : ℂ} (hkappa : kappa ≠ 0)
+    (omega : ℕ → ℂ) (homega : ∀ m, omega m ≠ 0)
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
+    SeededTfvdGreenRadialClosureAt p kappa omega s ↔
+      criticalDisplacement s.re = 0 := by
+  constructor
+  · intro hclosure
+    unfold SeededTfvdGreenRadialClosureAt at hclosure
+    let c : ℝ := cpRadialDifference p (criticalDisplacement s.re)
+    let pairingRe : ℕ → ℝ :=
+      fun M ↦ (finiteReflectedGradientPairing (3 * M) s).re
+    have hfun :
+        (fun M : ℕ ↦
+          finiteCanonicalSeededTfvdGreenRadialClosureObservable
+            p M kappa omega s) =
+          (fun M : ℕ ↦ c * pairingRe M) := by
+      funext M
+      dsimp [c, pairingRe]
+      exact
+        finiteCanonicalSeededTfvdGreenRadialClosureObservable_eq_radialDifference_mul_pairing
+          p hp M hkappa omega homega s
+    rw [hfun] at hclosure
+    have hpositive : 0 < pairingRe 1 := by
+      dsimp [pairingRe]
+      exact finiteReflectedGradientPairing_re_pos (by norm_num) hs
+    have hmonotone := finiteReflectedGradientPairing_re_monotone hs
+    have hbound : ∀ᶠ M in atTop, pairingRe 1 ≤ pairingRe M :=
+      eventually_atTop.2 ⟨1, fun M hM ↦ hmonotone (by omega)⟩
+    have hc : c = 0 :=
+      constant_eq_zero_of_tendsto_mul_of_eventually_pos_lower_bound
+        hpositive hbound hclosure
+    dsimp [c] at hc
+    exact
+      (cpRadialDifference_eq_zero_iff
+        p hp (criticalDisplacement s.re)).1 hc
+  · intro hcritical
+    unfold SeededTfvdGreenRadialClosureAt
+    have hradial :
+        cpRadialDifference p (criticalDisplacement s.re) = 0 :=
+      (cpRadialDifference_eq_zero_iff
+        p hp (criticalDisplacement s.re)).2 hcritical
+    have hfun :
+        (fun M : ℕ ↦
+          finiteCanonicalSeededTfvdGreenRadialClosureObservable
+            p M kappa omega s) =
+          (fun _ : ℕ ↦ (0 : ℝ)) := by
+      funext M
+      rw [
+        finiteCanonicalSeededTfvdGreenRadialClosureObservable_eq_radialDifference_mul_pairing
+          p hp M hkappa omega homega s,
+        hradial,
+        zero_mul]
+    rw [hfun]
+    exact tendsto_const_nhds
+
+/-- The same exact gate in the original radial coordinate. -/
+theorem seededTfvdGreenRadialClosureAt_iff_re_eq_half
+    (p : ℕ) (hp : Nat.Prime p)
+    {kappa : ℂ} (hkappa : kappa ≠ 0)
+    (omega : ℕ → ℂ) (homega : ∀ m, omega m ≠ 0)
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
+    SeededTfvdGreenRadialClosureAt p kappa omega s ↔
+      s.re = (1 : ℝ) / 2 := by
+  rw [seededTfvdGreenRadialClosureAt_iff_criticalDisplacement_eq_zero
+    p hp hkappa omega homega hs]
+  unfold criticalDisplacement
+  constructor <;> intro h <;> linarith
+
+/-- Corollary retaining the Genuine-zero context used by the diagnostic route. -/
 theorem seededTfvdGreenRadialClosureAt_iff_re_eq_half_of_genuine_zero
     (p : ℕ) (hp : Nat.Prime p)
     {kappa : ℂ} (hkappa : kappa ≠ 0)
     (omega : ℕ → ℂ) (homega : ∀ m, omega m ≠ 0)
     {s : ℂ} (hs : s ∈ genuineCriticalStrip)
-    (hzero : genuineContinuation s = 0) :
+    (_hzero : genuineContinuation s = 0) :
     SeededTfvdGreenRadialClosureAt p kappa omega s ↔
-      s.re = (1 : ℝ) / 2 := by
-  rw [seededTfvdGreenRadialClosureAt_iff_coupledGreenFlux_tendsto_zero_of_genuine_zero
-    p hp hkappa omega homega hs hzero]
-  constructor
-  · intro hflux
-    have hcritical :=
-      criticalDisplacement_eq_zero_of_alignedGenuineGreenFlux_tendsto_zero
-        p hp hs hzero hflux
-    unfold criticalDisplacement at hcritical
-    linarith
-  · intro hre
-    apply alignedGenuineGreenFlux_tendsto_zero_of_criticalDisplacement
-      p hp hs hzero
-    unfold criticalDisplacement
-    linarith
+      s.re = (1 : ℝ) / 2 :=
+  seededTfvdGreenRadialClosureAt_iff_re_eq_half
+    p hp hkappa omega homega hs
 
 end
 
