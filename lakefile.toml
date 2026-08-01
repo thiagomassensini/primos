@@ -5,7 +5,8 @@ defaultTargets = [
   "CPFormal.Analytic.CpTfvdSeededReconstructionBridgeProbe",
   "CPFormal.Analytic.CpTfvdSeededFiniteBesselConservation",
   "CPFormal.Analytic.CpTfvdSeededNativeMomentContraction",
-  "CPFormal.Analytic.CpNativeGpreFiniteTowerCollapse"
+  "CPFormal.Analytic.CpNativeGpreFiniteTowerCollapse",
+  "CPFormal.Analytic.CpNativeGpreTfvdCommutatorTowerSource"
 ]
 
 [[lean_lib]]
