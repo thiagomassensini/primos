@@ -40,6 +40,10 @@ import CPFormal.Analytic.CpBracketConvergence
 import CPFormal.Analytic.CpBracketHolomorphic
 import CPFormal.Analytic.CpGenuineQuotient
 import CPFormal.Analytic.CpGenuineCompatibility
+import CPFormal.Analytic.CpPairedGenuineBridge
+import CPFormal.Analytic.CpPairedGenuineBridgeAnalytic
+import CPFormal.Analytic.CpPairedGenuineBridgeIdentity
+import CPFormal.Analytic.CpPairedGenuineBridgeTarget
 import CPFormal.Analytic.CpGenuineRiemannZetaIdentification
 import CPFormal.Analytic.CpFiniteGreen
 import CPFormal.Analytic.CpReflectedEndpoint
