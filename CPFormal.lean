@@ -201,6 +201,7 @@ import CPFormal.Analytic.CpConformalJacobian
 import CPFormal.Analytic.CpConformalBranchScale
 import CPFormal.Analytic.CpRadialCoercivity
 import CPFormal.Analytic.CpReflectedGreenBridge
+import CPFormal.Analytic.CpGenuineConfinementBridge
 import CPFormal.Analytic.CpGenuineCarryTiltFrontier
 import CPFormal.Analytic.CpTfvdSeededReconstructionBridgeProbe
 import CPFormal.Analytic.CpTfvdSeededFiniteBesselConservation
