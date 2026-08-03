@@ -1,4 +1,4 @@
-import Mathlib
+import Mathlib.Tactic
 import CPFormal.Analytic.CpFiniteGreenRadial
 import CPFormal.Analytic.CpFiniteGreenPositivity
 import CPFormal.Analytic.CpRadialCoercivity
@@ -89,6 +89,64 @@ theorem finiteReflectedGradientPairing_ne_zero
   have hpos := finiteReflectedGradientPairing_re_pos hM hs
   rw [h] at hpos
   simp at hpos
+
+/-- **Coercividade quantitativa do detector Green.** No strip e em qualquer
+corte refletido não vazio, a norma do fluxo domina linearmente o deslocamento
+crítico.  A constante explícita é `2 * log p`, ponderada pela energia refletida
+positiva. A estimativa é pontual: não afirma uma constante inferior uniforme
+em `s` ou em `M`, pois o peso de energia depende de ambos. -/
+theorem finitePhaseNormalizedCpGreenFlux_norm_ge_radialDefect
+    (p M : ℕ) (hp : Nat.Prime p) (hM : 0 < M)
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
+    2 * |criticalDisplacement s.re| * Real.log p *
+        (finiteReflectedGradientPairing M s).re ≤
+      ‖finitePhaseNormalizedCpGreenFlux p M s‖ := by
+  have hradial :=
+    abs_cpRadialDifference_ge p hp (criticalDisplacement s.re)
+  have hpairPos := finiteReflectedGradientPairing_re_pos hM hs
+  have hpairNorm :
+      (finiteReflectedGradientPairing M s).re ≤
+        ‖finiteReflectedGradientPairing M s‖ :=
+    Complex.re_le_norm _
+  have hcoefficientNorm :
+      ‖((p : ℝ) ^ (-criticalDisplacement s.re) -
+          (p : ℝ) ^ criticalDisplacement s.re : ℂ)‖ =
+        |cpRadialDifference p (criticalDisplacement s.re)| := by
+    rw [Complex.norm_real, Real.norm_eq_abs]
+    simpa [cpRadialDifference] using
+      (abs_sub_comm
+        ((p : ℝ) ^ (-criticalDisplacement s.re))
+        ((p : ℝ) ^ criticalDisplacement s.re))
+  calc
+    2 * |criticalDisplacement s.re| * Real.log p *
+          (finiteReflectedGradientPairing M s).re ≤
+        |cpRadialDifference p (criticalDisplacement s.re)| *
+          (finiteReflectedGradientPairing M s).re :=
+      mul_le_mul_of_nonneg_right hradial hpairPos.le
+    _ ≤ |cpRadialDifference p (criticalDisplacement s.re)| *
+          ‖finiteReflectedGradientPairing M s‖ :=
+      mul_le_mul_of_nonneg_left hpairNorm (abs_nonneg _)
+    _ = ‖finitePhaseNormalizedCpGreenFlux p M s‖ := by
+      rw [finitePhaseNormalizedCpGreenFlux_eq_radialDifference_mul_pairing
+        p M hp s, norm_mul, hcoefficientNorm]
+
+/-- **Detector radial exato.** Em qualquer corte refletido não vazio do strip,
+o fluxo de bulk Green normalizado zera exatamente na meia-abscissa.  A direção
+difícil usa a energia refletida estritamente positiva; a recíproca é a
+substituição direta do deslocamento crítico nulo na fatoração radial. -/
+theorem finitePhaseNormalizedCpGreenFlux_eq_zero_iff_re_eq_half
+    (p M : ℕ) (hp : Nat.Prime p) (hM : 0 < M)
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
+    finitePhaseNormalizedCpGreenFlux p M s = 0 ↔
+      s.re = (1 : ℝ) / 2 := by
+  constructor
+  · intro hflux
+    exact re_eq_half_of_flux_zero_of_pairing_ne p hp hflux
+      (finiteReflectedGradientPairing_ne_zero hM hs)
+  · intro hre
+    rw [finitePhaseNormalizedCpGreenFlux_eq_radialDifference_mul_pairing
+      p M hp s]
+    simp [criticalDisplacement, hre]
 
 /-- A única obrigação restante nesta rota, isolada como predicado: o fluxo de
 bulk Green refletido se anula em todo zero Genuine no strip.  Isto é mais forte
