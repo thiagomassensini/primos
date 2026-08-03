@@ -16,6 +16,7 @@ import CPFormal.Carry.CpWeightedReindex
 import CPFormal.Carry.CpAlignedBox
 import CPFormal.Carry.CpBranchWeight
 import CPFormal.Carry.CpMultibaseCameraAtlas
+import CPFormal.Carry.CpMultibaseCameraAtlasHilbert
 import CPFormal.Genuine.BalancedOffsets
 import CPFormal.Genuine.FiniteCancellation
 import CPFormal.Genuine.C2
