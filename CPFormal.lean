@@ -47,6 +47,7 @@ import CPFormal.Analytic.CpPairedGenuineBridgeAnalytic
 import CPFormal.Analytic.CpPairedGenuineBridgeIdentity
 import CPFormal.Analytic.CpPairedGenuineBridgeTarget
 import CPFormal.Analytic.CpPairedBookCoercivity
+import CPFormal.Analytic.CpGenuineFirstTermDominanceRegion
 import CPFormal.Analytic.CpGenuineRiemannZetaIdentification
 import CPFormal.Analytic.CpFiniteGreen
 import CPFormal.Analytic.CpReflectedEndpoint
