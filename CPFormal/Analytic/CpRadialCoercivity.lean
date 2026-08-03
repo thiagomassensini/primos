@@ -1,4 +1,4 @@
-import Mathlib
+import Mathlib.Tactic
 import CPFormal.Analytic.CpFiniteGreenRadial
 
 /-!
