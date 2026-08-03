@@ -50,6 +50,8 @@ import CPFormal.Analytic.CpPairedBookCoercivity
 import CPFormal.Analytic.CpGenuineFirstTermDominanceRegion
 import CPFormal.Analytic.CpGenuineFirstTermDominanceNonempty
 import CPFormal.Analytic.CpGenuineOffCriticalWitnessCapstone
+import CPFormal.Analytic.CpGenuineOffCriticalInterval
+import CPFormal.Analytic.CpGenuineCompletedOperatorWitness
 import CPFormal.Analytic.CpGenuineRiemannZetaIdentification
 import CPFormal.Analytic.CpFiniteGreen
 import CPFormal.Analytic.CpReflectedEndpoint
