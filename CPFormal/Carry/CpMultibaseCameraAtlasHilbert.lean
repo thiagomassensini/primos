@@ -152,12 +152,12 @@ theorem eq_zero_of_logEval_eq_zero_of_nonnegative_prime_support
   have htermPos : 0 < x q * Real.log q := mul_pos hxqPos hlogqPos
   have hsingle :
       x q * Real.log q ≤ ∑ r ∈ x.support, x r * Real.log r := by
-    apply Finset.single_le_sum
-    · intro r hr
-      have hrPrime := hxPrime r hr
-      exact mul_nonneg (hxNonneg r)
-        (Real.log_pos (Nat.one_lt_cast.mpr hrPrime.one_lt)).le
-    · exact hqmem
+    refine Finset.single_le_sum
+      (s := x.support) (f := fun r => x r * Real.log r) (a := q) ?_ hqmem
+    intro r hr
+    have hrPrime := hxPrime r hr
+    exact mul_nonneg (hxNonneg r)
+      (Real.log_pos (Nat.one_lt_cast.mpr hrPrime.one_lt)).le
   rw [hsum] at hsingle
   exact (not_lt_of_ge hsingle) htermPos
 

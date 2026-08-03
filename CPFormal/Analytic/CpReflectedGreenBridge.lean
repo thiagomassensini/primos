@@ -109,8 +109,8 @@ theorem finitePhaseNormalizedCpGreenFlux_norm_ge_radialDefect
         ‖finiteReflectedGradientPairing M s‖ :=
     Complex.re_le_norm _
   have hcoefficientNorm :
-      ‖((p : ℝ) ^ (-criticalDisplacement s.re) -
-          (p : ℝ) ^ criticalDisplacement s.re : ℂ)‖ =
+      ‖(((p : ℝ) ^ (-criticalDisplacement s.re) -
+          (p : ℝ) ^ criticalDisplacement s.re : ℝ) : ℂ)‖ =
         |cpRadialDifference p (criticalDisplacement s.re)| := by
     rw [Complex.norm_real, Real.norm_eq_abs]
     simpa [cpRadialDifference] using
