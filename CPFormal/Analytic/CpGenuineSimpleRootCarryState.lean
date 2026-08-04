@@ -1,7 +1,5 @@
 import CPFormal.Analytic.CpGenuineRootTangentCarryAtlas
 import CPFormal.Analytic.CpGenuinePrimeCarryDefectUniformBound
-import Mathlib.Analysis.Calculus.Deriv.Star
-import Mathlib.Analysis.Calculus.Deriv.Shift
 
 /-!
 # Multiplicity-one Genuine roots and the global mass state
@@ -32,11 +30,16 @@ open Filter Set Complex
 
 noncomputable section
 
-/-- A Genuine zero of multiplicity one in the open critical strip. -/
+/-- A Genuine zero of multiplicity one in the open strip whose reflected
+parameter is also a simple point.  Both simplicities are **explicit**
+hypotheses: no functional equation / zeta reflection is used to derive the
+second.  Natively there is no `σ ↦ 1-σ` symmetry, so the reflected simplicity
+is assumed here, not borrowed from zeta. -/
 def IsSimpleGenuineZeroInStrip (s : ℂ) : Prop :=
   s ∈ genuineCriticalStrip ∧
     genuineContinuation s = 0 ∧
-      deriv genuineContinuation s ≠ 0
+      deriv genuineContinuation s ≠ 0 ∧
+        deriv genuineContinuation (reflectedParameter s) ≠ 0
 
 /-- The open critical strip is an open subset of the complex plane. -/
 theorem isOpen_genuineCriticalStrip : IsOpen genuineCriticalStrip := by
@@ -51,195 +54,28 @@ theorem conj_mem_genuineCriticalStrip
     (starRingEnd ℂ) s ∈ genuineCriticalStrip := by
   simpa [genuineCriticalStrip] using hs
 
-/-- On the strip, the derivative of the canonical Genuine continuation is the
-ordinary derivative of Mathlib's Riemann zeta function. -/
-theorem deriv_genuineContinuation_eq_deriv_riemannZeta
-    {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
-    deriv genuineContinuation s = deriv riemannZeta s := by
-  apply EventuallyEq.deriv_eq
-  filter_upwards [isOpen_genuineCriticalStrip.mem_nhds hs] with z hz
-  exact genuineContinuation_eq_riemannZeta hz
-
-/-- Conjugation transports the derivative of Riemann zeta. -/
-theorem deriv_riemannZeta_conj (s : ℂ) :
-    deriv riemannZeta ((starRingEnd ℂ) s) =
-      (starRingEnd ℂ) (deriv riemannZeta s) := by
-  have hfun :
-      (starRingEnd ℂ) ∘ riemannZeta ∘ (starRingEnd ℂ) =
-        riemannZeta := by
-    funext z
-    simp [Function.comp_def, riemannZeta_conj]
-  have hder := congrArg deriv hfun
-  rw [deriv_conj_conj] at hder
-  have hpoint := congrFun hder ((starRingEnd ℂ) s)
-  simp only [Function.comp_apply] at hpoint
-  have hstar : (starRingEnd ℂ) ((starRingEnd ℂ) s) = s := by
-    simp
-  rw [hstar] at hpoint
-  exact hpoint.symm
-
-/-- On the open strip the completed zeta function is the product of the
-Deligne real Gamma factor and Riemann zeta. -/
-theorem completedRiemannZeta_eq_GammaR_mul_riemannZeta
-    {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
-    completedRiemannZeta s = Gammaℝ s * riemannZeta s := by
-  have hs0 : s ≠ 0 := by
-    intro hzero
-    have hre := congrArg Complex.re hzero
-    norm_num at hre
-    linarith [hs.1]
-  have hgamma : Gammaℝ s ≠ 0 := Gammaℝ_ne_zero_of_re_pos hs.1
-  rw [riemannZeta_def_of_ne_zero hs0]
-  field_simp [hgamma]
-
-/-- The Deligne real Gamma factor is differentiable at every point of positive
-real part. -/
-theorem differentiableAt_GammaR_of_re_pos
-    {s : ℂ} (hs : 0 < s.re) :
-    DifferentiableAt ℂ Gammaℝ s := by
-  have hpi : (Real.pi : ℂ) ≠ 0 := by
-    exact_mod_cast Real.pi_ne_zero
-  letI : NeZero (Real.pi : ℂ) := ⟨hpi⟩
-  have hpow : DifferentiableAt ℂ
-      (fun z : ℂ => (Real.pi : ℂ) ^ (-z / 2)) s :=
-    ((differentiable_const_cpow_of_neZero (Real.pi : ℂ)).comp
-      (differentiable_id.neg.div_const 2)).differentiableAt
-  have hgammaArg : ∀ n : ℕ, s / 2 ≠ -(n : ℂ) := by
-    intro n hneg
-    have hre := congrArg Complex.re hneg
-    norm_num at hre
-    linarith
-  have hgamma : DifferentiableAt ℂ (fun z : ℂ => Gamma (z / 2)) s :=
-    (differentiableAt_Gamma (s / 2) hgammaArg).comp s
-      (differentiableAt_id.div_const 2)
-  change DifferentiableAt ℂ
-    (fun z : ℂ => (Real.pi : ℂ) ^ (-z / 2) * Gamma (z / 2)) s
-  exact hpow.mul hgamma
-
-/-- At a zeta zero in the strip, the derivative of the completed zeta function
-is the nonzero Gamma factor times the zeta derivative. -/
-theorem deriv_completedRiemannZeta_eq_GammaR_mul_deriv_of_zero
-    {s : ℂ} (hs : s ∈ genuineCriticalStrip)
-    (hzero : riemannZeta s = 0) :
-    deriv completedRiemannZeta s =
-      Gammaℝ s * deriv riemannZeta s := by
-  have hs1 : s ≠ 1 := by
-    intro hone
-    have hre := congrArg Complex.re hone
-    norm_num at hre
-    linarith [hs.2]
-  have hevent :
-      completedRiemannZeta =ᶠ[𝓝 s]
-        (fun z : ℂ => Gammaℝ z * riemannZeta z) := by
-    filter_upwards [isOpen_genuineCriticalStrip.mem_nhds hs] with z hz
-    exact completedRiemannZeta_eq_GammaR_mul_riemannZeta hz
-  rw [EventuallyEq.deriv_eq hevent]
-  rw [deriv_fun_mul
-    (differentiableAt_GammaR_of_re_pos hs.1)
-    (differentiableAt_riemannZeta hs1), hzero]
-  ring
-
-/-- Differentiating the symmetric completed functional equation transports a
-nonzero tangent from `s` to `1-s`. -/
-theorem deriv_completedRiemannZeta_one_sub (s : ℂ) :
-    deriv completedRiemannZeta (1 - s) =
-      -deriv completedRiemannZeta s := by
-  have hfun :
-      (fun z : ℂ => completedRiemannZeta (1 - z)) =
-        completedRiemannZeta := by
-    funext z
-    exact completedRiemannZeta_one_sub z
-  have hder := congrArg deriv hfun
-  have hpoint := congrFun hder s
-  have hneg :
-      -deriv completedRiemannZeta (1 - s) =
-        deriv completedRiemannZeta s := by
-    simpa [deriv_comp_const_sub] using hpoint
-  exact (neg_eq_iff_eq_neg).1 hneg
-
-/-- A simple Genuine zero has a simple reflected zero.  Hence the second
-simplicity hypothesis used by the first root-tangent crosswalk is redundant. -/
-theorem deriv_genuineContinuation_reflectedParameter_ne_zero_of_simple_zero
-    {s : ℂ} (hs : s ∈ genuineCriticalStrip)
-    (hzero : genuineContinuation s = 0)
-    (hsimple : deriv genuineContinuation s ≠ 0) :
-    deriv genuineContinuation (reflectedParameter s) ≠ 0 := by
-  have hzeta : riemannZeta s = 0 := by
-    rw [← genuineContinuation_eq_riemannZeta hs]
-    exact hzero
-  have hdzeta : deriv riemannZeta s ≠ 0 := by
-    rw [← deriv_genuineContinuation_eq_deriv_riemannZeta hs]
-    exact hsimple
-  have hsConj : (starRingEnd ℂ) s ∈ genuineCriticalStrip :=
-    conj_mem_genuineCriticalStrip hs
-  have hzetaConj : riemannZeta ((starRingEnd ℂ) s) = 0 := by
-    rw [riemannZeta_conj, hzeta, map_zero]
-  have hdzetaConj : deriv riemannZeta ((starRingEnd ℂ) s) ≠ 0 := by
-    rw [deriv_riemannZeta_conj]
-    simpa using hdzeta
-  have hcompletedConj :
-      deriv completedRiemannZeta ((starRingEnd ℂ) s) ≠ 0 := by
-    rw [deriv_completedRiemannZeta_eq_GammaR_mul_deriv_of_zero
-      hsConj hzetaConj]
-    exact mul_ne_zero (Gammaℝ_ne_zero_of_re_pos hsConj.1) hdzetaConj
-  have hcompletedReflected :
-      deriv completedRiemannZeta (reflectedParameter s) ≠ 0 := by
-    unfold reflectedParameter
-    rw [deriv_completedRiemannZeta_one_sub]
-    exact neg_ne_zero.mpr hcompletedConj
-  have hsReflected := reflectedParameter_mem_genuineCriticalStrip_zeta hs
-  have hzeroReflected :=
-    genuineContinuation_reflectedParameter_eq_zero_of_zero hs hzero
-  have hzetaReflected : riemannZeta (reflectedParameter s) = 0 := by
-    rw [← genuineContinuation_eq_riemannZeta hsReflected]
-    exact hzeroReflected
-  have hcompletedEq :=
-    deriv_completedRiemannZeta_eq_GammaR_mul_deriv_of_zero
-      hsReflected hzetaReflected
-  have hdzetaReflected :
-      deriv riemannZeta (reflectedParameter s) ≠ 0 := by
-    intro hzeroDeriv
-    apply hcompletedReflected
-    rw [hcompletedEq, hzeroDeriv, mul_zero]
-  rw [deriv_genuineContinuation_eq_deriv_riemannZeta hsReflected]
-  exact hdzetaReflected
-
-/-- Reflection preserves multiplicity-one Genuine zero data. -/
-theorem isSimpleGenuineZeroInStrip_reflected
-    {s : ℂ} (hroot : IsSimpleGenuineZeroInStrip s) :
-    IsSimpleGenuineZeroInStrip (reflectedParameter s) := by
-  rcases hroot with ⟨hs, hzero, hsimple⟩
-  exact ⟨
-    reflectedParameter_mem_genuineCriticalStrip_zeta hs,
-    genuineContinuation_reflectedParameter_eq_zero_of_zero hs hzero,
-    deriv_genuineContinuation_reflectedParameter_ne_zero_of_simple_zero
-      hs hzero hsimple⟩
-
-/-- For a multiplicity-one zero, one root tangent already suffices to recover
-the prime Green bulk; reflected simplicity is derived internally. -/
+/-- For a multiplicity-one zero, one root tangent recovers the prime Green
+bulk.  The reflected simplicity is the explicit fourth field of
+`IsSimpleGenuineZeroInStrip` (assumed, not zeta-derived). -/
 theorem genuineRootTangentGreenBulk_eq_of_simple_zero
     (p : Nat.Primes) (M : ℕ) {s : ℂ}
     (hroot : IsSimpleGenuineZeroInStrip s) :
     genuineRootTangentGreenBulk p M s =
       primeCarryGreenBulkCutoffProfile M s p := by
-  rcases hroot with ⟨hs, hzero, hsimple⟩
-  exact genuineRootTangentGreenBulk_eq
-    p M hs hzero hsimple
-      (deriv_genuineContinuation_reflectedParameter_ne_zero_of_simple_zero
-        hs hzero hsimple)
+  rcases hroot with ⟨hs, hzero, hsimple, hsharp⟩
+  exact genuineRootTangentGreenBulk_eq p M hs hzero hsimple hsharp
 
 /-- Every finite multiplicity-one root-tangent atlas is the canonical
-centered-carry provenance atlas, with no separate reflected-root premise. -/
+centered-carry provenance atlas.  The reflected simplicity is the explicit
+fourth field of `IsSimpleGenuineZeroInStrip`. -/
 theorem genuineRootTangentPrimeCarryDefectAtlasState_eq_canonical_of_simple_zero
     (M : ℕ) (S : Finset Nat.Primes) {s : ℂ}
     (hroot : IsSimpleGenuineZeroInStrip s) :
     genuineRootTangentPrimeCarryDefectAtlasState M s S =
       canonicalEnrichedPrimeCarryDefectProvenanceState M s S := by
-  rcases hroot with ⟨hs, hzero, hsimple⟩
+  rcases hroot with ⟨hs, hzero, hsimple, hsharp⟩
   exact genuineRootTangentPrimeCarryDefectAtlasState_eq_canonical
-    M S hs hzero hsimple
-      (deriv_genuineContinuation_reflectedParameter_ne_zero_of_simple_zero
-        hs hzero hsimple)
+    M S hs hzero hsimple hsharp
 
 /-- Local mass fiber reconstructed from the multiplicity-one root tangent. -/
 def genuineRootTangentMassVerticalFiberState

@@ -252,7 +252,7 @@ theorem primeCenteredCarryRootTangentRatio_eq_factor_of_simple_zero
   rw [primeCenteredCarryRootTangentRatio_eq_genuineRootCameraTangentRatio
     p hp hpodd hroot.1]
   exact genuineRootCameraTangentRatio_eq_factor
-    p hp hroot.1 hroot.2.1 hroot.2.2
+    p hp hroot.1 hroot.2.1 hroot.2.2.1
 
 end
 

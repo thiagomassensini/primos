@@ -129,9 +129,7 @@ theorem criticalDisplacement_eq_zero_of_simpleRoot_positiveBoxLedgerCrosswalk
     genuineRootTangentAtlasStatesBounded_of_positiveBoxLedgerCrosswalk hcross
   exact
     (genuineRootTangentPrimeCarryDefectAtlasStatesBounded_iff
-      1 (by norm_num) hroot.1 hroot.2.1 hroot.2.2
-      (deriv_genuineContinuation_reflectedParameter_ne_zero_of_simple_zero
-        hroot.1 hroot.2.1 hroot.2.2)).1 hbounded
+      1 (by norm_num) hroot.1 hroot.2.1 hroot.2.2.1 hroot.2.2.2).1 hbounded
 
 /-- The ledger crosswalk places the global mass state of a simple root in the
 simultaneous primewise vertical-trace domain. -/
