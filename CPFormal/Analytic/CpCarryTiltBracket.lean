@@ -177,6 +177,44 @@ theorem carryTiltBracket_criticalDisplacement_ne_zero_of_ne_half
   rw [Ne, carryTiltBracket_criticalDisplacement_eq_zero_iff hsigma hc]
   exact hhalf
 
+/-- **Confinamento por curvatura de dois lados — sem simetria.**  Para `c > 1`
+e `σ > -1/2`, a curvatura do peso de carry cumpre a tricotomia
+
+* `σ < 1/2` ⟹ curvatura `< 0` (peso estritamente côncavo);
+* `σ = 1/2` ⟹ curvatura `= 0`;
+* `1/2 < σ` ⟹ curvatura `> 0` (peso estritamente convexo).
+
+O único expoente com curvatura nula é `1/2`.  A exclusão vale nos **dois lados**
+por igual — não por uma simetria `σ ↦ 1-σ`, mas porque o peso curva
+definidamente para um lado abaixo da linha e para o outro acima.  Confinamento é
+uma positividade de curvatura, não uma reflexão. -/
+theorem carryTiltBracket_criticalDisplacement_confines
+    {sigma c : ℝ} (hsigma0 : -(1 : ℝ) / 2 < sigma) (hc : 1 < c) :
+    (sigma < (1 : ℝ) / 2 → carryTiltBracket (criticalDisplacement sigma) c < 0) ∧
+      (sigma = (1 : ℝ) / 2 →
+        carryTiltBracket (criticalDisplacement sigma) c = 0) ∧
+      ((1 : ℝ) / 2 < sigma →
+        0 < carryTiltBracket (criticalDisplacement sigma) c) := by
+  refine
+    ⟨fun h => carryTiltBracket_criticalDisplacement_neg_of_lt_half hsigma0 h hc,
+      fun h => ?_,
+      fun h => carryTiltBracket_criticalDisplacement_pos_of_half_lt h hc⟩
+  have hzero : criticalDisplacement sigma = 0 := by
+    unfold criticalDisplacement; rw [h]; norm_num
+  rw [hzero, carryTiltBracket_zero]
+
+/-- Corolário do confinamento de dois lados: fora da linha crítica a curvatura é
+não nula, seja qual for o lado (`σ > -1/2`, `c > 1`). -/
+theorem carryTiltBracket_criticalDisplacement_ne_zero_of_ne_half'
+    {sigma c : ℝ} (hsigma0 : -(1 : ℝ) / 2 < sigma) (hc : 1 < c)
+    (hhalf : sigma ≠ (1 : ℝ) / 2) :
+    carryTiltBracket (criticalDisplacement sigma) c ≠ 0 := by
+  obtain ⟨hneg, _, hpos⟩ := carryTiltBracket_criticalDisplacement_confines hsigma0 hc
+  rcases lt_or_gt_of_ne hhalf with h | h
+  · exact ne_of_lt (hneg h)
+  · exact ne_of_gt (hpos h)
+
 end
+
 
 end CPFormal.Analytic.Cp
