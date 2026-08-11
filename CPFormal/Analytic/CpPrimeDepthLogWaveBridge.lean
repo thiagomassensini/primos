@@ -48,7 +48,7 @@ theorem primeDepthLogCoordinate_eq_log
 /-- The same coordinate written completely atomically: one von Mangoldt atom
 for every positive level reached in every active prime camera. -/
 theorem primeDepthLogCoordinate_eq_atomicPrimeCameraLedger
-    {n : ℕ} (hn : n ≠ 0) :
+    (n : ℕ) :
     primeDepthLogCoordinate n =
       ∑ p ∈ n.primeFactors,
         ∑ j ∈ Finset.range (CPFormal.Carry.Positional.positionalDepth p n),
@@ -70,16 +70,25 @@ theorem nativeCarryLogWave_primeDepthLogCoordinate_eq_dirichletTerm
   exact nativeCarryLogWave_log_nat_eq_dirichletTerm z n hn
 
 /-- Fully expanded version of the previous theorem: the argument of the native
-wave is literally the all-prime-camera atomic ledger. -/
+wave is literally the all-prime-camera atomic ledger.  The ledger is first
+summed in `ℝ`, then injected faithfully into `ℂ`. -/
 theorem nativeCarryLogWave_atomicPrimeCameraLedger_eq_dirichletTerm
     (z : ℂ) {n : ℕ} (hn : 0 < n) :
     nativeCarryLogWave z
-        ((∑ p ∈ n.primeFactors,
+        (((∑ p ∈ n.primeFactors,
             ∑ j ∈ Finset.range
                 (CPFormal.Carry.Positional.positionalDepth p n),
-              ArithmeticFunction.vonMangoldt (p ^ (j + 1))) : ℂ) =
+              ArithmeticFunction.vonMangoldt (p ^ (j + 1))) : ℝ) : ℂ) =
       dirichletTerm (carryComplexTimeParameter z) (n : ℤ) := by
-  rw [← primeDepthLogCoordinate_eq_atomicPrimeCameraLedger hn.ne']
+  have hcoord :
+      (((∑ p ∈ n.primeFactors,
+          ∑ j ∈ Finset.range
+              (CPFormal.Carry.Positional.positionalDepth p n),
+            ArithmeticFunction.vonMangoldt (p ^ (j + 1))) : ℝ) : ℂ) =
+        (primeDepthLogCoordinate n : ℂ) := by
+    exact congrArg (fun x : ℝ => (x : ℂ))
+      (primeDepthLogCoordinate_eq_atomicPrimeCameraLedger n).symm
+  rw [hcoord]
   exact nativeCarryLogWave_primeDepthLogCoordinate_eq_dirichletTerm z hn
 
 /-- Integer-indexed field obtained by feeding the native wave the prime-depth
