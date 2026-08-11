@@ -224,3 +224,4 @@ import CPFormal.Analytic.CpGenuineOffCriticalCostContradictionProbe
 import CPFormal.Analytic.CpNativeGpreFiniteTowerCollapse
 import CPFormal.Analytic.CpNativeGpreTfvdCommutatorTowerSource
 import CPFormal.Analytic.CpPrimeTowerCarryMangoldtBridge
+import CPFormal.Analytic.CpPrimeDepthLogWaveBridge
