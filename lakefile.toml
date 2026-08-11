@@ -3,6 +3,7 @@ version = "0.2.0"
 defaultTargets = [
   "CPFormal",
   "CPFormal.Analytic.CpPrimeTowerCarryMangoldtBridge",
+  "CPFormal.Analytic.CpPrimeDepthLogWaveBridge",
   "CPFormal.Analytic.CpTfvdSeededReconstructionBridgeProbe",
   "CPFormal.Analytic.CpTfvdSeededFiniteBesselConservation",
   "CPFormal.Analytic.CpTfvdSeededNativeMomentContraction",
