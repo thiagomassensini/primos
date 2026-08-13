@@ -28,7 +28,7 @@ import CPFormal.Analytic.CpPositionalCarryQuadraticRigidity
 import CPFormal.Analytic.CpNativeCarryRealPlaneBracket
 import CPFormal.Analytic.CpNativeCarryRealPlaneComplexPackaging
 import CPFormal.Analytic.CpNativeCarryRealPlaneGreenRigidity
-import CPFormal.Analytic.CpNativeCarryRealOperatorConfinement
+import CPFormal.Analytic.CpNativeCarryRealOperatorZero
 import CPFormal.Analytic.CpNativeCarryRealSpectralBoundaryCarrier
 import CPFormal.Analytic.CpNativeCarryRealPrecompressionBoundaryWitness
 import CPFormal.Analytic.CpTilt
@@ -206,7 +206,6 @@ import CPFormal.Analytic.CpNaturalCameraAnalyticContinuation
 import CPFormal.Analytic.CpNaturalCameraGlobalBlindSpot
 import CPFormal.Analytic.CpUniversalCarryStructuralPersistence
 import CPFormal.Analytic.CpNativeGenuineGreenCompletedCrosswalk
-import CPFormal.Analytic.CpGenuineZeroConfinementAttempt
 import CPFormal.Analytic.CpGenuineC2QuadraticBridgeAttempt
 import CPFormal.Analytic.CpConformalJacobian
 import CPFormal.Analytic.CpConformalBranchScale
@@ -220,6 +219,5 @@ import CPFormal.Analytic.CpTfvdSeededFiniteBesselConservation
 import CPFormal.Analytic.CpTfvdSeededNativeMomentContraction
 import CPFormal.Analytic.CpTfvdSeededNativeMomentSourceAudit
 import CPFormal.Analytic.CpTfvdGpreCollapseInterface
-import CPFormal.Analytic.CpGenuineOffCriticalCostContradictionProbe
 import CPFormal.Analytic.CpNativeGpreFiniteTowerCollapse
 import CPFormal.Analytic.CpNativeGpreTfvdCommutatorTowerSource

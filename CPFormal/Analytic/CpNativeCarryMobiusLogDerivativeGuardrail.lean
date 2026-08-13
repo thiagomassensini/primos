@@ -1,4 +1,4 @@
-import CPFormal.Analytic.CpNativeCarryRealOperatorConfinement
+import CPFormal.Analytic.CpNativeCarryRealOperatorZero
 import Mathlib.NumberTheory.LSeries.Dirichlet
 
 /-!
@@ -7,22 +7,25 @@ import Mathlib.NumberTheory.LSeries.Dirichlet
 This module records, in the Lean kernel, the exact arithmetic circuit behind
 the prime-power signal used by the logarithmic derivative of Riemann zeta.
 
-There are two logically separate layers:
+There are three logically separate facts:
 
-* the native carry operator has its real zero set confined by quadratic mass
-  compatibility, before any arithmetic projection;
+* positional carry fixes the unique quadratic mass-equilibrium shell before
+  any zero or arithmetic projection is considered;
+* a native zero means boundary vanishing and does not include that equilibrium
+  condition in its definition;
 * the von Mangoldt signal is obtained from the logarithm on all positive
   integers by Dirichlet convolution with Mobius, and its L-series is the
   negative logarithmic derivative of Riemann zeta on `re(s) > 1`.
 
 The convolution by the arithmetic zeta function reconstructs the original
-integer logarithm exactly.  Thus the prime-power support is an invertible
-arithmetic resolution of the logarithmic field, not an additional source of
-the already-proved native carry confinement.
+integer logarithm exactly. Thus the prime-power support is an invertible
+arithmetic resolution of the logarithmic field, not a source of the quadratic
+carry equilibrium and not a restriction inserted into the zero predicate.
 
 This file does not formalize the classical explicit formula and does not claim
-logical circularity of that formula.  It isolates the reversible Mobius
-round-trip and keeps it separate from the native carry zero theorem.
+logical circularity of that formula. It isolates the reversible Mobius
+round-trip and keeps it separate from both carry equilibrium and boundary
+vanishing.
 -/
 
 open scoped BigOperators LSeries.notation
@@ -78,18 +81,19 @@ theorem primePowerSignal_lSeries_eq_riemannZeta_logDerivative
   simpa using
     (ArithmeticFunction.LSeries_vonMangoldt_eq_deriv_riemannZeta_div hs)
 
-/-- Kernel-level separation checkpoint.  The native carry confinement theorem
-and the arithmetic log-derivative readout hold side by side; no implication in
-either direction is inserted into their definitions. -/
-theorem nativeCarryConfinement_and_primePowerReadout
-    (camera : ℕ) (sigma time : ℝ) {s : ℂ} (hs : 1 < s.re) :
-    (IsNativeCarryRealOperatorZero camera sigma time ↔
-        sigma = (1 : ℝ) / 2 ∧
-          IsNativeCarryRealOperatorResonance camera time) ∧
+/--
+Kernel-level separation checkpoint. The quadratic carry equilibrium and the
+arithmetic log-derivative readout hold side by side, before any zero predicate
+is used.
+-/
+theorem quadraticCarryEquilibrium_and_primePowerReadout
+    (sigma time : ℝ) {s : ℂ} (hs : 1 < s.re) :
+    (NativeCarryRealPlaneMassCompatible sigma time ↔
+        sigma = (1 : ℝ) / 2) ∧
       (L (fun n : ℕ => (ArithmeticFunction.vonMangoldt n : ℂ)) s =
         -deriv riemannZeta s / riemannZeta s) := by
   exact
-    ⟨isNativeCarryRealOperatorZero_iff camera sigma time,
+    ⟨nativeCarryRealPlaneMassCompatible_iff sigma time,
       primePowerSignal_lSeries_eq_riemannZeta_logDerivative hs⟩
 
 end

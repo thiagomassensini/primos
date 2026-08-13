@@ -8,6 +8,11 @@ repository: thiagomassensini/primos
 primary_module: CPFormal/Analytic/CpGenuineGreenCompletedOperator.lean
 ---
 
+> **Arquivo histórico.** A definição antiga que incluía compatibilidade de
+> massa no “zero nativo” foi substituída. O operador completado testa dois
+> canais; ele não redefine o zero Genuine/nativo. Consulte
+> `docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md`.
+
 # Cronologia da construção do operador completado Genuine–Green
 
 ## Da informação perdida pela síntese escalar à soma direta que preserva o canal de massa do carry

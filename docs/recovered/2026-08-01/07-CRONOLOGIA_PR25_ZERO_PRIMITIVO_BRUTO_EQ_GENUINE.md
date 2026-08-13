@@ -1,5 +1,10 @@
 # Cronologia do PR #25 — quando o zero primitivo bruto e o zero Genuine viraram o mesmo conjunto de zeros
 
+> **Arquivo histórico.** A distinção posterior entre “zero bruto” e “zero
+> nativo completo” foi eliminada da API: zero é fechamento, enquanto massa e
+> Green são propriedades separadas. Consulte
+> `docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md`.
+
 > Reconstrução histórica e lógica da retirada da compatibilidade de massa do predicado primitivo, da reutilização do crosswalk real/complexo e da prova Lean de que, no strip aberto, o fechamento primitivo bruto e `genuineContinuation = 0` descrevem exatamente o mesmo locus.
 
 ---

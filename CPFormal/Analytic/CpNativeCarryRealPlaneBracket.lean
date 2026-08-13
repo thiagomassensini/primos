@@ -283,25 +283,20 @@ theorem nativeCarryRealPlaneFiniteChart_energy_eq_zero_iff
   nativeCarryRealPlaneEnergy_eq_zero_iff _
 
 /--
-An admissible finite primitive zero keeps the vector state and the camera
-resultant separate: mass compatibility is a domain condition, while zero is a
-bracket observation.
+This predicate records two separate finite facts without renaming their
+intersection as a kind of zero: quadratic mass balance and vanishing camera
+energy.
 -/
-def NativeCarryRealPlaneAdmissibleFiniteZero
+def NativeCarryRealPlaneMassBalancedFiniteClosure
     (p M : ℕ) (sigma t : ℝ) : Prop :=
   NativeCarryRealPlaneMassCompatible sigma t ∧
     nativeCarryRealPlaneEnergy
       (nativeCarryRealPlaneFiniteChartAt p M sigma t) = 0
 
-/--
-Exact real-domain factorization: an admissible finite zero is the same as the
-critical exponent together with a zero of the critical real camera.  The
-bracket does not choose the exponent after the fact; the carry mass fixes the
-domain before the camera is evaluated.
--/
-theorem nativeCarryRealPlaneAdmissibleFiniteZero_iff
+/-- Exact factorization of mass balance together with finite camera closure. -/
+theorem nativeCarryRealPlaneMassBalancedFiniteClosure_iff
     (p M : ℕ) (sigma t : ℝ) :
-    NativeCarryRealPlaneAdmissibleFiniteZero p M sigma t ↔
+    NativeCarryRealPlaneMassBalancedFiniteClosure p M sigma t ↔
       sigma = (1 : ℝ) / 2 ∧
         nativeCarryRealPlaneEnergy
           (nativeCarryRealPlaneFiniteChart p M t) = 0 := by

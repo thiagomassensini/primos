@@ -1,208 +1,145 @@
 # Índice canônico da teoria nativa do carry
 
-## Escopo congelado
+## Regra de leitura
 
-Este índice lê o tronco importado por `CPFormal.lean`, tomando como base o
-checkpoint publicado `v0.49.0` e o `main` em
-`e4f36c94c5d9208b65f7f603f7966c27d59d851e`.
+Este índice separa três propriedades que não podem ser fundidas por uma
+definição:
 
-Na base desse checkpoint:
+1. equilíbrio quadrático da massa de carry;
+2. anulação da câmera nativa/Genuine;
+3. detecção Green do deslocamento transversal.
 
-- 174 arquivos Lean formam a superfície `CPFormal`;
-- 37.976 linhas Lean estão no núcleo;
-- o índice sintático encontra 2.501 declarações:
-  1.638 `theorem`, 773 `def`, 46 `structure`, 34 `abbrev`,
-  5 `inductive`, 4 `lemma` e 1 `instance`;
-- a auditoria estática encontra zero `axiom`, `sorry` ou `admit`.
-
-Os números são inventário, não argumento matemático. A autoridade de cada
-resultado é seu tipo Lean e a elaboração pelo kernel.
-
-Este documento separa:
-
-1. a rota nativa canônica;
-2. interfaces equivalentes ou auxiliares;
-3. rotas paralelas interrompidas por decisão de pesquisa.
-
-Uma rota paralela não é classificada como barreira. Ela apenas não entra na
-dependência do teorema nativo consolidado.
+Os tipos Lean são a autoridade. Inventários de arquivos, versões e contagens
+de declarações são auxiliares e não substituem a elaboração pelo kernel.
 
 ## Ordem canônica
 
-| Camada | Objeto preservado | Declarações centrais | Fonte |
+| Camada | Fato central | Declarações | Fonte |
 |---|---|---|---|
-| Incidência | inteiro, centro, perna e offset | `oddLegEquivIncidence`, `balancedOffsetEquivNonzeroResidue`, `nonmultipleEquivIncidence` | `Carry/C2Adjacent.lean`, `Carry/CpBalancedResidue.lean`, `Carry/CpGlobalIncidence.lean` |
-| Profundidade | valuation do centro carregado | `effectiveDepth_eq_centerDepth`, `dvd_sub_iff_eq_offset` | `Carry/C2Depth.lean`, `Carry/CpDepth.lean` |
-| Transporte | soma por pernas sem perda de bordo | `weighted_reindex_alignedBox` | `Carry/C2AlignedBox.lean`, `Carry/CpAlignedBox.lean` |
-| Massa | custo posicional `b⁻ᵏ` | `criticalMass`, `criticalMass_reindex_alignedBox` | `Carry/CpBranchWeight.lean` |
-| Amplitude | raiz quadrática `b⁻ᵏ⧸²` | `criticalAmplitude`, `criticalAmplitude_sq_eq_mass` | `Carry/CpBranchWeight.lean` |
-| Rigidez posicional | compatibilidade massa–energia | `branchAmplitude_sq_eq_criticalMass_iff_of_one_lt`, `positionalCarryMassCompatible_iff` | `Analytic/CpPositionalCarryQuadraticRigidity.lean` |
-| Estado real | amplitude e rotação separadas | `nativeCarryRealPlaneEnergy_sampleAt`, `nativeCarryRealPlaneMassCompatible_iff` | `Analytic/CpNativeCarryRealPlaneBracket.lean` |
-| Bracket | segunda diferença saturada | `centeredSecondDifference`, `saturatedBracket`, `bracket_eq_saturatedBracket` | `Finite/Bracket.lean`, `Genuine/CpBracketPairing.lean` |
-| Genuine finito | síntese de sementes e brackets | `finite_genuine_cancellation`, `finiteChart_eq_positiveIntervalSum_sub_p_mul_centerSum` | `Genuine/FiniteCancellation.lean`, `Genuine/CpFiniteChart.lean` |
-| TFVD/retorno | bracket mais traço reconstrói o estado | `carryWeightedScalarReconstruction`, `carryWeightedVerticalTfvd_identity` | `Analytic/CpCarryWeightedVerticalTfvdFinite.lean`, `Analytic/CpCarryWeightedVerticalTfvdIdentity.lean` |
-| Proveniência | análise injetiva com inversa à esquerda | `nativeGpreFiniteTfvdReconstruction_comp_analysis`, `nativeGpreFiniteTfvdAnalysis_injective` | `Analytic/CpNativeGpreTfvdAnalysis.lean` |
-| Fase real | grupo unitário e gerador logarítmico | `finiteRealSpectralStateVector_eq_evolution_zero`, `infiniteRealSpectralGenerator_isSelfAdjoint` | `Analytic/CpNativeCarryLogPhaseOrbit.lean`, `Analytic/CpInfiniteRealSpectralGenerator.lean` |
-| Readout nativo | ressonância parametrizada apenas por `t : ℝ` | `IsRealSpectralResonance`, `isRealSpectralResonance_iff_nativeGpreGenuineLimit_zeroCharacteristic` | `Analytic/CpRealSpectralGenerator.lean`, `Analytic/CpNativeGpreTfvdGenuineCompression.lean` |
-| Confinamento | zero nativo tem uma única fibra radial | `isNativeCarryRealOperatorZero_iff`, `nativeCarryRealOperatorZero_sigma_eq_half` | `Analytic/CpNativeCarryRealOperatorConfinement.lean` |
+| Incidência posicional | quantidade preservada sob redistribuição por carry | `positionalUnitCarry_preserves_value`, `nonmultipleEquivIncidence` | `Carry/PositionalDecomposition.lean`, `Carry/CpGlobalIncidence.lean` |
+| Massa | profundidade `k` possui massa `b^(-k)` | `criticalMass`, `uniformCarryEvent_probability` | `Carry/CpBranchWeight.lean`, `Carry/UniformCarryProbability.lean` |
+| Amplitude | amplitude crítica é a raiz quadrática da massa | `criticalAmplitude`, `criticalAmplitude_sq_eq_mass` | `Carry/CpBranchWeight.lean` |
+| Equilíbrio | compatibilidade amplitude--massa equivale a `sigma = 1/2` | `positionalCarryMassCompatible_iff`, `nativeCarryRealPlaneMassCompatible_iff` | `Analytic/CpPositionalCarryQuadraticRigidity.lean`, `Analytic/CpNativeCarryRealPlaneBracket.lean` |
+| Câmera real | zero significa que a câmera tende a zero | `IsNativeCarryRealOperatorZero`, `isNativeCarryRealOperatorZero_iff` | `Analytic/CpNativeCarryRealOperatorZero.lean` |
+| Embalagem complexa | a coordenada complexa preserva exatamente o zero real | `isNativeCarryComplexOperatorZero_iff_real` | `Analytic/CpNativeCarryComplexOperatorSameAsReal.lean` |
+| Genuine | câmera real `3` e Genuine têm o mesmo zero no strip | `isNativeCarryRealOperatorZero_three_iff_genuineContinuation_zero` | `Analytic/CpNativeGenuineGreenCompletedCrosswalk.lean` |
+| Green | o centro Green detecta `re(s)-1/2` | `complexifiedAlignedGreenLimitOperator_eq_zero_iff_criticalDisplacement_eq_zero` | `Analytic/CpGenuineGreenCompletedOperator.lean` |
+| Operador completado | os dois canais zeram juntos exatamente em zero mais equilíbrio | `genuineGreenCompletedLimitOperator_eq_zero_iff_nativeZero_and_re_eq_half` | `Analytic/CpNativeGenuineGreenCompletedCrosswalk.lean` |
 
-## O novo teorema consolidado
+## Equilíbrio antes dos zeros
 
-O operador real nativo é apresentado por dois dados que já existiam:
+O carry posicional fornece a massa e sua realização quadrática:
+
+```text
+b^(-k) -> b^(-k/2) -> amplitude^2 = mass.
+```
+
+Ao deformar o expoente por `sigma`, o kernel prova:
+
+```lean
+NativeCarryRealPlaneMassCompatible sigma time
+  ↔ sigma = (1 : ℝ) / 2
+```
+
+Esse é um teorema de compatibilidade energética. Ele não contém hipótese de
+zero e não classifica o conjunto de zeros de uma função.
+
+## Zero literal
+
+O predicado canônico não inclui compatibilidade de massa:
 
 ```lean
 def IsNativeCarryRealOperatorZero
     (camera : ℕ) (sigma time : ℝ) : Prop :=
-  NativeCarryRealPlaneMassCompatible sigma time ∧
-    NativeCarryRealOperatorBoundaryClosesAt camera sigma time
+  NativeCarryRealOperatorBoundaryClosesAt camera sigma time
 ```
 
-A primeira coordenada é o domínio físico antes do bracket. A segunda é a
-observação de que os resultantes reais do bracket fecham. Nenhuma seta
-`zero → massa` é pedida: a massa já pertence ao domínio do operador que está
-sendo chamado de nativo.
-
-O kernel é solicitado a verificar:
+Assim, o teorema básico é propositalmente literal:
 
 ```lean
 theorem isNativeCarryRealOperatorZero_iff
     (camera : ℕ) (sigma time : ℝ) :
     IsNativeCarryRealOperatorZero camera sigma time ↔
-      sigma = (1 : ℝ) / 2 ∧
-        IsNativeCarryRealOperatorResonance camera time
+      NativeCarryRealOperatorBoundaryClosesAt camera sigma time
 ```
 
-Em notação de conjuntos:
+O nome `IsNativeCarryRealOperatorResonance camera time` é somente a
+especialização desse predicado a `sigma = 1/2`; não é uma fatoração de todos
+os zeros.
 
-\[
-Z_{\mathrm{native},\,c}
-=
-\left\{\frac12\right\}\times\mathcal R_c,
-\]
+## Identidade nativo--Genuine
 
-onde `c` é qualquer largura natural de câmera e
-\(\mathcal R_c\subseteq\mathbb R\) é o conjunto dos tempos reais em que a
-câmera fecha.
-
-Consequências literais:
-
-- o resultado vale para toda câmera, sem hipótese de primalidade;
-- a rotação real continua livre;
-- cancelamento do bracket decide somente quais tempos pertencem
-  a \(\mathcal R_c\);
-- o bracket não redefine o expoente radial;
-- não existe parâmetro `s : ℂ` no enunciado;
-- não existe Zeta, equação funcional ou hipótese externa;
-- não existe `bridge`, `certificate`, `hmass` ou `hreconstruct`.
-
-O único argumento recebido pelo corolário de confinamento é um zero do próprio
-operador nativo:
+Dentro do strip, a equivalência é direta e vale em qualquer coordenada radial:
 
 ```lean
-theorem nativeCarryRealOperatorZero_sigma_eq_half
-    (hzero : IsNativeCarryRealOperatorZero camera sigma time) :
-    sigma = (1 : ℝ) / 2
+theorem isNativeCarryRealOperatorZero_three_iff_genuineContinuation_zero
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
+    IsNativeCarryRealOperatorZero 3 s.re s.im ↔
+      genuineContinuation s = 0
 ```
 
-## Dependência formal mínima do confinamento
+A embalagem complexa é apenas o mesmo par real escrito em `ℂ`:
+
+```lean
+IsNativeCarryComplexOperatorZero camera sigma time
+  ↔ IsNativeCarryRealOperatorZero camera sigma time.
+```
+
+Nenhuma das duas equivalências deduz `sigma = 1/2` da palavra “zero”.
+
+## Centro Green e tilt
+
+O canal Green conserva informação que o readout escalar Genuine não contém.
+Seu locus de anulação é o equilíbrio transversal:
+
+```lean
+complexifiedAlignedGreenLimitOperator p q s = 0
+  ↔ criticalDisplacement s.re = 0.
+```
+
+Ao colocar Genuine e Green numa soma direta, o kernel obtém:
+
+```lean
+genuineGreenCompletedLimitOperator p q s = 0
+  ↔ IsNativeCarryRealOperatorZero 3 s.re s.im ∧
+      s.re = (1 : ℝ) / 2.
+```
+
+Portanto, num eventual zero off-equilibrium, o primeiro canal continua zero e
+o canal Green permanece não nulo. O teorema
+`nativeZero_offEquilibrium_channelSeparation` registra os dois fatos na mesma
+conclusão. Isso é detecção do tilt, não redefinição do zero.
+
+## Interseção explícita, sem novo tipo de zero
+
+`NativeCarryRealPlaneMassBalancedBoundaryClosesAt` registra a interseção
+explícita:
 
 ```text
-branchAmplitude b sigma k
-        │ energia quadrática
-        ▼
-branchAmplitude_sq_eq_criticalMass_iff_of_one_lt
-        │ realização em R × R
-        ▼
-nativeCarryRealPlaneMassCompatible_iff
-        │ domínio do operador nativo
-        ▼
-isNativeCarryRealOperatorZero_iff
+mass compatibility and native zero.
 ```
 
-O bracket aparece no predicado de ressonância, mas não é usado para escolher
-a casca radial. Isso expressa no tipo Lean a ordem causal da teoria:
+Ele pode ser útil quando uma construção exige simultaneamente equilíbrio e
+fechamento, mas seu nome e seu tipo não criam uma categoria diferente de zero.
 
-```text
-carry → massa → amplitude → estado → bracket → zero.
-```
+## TFVD, retorno e proveniência
 
-## TFVD, retorno e ponta operatorial
-
-A TFVD não é uma tentativa de inverter apenas o stencil. Ela conserva o
-complemento de bordo explicitamente:
+As identidades TFVD permanecem ortogonais à correção semântica:
 
 ```lean
 carryWeightedVerticalTfvd_identity
 ```
 
-prova
-
-\[
-G_qB_q+R_q\operatorname{Tr}_q=I.
-\]
-
-No carrier enriquecido:
+prova `G_q B_q + R_q Tr_q = I`, e
 
 ```lean
 nativeGpreFiniteTfvdReconstruction_comp_analysis
 ```
 
-prova que reconstrução composta com análise é a identidade. Portanto, bracket,
-traço e proveniência permanecem separados e o estado não é tratado como três
-amostras livres.
+prova que reconstrução composta com análise é a identidade. Essas camadas
+conservam bracket, traço e proveniência sem alterar o significado de zero.
 
-Na ponta do readout:
-
-```lean
-isRealSpectralResonance_iff_nativeGpreGenuineLimit_zeroCharacteristic
-```
-
-identifica a ressonância real com o valor característico zero do pencil-limite
-das compressões nativas. Esse endpoint classifica os tempos em
-\(\mathcal R_c\); ele não reabre a coordenada radial já fixada pelo carry.
-
-## Três objetos que não devem ser misturados
-
-| Objeto | Parâmetros | Papel |
-|---|---:|---|
-| Operador real nativo | `camera : ℕ`, `time : ℝ` | massa fixada antes do bracket; zeros são ressonâncias reais |
-| Apresentação radial do operador nativo | `camera`, `sigma`, `time` com compatibilidade de massa no domínio | permite provar que toda apresentação reduz a `sigma = 1/2` |
-| Continuação escalar ambiente | parâmetro não real livre | objeto auxiliar mais forte; não é necessário para o confinamento nativo |
-
-O operador completado `Genuine ⊕ Green` também permanece um quarto objeto
-distinto. Seus teoremas são válidos, mas não participam da prova
-`isNativeCarryRealOperatorZero_iff`.
-
-## Rotas paralelas
-
-As famílias abaixo permanecem formalizadas e disponíveis, mas não são
-dependências do novo teorema:
-
-- continuação escalar, tempo não real e exaustão;
-- Green cruzado e operador completado;
-- boundary relation refletida e Cayley;
-- correção angular/Abel;
-- Bessel, estado global e domínio de traço;
-- sínteses C2–`G_pre` e detectores multibase.
-
-Algumas dessas rotas possuem guardrails de equivalência com alvos escalares
-mais fortes. Isso classifica a força lógica de seus enunciados; não transforma
-uma interrupção escolhida em impossibilidade matemática.
-
-## Como consultar o índice literal
-
-O root ativo é `CPFormal.lean`. Para localizar uma declaração pelo nome:
-
-```bash
-rg -n 'nome_da_declaracao' CPFormal -g '*.lean'
-```
-
-Para listar declarações e seus arquivos:
-
-```bash
-rg -n '^[[:space:]]*(@\[[^]]+\][[:space:]]*)?(private[[:space:]]+)?(noncomputable[[:space:]]+)?(def|abbrev|structure|theorem|lemma)[[:space:]]' \
-  CPFormal -g '*.lean'
-```
+## Auditoria
 
 Para verificar a higiene estática:
 
@@ -210,10 +147,11 @@ Para verificar a higiene estática:
 bash scripts/static_audit.sh
 ```
 
-A promoção final continua sendo feita apenas por:
+Para elaborar toda a superfície pública:
 
 ```bash
 lake build --wfail
 ```
 
-no workflow `Lean kernel audit`.
+A correção completa está registrada em
+`docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md`.

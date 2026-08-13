@@ -1,5 +1,11 @@
 # Recovered research context — 2026-08-01
 
+> **Semantic archive warning.** Some recovered notes define a “native zero”
+> as `mass compatibility ∧ boundary closure`. That terminology is obsolete
+> and must not be used as the current API. In the active Lean sources, zero is
+> boundary closure alone; mass equilibrium and the Green center are separate.
+> See `docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md`.
+
 This directory preserves the mathematical notes recovered from a previous
 interrupted working session.  The readable top-level copies may normalize
 whitespace or correct terminology.  Their 22 byte-exact source payloads,

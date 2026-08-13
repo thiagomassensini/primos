@@ -219,35 +219,35 @@ theorem nativeCarryRealTimeMultiplicationBoundaryPencil_relationHasSlope
       simp [nativeCarryRealPlaneFamilyConformalAction, u]
     · simp [nativeCarryRealPlaneFamilyConformalAction, u, hr]
 
-/-! ## Admissible closure versus the raw scalar closure -/
+/-! ## Mass balance and raw boundary closure -/
 
 /--
-A boundary-closing real camera state is physically admissible when its
-uncompressed samples also preserve the inverse carry mass.
+The conjunction of quadratic mass balance and raw boundary closure. This is
+not a distinct kind of zero; each conjunct retains its own meaning.
 -/
-def NativeCarryRealPlaneAdmissibleBoundaryClosesAt
+def NativeCarryRealPlaneMassBalancedBoundaryClosesAt
     (sigma time : ℝ) : Prop :=
   NativeCarryRealPlaneMassCompatible sigma time ∧
     NativeCarryRealPlaneBoundaryClosesAt sigma time
 
-/-- Admissibility fixes the radial exponent before the boundary is read. -/
-theorem nativeCarryRealPlaneAdmissibleBoundaryClosesAt_sigma_eq_half
+/-- Mass balance fixes the radial exponent independently of closure. -/
+theorem nativeCarryRealPlaneMassBalancedBoundaryClosesAt_sigma_eq_half
     {sigma time : ℝ}
-    (hclose : NativeCarryRealPlaneAdmissibleBoundaryClosesAt sigma time) :
+    (hclose : NativeCarryRealPlaneMassBalancedBoundaryClosesAt sigma time) :
     sigma = (1 : ℝ) / 2 :=
   (nativeCarryRealPlaneMassCompatible_iff sigma time).1 hclose.1
 
 /--
-Every admissible closing state enters the fixed infinite real pencil with its
-native time and with transverse coefficient `1/2 - sigma`.
+Mass balance together with closure enters the fixed infinite real pencil with
+transverse coefficient `1/2 - sigma`.
 -/
-theorem admissibleBoundaryClosure_to_timeMultiplicationRelationHasConformalSlope
+theorem massBalancedBoundaryClosure_to_timeMultiplicationRelationHasConformalSlope
     {sigma time : ℝ}
-    (hclose : NativeCarryRealPlaneAdmissibleBoundaryClosesAt sigma time) :
+    (hclose : NativeCarryRealPlaneMassBalancedBoundaryClosesAt sigma time) :
     nativeCarryRealTimeMultiplicationBoundaryPencil.RelationHasConformalSlope
       time ((1 : ℝ) / 2 - sigma) := by
   have hsigma :=
-    nativeCarryRealPlaneAdmissibleBoundaryClosesAt_sigma_eq_half hclose
+    nativeCarryRealPlaneMassBalancedBoundaryClosesAt_sigma_eq_half hclose
   have htransverse : (1 : ℝ) / 2 - sigma = 0 := by
     linarith
   rw [htransverse]
@@ -303,7 +303,7 @@ theorem nativeCarryRealPlaneBoundaryClosureActivatesTimePencil_iff_preservesMass
     linarith
   · intro hpreserves sigma time hsigma0 hsigma1 hclose
     exact
-      admissibleBoundaryClosure_to_timeMultiplicationRelationHasConformalSlope
+      massBalancedBoundaryClosure_to_timeMultiplicationRelationHasConformalSlope
         ⟨hpreserves hsigma0 hsigma1 hclose, hclose⟩
 
 /-- Consequently the corrected activation arrow is the exact zero-rigidity gate. -/

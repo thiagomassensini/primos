@@ -10,6 +10,50 @@ O projeto nunca usa `sorry`, `axiom` ou um zero conhecido para fabricar o
 operador que deveria explica-lo. Uma afirmacao so recebe o estado
 `KERNEL_CHECKED` depois que `lake build` termina sem erros.
 
+## Correção semântica do zero nativo
+
+O zero nativo é anulação, sem condição radial embutida:
+
+```lean
+def IsNativeCarryRealOperatorZero
+    (camera : ℕ) (sigma time : ℝ) : Prop :=
+  NativeCarryRealOperatorBoundaryClosesAt camera sigma time
+```
+
+As três camadas são distintas e aparecem nessa ordem:
+
+```text
+carry quadrático
+  -> equilíbrio de massa: sigma = 1/2
+
+camera nativa / Genuine
+  -> o mesmo predicado de zero, para todo sigma no strip
+
+centro Green
+  -> detecta o tilt sigma - 1/2
+```
+
+Em particular, dentro do strip e para a câmera `3`, o Lean prova
+
+```text
+IsNativeCarryRealOperatorZero 3 s.re s.im
+  <-> genuineContinuation s = 0.
+```
+
+Já o operador completado `Genuine ⊕ Green` zera exatamente quando coexistem
+o zero nativo/Genuine e o equilíbrio transversal:
+
+```text
+genuineGreenCompletedLimitOperator p q s = 0
+  <-> IsNativeCarryRealOperatorZero 3 s.re s.im
+      and s.re = 1/2.
+```
+
+Logo um eventual zero fora do equilíbrio continua sendo zero; quem permanece
+não nulo é o canal Green adicional, porque ele denuncia o tilt. A versão
+anterior que definia zero como `massCompatible ∧ boundaryCloses` foi removida
+da API e está documentada em `docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md`.
+
 ## Checkpoint v0.60.0 — fontes finitas explicitas e preservacao completa
 
 `CpNativeGpreFiniteTowerCollapse` constroi, para toda fibra natural de
@@ -65,9 +109,10 @@ refletida estritamente positiva. Isso separa invisibilidade global de perda de
 energia, sem afirmar o `GREEN-NATCAM-INTERTWINER` ainda aberto.
 
 Os drafts historicos, inclusive o probe deliberadamente vermelho, foram
-auditados. O dado ausente nesse probe era a compatibilidade de massa
-pre-compressao; a versao integrada o recebe explicitamente. As notas
-recuperadas da sessao interrompida foram preservadas em
+auditados. A leitura antiga tratava compatibilidade de massa como parte da
+definicao de zero; essa semantica foi corrigida. Massa quadratica, anulacao e
+centro Green agora permanecem em predicados distintos. As notas recuperadas
+da sessao interrompida foram preservadas em
 `docs/recovered/2026-08-01/` como registros de pesquisa, separados dos
 certificados do kernel. O escopo publicavel completo esta em
 `docs/RELEASE_0.59.0.md`.
@@ -101,6 +146,12 @@ a largura nativa literal `2` permanece separada e degenerada.
   toda base `b>1`, com certificados de decomposicao e iteracao;
 - conexao dessa heranca causal com a massa uniforme `b^(-k)`, amplitude
   quadratica e rigidez do expoente `1/2`;
+- zero nativo definido somente por fechamento da camera, sem conjuncao com
+  compatibilidade de massa;
+- identidade exata, no strip, entre o zero da camera real nativa `3` e o zero
+  de `genuineContinuation`, para qualquer coordenada radial apresentada;
+- centro Green e operador completado mantidos como detectores adicionais do
+  deslocamento `sigma-1/2`, sem redefinir o zero nativo/Genuine;
 - interface `RestrictedInverseCertificate`, separada da linguagem causal, que
   exige dominios de origem e destino preservados e os dois round-trips;
 - certificados restritos `carryBorrowReverseCertificate`,
@@ -322,6 +373,7 @@ afirma uma inversa global ou uma lei sobre toda a matematica.
 ## Ordem de leitura
 
 Para uma visao completa deste checkpoint, comece por
+`docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md`,
 `docs/RELEASE_0.60.0.md`,
 `docs/POST_V059_PRESERVATION_MANIFEST_2026-08-01.md` e
 `docs/ZERO_CONFINEMENT_FRONTIER_AUDIT.md`;
@@ -333,19 +385,15 @@ extensao inversa estao registrados em `docs/RELEASE_0.54.0.md`.
 
 Arquivos centrais da fronteira `v0.60.0`:
 
-1. `CPFormal/Analytic/CpTiltRigidity.lean`
-2. `CPFormal/Analytic/CpGenuineCarryTiltFrontier.lean`
-3. `CPFormal/Analytic/CpRadialCoercivity.lean`
-4. `CPFormal/Analytic/CpReflectedGreenBridge.lean`
-5. `CPFormal/Analytic/CpTfvdSeededFiniteBesselConservation.lean`
-6. `CPFormal/Analytic/CpTfvdSeededNativeMomentContraction.lean`
-7. `CPFormal/Analytic/CpTfvdSeededNativeMomentSourceAudit.lean`
-8. `CPFormal/Analytic/CpTfvdGpreCollapseInterface.lean`
-9. `CPFormal/Analytic/CpNativeGpreFiniteTowerCollapse.lean`
-10. `CPFormal/Analytic/CpNativeGpreTfvdCommutatorTowerSource.lean`
-11. `docs/ZERO_CONFINEMENT_FRONTIER_AUDIT.md`
-12. `docs/POST_V059_PRESERVATION_MANIFEST_2026-08-01.md`
-13. `docs/RELEASE_0.60.0.md`
+1. `CPFormal/Analytic/CpNativeCarryRealOperatorZero.lean`
+2. `CPFormal/Analytic/CpGenuineNativeRealBoundaryCrosswalk.lean`
+3. `CPFormal/Analytic/CpNativeCarryComplexOperatorSameAsReal.lean`
+4. `CPFormal/Analytic/CpNativeGenuineGreenCompletedCrosswalk.lean`
+5. `CPFormal/Analytic/CpGenuineGreenCompletedOperator.lean`
+6. `CPFormal/Analytic/CpTiltRigidity.lean`
+7. `CPFormal/Analytic/CpCarryTiltBracket.lean`
+8. `docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md`
+9. `docs/ZERO_CONFINEMENT_FRONTIER_AUDIT.md`
 
 Ordem historica do nucleo:
 

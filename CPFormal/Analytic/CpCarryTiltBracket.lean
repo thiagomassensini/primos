@@ -167,9 +167,9 @@ theorem carryTiltBracket_criticalDisplacement_neg_of_lt_half
   apply carryTiltBracket_neg_of_neg_one_lt _ _ hc <;>
     unfold criticalDisplacement <;> linarith
 
-/-- **Não-anulação off-critical nativa.**  Fora do autodual `σ = 1/2` (com
-`σ > 0`, `c > 1`), a curvatura do peso de carry é estritamente diferente de
-zero — direto do sinal, sem reflexão nem equação funcional. -/
+/-- Fora do equilíbrio `σ = 1/2` (com `σ > 0`, `c > 1`), a curvatura
+do peso de carry é estritamente diferente de zero. Este é um teorema sobre o
+detector de tilt, não sobre zeros de uma câmera. -/
 theorem carryTiltBracket_criticalDisplacement_ne_zero_of_ne_half
     {sigma c : ℝ} (hsigma : 0 < sigma) (hc : 1 < c)
     (hhalf : sigma ≠ (1 : ℝ) / 2) :
@@ -177,18 +177,16 @@ theorem carryTiltBracket_criticalDisplacement_ne_zero_of_ne_half
   rw [Ne, carryTiltBracket_criticalDisplacement_eq_zero_iff hsigma hc]
   exact hhalf
 
-/-- **Confinamento por curvatura de dois lados — sem simetria.**  Para `c > 1`
-e `σ > -1/2`, a curvatura do peso de carry cumpre a tricotomia
+/-- **Tricotomia de sinal da curvatura.** Para `c > 1` e `σ > -1/2`, a
+curvatura do peso de carry cumpre
 
 * `σ < 1/2` ⟹ curvatura `< 0` (peso estritamente côncavo);
 * `σ = 1/2` ⟹ curvatura `= 0`;
 * `1/2 < σ` ⟹ curvatura `> 0` (peso estritamente convexo).
 
-O único expoente com curvatura nula é `1/2`.  A exclusão vale nos **dois lados**
-por igual — não por uma simetria `σ ↦ 1-σ`, mas porque o peso curva
-definidamente para um lado abaixo da linha e para o outro acima.  Confinamento é
-uma positividade de curvatura, não uma reflexão. -/
-theorem carryTiltBracket_criticalDisplacement_confines
+O único expoente com curvatura nula é `1/2`. Isso caracteriza o equilíbrio do
+detector; não caracteriza por definição o conjunto de zeros da câmera. -/
+theorem carryTiltBracket_criticalDisplacement_sign_trichotomy
     {sigma c : ℝ} (hsigma0 : -(1 : ℝ) / 2 < sigma) (hc : 1 < c) :
     (sigma < (1 : ℝ) / 2 → carryTiltBracket (criticalDisplacement sigma) c < 0) ∧
       (sigma = (1 : ℝ) / 2 →
@@ -203,13 +201,14 @@ theorem carryTiltBracket_criticalDisplacement_confines
     unfold criticalDisplacement; rw [h]; norm_num
   rw [hzero, carryTiltBracket_zero]
 
-/-- Corolário do confinamento de dois lados: fora da linha crítica a curvatura é
-não nula, seja qual for o lado (`σ > -1/2`, `c > 1`). -/
+/-- Corolário da tricotomia: fora do equilíbrio a curvatura é não nula, seja
+qual for o lado (`σ > -1/2`, `c > 1`). -/
 theorem carryTiltBracket_criticalDisplacement_ne_zero_of_ne_half'
     {sigma c : ℝ} (hsigma0 : -(1 : ℝ) / 2 < sigma) (hc : 1 < c)
     (hhalf : sigma ≠ (1 : ℝ) / 2) :
     carryTiltBracket (criticalDisplacement sigma) c ≠ 0 := by
-  obtain ⟨hneg, _, hpos⟩ := carryTiltBracket_criticalDisplacement_confines hsigma0 hc
+  obtain ⟨hneg, _, hpos⟩ :=
+    carryTiltBracket_criticalDisplacement_sign_trichotomy hsigma0 hc
   rcases lt_or_gt_of_ne hhalf with h | h
   · exact ne_of_lt (hneg h)
   · exact ne_of_gt (hpos h)

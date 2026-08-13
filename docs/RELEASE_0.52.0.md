@@ -1,4 +1,10 @@
-# CPFormal v0.52.0 — Native carry consolidation checkpoint
+# Nota de correção semântica
+
+> Este documento registra historicamente a `v0.52.0`. A API atual não exige
+> compatibilidade de massa para que um fechamento seja chamado de zero nativo.
+> Consulte `docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md`.
+
+## CPFormal v0.52.0 — registro histórico
 
 ## Scope
 

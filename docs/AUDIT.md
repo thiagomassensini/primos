@@ -864,46 +864,43 @@ O SHA acima identifica o head matematico anterior a esta consolidacao
 documental. Isso evita circularidade de autorreferencia. O workflow de release
 da `v0.55.0` valida o `GITHUB_SHA` do `main` remoto depois da incorporacao e
 e a autoridade sobre o commit exato marcado pela tag anotada.
-## Checkpoint pos-v0.52 do crosswalk nativo--Genuine--Green
+## Correção do crosswalk nativo--Genuine--Green
 
-- commit matematico certificado:
-  `e43a42f52308d488d46e71316e5a919e4678da6b`;
-- workflow run: `30592046379` (`Lean kernel audit`, run #728);
-- job: `91036267615` (`Build CPFormal`);
-- resultado: `success` em auditoria estatica e `lake build --wfail`;
-- novo alvo compilado:
-  `CPFormal.Analytic.CpNativeGenuineGreenCompletedCrosswalk`.
+A leitura pos-v0.52 foi substituída porque constringia o predicado de zero com
+compatibilidade de massa. A API corrigida mantém os fatos separados.
 
-O kernel fechou primeiro o elo aritmetico entre a decomposicao posicional e
-o evento probabilistico: o residuo canonico de `n` na profundidade `k`
-pertence ao singleton uniforme de carry se e somente se `b^k` divide `n`.
-Esse singleton possui a probabilidade finita uniforme `criticalMass b k`.
-Isto nao e uma afirmacao de equidistribuicao assintotica dos naturais.
-
-Na faixa Genuine, para a camera nativa `3` e blocos Green indexados por
-primos `p,q`, o kernel verificou:
+Na faixa Genuine, para a câmera nativa `3`, o kernel verifica para todo `s`:
 
 ```text
-zero nativo
-  <-> zero Genuine bruto e Re(s)=1/2
-  <-> zero Genuine bruto e fechamento Green alinhado
-  <-> genuineGreenCompletedLimitOperator(p,q,s)=0.
+zero nativo em (Re(s), Im(s))
+  <-> zero de genuineContinuation(s).
 ```
 
-A ultima igualdade significa que o endomorfismo completado inteiro e o mapa
-zero naquele parametro. Nao foi provada igualdade dos operadores como mapas,
-nem igualdade de seus subespacos `LinearMap.ker`.
+Não aparece `Re(s)=1/2` nessa equivalência. O zero real e sua embalagem
+complexa também coincidem para todo `sigma`.
 
-Tambem foi provado que, num zero nativo, o vetor Green limite zera e os
-operadores finitos completados convergem fortemente a zero ponto a ponto em
-cada vetor do espaco completado.
+Separadamente, para blocos Green primos `p,q`:
 
-O guardrail central permanece explicito: um zero Genuine bruto equivale ao
-fechamento bruto da camera, mas nao fornece sozinho a compatibilidade de
-massa pre-compressao exigida pelo predicado de zero nativo. Portanto este
-checkpoint nao prova a seta global `zero Genuine bruto -> zero nativo`; ele
-fecha a equivalencia entre o zero nativo completo e o locus de anulacao do
-operador completado que conserva os dois canais.
+```text
+centro Green = 0
+  <-> criticalDisplacement(Re(s)) = 0
+  <-> Re(s)=1/2.
+```
+
+Logo o operador completado satisfaz:
+
+```text
+genuineGreenCompletedLimitOperator(p,q,s)=0
+  <-> zero nativo/Genuine e Re(s)=1/2.
+```
+
+Em todo zero nativo/Genuine, os operadores finitos completados convergem ao
+operador-limite explícito. A convergência é para zero somente quando o dado
+separado de equilíbrio também é fornecido. Num eventual zero off-equilibrium,
+o canal Genuine fecha e o centro Green permanece não nulo, denunciando o tilt.
+
+Os detalhes da correção e os nomes autoritativos estão em
+`docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md`.
 
 ## Checkpoint v0.59.0 — auditoria carry-first e integracao ativa dos drafts
 
@@ -926,24 +923,13 @@ matematico unico foi perdido. Os JSON imutaveis de confirmacao da publicacao
 `v0.45.0` foram incorporados, mas os dois workflows branch-specific obsoletos
 nao foram reativados.
 
-Os drafts abertos foram integrados pelas suas pontas de stack:
-
-- PRs #25--#26: comparacao primitivo--Genuine--zeta e equivalencia exata com
-  `RiemannHypothesis` da Mathlib;
-- PRs #27, #31 e #32: crosswalk nativo--Genuine--Green, tentativa de
-  confinamento bruto e fronteira de ativacao C2;
-- PR #33: probe deliberadamente vermelho, reparado com a compatibilidade de
-  massa como hipotese explicita;
-- PR #34: reconstrucao TFVD semeada, conservacao finita de Bessel e contracao
-  de momentos nativos.
-
-O diagnostico historico mais forte foi o commit
-`b5a65f168de787c6ab04cc26288c3018d42d375b`, run `30491613094`. O Lean
-recusou a promocao de boundary closure para zero nativo porque faltava
-`NativeCarryRealPlaneMassCompatible`. O commit corretivo
-`68724075d7d44f7c6efb6cfabfc70030bb295945`, run `30492123997`, registrou o
-enunciado condicional correto e ficou verde. O PR #33 encontrou de forma
-independente o mesmo campo ausente.
+Os drafts foram preservados como registro historico, mas uma conclusao dessa
+integracao foi posteriormente corrigida. Os probes que pediam
+`NativeCarryRealPlaneMassCompatible` para "promover" boundary closure a zero
+nativo partiam da definicao substituida de zero. Com a semantica literal,
+boundary closure ja e o zero nativo; compatibilidade de massa e uma propriedade
+quadratica separada. Assim, os commits e runs historicos continuam uteis para
+reproduzir o diagnostico antigo, mas nao descrevem a API atual.
 
 Foram reavaliadas as rotas carry/tilt, regra do produto, Green refletido,
 orcamento Green unilateral, ledger TFVD--log-jet, C2 multiescala, operador

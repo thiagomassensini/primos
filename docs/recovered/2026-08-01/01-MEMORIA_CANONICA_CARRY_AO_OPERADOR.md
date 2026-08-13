@@ -1,5 +1,9 @@
 # Memória canônica — do carry ao operador
 
+> **Arquivo histórico.** A definição antiga que incluía compatibilidade de
+> massa no “zero nativo” foi substituída. Consulte
+> `docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md` antes de usar esta nota.
+
 ## O que está fechado, o que significa e o que não é obrigação
 
 > **Leia este arquivo antes de propor uma nova pendência para o confinamento.**

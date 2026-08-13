@@ -3,32 +3,29 @@ import CPFormal.Analytic.CpGenuineGreenCompletedOperator
 import Mathlib.Tactic.Linarith
 
 /-!
-# Native, Genuine, Green, and completed-operator crosswalk
+# Native, Genuine, and Green: zero versus transverse equilibrium
 
-This module composes the already audited layers without strengthening any of
-them.
+This module records the separation that is essential to the architecture.
 
-For the canonical real camera `3`, the raw primitive boundary closes exactly
-when the scalar Genuine continuation vanishes.  A zero of the full native
-operator retains one additional datum: compatibility with the quadratic carry
-mass.  The Green channel of the completed operator retains exactly this radial
-datum.
-
-Inside the open Genuine strip, for native camera `3` and prime Green blocks
-`p,q`, the kernel proves
+Inside the open Genuine strip, the native camera-three zero and the scalar
+Genuine zero are the same vanishing event, at every radial coordinate:
 
 ```text
-native zero
-  <-> Genuine zero and re(s) = 1/2
-  <-> Genuine zero and cross-prime Green closure
-  <-> completed Genuine--Green operator zero.
+native zero at (re(s), im(s))  <->  genuineContinuation s = 0.
 ```
 
-This is an equality of the parameter loci where the full native predicate
-holds and where the completed endomorphism is the zero map.  It is not an
-equality or intertwiner of the operators themselves, and it does not assert
-that a raw scalar Genuine zero reconstructs the mass discarded by scalar
-compression.
+Independently, the Green center detects the transverse displacement
+`re(s) - 1 / 2`.  Therefore the *completed* two-channel operator vanishes
+exactly when both facts hold:
+
+```text
+completed Green operator = 0
+  <-> native/Genuine zero and re(s) = 1 / 2.
+```
+
+Thus an off-equilibrium zero remains a zero.  What cannot vanish there is the
+additional Green diagnostic channel.  Quadratic mass compatibility is never
+inserted into the definition of zero.
 -/
 
 open scoped Topology
@@ -40,114 +37,103 @@ open Filter
 noncomputable section
 
 /--
-The full native zero is the raw Genuine zero together with the quadratic carry
-shell already present in the native operator domain.
+The primitive native real camera and the scalar Genuine continuation have
+exactly the same zero set throughout the open strip.
 -/
-theorem isNativeCarryRealOperatorZero_three_iff_genuineContinuation_zero_and_re_eq_half
+theorem isNativeCarryRealOperatorZero_three_iff_genuineContinuation_zero
     {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
     IsNativeCarryRealOperatorZero 3 s.re s.im ↔
-      genuineContinuation s = 0 ∧ s.re = (1 : ℝ) / 2 := by
-  unfold IsNativeCarryRealOperatorZero
-  rw [nativeCarryRealPlaneMassCompatible_iff s.re s.im,
-    nativeCarryRealBoundaryClosure_iff_genuineContinuation_zero hs]
-  constructor <;> rintro ⟨h₁, h₂⟩
-  · exact ⟨h₂, h₁⟩
-  · exact ⟨h₂, h₁⟩
+      genuineContinuation s = 0 := by
+  rw [isNativeCarryRealOperatorZero_iff]
+  exact nativeCarryRealBoundaryClosure_iff_genuineContinuation_zero hs
 
 /--
-Every native zero closes the two aligned Green coordinates separately.  The
-scalar Genuine component supplies the raw boundary zero, while the native mass
-component supplies the vanishing radial displacement.
+At a native/Genuine zero, Green closure is exactly transverse equilibrium; it
+is not part of the zero hypothesis.
 -/
-theorem nativeCarryRealOperatorZero_three_to_crossPrimeAlignedGreenClosure
+theorem crossPrimeAlignedGreenClosure_at_nativeZero_iff_re_eq_half
     (p q : ℕ) (hp : Nat.Prime p) (hq : Nat.Prime q)
     {s : ℂ} (hs : s ∈ genuineCriticalStrip)
     (hzero : IsNativeCarryRealOperatorZero 3 s.re s.im) :
-    CrossPrimeAlignedGreenClosure p q s := by
-  have hdata :=
-    (isNativeCarryRealOperatorZero_three_iff_genuineContinuation_zero_and_re_eq_half
-      hs).1 hzero
-  have hcritical : criticalDisplacement s.re = 0 := by
-    unfold criticalDisplacement
-    linarith [hdata.2]
-  exact crossPrimeAlignedGreenClosure_of_critical
-    p q hp hq hs hdata.1 hcritical
-
-/--
-The Green limit vector vanishes at every full native zero.  This is the
-operator-level form of retaining the quadratic mass after scalar synthesis.
--/
-theorem nativeCarryRealOperatorZero_three_to_crossPrimeAlignedGreenLimitVector_zero
-    (p q : ℕ) (hp : Nat.Prime p) (hq : Nat.Prime q)
-    {s : ℂ} (hs : s ∈ genuineCriticalStrip)
-    (hzero : IsNativeCarryRealOperatorZero 3 s.re s.im) :
-    crossPrimeAlignedGreenLimitVector p q s = 0 := by
-  have hdata :=
-    (isNativeCarryRealOperatorZero_three_iff_genuineContinuation_zero_and_re_eq_half
-      hs).1 hzero
-  apply
-    (crossPrimeAlignedGreenLimitVector_eq_zero_iff_criticalDisplacement_eq_zero
-      p q hp hq hs).2
+    CrossPrimeAlignedGreenClosure p q s ↔
+      s.re = (1 : ℝ) / 2 := by
+  have hgenuine : genuineContinuation s = 0 :=
+    (isNativeCarryRealOperatorZero_three_iff_genuineContinuation_zero hs).1
+      hzero
+  rw [crossPrimeAlignedGreenClosure_iff_limitVector_eq_zero
+      p q hp hq hs hgenuine,
+    crossPrimeAlignedGreenLimitVector_eq_zero_iff_criticalDisplacement_eq_zero
+      p q hp hq hs]
   unfold criticalDisplacement
-  linarith [hdata.2]
+  constructor <;> intro h <;> linarith
 
 /--
-The full native zero is equivalently a raw Genuine zero whose two aligned
-Green coordinates close.  Neither conjunct may be dropped.
+The completed two-channel operator is zero exactly when the native/Genuine
+zero and Green equilibrium occur together.
 -/
-theorem isNativeCarryRealOperatorZero_three_iff_genuineContinuation_zero_and_greenClosure
+theorem genuineGreenCompletedLimitOperator_eq_zero_iff_nativeZero_and_re_eq_half
     (p q : ℕ) (hp : Nat.Prime p) (hq : Nat.Prime q)
     {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
-    IsNativeCarryRealOperatorZero 3 s.re s.im ↔
-      genuineContinuation s = 0 ∧ CrossPrimeAlignedGreenClosure p q s := by
-  constructor
-  · intro hzero
-    have hdata :=
-      (isNativeCarryRealOperatorZero_three_iff_genuineContinuation_zero_and_re_eq_half
-        hs).1 hzero
-    exact
-      ⟨hdata.1,
-        nativeCarryRealOperatorZero_three_to_crossPrimeAlignedGreenClosure
-          p q hp hq hs hzero⟩
-  · rintro ⟨hgenuine, hgreen⟩
-    have hvector :
-        crossPrimeAlignedGreenLimitVector p q s = 0 :=
-      (crossPrimeAlignedGreenClosure_iff_limitVector_eq_zero
-        p q hp hq hs hgenuine).1 hgreen
-    have hcritical : criticalDisplacement s.re = 0 :=
-      (crossPrimeAlignedGreenLimitVector_eq_zero_iff_criticalDisplacement_eq_zero
-        p q hp hq hs).1 hvector
-    apply
-      (isNativeCarryRealOperatorZero_three_iff_genuineContinuation_zero_and_re_eq_half
-        hs).2
-    refine ⟨hgenuine, ?_⟩
-    unfold criticalDisplacement at hcritical
-    linarith
+    genuineGreenCompletedLimitOperator p q s = 0 ↔
+      IsNativeCarryRealOperatorZero 3 s.re s.im ∧
+        s.re = (1 : ℝ) / 2 := by
+  rw [genuineGreenCompletedLimitOperator_eq_zero_iff_re_eq_half
+      p q hp hq hs,
+    isNativeCarryRealOperatorZero_three_iff_genuineContinuation_zero hs]
 
-/--
-Exact identity between the native zero locus and the parameter locus where the
-Genuine--Green completed limit endomorphism is the zero map.
--/
-theorem isNativeCarryRealOperatorZero_three_iff_genuineGreenCompletedLimitOperator_zero
+/-- Equivalent coordinate-free formulation using the Green displacement. -/
+theorem genuineGreenCompletedLimitOperator_eq_zero_iff_nativeZero_and_greenCenter_zero
     (p q : ℕ) (hp : Nat.Prime p) (hq : Nat.Prime q)
     {s : ℂ} (hs : s ∈ genuineCriticalStrip) :
-    IsNativeCarryRealOperatorZero 3 s.re s.im ↔
-      genuineGreenCompletedLimitOperator p q s = 0 := by
-  calc
-    IsNativeCarryRealOperatorZero 3 s.re s.im ↔
-        genuineContinuation s = 0 ∧ s.re = (1 : ℝ) / 2 :=
-      isNativeCarryRealOperatorZero_three_iff_genuineContinuation_zero_and_re_eq_half
-        hs
-    _ ↔ genuineGreenCompletedLimitOperator p q s = 0 :=
-      (genuineGreenCompletedLimitOperator_eq_zero_iff_re_eq_half
-        p q hp hq hs).symm
+    genuineGreenCompletedLimitOperator p q s = 0 ↔
+      IsNativeCarryRealOperatorZero 3 s.re s.im ∧
+        criticalDisplacement s.re = 0 := by
+  rw [genuineGreenCompletedLimitOperator_eq_zero_iff p q hp hq hs,
+    isNativeCarryRealOperatorZero_three_iff_genuineContinuation_zero hs]
 
 /--
-At a native zero, every finite completed operator converges strongly to zero.
-The finite operators retain both the scalar Genuine channel and the Green
-channel throughout the limit.
+Exact channel separation at an off-equilibrium zero: the Genuine block is
+zero, while the Green center is nonzero. This is the formal statement that
+Green detects the tilt without changing the meaning of the zero.
 -/
-theorem finiteGenuineGreenCompletedOperator_tendsto_zero_of_nativeCarryRealOperatorZero
+theorem nativeZero_offEquilibrium_channelSeparation
+    (p q : ℕ) (hp : Nat.Prime p) (hq : Nat.Prime q)
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip)
+    (hzero : IsNativeCarryRealOperatorZero 3 s.re s.im)
+    (hoff : s.re ≠ (1 : ℝ) / 2) :
+    orthogonalGenuineLimitOperator s = 0 ∧
+      complexifiedAlignedGreenLimitOperator p q s ≠ 0 := by
+  have hgenuine : genuineContinuation s = 0 :=
+    (isNativeCarryRealOperatorZero_three_iff_genuineContinuation_zero hs).1
+      hzero
+  refine ⟨(orthogonalGenuineLimitOperator_eq_zero_iff s).2 hgenuine, ?_⟩
+  intro hgreen
+  have hcenter : criticalDisplacement s.re = 0 :=
+    (complexifiedAlignedGreenLimitOperator_eq_zero_iff_criticalDisplacement_eq_zero
+      p q hp hq hs).1 hgreen
+  apply hoff
+  unfold criticalDisplacement at hcenter
+  linarith
+
+/--
+If a native/Genuine zero lies away from equilibrium, the zero remains valid
+and the completed operator is nonzero precisely because its Green channel
+detects the tilt.
+-/
+theorem nativeZero_has_nonzero_greenCompletedOperator_of_re_ne_half
+    (p q : ℕ) (hp : Nat.Prime p) (hq : Nat.Prime q)
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip)
+    (_hzero : IsNativeCarryRealOperatorZero 3 s.re s.im)
+    (hoff : s.re ≠ (1 : ℝ) / 2) :
+    genuineGreenCompletedLimitOperator p q s ≠ 0 :=
+  genuineGreenCompletedLimitOperator_ne_zero_of_re_ne_half
+    p q hp hq hs hoff
+
+/--
+At every native/Genuine zero, the finite completed operators converge to the
+explicit two-channel limit.  No equilibrium assumption is used.
+-/
+theorem finiteGenuineGreenCompletedOperator_tendsto_apply_of_nativeZero
     (p q : ℕ)
     (hp : Nat.Prime p) (hpodd : Odd p)
     (hq : Nat.Prime q) (hqodd : Odd q)
@@ -156,18 +142,36 @@ theorem finiteGenuineGreenCompletedOperator_tendsto_zero_of_nativeCarryRealOpera
     (v : GenuineGreenCompletedSpace) :
     Tendsto
       (fun L : ℕ => finiteGenuineGreenCompletedOperator p q L s v)
+      atTop
+      (nhds (genuineGreenCompletedLimitOperator p q s v)) := by
+  apply finiteGenuineGreenCompletedOperator_tendsto_apply_of_genuine_zero
+    p q hp hpodd hq hqodd hs
+  exact
+    (isNativeCarryRealOperatorZero_three_iff_genuineContinuation_zero hs).1
+      hzero
+
+/--
+The preceding limit is zero only after the separate Green-equilibrium datum
+is supplied.
+-/
+theorem finiteGenuineGreenCompletedOperator_tendsto_zero_of_nativeZero_and_re_eq_half
+    (p q : ℕ)
+    (hp : Nat.Prime p) (hpodd : Odd p)
+    (hq : Nat.Prime q) (hqodd : Odd q)
+    {s : ℂ} (hs : s ∈ genuineCriticalStrip)
+    (hzero : IsNativeCarryRealOperatorZero 3 s.re s.im)
+    (hhalf : s.re = (1 : ℝ) / 2)
+    (v : GenuineGreenCompletedSpace) :
+    Tendsto
+      (fun L : ℕ => finiteGenuineGreenCompletedOperator p q L s v)
       atTop (nhds 0) := by
-  have hdata :=
-    (isNativeCarryRealOperatorZero_three_iff_genuineContinuation_zero_and_re_eq_half
-      hs).1 hzero
-  have hoperator :
-      genuineGreenCompletedLimitOperator p q s = 0 :=
-    (isNativeCarryRealOperatorZero_three_iff_genuineGreenCompletedLimitOperator_zero
-      p q hp hq hs).1 hzero
   have hlimit :=
-    finiteGenuineGreenCompletedOperator_tendsto_apply_of_genuine_zero
-      p q hp hpodd hq hqodd hs hdata.1 v
-  simpa [hoperator] using hlimit
+    finiteGenuineGreenCompletedOperator_tendsto_apply_of_nativeZero
+      p q hp hpodd hq hqodd hs hzero v
+  have hop : genuineGreenCompletedLimitOperator p q s = 0 :=
+    (genuineGreenCompletedLimitOperator_eq_zero_iff_nativeZero_and_re_eq_half
+      p q hp hq hs).2 ⟨hzero, hhalf⟩
+  simpa [hop] using hlimit
 
 end
 

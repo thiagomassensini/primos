@@ -1,4 +1,11 @@
-# CPFormal v0.59.0 — Carry-first active integration and immutable mirror
+# Nota de correção semântica
+
+> Este documento registra historicamente a `v0.59.0`. A frase
+> `full native zero = mass compatibility + boundary closure` não descreve a
+> API atual: zero é somente boundary closure, enquanto massa e Green são
+> camadas separadas. Consulte `docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md`.
+
+## CPFormal v0.59.0 — registro histórico
 
 ## Release status
 

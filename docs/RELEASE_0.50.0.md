@@ -1,4 +1,12 @@
-# CPFormal v0.50.0 — Exact native real-operator confinement
+# Nota de correção semântica
+
+> Este documento registra historicamente a `v0.50.0`, mas sua definição de
+> zero nativo foi substituída. Zero agora significa somente fechamento de
+> fronteira; compatibilidade de massa e `sigma = 1/2` são propriedades
+> quadráticas separadas. Consulte
+> `docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md`.
+
+## CPFormal v0.50.0 — registro histórico substituído
 
 ## Scope
 

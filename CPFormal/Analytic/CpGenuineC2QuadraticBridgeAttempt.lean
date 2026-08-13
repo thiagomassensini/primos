@@ -1,6 +1,5 @@
 import CPFormal.Analytic.CpC2GpreGreenActivationGuard
 import CPFormal.Analytic.CpConnectedC2Defect
-import CPFormal.Analytic.CpGenuineZeroConfinementAttempt
 import Mathlib.Tactic.Linarith
 
 /-!
@@ -28,8 +27,7 @@ detector is equivalent to:
 
 * closure of that detector on the raw Genuine kernel;
 * activation of the aligned Green closure;
-* strong off-critical nonvanishing of the Genuine continuation;
-* promotion of every raw Genuine zero to a full native operator zero.
+* strong off-critical nonvanishing of the Genuine continuation.
 
 No instance of the activation proposition is declared.
 -/
@@ -125,27 +123,6 @@ theorem c2GpreTaggedRadialC2Activation_iff_greenActivation
       (c2GpreTaggedSynthesisActivatesGreenClosure_iff_strongNonvanishing
         verticalRatio family hp hpodd hq hqodd).symm
 
-/--
-The requested quadratic activation is also exactly promotion of raw Genuine
-zeros to full native zeros from the preceding confinement-frontier module.
--/
-theorem c2GpreTaggedRadialC2Activation_iff_genuineZerosPromoteToNativeZeros
-    (verticalRatio : ℝ) {p q : ℕ}
-    (family : C2GpreActiveCofinalAtlasFamily p q)
-    (hp : Nat.Prime p) (hpodd : Odd p)
-    (hq : Nat.Prime q) (hqodd : Odd q) :
-    C2GpreTaggedSynthesisActivatesRadialC2Detector
-        verticalRatio family ↔
-      GenuineZerosPromoteToNativeZeros := by
-  calc
-    C2GpreTaggedSynthesisActivatesRadialC2Detector
-          verticalRatio family ↔
-        GenuineStrongNonvanishingInStrip :=
-      c2GpreTaggedSynthesisActivatesRadialC2Detector_iff_strongNonvanishing
-        verticalRatio family hp hpodd hq hqodd
-    _ ↔ GenuineZerosPromoteToNativeZeros :=
-      genuineZerosPromoteToNativeZeros_iff_strongNonvanishing.symm
-
 /-- Conditional composition of the proved scalar closure with the exact
 quadratic activation map. -/
 theorem genuineContinuation_zero_to_radialC2Detector_zero_of_taggedActivation
@@ -220,27 +197,6 @@ theorem genuineContinuation_zero_re_eq_half_of_taggedRadialC2Activation
       verticalRatio family hp hpodd hq hqodd hactivate hs hzero
   unfold criticalDisplacement at hdelta
   linarith
-
-/-- The same conditional chain promotes the raw Genuine zero to the native
-operator zero used by the already proved confinement theorem. -/
-theorem genuineContinuation_zero_to_nativeOperatorZero_of_taggedRadialC2Activation
-    (verticalRatio : ℝ) {p q : ℕ}
-    (family : C2GpreActiveCofinalAtlasFamily p q)
-    (hp : Nat.Prime p) (hpodd : Odd p)
-    (hq : Nat.Prime q) (hqodd : Odd q)
-    (hactivate :
-      C2GpreTaggedSynthesisActivatesRadialC2Detector
-        verticalRatio family)
-    {s : ℂ} (hs : s ∈ genuineCriticalStrip)
-    (hzero : genuineContinuation s = 0) :
-    IsNativeCarryRealOperatorZero 3 s.re s.im := by
-  apply
-    (isNativeCarryRealOperatorZero_three_iff_genuineContinuation_zero_and_re_eq_half
-      hs).2
-  exact
-    ⟨hzero,
-      genuineContinuation_zero_re_eq_half_of_taggedRadialC2Activation
-        verticalRatio family hp hpodd hq hqodd hactivate hs hzero⟩
 
 end
 

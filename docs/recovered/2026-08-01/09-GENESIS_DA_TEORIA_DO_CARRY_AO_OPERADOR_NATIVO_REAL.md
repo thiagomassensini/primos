@@ -18,6 +18,10 @@ checkpoint_primos: "7d8d0b345b329935674edc24e5ac08ad9f7b5804"
 data: 2026-07-31
 ---
 
+> **Arquivo histórico.** A definição antiga que incluía compatibilidade de
+> massa no “zero nativo” foi substituída. Consulte
+> `docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md`.
+
 # Gênesis da teoria — do carry ao operador nativo real
 
 ## Mapa formal da origem da linha crítica, da norma quadrática, do tilt, do Genuine e da invariância de câmeras

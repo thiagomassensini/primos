@@ -1,4 +1,11 @@
-# CPFormal v0.51.0 — Möbius log-derivative guardrail
+# Nota de correção semântica
+
+> Este documento registra historicamente a `v0.51.0`. Toda passagem que usa
+> “confinamento do zero nativo” a partir da compatibilidade de massa deve ser
+> lida como substituída: equilíbrio quadrático e anulação são predicados
+> separados. Consulte `docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md`.
+
+## CPFormal v0.51.0 — registro histórico
 
 ## Scope
 

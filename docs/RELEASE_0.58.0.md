@@ -1,4 +1,11 @@
-# CPFormal v0.58.0 — Immutable complete Git mirror
+# Nota de correção semântica
+
+> Este documento registra historicamente a `v0.58.0`. Referências a
+> “native real-operator confinement” baseadas na definição
+> `massCompatible ∧ boundaryCloses` foram substituídas. Consulte
+> `docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md`.
+
+## CPFormal v0.58.0 — registro histórico
 
 ## Purpose
 

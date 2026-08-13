@@ -1,9 +1,9 @@
-import CPFormal.Analytic.CpNativeCarryRealOperatorConfinement
+import CPFormal.Analytic.CpNativeCarryRealOperatorZero
 import CPFormal.Analytic.CpNativeCarryRealPlaneComplexPackaging
 import Mathlib.Analysis.Complex.Basic
 
 /-!
-# O operador complexo é o mesmo operador real: confinamento por troca de roupa
+# O operador complexo é o mesmo operador real
 
 O empacotamento complexo `nativeCarryRealPlaneComplexPackaging` guarda o par real
 `(x,y)` nos dois campos de um número complexo.  Já está provado que ele é um
@@ -12,23 +12,22 @@ e que **comuta com toda a câmera finita**.  A unidade imaginária não multipli
 nada: `√-1` é um apêndice, um recipiente de duas coordenadas.
 
 Como `ℂ ≃L[ℝ] ℝ × ℝ` é um homeomorfismo (`Complex.equivRealProdCLM`), o
-empacotamento também transporta o **limite** de fronteira.  Assim o operador
+empacotamento também transporta o **limite** de fronteira. Assim o operador
 complexo tem exatamente a mesma condição de fechamento que o operador real
-nativo, e o mesmo domínio de massa.  Logo é, ao pé da letra, o mesmo operador.
+nativo. Logo é, ao pé da letra, o mesmo operador.
 
-Consequência (ligando os teoremas já provados):
+Consequência:
 
-`zero do operador complexo (camera,σ,t) ⟺ zero do operador real (camera,σ,t)`
-`⟹ σ = 1/2`.
+`zero complexo (camera,σ,t) ⟺ zero real (camera,σ,t)`.
 
-Portanto o operador Genuine complexo **completo** não tem zero fora do expoente
-autodual — não por um argumento novo, mas porque é o operador real de sempre com
-outra roupa.
+Essa equivalência vale para todo `sigma`; a coordenada imaginária não cria nem
+remove zeros. A rigidez quadrática `sigma = 1 / 2` é um teorema separado sobre
+a compatibilidade entre amplitude e massa de carry. Ela não faz parte da
+definição de zero.
 
-Aviso honesto: isto vale para o operador **completo** (que carrega o dado de
-massa via o domínio).  Não afirma que o escalar Genuine comprimido sozinho
-(`genuineContinuation`) reconstrua a massa que a compressão descartou — esse é o
-ângulo cego, e continua sendo a única seta não automática.
+Quando `sigma ≠ 1 / 2`, o deslocamento é registrado separadamente pelo centro
+Green e pelo canal Green completado. Isso não altera o fato de que anulação
+continua significando anulação.
 
 Genuine First: nenhum zeta, equação funcional ou RH.
 -/
@@ -76,14 +75,17 @@ theorem nativeCarryComplexOperatorBoundaryClosesAt_iff
   exact
     (Complex.equivRealProdCLM.symm.toHomeomorph.isEmbedding.tendsto_nhds_iff).symm
 
-/--
-Zero do operador **complexo** completo: mesma massa de carry no domínio e
-fechamento de fronteira complexo.
--/
+/-- Zero complexo significa apenas fechamento da fronteira complexa. -/
 def IsNativeCarryComplexOperatorZero
     (camera : ℕ) (sigma time : ℝ) : Prop :=
-  NativeCarryRealPlaneMassCompatible sigma time ∧
-    NativeCarryComplexOperatorBoundaryClosesAt camera sigma time
+  NativeCarryComplexOperatorBoundaryClosesAt camera sigma time
+
+/-- O predicado de zero complexo não acrescenta nenhuma condição radial. -/
+@[simp] theorem isNativeCarryComplexOperatorZero_iff_boundaryClosesAt
+    (camera : ℕ) (sigma time : ℝ) :
+    IsNativeCarryComplexOperatorZero camera sigma time ↔
+      NativeCarryComplexOperatorBoundaryClosesAt camera sigma time :=
+  Iff.rfl
 
 /-- **É o mesmo operador.**  O zero complexo e o zero real coincidem. -/
 theorem isNativeCarryComplexOperatorZero_iff_real
@@ -91,39 +93,7 @@ theorem isNativeCarryComplexOperatorZero_iff_real
     IsNativeCarryComplexOperatorZero camera sigma time ↔
       IsNativeCarryRealOperatorZero camera sigma time := by
   unfold IsNativeCarryComplexOperatorZero IsNativeCarryRealOperatorZero
-  rw [nativeCarryComplexOperatorBoundaryClosesAt_iff]
-
-/--
-Fatoração exata do operador complexo, herdada do operador real:
-`Zero_camera = {1/2} × Resonance_camera`.
--/
-theorem isNativeCarryComplexOperatorZero_iff
-    (camera : ℕ) (sigma time : ℝ) :
-    IsNativeCarryComplexOperatorZero camera sigma time ↔
-      sigma = (1 : ℝ) / 2 ∧
-        IsNativeCarryRealOperatorResonance camera time := by
-  rw [isNativeCarryComplexOperatorZero_iff_real,
-    isNativeCarryRealOperatorZero_iff]
-
-/--
-**Confinamento do operador Genuine complexo completo.**  Todo zero tem o
-expoente autodual `σ = 1/2` — porque é literalmente o operador real nativo,
-apenas empacotado em `ℂ`.
--/
-theorem nativeCarryComplexOperatorZero_sigma_eq_half
-    {camera : ℕ} {sigma time : ℝ}
-    (hzero : IsNativeCarryComplexOperatorZero camera sigma time) :
-    sigma = (1 : ℝ) / 2 :=
-  nativeCarryRealOperatorZero_sigma_eq_half
-    ((isNativeCarryComplexOperatorZero_iff_real camera sigma time).1 hzero)
-
-/-- Não há zero do operador complexo numa casca radial fora do autodual. -/
-theorem nativeCarryComplexOperatorZero_ne_of_sigma_ne_half
-    {camera : ℕ} {sigma time : ℝ}
-    (hoff : sigma ≠ (1 : ℝ) / 2) :
-    ¬ IsNativeCarryComplexOperatorZero camera sigma time := by
-  intro hzero
-  exact hoff (nativeCarryComplexOperatorZero_sigma_eq_half hzero)
+  exact nativeCarryComplexOperatorBoundaryClosesAt_iff camera sigma time
 
 end
 

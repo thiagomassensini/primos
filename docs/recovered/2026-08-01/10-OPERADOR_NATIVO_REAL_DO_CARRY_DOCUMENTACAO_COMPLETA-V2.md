@@ -16,6 +16,10 @@ date: 2026-07-29
 revised: 2026-07-29
 ---
 
+> **Arquivo histórico.** A definição antiga que incluía compatibilidade de
+> massa no “zero nativo” foi substituída. Consulte
+> `docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md`.
+
 # Operador real de carry
 
 ## Definição completa, geometria, zero, confinamento, representações e auditoria numérica
