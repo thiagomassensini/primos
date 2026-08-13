@@ -1,4 +1,5 @@
 import unittest
+from collections import Counter, defaultdict
 
 from experiments.elliptic_congruence_camera import (
     ShortWeierstrassCurve,
@@ -7,6 +8,34 @@ from experiments.elliptic_congruence_camera import (
     generate_gate1_ledger,
     summarize_level,
 )
+
+
+def direct_profile(
+    curve: ShortWeierstrassCurve,
+    base: int,
+    depth: int,
+) -> tuple[int, int, dict[int, int], int]:
+    """Independent exhaustive check using the complete next modulus."""
+
+    modulus = base**depth
+    next_modulus = modulus * base
+    source = [
+        (x, y)
+        for x in range(modulus)
+        for y in range(modulus)
+        if curve.contains((x, y), modulus)
+    ]
+    counts: defaultdict[tuple[int, int], int] = defaultdict(int)
+    next_point_count = 0
+    for x in range(next_modulus):
+        for y in range(next_modulus):
+            if curve.contains((x, y), next_modulus):
+                counts[(x % modulus, y % modulus)] += 1
+                next_point_count += 1
+
+    histogram = Counter(counts[point] for point in source)
+    energy = sum((counts[point] - base) ** 2 for point in source)
+    return len(source), next_point_count, dict(sorted(histogram.items())), energy
 
 
 class EllipticCongruenceCameraTests(unittest.TestCase):
@@ -63,6 +92,19 @@ class EllipticCongruenceCameraTests(unittest.TestCase):
                 self.assertTrue(check.point_count_identity)
                 self.assertTrue(check.fiber_product_identity)
                 self.assertEqual(check.mismatches, 0)
+
+    def test_independent_direct_enumeration_matches_lift_engine(self) -> None:
+        expected = {
+            (2, 1): (2, 6, {2: 1, 4: 1}, 4),
+            (2, 4): (40, 80, {0: 16, 2: 8, 4: 16}, 128),
+            (3, 1): (6, 18, {3: 6}, 0),
+            (23, 1): (22, 483, {0: 1, 23: 21}, 529),
+            (6, 1): (12, 108, {6: 6, 12: 6}, 216),
+            (15, 1): (42, 630, {15: 42}, 0),
+        }
+        for key, target in expected.items():
+            with self.subTest(base=key[0], depth=key[1]):
+                self.assertEqual(direct_profile(self.curve, *key), target)
 
     def test_gate_passes_without_upgrading_evidence_status(self) -> None:
         self.assertTrue(self.ledger["gate_passed"])
