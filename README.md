@@ -10,6 +10,25 @@ O projeto nunca usa `sorry`, `axiom` ou um zero conhecido para fabricar o
 operador que deveria explica-lo. Uma afirmacao so recebe o estado
 `KERNEL_CHECKED` depois que `lake build` termina sem erros.
 
+## Checkpoint v0.62.0 — zero literal e separação do canal Green
+
+Esta release corretiva torna imutável a separação entre três fatos distintos:
+
+```text
+carry quadrático -> seleciona o equilíbrio sigma = 1/2
+câmera/Genuine   -> registra somente a anulação
+centro Green     -> detecta separadamente o deslocamento sigma - 1/2
+```
+
+A correção não cria nem exclui zeros. No strip, a câmera real nativa `3` e
+`genuineContinuation` continuam realizando literalmente o mesmo teste de
+anulação em toda coordenada radial. Se um zero for apresentado fora do
+equilíbrio, ele permanece zero e o canal Green adicional permanece não nulo.
+
+A nota de migração e o alcance lógico exato estão em
+[`docs/RELEASE_0.62.0.md`](docs/RELEASE_0.62.0.md) e
+[`docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md`](docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md).
+
 ## Correção semântica do zero nativo
 
 O zero nativo é anulação, sem condição radial embutida:
@@ -358,7 +377,7 @@ job `91116286122`. A certificacao cobre os imports de `CPFormal.lean`,
 incluindo as cameras naturais e o certificado de persistencia estrutural;
 `CPFormal.ResearchReserve` permanece fora dela.
 
-O workflow de release da `v0.60.0` repete a auditoria sobre o `main` exato
+O workflow de release da `v0.62.0` repete a auditoria sobre o `main` exato
 antes de criar a tag anotada e a GitHub Release. Essa verificacao final do
 commit publicado e separada do registro do head matematico acima.
 
@@ -373,6 +392,7 @@ afirma uma inversa global ou uma lei sobre toda a matematica.
 ## Ordem de leitura
 
 Para uma visao completa deste checkpoint, comece por
+`docs/RELEASE_0.62.0.md`,
 `docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md`,
 `docs/RELEASE_0.60.0.md`,
 `docs/POST_V059_PRESERVATION_MANIFEST_2026-08-01.md` e
