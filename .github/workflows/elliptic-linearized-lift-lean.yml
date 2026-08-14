@@ -10,6 +10,7 @@ on:
       - "CPFormal/Elliptic/CoprimeState.lean"
       - "CPFormal/Elliptic/ReductionFiber.lean"
       - "CPFormal.lean"
+      - "docs/ELLIPTIC_CONGRUENCE_CAMERA_GATE3_LEAN.md"
       - ".github/workflows/elliptic-linearized-lift-lean.yml"
   workflow_dispatch:
 
@@ -43,8 +44,12 @@ jobs:
         run: |
           set -o pipefail
           lake build --wfail \
-            CPFormal.Elliptic.ReductionFiber \
-            CPFormal.Elliptic.WeierstrassLinearizedLift 2>&1 \
+            CPFormal.Elliptic.LinearizedLift \
+            CPFormal.Elliptic.WeierstrassLinearizedLift \
+            CPFormal.Elliptic.ProductFiber \
+            CPFormal.Elliptic.ProductEnergy \
+            CPFormal.Elliptic.CoprimeState \
+            CPFormal.Elliptic.ReductionFiber 2>&1 \
             | tee elliptic-finite.log
 
       - name: Preserve failure log
