@@ -53,7 +53,7 @@ def IsAffineSingularState
     shortWeierstrassGradientY p point.1.2 = 0
 
 /-- Linearized lift fiber attached to one affine Weierstrass state. -/
-def WeierstrassLinearizedLiftFiber
+abbrev WeierstrassLinearizedLiftFiber
     (p : ℕ) (a b : ℤ)
     (point : AffineCongruenceState p a b)
     (residualQuotient : ZMod p) : Type :=
