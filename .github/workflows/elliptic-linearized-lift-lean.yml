@@ -1,9 +1,11 @@
-name: Elliptic linearized lift Lean gate
+name: Elliptic finite arithmetic Lean gate
 
 on:
   pull_request:
     paths:
       - "CPFormal/Elliptic/LinearizedLift.lean"
+      - "CPFormal/Elliptic/ProductEnergy.lean"
+      - "CPFormal/Elliptic/CoprimeState.lean"
       - ".github/workflows/elliptic-linearized-lift-lean.yml"
   workflow_dispatch:
 
@@ -11,8 +13,8 @@ permissions:
   contents: read
 
 jobs:
-  linearized-lift:
-    name: Kernel-check local lift trichotomy
+  elliptic-finite:
+    name: Kernel-check local lift and product energy
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -32,18 +34,23 @@ jobs:
           lint: false
           use-mathlib-cache: true
 
-      - name: Elaborate linearized lift module
+      - name: Elaborate elliptic finite modules
         shell: bash
         run: |
           set -o pipefail
-          lake env lean CPFormal/Elliptic/LinearizedLift.lean 2>&1 \
-            | tee elliptic-linearized-lift.log
+          {
+            lake env lean CPFormal/Elliptic/LinearizedLift.lean
+            lake env lean CPFormal/Elliptic/ProductEnergy.lean
+            if [[ -f CPFormal/Elliptic/CoprimeState.lean ]]; then
+              lake env lean CPFormal/Elliptic/CoprimeState.lean
+            fi
+          } 2>&1 | tee elliptic-finite.log
 
       - name: Preserve failure log
         if: failure()
         uses: actions/upload-artifact@v4
         with:
-          name: elliptic-linearized-lift-${{ github.run_id }}
-          path: elliptic-linearized-lift.log
+          name: elliptic-finite-${{ github.run_id }}
+          path: elliptic-finite.log
           if-no-files-found: ignore
           retention-days: 7
