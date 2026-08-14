@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "CPFormal/Elliptic/LinearizedLift.lean"
+      - "CPFormal/Elliptic/WeierstrassLinearizedLift.lean"
       - "CPFormal/Elliptic/ProductFiber.lean"
       - "CPFormal/Elliptic/ProductEnergy.lean"
       - "CPFormal/Elliptic/CoprimeState.lean"
@@ -37,11 +38,13 @@ jobs:
           lint: false
           use-mathlib-cache: true
 
-      - name: Build the reduction-fiber module and its local dependencies
+      - name: Build the elliptic finite modules and local dependencies
         shell: bash
         run: |
           set -o pipefail
-          lake build --wfail CPFormal.Elliptic.ReductionFiber 2>&1 \
+          lake build --wfail \
+            CPFormal.Elliptic.ReductionFiber \
+            CPFormal.Elliptic.WeierstrassLinearizedLift 2>&1 \
             | tee elliptic-finite.log
 
       - name: Preserve failure log
