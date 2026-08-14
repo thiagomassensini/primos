@@ -3,6 +3,7 @@ import CPFormal.Logic.CausalCompression
 import CPFormal.Logic.StructuralPersistence
 import CPFormal.Finite.SymmetricPair
 import CPFormal.Finite.Bracket
+import CPFormal.Elliptic.LinearizedLift
 import CPFormal.Carry.Shift
 import CPFormal.Carry.C2Adjacent
 import CPFormal.Carry.C2Depth
