@@ -63,7 +63,7 @@ theorem zmodReduction_chineseRemainder
       (zmodReduction hm ((ZMod.chineseRemainder hLarge x).1),
         zmodReduction hn ((ZMod.chineseRemainder hLarge x).2)) := by
   obtain ⟨k, rfl⟩ := ZMod.intCast_surjective x
-  simp [zmodReduction]
+  apply Prod.ext <;> simp [zmodReduction]
 
 /-- The affine-state reduction square commutes with both CRT equivalences. -/
 theorem affineCongruenceStateReduction_crt_commutes
