@@ -4,6 +4,7 @@ import CPFormal.Logic.StructuralPersistence
 import CPFormal.Finite.SymmetricPair
 import CPFormal.Finite.Bracket
 import CPFormal.Elliptic.LinearizedLift
+import CPFormal.Elliptic.WeierstrassLinearizedLift
 import CPFormal.Elliptic.ProductFiber
 import CPFormal.Elliptic.ProductEnergy
 import CPFormal.Elliptic.CoprimeState
