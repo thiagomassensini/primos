@@ -215,7 +215,7 @@ def rawWeierstrassLiftFiberEquivLinearized
         (shortWeierstrassGradientXInt a x)
         (shortWeierstrassGradientYInt y) uv.1).2
         (by
-          simpa [shortWeierstrassLinearTermInt] using
+          simpa [shortWeierstrassLinearTermInt, add_assoc] using
             ((shortWeierstrassRawLift_dvd_iff
               p k hp hk a b x y
               (ZMod.cast uv.1.1 : ℤ)
@@ -226,7 +226,7 @@ def rawWeierstrassLiftFiberEquivLinearized
         (ZMod.cast uv.1.1 : ℤ)
         (ZMod.cast uv.1.2 : ℤ) c hbase).2
         (by
-          simpa [shortWeierstrassLinearTermInt] using
+          simpa [shortWeierstrassLinearTermInt, add_assoc] using
             ((linearizedEquation_zmod_iff_dvd p c
               (shortWeierstrassGradientXInt a x)
               (shortWeierstrassGradientYInt y) uv.1).1 uv.2))
