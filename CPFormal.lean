@@ -88,6 +88,7 @@ import CPFormal.Analytic.CpGenuineTiltAuxiliaryRoute
 import CPFormal.Analytic.CpTfvdGenuineCarryIdentification
 import CPFormal.Analytic.CpSeededTfvdSameSBoundary
 import CPFormal.Analytic.CpFiniteSeededTfvdGreenIdentity
+import CPFormal.Analytic.CpMinimalProvenanceQuotient
 import CPFormal.Analytic.CpGpreTypes
 import CPFormal.Analytic.CpNativeGpreTowerLift
 import CPFormal.Analytic.CpNativeGpreTowerNorm
