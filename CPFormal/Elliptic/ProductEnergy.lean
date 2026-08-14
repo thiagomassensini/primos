@@ -137,7 +137,7 @@ theorem fiberEnergy_product_left_regular
       simp
     _ = (Fintype.card α : ℤ) * (a : ℤ) ^ 2 *
         ∑ y : β, fiberDefect b (right y) ^ 2 := by
-      rw [Finset.mul_sum]
+      rw [← Finset.mul_sum]
       ring
 
 end CPFormal.Elliptic
