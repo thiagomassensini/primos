@@ -43,7 +43,7 @@ def LinearizedLiftFiber (p : ℕ) (c gx gy : ZMod p) : Type :=
 noncomputable instance linearizedLiftFiberFintype
     (p : ℕ) [Fact (Nat.Prime p)] (c gx gy : ZMod p) :
     Fintype (LinearizedLiftFiber p c gx gy) :=
-  Fintype.ofFinite _
+  Fintype.ofInjective Subtype.val Subtype.val_injective
 
 /-- The finite field `ZMod p` has exactly `p` elements when `p` is prime. -/
 theorem card_zmod_prime (p : ℕ) [Fact (Nat.Prime p)] :
