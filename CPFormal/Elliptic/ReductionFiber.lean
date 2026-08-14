@@ -38,7 +38,7 @@ theorem shortWeierstrassResidual_zmodPointReduction
     (point : ZMod large × ZMod large) :
     shortWeierstrassResidual a b (zmodPointReduction h point) =
       zmodReduction h (shortWeierstrassResidual a b point) := by
-  simp [shortWeierstrassResidual, zmodPointReduction, zmodReduction]
+  simp [shortWeierstrassResidual, zmodPointReduction]
 
 /-- Reduction of affine congruence states along a divisor of moduli. -/
 def affineCongruenceStateReduction
@@ -62,7 +62,8 @@ theorem zmodReduction_chineseRemainder
     (ZMod.chineseRemainder hSmall) (zmodReduction hProduct x) =
       (zmodReduction hm ((ZMod.chineseRemainder hLarge x).1),
         zmodReduction hn ((ZMod.chineseRemainder hLarge x).2)) := by
-  apply Prod.ext <;> simp [zmodReduction]
+  obtain ⟨k, rfl⟩ := ZMod.intCast_surjective x
+  simp [zmodReduction]
 
 /-- The affine-state reduction square commutes with both CRT equivalences. -/
 theorem affineCongruenceStateReduction_crt_commutes
