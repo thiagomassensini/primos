@@ -38,6 +38,12 @@ noncomputable section
 def LinearizedLiftFiber (p : ℕ) (c gx gy : ZMod p) : Type :=
   {uv : ZMod p × ZMod p // c + uv.1 * gx + uv.2 * gy = 0}
 
+/-- The linearized solution fiber is finite over a prime residue field. -/
+noncomputable instance linearizedLiftFiberFintype
+    (p : ℕ) [Fact (Nat.Prime p)] (c gx gy : ZMod p) :
+    Fintype (LinearizedLiftFiber p c gx gy) :=
+  Fintype.ofFinite _
+
 /-- The finite field `ZMod p` has exactly `p` elements when `p` is prime. -/
 theorem card_zmod_prime (p : ℕ) [Fact (Nat.Prime p)] :
     Fintype.card (ZMod p) = p := by
@@ -202,7 +208,7 @@ theorem card_ne_expected_iff_gradient_zero
       exact prime_sq_ne_self p
     · rw [card_linearizedLiftFiber_of_gradient_zero_of_residual_ne_zero
           p c gx gy hx hy hc]
-      exact Nat.zero_ne_of_lt (Fact.out : Nat.Prime p).pos
+      exact ((Fact.out : Nat.Prime p).ne_zero).symm
 
 end
 
