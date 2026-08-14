@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - "CPFormal/Elliptic/LinearizedLift.lean"
+      - "CPFormal/Elliptic/ProductFiber.lean"
       - "CPFormal/Elliptic/ProductEnergy.lean"
       - "CPFormal/Elliptic/CoprimeState.lean"
       - ".github/workflows/elliptic-linearized-lift-lean.yml"
@@ -14,7 +15,7 @@ permissions:
 
 jobs:
   elliptic-finite:
-    name: Kernel-check local lift and product energy
+    name: Kernel-check local lift, product fibers and energy
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -40,6 +41,7 @@ jobs:
           set -o pipefail
           {
             lake env lean CPFormal/Elliptic/LinearizedLift.lean
+            lake env lean CPFormal/Elliptic/ProductFiber.lean
             lake env lean CPFormal/Elliptic/ProductEnergy.lean
             if [[ -f CPFormal/Elliptic/CoprimeState.lean ]]; then
               lake env lean CPFormal/Elliptic/CoprimeState.lean
