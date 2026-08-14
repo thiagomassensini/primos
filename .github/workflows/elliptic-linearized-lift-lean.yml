@@ -8,6 +8,7 @@ on:
       - "CPFormal/Elliptic/ProductEnergy.lean"
       - "CPFormal/Elliptic/CoprimeState.lean"
       - "CPFormal/Elliptic/ReductionFiber.lean"
+      - "CPFormal.lean"
       - ".github/workflows/elliptic-linearized-lift-lean.yml"
   workflow_dispatch:
 
@@ -36,17 +37,12 @@ jobs:
           lint: false
           use-mathlib-cache: true
 
-      - name: Elaborate elliptic finite modules
+      - name: Build the reduction-fiber module and its local dependencies
         shell: bash
         run: |
           set -o pipefail
-          {
-            lake env lean CPFormal/Elliptic/LinearizedLift.lean
-            lake env lean CPFormal/Elliptic/ProductFiber.lean
-            lake env lean CPFormal/Elliptic/ProductEnergy.lean
-            lake env lean CPFormal/Elliptic/CoprimeState.lean
-            lake env lean CPFormal/Elliptic/ReductionFiber.lean
-          } 2>&1 | tee elliptic-finite.log
+          lake build --wfail CPFormal.Elliptic.ReductionFiber 2>&1 \
+            | tee elliptic-finite.log
 
       - name: Preserve failure log
         if: failure()
