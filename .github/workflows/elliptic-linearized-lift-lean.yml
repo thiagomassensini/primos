@@ -7,6 +7,7 @@ on:
       - "CPFormal/Elliptic/ProductFiber.lean"
       - "CPFormal/Elliptic/ProductEnergy.lean"
       - "CPFormal/Elliptic/CoprimeState.lean"
+      - "CPFormal/Elliptic/ReductionFiber.lean"
       - ".github/workflows/elliptic-linearized-lift-lean.yml"
   workflow_dispatch:
 
@@ -15,7 +16,7 @@ permissions:
 
 jobs:
   elliptic-finite:
-    name: Kernel-check local lift, product fibers and energy
+    name: Kernel-check elliptic finite arithmetic layer
     runs-on: ubuntu-latest
     timeout-minutes: 30
 
@@ -43,9 +44,8 @@ jobs:
             lake env lean CPFormal/Elliptic/LinearizedLift.lean
             lake env lean CPFormal/Elliptic/ProductFiber.lean
             lake env lean CPFormal/Elliptic/ProductEnergy.lean
-            if [[ -f CPFormal/Elliptic/CoprimeState.lean ]]; then
-              lake env lean CPFormal/Elliptic/CoprimeState.lean
-            fi
+            lake env lean CPFormal/Elliptic/CoprimeState.lean
+            lake env lean CPFormal/Elliptic/ReductionFiber.lean
           } 2>&1 | tee elliptic-finite.log
 
       - name: Preserve failure log
