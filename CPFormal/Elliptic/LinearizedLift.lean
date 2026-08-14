@@ -1,3 +1,4 @@
+import Mathlib.Data.Fintype.EquivFin
 import Mathlib.Data.ZMod.Basic
 import Mathlib.Tactic
 
@@ -47,7 +48,10 @@ noncomputable instance linearizedLiftFiberFintype
 /-- The finite field `ZMod p` has exactly `p` elements when `p` is prime. -/
 theorem card_zmod_prime (p : ℕ) [Fact (Nat.Prime p)] :
     Fintype.card (ZMod p) = p := by
-  simpa using Fintype.card_congr (ZMod.finEquiv p).toEquiv.symm
+  calc
+    Fintype.card (ZMod p) = Fintype.card (Fin p) :=
+      Fintype.card_congr (ZMod.finEquiv p).toEquiv.symm
+    _ = p := Fintype.card_fin p
 
 /--
 If the first gradient coordinate is nonzero, the second coordinate freely
@@ -136,7 +140,7 @@ theorem card_linearizedLiftFiber_of_gradient_zero_of_residual_zero
   subst gx
   subst gy
   subst c
-  simp [LinearizedLiftFiber, card_zmod_prime, Fintype.card_prod, pow_two]
+  simp [LinearizedLiftFiber, Fintype.card_prod, pow_two]
 
 /-- A zero gradient and nonzero residual quotient leave no lift. -/
 theorem card_linearizedLiftFiber_of_gradient_zero_of_residual_ne_zero
