@@ -99,7 +99,6 @@ theorem shortWeierstrassResidual_intCast
     shortWeierstrassResidual a b ((x : ZMod p), (y : ZMod p)) =
       (shortWeierstrassResidualInt a b x y : ZMod p) := by
   simp [shortWeierstrassResidual, shortWeierstrassResidualInt]
-  ring
 
 /-- The integral `x`-gradient agrees with the residue-ring gradient. -/
 @[simp]
@@ -108,7 +107,6 @@ theorem shortWeierstrassGradientX_intCast
     shortWeierstrassGradientX p a (x : ZMod p) =
       (shortWeierstrassGradientXInt a x : ZMod p) := by
   simp [shortWeierstrassGradientX, shortWeierstrassGradientXInt]
-  ring
 
 /-- The integral `y`-gradient agrees with the residue-ring gradient. -/
 @[simp]
@@ -150,8 +148,8 @@ theorem shortWeierstrassRawLift_dvd_iff
     simp [shortWeierstrassHigherOrderInt, tail]
     ring
   rw [hexpand, pow_succ, mul_dvd_mul_iff_left hpk]
-  have hpow : (p : ℤ) ∣ (p : ℤ) ^ k :=
-    pow_dvd_pow (p : ℤ) hk
+  have hpow : (p : ℤ) ∣ (p : ℤ) ^ k := by
+    simpa using (pow_dvd_pow (p : ℤ) hk)
   have htail : (p : ℤ) ∣ (p : ℤ) ^ k * tail :=
     hpow.mul_right tail
   exact dvd_add_left htail
@@ -216,18 +214,22 @@ def rawWeierstrassLiftFiberEquivLinearized
       (linearizedEquation_zmod_iff_dvd p c
         (shortWeierstrassGradientXInt a x)
         (shortWeierstrassGradientYInt y) uv.1).2
-        ((shortWeierstrassRawLift_dvd_iff
-          p k hp hk a b x y
-          (ZMod.cast uv.1.1 : ℤ)
-          (ZMod.cast uv.1.2 : ℤ) c hbase).1 uv.2)
+        (by
+          simpa [shortWeierstrassLinearTermInt] using
+            ((shortWeierstrassRawLift_dvd_iff
+              p k hp hk a b x y
+              (ZMod.cast uv.1.1 : ℤ)
+              (ZMod.cast uv.1.2 : ℤ) c hbase).1 uv.2))
   · exact
       (shortWeierstrassRawLift_dvd_iff
         p k hp hk a b x y
         (ZMod.cast uv.1.1 : ℤ)
         (ZMod.cast uv.1.2 : ℤ) c hbase).2
-        ((linearizedEquation_zmod_iff_dvd p c
-          (shortWeierstrassGradientXInt a x)
-          (shortWeierstrassGradientYInt y) uv.1).1 uv.2)
+        (by
+          simpa [shortWeierstrassLinearTermInt] using
+            ((linearizedEquation_zmod_iff_dvd p c
+              (shortWeierstrassGradientXInt a x)
+              (shortWeierstrassGradientYInt y) uv.1).1 uv.2))
 
 /--
 The integral base residual produces a genuine affine state modulo the prime
@@ -240,8 +242,8 @@ def affineCongruenceStateModPrimeOfIntegralResidual
       shortWeierstrassResidualInt a b x y = (p : ℤ) ^ k * c) :
     AffineCongruenceState p a b := by
   refine ⟨((x : ZMod p), (y : ZMod p)), ?_⟩
-  have hpow : (p : ℤ) ∣ (p : ℤ) ^ k :=
-    pow_dvd_pow (p : ℤ) hk
+  have hpow : (p : ℤ) ∣ (p : ℤ) ^ k := by
+    simpa using (pow_dvd_pow (p : ℤ) hk)
   have hres : (p : ℤ) ∣ shortWeierstrassResidualInt a b x y := by
     rw [hbase]
     exact hpow.mul_right c
