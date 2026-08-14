@@ -61,20 +61,6 @@ def WeierstrassLinearizedLiftFiber
     (shortWeierstrassGradientX p a point.1.1)
     (shortWeierstrassGradientY p point.1.2)
 
-/-- The specialized Weierstrass linearized fiber is finite. -/
-noncomputable instance weierstrassLinearizedLiftFiberFintype
-    (p : ℕ) [Fact (Nat.Prime p)] (a b : ℤ)
-    (point : AffineCongruenceState p a b)
-    (residualQuotient : ZMod p) :
-    Fintype
-      (WeierstrassLinearizedLiftFiber
-        p a b point residualQuotient) :=
-  inferInstanceAs
-    (Fintype
-      (LinearizedLiftFiber p residualQuotient
-        (shortWeierstrassGradientX p a point.1.1)
-        (shortWeierstrassGradientY p point.1.2)))
-
 /-- Every specialized local fiber has cardinality `p`, `0`, or `p^2`. -/
 theorem card_weierstrassLinearizedLiftFiber_trichotomy
     (p : ℕ) [Fact (Nat.Prime p)] (a b : ℤ)
@@ -105,10 +91,9 @@ theorem card_weierstrassLinearizedLiftFiber_ne_expected_iff_singular
         (WeierstrassLinearizedLiftFiber
           p a b point residualQuotient) ≠ p ↔
       IsAffineSingularState p a b point := by
-  simpa [WeierstrassLinearizedLiftFiber, IsAffineSingularState] using
-    (card_ne_expected_iff_gradient_zero p residualQuotient
-      (shortWeierstrassGradientX p a point.1.1)
-      (shortWeierstrassGradientY p point.1.2))
+  exact card_ne_expected_iff_gradient_zero p residualQuotient
+    (shortWeierstrassGradientX p a point.1.1)
+    (shortWeierstrassGradientY p point.1.2)
 
 /-- A singular state with zero residual quotient has all `p^2` lifts. -/
 theorem card_weierstrassLinearizedLiftFiber_of_singular_of_residual_zero
