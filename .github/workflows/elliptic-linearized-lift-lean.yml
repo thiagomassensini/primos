@@ -1,0 +1,49 @@
+name: Elliptic linearized lift Lean gate
+
+on:
+  pull_request:
+    paths:
+      - "CPFormal/Elliptic/LinearizedLift.lean"
+      - ".github/workflows/elliptic-linearized-lift-lean.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  linearized-lift:
+    name: Kernel-check local lift trichotomy
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Static audit
+        run: bash scripts/static_audit.sh
+
+      - name: Set up Lean and mathlib cache
+        uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          lint: false
+          use-mathlib-cache: true
+
+      - name: Elaborate linearized lift module
+        shell: bash
+        run: |
+          set -o pipefail
+          lake env lean CPFormal/Elliptic/LinearizedLift.lean 2>&1 \
+            | tee elliptic-linearized-lift.log
+
+      - name: Preserve failure log
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: elliptic-linearized-lift-${{ github.run_id }}
+          path: elliptic-linearized-lift.log
+          if-no-files-found: ignore
+          retention-days: 7
