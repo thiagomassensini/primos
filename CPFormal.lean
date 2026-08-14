@@ -7,6 +7,7 @@ import CPFormal.Elliptic.LinearizedLift
 import CPFormal.Elliptic.ProductFiber
 import CPFormal.Elliptic.ProductEnergy
 import CPFormal.Elliptic.CoprimeState
+import CPFormal.Elliptic.ReductionFiber
 import CPFormal.Carry.Shift
 import CPFormal.Carry.C2Adjacent
 import CPFormal.Carry.C2Depth
