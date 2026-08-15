@@ -146,7 +146,11 @@ theorem zmodReduction_primePowerCoordinateLift
   rw [ZMod.cast_intCast (R := ZMod (p ^ k))
     (primePowerStepDvd p k)]
   rw [Int.cast_add, Int.cast_mul]
-  simp
+  have hpzero :
+      (p : ZMod (p ^ k)) ^ k = 0 := by
+    rw [← Nat.cast_pow]
+    exact ZMod.natCast_self (p ^ k)
+  rw [hpzero, zero_mul, add_zero]
 
 /-- An anchored digit as an element of the coordinate reduction fiber. -/
 def primePowerCoordinateFiberMap
