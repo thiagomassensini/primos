@@ -49,6 +49,20 @@ A prova, o witness que impede confundir completude com ortogonalidade do
 carrier e o alcance lógico exato estão em
 [`docs/C3_TILT_TAIL_NONCOMPENSATION.md`](docs/C3_TILT_TAIL_NONCOMPENSATION.md).
 
+O ledger restante também foi fechado sem hipótese de zero:
+
+```math
+1+W_\infty(s)+R_\infty(s)
+=a_3(s)\,\mathrm{Genuine}(s).
+```
+
+Lean prova ainda que `W_infinity` tem projeção estritamente positiva sobre o
+primeiro bloco completo. Como `a_3` não zera no strip, a compensação exata
+`1 + R_infinity = -W_infinity` é equivalente ao zero Genuine; proibi-la
+globalmente é equivalente à não-anulação forte, e não um lema de cutoff mais
+fraco. A fórmula, a auditoria de escopo e o alvo geométrico exato restante estão em
+[`docs/C3_CARRIER_COMPENSATION_GATE.md`](docs/C3_CARRIER_COMPENSATION_GATE.md).
+
 ## Correção semântica do zero nativo
 
 O zero nativo é anulação, sem condição radial embutida:
