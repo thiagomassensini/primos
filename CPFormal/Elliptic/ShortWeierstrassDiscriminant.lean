@@ -179,7 +179,7 @@ theorem exists_affineSingularState_of_discriminantCore_eq_zero
         ((2 : ZMod p) * (a : ZMod p)) * x =
           -((3 : ZMod p) * (b : ZMod p)) := by
       dsimp [x]
-      field_simp [hden]
+      field_simp [hden, zmodTwo_ne_zero_of_five_le p hp]
     have hxRelationSq :=
       congrArg (fun z : ZMod p => z ^ 2) hxRelation
     have hxRelationCube :=
