@@ -26,18 +26,37 @@ theorem primePowerCoordinateLift_injective
   apply Subtype.ext
   exact huv
 
-/--
-The affine source state determined by a certified raw increment pair.
--/
-def rawWeierstrassLiftSourceState
+/-- The affine-plane point determined by one certified raw increment pair. -/
+def rawWeierstrassLiftPoint
+    (p k : ℕ) (x y : ℤ)
+    (uv : RawWeierstrassLiftFiber p k a b x y) :
+    ZMod (p ^ (k + 1)) × ZMod (p ^ (k + 1)) :=
+  (primePowerCoordinateLift p k x uv.1.1,
+    primePowerCoordinateLift p k y uv.1.2)
+
+@[simp]
+theorem rawWeierstrassLiftPoint_fst
+    (p k : ℕ) (x y : ℤ)
+    (uv : RawWeierstrassLiftFiber p k a b x y) :
+    (rawWeierstrassLiftPoint p k x y uv).1 =
+      primePowerCoordinateLift p k x uv.1.1 :=
+  rfl
+
+@[simp]
+theorem rawWeierstrassLiftPoint_snd
+    (p k : ℕ) (x y : ℤ)
+    (uv : RawWeierstrassLiftFiber p k a b x y) :
+    (rawWeierstrassLiftPoint p k x y uv).2 =
+      primePowerCoordinateLift p k y uv.1.2 :=
+  rfl
+
+/-- The raw affine-plane point satisfies the displayed equation. -/
+theorem rawWeierstrassLiftPoint_mem
     (p k : ℕ) [Fact (Nat.Prime p)]
     (a b x y : ℤ)
     (uv : RawWeierstrassLiftFiber p k a b x y) :
-    AffineCongruenceState (p ^ (k + 1)) a b := by
-  letI : NeZero p := ⟨(Fact.out : Nat.Prime p).ne_zero⟩
-  refine
-    ⟨(primePowerCoordinateLift p k x uv.1.1,
-       primePowerCoordinateLift p k y uv.1.2), ?_⟩
+    shortWeierstrassResidual a b
+      (rawWeierstrassLiftPoint p k x y uv) = 0 := by
   have hdiv :
       (((p ^ (k + 1) : ℕ) : ℤ) ∣
         shortWeierstrassResidualInt a b
@@ -51,7 +70,23 @@ def rawWeierstrassLiftSourceState
         ZMod (p ^ (k + 1))) = 0 :=
     (CharP.intCast_eq_zero_iff
       (ZMod (p ^ (k + 1))) (p ^ (k + 1)) _).2 hdiv
-  simpa [primePowerCoordinateLift] using hz
+  change
+    shortWeierstrassResidual a b
+      (((x + (p : ℤ) ^ k * (ZMod.cast uv.1.1 : ℤ) : ℤ) :
+          ZMod (p ^ (k + 1))),
+        ((y + (p : ℤ) ^ k * (ZMod.cast uv.1.2 : ℤ) : ℤ) :
+          ZMod (p ^ (k + 1)))) = 0
+  rw [shortWeierstrassResidual_intCast]
+  exact hz
+
+/-- The affine source state determined by a certified raw increment pair. -/
+def rawWeierstrassLiftSourceState
+    (p k : ℕ) [Fact (Nat.Prime p)]
+    (a b x y : ℤ)
+    (uv : RawWeierstrassLiftFiber p k a b x y) :
+    AffineCongruenceState (p ^ (k + 1)) a b :=
+  ⟨rawWeierstrassLiftPoint p k x y uv,
+    rawWeierstrassLiftPoint_mem p k a b x y uv⟩
 
 @[simp]
 theorem rawWeierstrassLiftSourceState_fst
@@ -106,7 +141,10 @@ theorem rawWeierstrassLiftFiberMap_source_fst
     (uv : RawWeierstrassLiftFiber p k a b x y) :
     (rawWeierstrassLiftFiberMap
       p k a b x y target hx hy uv).1.1.1 =
-      primePowerCoordinateLift p k x uv.1.1 :=
+      primePowerCoordinateLift p k x uv.1.1 := by
+  change
+    (rawWeierstrassLiftSourceState p k a b x y uv).1.1 =
+      primePowerCoordinateLift p k x uv.1.1
   rfl
 
 @[simp]
@@ -119,7 +157,10 @@ theorem rawWeierstrassLiftFiberMap_source_snd
     (uv : RawWeierstrassLiftFiber p k a b x y) :
     (rawWeierstrassLiftFiberMap
       p k a b x y target hx hy uv).1.1.2 =
-      primePowerCoordinateLift p k y uv.1.2 :=
+      primePowerCoordinateLift p k y uv.1.2 := by
+  change
+    (rawWeierstrassLiftSourceState p k a b x y uv).1.2 =
+      primePowerCoordinateLift p k y uv.1.2
   rfl
 
 /-- The raw-to-intrinsic affine fiber map is injective. -/
@@ -136,9 +177,11 @@ theorem rawWeierstrassLiftFiberMap_injective
   apply Subtype.ext
   apply Prod.ext
   · apply primePowerCoordinateLift_injective p k x
-    simpa using congrArg (fun q => q.1.1.1) huv
+    have hcoord := congrArg (fun q => q.1.1.1) huv
+    simpa only [rawWeierstrassLiftFiberMap_source_fst] using hcoord
   · apply primePowerCoordinateLift_injective p k y
-    simpa using congrArg (fun q => q.1.1.2) huv
+    have hcoord := congrArg (fun q => q.1.1.2) huv
+    simpa only [rawWeierstrassLiftFiberMap_source_snd] using hcoord
 
 /-- Every intrinsic affine reduction-fiber point has unique raw digits. -/
 theorem rawWeierstrassLiftFiberMap_surjective
@@ -177,18 +220,32 @@ theorem rawWeierstrassLiftFiberMap_surjective
               (fun state : AffineCongruenceState (p ^ k) a b => state.1.2)
               point.2
         _ = (y : ZMod (p ^ k)) := hy.symm⟩
-  let ex := primePowerCoordinateReductionFiberEquiv p k x
-  let ey := primePowerCoordinateReductionFiberEquiv p k y
-  let u : ZMod p := ex.symm xFiber
-  let v : ZMod p := ey.symm yFiber
+  let u : ZMod p :=
+    (primePowerCoordinateReductionFiberEquiv p k x).symm xFiber
+  let v : ZMod p :=
+    (primePowerCoordinateReductionFiberEquiv p k y).symm yFiber
   have hux :
       primePowerCoordinateLift p k x u = point.1.1.1 := by
-    have h := congrArg Subtype.val (ex.apply_symm_apply xFiber)
-    simpa [ex, u, xFiber] using h
+    calc
+      primePowerCoordinateLift p k x u =
+          (primePowerCoordinateReductionFiberEquiv p k x u).1 :=
+        (primePowerCoordinateReductionFiberEquiv_apply_val p k x u).symm
+      _ = xFiber.1 :=
+        congrArg Subtype.val
+          ((primePowerCoordinateReductionFiberEquiv p k x).apply_symm_apply
+            xFiber)
+      _ = point.1.1.1 := rfl
   have hvy :
       primePowerCoordinateLift p k y v = point.1.1.2 := by
-    have h := congrArg Subtype.val (ey.apply_symm_apply yFiber)
-    simpa [ey, v, yFiber] using h
+    calc
+      primePowerCoordinateLift p k y v =
+          (primePowerCoordinateReductionFiberEquiv p k y v).1 :=
+        (primePowerCoordinateReductionFiberEquiv_apply_val p k y v).symm
+      _ = yFiber.1 :=
+        congrArg Subtype.val
+          ((primePowerCoordinateReductionFiberEquiv p k y).apply_symm_apply
+            yFiber)
+      _ = point.1.1.2 := rfl
   have hcurve :
       shortWeierstrassResidual a b
         (primePowerCoordinateLift p k x u,
@@ -200,7 +257,14 @@ theorem rawWeierstrassLiftFiberMap_surjective
           (x + (p : ℤ) ^ k * (ZMod.cast u : ℤ))
           (y + (p : ℤ) ^ k * (ZMod.cast v : ℤ)) :
         ZMod (p ^ (k + 1))) = 0 := by
-    simpa [primePowerCoordinateLift] using hcurve
+    change
+      shortWeierstrassResidual a b
+        (((x + (p : ℤ) ^ k * (ZMod.cast u : ℤ) : ℤ) :
+            ZMod (p ^ (k + 1))),
+          ((y + (p : ℤ) ^ k * (ZMod.cast v : ℤ) : ℤ) :
+            ZMod (p ^ (k + 1)))) = 0 at hcurve
+    rw [shortWeierstrassResidual_intCast] at hcurve
+    exact hcurve
   have hdiv :
       (((p ^ (k + 1) : ℕ) : ℤ) ∣
         shortWeierstrassResidualInt a b
