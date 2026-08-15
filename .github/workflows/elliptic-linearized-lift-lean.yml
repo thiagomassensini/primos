@@ -6,6 +6,7 @@ on:
       - "CPFormal/Elliptic/LinearizedLift.lean"
       - "CPFormal/Elliptic/WeierstrassLinearizedLift.lean"
       - "CPFormal/Elliptic/RawLiftTaylor.lean"
+      - "CPFormal/Elliptic/PrimePowerReductionFiber.lean"
       - "CPFormal/Elliptic/ProductFiber.lean"
       - "CPFormal/Elliptic/ProductEnergy.lean"
       - "CPFormal/Elliptic/CoprimeState.lean"
@@ -13,6 +14,7 @@ on:
       - "CPFormal.lean"
       - "docs/ELLIPTIC_CONGRUENCE_CAMERA_GATE3_LEAN.md"
       - "docs/ELLIPTIC_CONGRUENCE_CAMERA_GATE4_TAYLOR.md"
+      - "docs/ELLIPTIC_CONGRUENCE_CAMERA_GATE5_INTRINSIC_FIBER.md"
       - ".github/workflows/elliptic-linearized-lift-lean.yml"
   workflow_dispatch:
 
@@ -49,6 +51,7 @@ jobs:
             CPFormal.Elliptic.LinearizedLift \
             CPFormal.Elliptic.WeierstrassLinearizedLift \
             CPFormal.Elliptic.RawLiftTaylor \
+            CPFormal.Elliptic.PrimePowerReductionFiber \
             CPFormal.Elliptic.ProductFiber \
             CPFormal.Elliptic.ProductEnergy \
             CPFormal.Elliptic.CoprimeState \
