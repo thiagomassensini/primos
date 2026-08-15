@@ -28,7 +28,7 @@ theorem primePowerCoordinateLift_injective
 
 /-- The affine-plane point determined by one certified raw increment pair. -/
 def rawWeierstrassLiftPoint
-    (p k : ℕ) (x y : ℤ)
+    (p k : ℕ) (a b x y : ℤ)
     (uv : RawWeierstrassLiftFiber p k a b x y) :
     ZMod (p ^ (k + 1)) × ZMod (p ^ (k + 1)) :=
   (primePowerCoordinateLift p k x uv.1.1,
@@ -36,17 +36,17 @@ def rawWeierstrassLiftPoint
 
 @[simp]
 theorem rawWeierstrassLiftPoint_fst
-    (p k : ℕ) (x y : ℤ)
+    (p k : ℕ) (a b x y : ℤ)
     (uv : RawWeierstrassLiftFiber p k a b x y) :
-    (rawWeierstrassLiftPoint p k x y uv).1 =
+    (rawWeierstrassLiftPoint p k a b x y uv).1 =
       primePowerCoordinateLift p k x uv.1.1 :=
   rfl
 
 @[simp]
 theorem rawWeierstrassLiftPoint_snd
-    (p k : ℕ) (x y : ℤ)
+    (p k : ℕ) (a b x y : ℤ)
     (uv : RawWeierstrassLiftFiber p k a b x y) :
-    (rawWeierstrassLiftPoint p k x y uv).2 =
+    (rawWeierstrassLiftPoint p k a b x y uv).2 =
       primePowerCoordinateLift p k y uv.1.2 :=
   rfl
 
@@ -56,7 +56,7 @@ theorem rawWeierstrassLiftPoint_mem
     (a b x y : ℤ)
     (uv : RawWeierstrassLiftFiber p k a b x y) :
     shortWeierstrassResidual a b
-      (rawWeierstrassLiftPoint p k x y uv) = 0 := by
+      (rawWeierstrassLiftPoint p k a b x y uv) = 0 := by
   have hdiv :
       (((p ^ (k + 1) : ℕ) : ℤ) ∣
         shortWeierstrassResidualInt a b
@@ -85,7 +85,7 @@ def rawWeierstrassLiftSourceState
     (a b x y : ℤ)
     (uv : RawWeierstrassLiftFiber p k a b x y) :
     AffineCongruenceState (p ^ (k + 1)) a b :=
-  ⟨rawWeierstrassLiftPoint p k x y uv,
+  ⟨rawWeierstrassLiftPoint p k a b x y uv,
     rawWeierstrassLiftPoint_mem p k a b x y uv⟩
 
 @[simp]
