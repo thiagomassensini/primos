@@ -18,22 +18,26 @@ noncomputable section
 
 /-- Canonical integer representative of the target `x` coordinate. -/
 def canonicalPrimePowerX
+    {modulus : ℕ} {a b : ℤ}
     (target : AffineCongruenceState modulus a b) : ℤ :=
   ZMod.cast target.1.1
 
 /-- Canonical integer representative of the target `y` coordinate. -/
 def canonicalPrimePowerY
+    {modulus : ℕ} {a b : ℤ}
     (target : AffineCongruenceState modulus a b) : ℤ :=
   ZMod.cast target.1.2
 
 @[simp]
 theorem canonicalPrimePowerX_intCast
+    {modulus : ℕ} {a b : ℤ}
     (target : AffineCongruenceState modulus a b) :
     (canonicalPrimePowerX target : ZMod modulus) = target.1.1 := by
   simp [canonicalPrimePowerX]
 
 @[simp]
 theorem canonicalPrimePowerY_intCast
+    {modulus : ℕ} {a b : ℤ}
     (target : AffineCongruenceState modulus a b) :
     (canonicalPrimePowerY target : ZMod modulus) = target.1.2 := by
   simp [canonicalPrimePowerY]
