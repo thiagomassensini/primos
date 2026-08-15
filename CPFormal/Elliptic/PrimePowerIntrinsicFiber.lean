@@ -141,14 +141,32 @@ theorem canonicalPrimeState_eq_reduction
   apply Prod.ext
   · change
       (canonicalPrimePowerX target : ZMod p) =
-        zmodReduction (primeDvdPrimePower p k hk) target.1.1
-    rw [← canonicalPrimePowerX_intCast target]
-    simp [zmodReduction]
+        (ZMod.cast target.1.1 : ZMod p)
+    calc
+      (canonicalPrimePowerX target : ZMod p) =
+          (ZMod.cast
+            ((canonicalPrimePowerX target : ℤ) : ZMod (p ^ k)) :
+              ZMod p) := by
+        exact
+          (ZMod.cast_intCast (R := ZMod p)
+            (primeDvdPrimePower p k hk)
+            (canonicalPrimePowerX target)).symm
+      _ = (ZMod.cast target.1.1 : ZMod p) := by
+        rw [canonicalPrimePowerX_intCast]
   · change
       (canonicalPrimePowerY target : ZMod p) =
-        zmodReduction (primeDvdPrimePower p k hk) target.1.2
-    rw [← canonicalPrimePowerY_intCast target]
-    simp [zmodReduction]
+        (ZMod.cast target.1.2 : ZMod p)
+    calc
+      (canonicalPrimePowerY target : ZMod p) =
+          (ZMod.cast
+            ((canonicalPrimePowerY target : ℤ) : ZMod (p ^ k)) :
+              ZMod p) := by
+        exact
+          (ZMod.cast_intCast (R := ZMod p)
+            (primeDvdPrimePower p k hk)
+            (canonicalPrimePowerY target)).symm
+      _ = (ZMod.cast target.1.2 : ZMod p) := by
+        rw [canonicalPrimePowerY_intCast]
 
 /--
 Every intrinsic affine reduction fiber from `p^(k+1)` to `p^k` has cardinality
