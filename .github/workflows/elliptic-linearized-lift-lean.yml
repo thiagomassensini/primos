@@ -8,6 +8,7 @@ on:
       - "CPFormal/Elliptic/RawLiftTaylor.lean"
       - "CPFormal/Elliptic/PrimePowerReductionFiber.lean"
       - "CPFormal/Elliptic/PrimePowerAffineFiber.lean"
+      - "CPFormal/Elliptic/PrimePowerIntrinsicFiber.lean"
       - "CPFormal/Elliptic/ProductFiber.lean"
       - "CPFormal/Elliptic/ProductEnergy.lean"
       - "CPFormal/Elliptic/CoprimeState.lean"
@@ -54,6 +55,7 @@ jobs:
             CPFormal.Elliptic.RawLiftTaylor \
             CPFormal.Elliptic.PrimePowerReductionFiber \
             CPFormal.Elliptic.PrimePowerAffineFiber \
+            CPFormal.Elliptic.PrimePowerIntrinsicFiber \
             CPFormal.Elliptic.ProductFiber \
             CPFormal.Elliptic.ProductEnergy \
             CPFormal.Elliptic.CoprimeState \
