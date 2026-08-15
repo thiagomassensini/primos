@@ -9,6 +9,7 @@ import CPFormal.Elliptic.RawLiftTaylor
 import CPFormal.Elliptic.PrimePowerReductionFiber
 import CPFormal.Elliptic.PrimePowerAffineFiber
 import CPFormal.Elliptic.PrimePowerIntrinsicFiber
+import CPFormal.Elliptic.ShortWeierstrassDiscriminant
 import CPFormal.Elliptic.ProductFiber
 import CPFormal.Elliptic.ProductEnergy
 import CPFormal.Elliptic.CoprimeState
