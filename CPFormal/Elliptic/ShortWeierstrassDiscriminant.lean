@@ -293,6 +293,28 @@ theorem int_dvd_shortWeierstrassDiscriminant_iff_exists_nonregular_primePowerOne
       (card_primePowerAffineReductionFiber_ne_expected_iff_singular
         p 1 (by omega) a b target).1 hnonregular
 
+/-- The visible first step of the prime-power tower is `p ∣ p^2`. -/
+theorem primeSquareStepDvd (p : ℕ) : p ∣ p ^ 2 := by
+  simpa using primePowerStepDvd p 1
+
+/--
+Capstone in the direct `p^2 -> p` notation: discriminant divisibility is
+exactly the existence of a non-regular intrinsic affine reduction fiber.
+-/
+theorem int_dvd_shortWeierstrassDiscriminant_iff_exists_nonregular_primeSquareFiber
+    (p : ℕ) [Fact (Nat.Prime p)] (hp : 5 ≤ p)
+    (a b : ℤ) :
+    (p : ℤ) ∣ shortWeierstrassDiscriminantInt a b ↔
+      ∃ target : AffineCongruenceState p a b,
+        Fintype.card
+            (MapFiber
+              (affineCongruenceStateReduction
+                (primeSquareStepDvd p) a b)
+              target) ≠ p := by
+  simpa using
+    (int_dvd_shortWeierstrassDiscriminant_iff_exists_nonregular_primePowerOneFiber
+      p hp a b)
+
 end
 
 end CPFormal.Elliptic
