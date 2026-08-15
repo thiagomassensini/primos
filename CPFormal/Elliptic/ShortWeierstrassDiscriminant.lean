@@ -252,7 +252,14 @@ theorem int_dvd_shortWeierstrassDiscriminant_iff_exists_nonregular_primePowerOne
     let target : AffineCongruenceState (p ^ 1) a b :=
       ⟨(((ZMod.cast point.1.1 : ℤ) : ZMod (p ^ 1)),
           ((ZMod.cast point.1.2 : ℤ) : ZMod (p ^ 1))), by
-        simpa only [pow_one, ZMod.intCast_zmod_cast] using point.2⟩
+        rw [pow_one]
+        change
+          shortWeierstrassResidual a b
+            (((ZMod.cast point.1.1 : ℤ) : ZMod p),
+              ((ZMod.cast point.1.2 : ℤ) : ZMod p)) = 0
+        rw [ZMod.intCast_zmod_cast point.1.1,
+          ZMod.intCast_zmod_cast point.1.2]
+        exact point.2⟩
     refine ⟨target, ?_⟩
     apply
       (card_primePowerAffineReductionFiber_ne_expected_iff_singular
