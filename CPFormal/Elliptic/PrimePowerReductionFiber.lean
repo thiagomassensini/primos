@@ -78,19 +78,27 @@ theorem zmodPrimePowerTargetDigitEquiv_apply
     ⟨mul_ne_zero (NeZero.ne p) (pow_ne_zero k (NeZero.ne p))⟩
   letI : NeZero (p ^ (k + 1)) :=
     ⟨pow_ne_zero (k + 1) (NeZero.ne p)⟩
-  apply ZMod.val_injective
-  rw [ZMod.val_natCast_of_lt]
-  · simp [zmodPrimePowerTargetDigitEquiv, ZMod.ringEquivCongr_val,
-      finProdFinEquiv]
-  · have htarget : target.val < p ^ k := target.val_lt
+  have hlt : target.val + p ^ k * digit.val < p ^ (k + 1) := by
+    have htarget : target.val < p ^ k := target.val_lt
     have hdigit : digit.val < p := digit.val_lt
     calc
       target.val + p ^ k * digit.val <
           p ^ k + p ^ k * digit.val :=
         Nat.add_lt_add_right htarget _
       _ = p ^ k * (digit.val + 1) := by ring
-      _ ≤ p ^ k * p := Nat.mul_le_mul_left _ hdigit
+      _ ≤ p ^ k * p :=
+        Nat.mul_le_mul_left _ (Nat.succ_le_iff.mpr hdigit)
       _ = p ^ (k + 1) := by simp [pow_succ]
+  apply ZMod.val_injective
+  rw [ZMod.val_natCast_of_lt hlt]
+  dsimp [zmodPrimePowerTargetDigitEquiv]
+  rw [ZMod.ringEquivCongr_val]
+  rw [zmodFinEquiv_apply_val]
+  change
+    ((ZMod.finEquiv (p ^ k)).symm target).val +
+        p ^ k * ((ZMod.finEquiv p).symm digit).val =
+      target.val + p ^ k * digit.val
+  simp
 
 /-- The target component of the digit decomposition is canonical reduction. -/
 @[simp]
