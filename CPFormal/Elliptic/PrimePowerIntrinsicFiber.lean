@@ -142,19 +142,13 @@ theorem canonicalPrimeState_eq_reduction
   · change
       (canonicalPrimePowerX target : ZMod p) =
         zmodReduction (primeDvdPrimePower p k hk) target.1.1
-    have hx := congrArg
-      (fun z : ZMod (p ^ k) =>
-        zmodReduction (primeDvdPrimePower p k hk) z)
-      (canonicalPrimePowerX_intCast target)
-    simpa [zmodReduction] using hx
+    rw [← canonicalPrimePowerX_intCast target]
+    simp [zmodReduction]
   · change
       (canonicalPrimePowerY target : ZMod p) =
         zmodReduction (primeDvdPrimePower p k hk) target.1.2
-    have hy := congrArg
-      (fun z : ZMod (p ^ k) =>
-        zmodReduction (primeDvdPrimePower p k hk) z)
-      (canonicalPrimePowerY_intCast target)
-    simpa [zmodReduction] using hy
+    rw [← canonicalPrimePowerY_intCast target]
+    simp [zmodReduction]
 
 /--
 Every intrinsic affine reduction fiber from `p^(k+1)` to `p^k` has cardinality
