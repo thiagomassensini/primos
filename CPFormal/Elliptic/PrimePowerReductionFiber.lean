@@ -6,10 +6,14 @@ import Mathlib.Tactic
 /-!
 # Prime-power reduction fibers
 
-This module begins the intrinsic bridge from the coordinate raw increment
-fiber to the actual `MapFiber` of affine-state reduction from `p^(k+1)` to
-`p^k`.  The first layer is the unique base-plus-digit decomposition of one
-coordinate.
+This module identifies coordinate increments modulo `p` with the actual fibers
+of reduction from `p^(k+1)` to `p^k`.  It keeps two complementary descriptions:
+
+* a canonical mixed-radix equivalence `target × digit ≃ source`;
+* an integral-anchor description `x + p^k * digit`, suitable for the raw
+  Taylor fibers from `RawLiftTaylor.lean`.
+
+The affine-state bridge is built below from these coordinate fibers.
 -/
 
 set_option autoImplicit false
@@ -118,6 +122,162 @@ theorem zmodReduction_zmodPrimePowerTargetDigitEquiv
     (primePowerStepDvd p k)]
   rw [Nat.cast_add, Nat.cast_mul, ZMod.natCast_zmod_val]
   simp
+
+/-- The integral-coordinate lift used by the raw Taylor fiber. -/
+def primePowerCoordinateLift
+    (p k : ℕ) (x : ℤ) (digit : ZMod p) :
+    ZMod (p ^ (k + 1)) :=
+  ((x + (p : ℤ) ^ k * (ZMod.cast digit : ℤ) : ℤ) :
+    ZMod (p ^ (k + 1)))
+
+/-- Integral-coordinate lifts reduce to their anchored residue modulo `p^k`. -/
+@[simp]
+theorem zmodReduction_primePowerCoordinateLift
+    (p k : ℕ) [NeZero p] (x : ℤ) (digit : ZMod p) :
+    zmodReduction (primePowerStepDvd p k)
+        (primePowerCoordinateLift p k x digit) =
+      (x : ZMod (p ^ k)) := by
+  letI : NeZero (p ^ k) := ⟨pow_ne_zero k (NeZero.ne p)⟩
+  change
+    (ZMod.cast
+      ((x + (p : ℤ) ^ k * (ZMod.cast digit : ℤ) : ℤ) :
+        ZMod (p ^ (k + 1))) : ZMod (p ^ k)) =
+      (x : ZMod (p ^ k))
+  rw [ZMod.cast_intCast (R := ZMod (p ^ k))
+    (primePowerStepDvd p k)]
+  rw [Int.cast_add, Int.cast_mul]
+  simp
+
+/-- An anchored digit as an element of the coordinate reduction fiber. -/
+def primePowerCoordinateFiberMap
+    (p k : ℕ) [NeZero p] (x : ℤ) :
+    ZMod p →
+      MapFiber
+        (zmodReduction (primePowerStepDvd p k))
+        (x : ZMod (p ^ k)) :=
+  fun digit =>
+    ⟨primePowerCoordinateLift p k x digit,
+      zmodReduction_primePowerCoordinateLift p k x digit⟩
+
+/-- Distinct digits give distinct anchored lifts modulo `p^(k+1)`. -/
+theorem primePowerCoordinateFiberMap_injective
+    (p k : ℕ) [NeZero p] (x : ℤ) :
+    Function.Injective (primePowerCoordinateFiberMap p k x) := by
+  intro u v huv
+  have hcoord :
+      primePowerCoordinateLift p k x u =
+        primePowerCoordinateLift p k x v :=
+    congrArg Subtype.val huv
+  have hdiv :
+      ((p ^ (k + 1) : ℕ) : ℤ) ∣
+        (x + (p : ℤ) ^ k * (ZMod.cast v : ℤ)) -
+          (x + (p : ℤ) ^ k * (ZMod.cast u : ℤ)) :=
+    (ZMod.intCast_eq_intCast_iff_dvd_sub
+      (x + (p : ℤ) ^ k * (ZMod.cast u : ℤ))
+      (x + (p : ℤ) ^ k * (ZMod.cast v : ℤ))
+      (p ^ (k + 1))).1 hcoord
+  have hsource :
+      ((p ^ (k + 1) : ℕ) : ℤ) =
+        (p : ℤ) ^ k * (p : ℤ) := by
+    push_cast
+    rw [pow_succ]
+  have hdiff :
+      (x + (p : ℤ) ^ k * (ZMod.cast v : ℤ)) -
+          (x + (p : ℤ) ^ k * (ZMod.cast u : ℤ)) =
+        (p : ℤ) ^ k *
+          ((ZMod.cast v : ℤ) - (ZMod.cast u : ℤ)) := by
+    ring
+  rw [hsource, hdiff] at hdiv
+  have hpz : (p : ℤ) ≠ 0 := by
+    exact_mod_cast NeZero.ne p
+  have hpk : (p : ℤ) ^ k ≠ 0 :=
+    pow_ne_zero _ hpz
+  have hpdiv :
+      (p : ℤ) ∣ (ZMod.cast v : ℤ) - (ZMod.cast u : ℤ) :=
+    (mul_dvd_mul_iff_left hpk).1 hdiv
+  have hcasts :
+      ((ZMod.cast u : ℤ) : ZMod p) =
+        ((ZMod.cast v : ℤ) : ZMod p) :=
+    (ZMod.intCast_eq_intCast_iff_dvd_sub
+      (ZMod.cast u : ℤ) (ZMod.cast v : ℤ) p).2 hpdiv
+  simpa using hcasts
+
+/-- Every coordinate reduction fiber is reached by one anchored digit. -/
+theorem primePowerCoordinateFiberMap_surjective
+    (p k : ℕ) [NeZero p] (x : ℤ) :
+    Function.Surjective (primePowerCoordinateFiberMap p k x) := by
+  intro point
+  let z : ℤ := ZMod.cast point.1
+  have hred :
+      (z : ZMod (p ^ k)) = (x : ZMod (p ^ k)) := by
+    simpa [z, zmodReduction] using point.2
+  have hdiv :
+      (p : ℤ) ^ k ∣ z - x := by
+    simpa using
+      (ZMod.intCast_eq_intCast_iff_dvd_sub
+        x z (p ^ k)).1 hred.symm
+  rcases hdiv with ⟨q, hq⟩
+  let digit : ZMod p := (q : ZMod p)
+  refine ⟨digit, ?_⟩
+  apply Subtype.ext
+  change primePowerCoordinateLift p k x digit = point.1
+  rw [← ZMod.intCast_zmod_cast point.1]
+  apply
+    (ZMod.intCast_eq_intCast_iff_dvd_sub
+      (x + (p : ℤ) ^ k * (ZMod.cast digit : ℤ))
+      z (p ^ (k + 1))).2
+  have hpdiv :
+      (p : ℤ) ∣ q - (ZMod.cast digit : ℤ) := by
+    apply
+      (ZMod.intCast_eq_intCast_iff_dvd_sub
+        (ZMod.cast digit : ℤ) q p).1
+    simp [digit]
+  have hscaled :
+      (p : ℤ) ^ k * (p : ℤ) ∣
+        (p : ℤ) ^ k * (q - (ZMod.cast digit : ℤ)) :=
+    mul_dvd_mul_left ((p : ℤ) ^ k) hpdiv
+  have hsource :
+      ((p ^ (k + 1) : ℕ) : ℤ) =
+        (p : ℤ) ^ k * (p : ℤ) := by
+    push_cast
+    rw [pow_succ]
+  have hdiff :
+      z - (x + (p : ℤ) ^ k * (ZMod.cast digit : ℤ)) =
+        (p : ℤ) ^ k * (q - (ZMod.cast digit : ℤ)) := by
+    calc
+      z - (x + (p : ℤ) ^ k * (ZMod.cast digit : ℤ)) =
+          (z - x) - (p : ℤ) ^ k * (ZMod.cast digit : ℤ) := by
+        ring
+      _ = (p : ℤ) ^ k * q -
+          (p : ℤ) ^ k * (ZMod.cast digit : ℤ) := by
+        rw [hq]
+      _ = (p : ℤ) ^ k *
+          (q - (ZMod.cast digit : ℤ)) := by
+        ring
+  rw [hsource, hdiff]
+  exact hscaled
+
+/--
+The actual coordinate reduction fiber is equivalent to one digit modulo `p`,
+for every integral representative of the target coordinate.
+-/
+def primePowerCoordinateReductionFiberEquiv
+    (p k : ℕ) [NeZero p] (x : ℤ) :
+    ZMod p ≃
+      MapFiber
+        (zmodReduction (primePowerStepDvd p k))
+        (x : ZMod (p ^ k)) :=
+  Equiv.ofBijective
+    (primePowerCoordinateFiberMap p k x)
+    ⟨primePowerCoordinateFiberMap_injective p k x,
+      primePowerCoordinateFiberMap_surjective p k x⟩
+
+@[simp]
+theorem primePowerCoordinateReductionFiberEquiv_apply_val
+    (p k : ℕ) [NeZero p] (x : ℤ) (digit : ZMod p) :
+    (primePowerCoordinateReductionFiberEquiv p k x digit).1 =
+      primePowerCoordinateLift p k x digit :=
+  rfl
 
 end
 
