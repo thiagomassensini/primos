@@ -110,8 +110,13 @@ theorem zmodReduction_zmodPrimePowerTargetDigitEquiv
       target := by
   letI : NeZero (p ^ k) := ⟨pow_ne_zero k (NeZero.ne p)⟩
   rw [zmodPrimePowerTargetDigitEquiv_apply]
-  simp only [zmodReduction, ZMod.castHom_apply, ZMod.cast_natCast]
-  rw [Int.cast_add, Int.cast_mul, ZMod.intCast_zmod_cast]
+  change
+    (ZMod.cast
+      ((target.val + p ^ k * digit.val : ℕ) : ZMod (p ^ (k + 1))) :
+        ZMod (p ^ k)) = target
+  rw [ZMod.cast_natCast (R := ZMod (p ^ k))
+    (primePowerStepDvd p k)]
+  rw [Nat.cast_add, Nat.cast_mul, ZMod.natCast_zmod_val]
   simp
 
 end
