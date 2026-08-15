@@ -29,6 +29,26 @@ A nota de migração e o alcance lógico exato estão em
 [`docs/RELEASE_0.62.0.md`](docs/RELEASE_0.62.0.md) e
 [`docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md`](docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md).
 
+## Resultado pós-v0.62 — não compensação da cauda de tilt C3
+
+Para todo parâmetro no strip com `Re(s) != 1/2`, o primeiro centro C3
+completo domina estritamente toda a cauda dos centros de tilt posteriores.
+O bound é uniforme no cutoff e usa a constante explícita
+
+```math
+\rho=\frac34\left(\frac65\right)^{3/2},
+\qquad \rho^2=\frac{243}{250}<1.
+```
+
+Consequentemente, a série cofinal dos blocos de tilt não zera fora da
+meia-abscissa. O teorema não usa um zero Genuine e não afirma confinamento.
+Ele isola o gate restante com exatidão: num eventual zero off-critical, o
+carrier não local mais o seed teria de cancelar esse tilt cofinal não nulo.
+
+A prova, o witness que impede confundir completude com ortogonalidade do
+carrier e o alcance lógico exato estão em
+[`docs/C3_TILT_TAIL_NONCOMPENSATION.md`](docs/C3_TILT_TAIL_NONCOMPENSATION.md).
+
 ## Correção semântica do zero nativo
 
 O zero nativo é anulação, sem condição radial embutida:
