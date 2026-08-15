@@ -232,6 +232,40 @@ theorem int_dvd_shortWeierstrassDiscriminant_iff_exists_singular
     exact shortWeierstrassDiscriminantCore_eq_zero_of_singular
       p hp a b point hsingular
 
+/--
+At the first prime-power step, discriminant divisibility is exactly the
+existence of a non-regular intrinsic affine reduction fiber.
+-/
+theorem int_dvd_shortWeierstrassDiscriminant_iff_exists_nonregular_primePowerOneFiber
+    (p : ℕ) [Fact (Nat.Prime p)] (hp : 5 ≤ p)
+    (a b : ℤ) :
+    (p : ℤ) ∣ shortWeierstrassDiscriminantInt a b ↔
+      ∃ target : AffineCongruenceState (p ^ 1) a b,
+        Fintype.card
+            (MapFiber
+              (affineCongruenceStateReduction
+                (primePowerStepDvd p 1) a b)
+              target) ≠ p := by
+  rw [int_dvd_shortWeierstrassDiscriminant_iff_exists_singular p hp a b]
+  constructor
+  · rintro ⟨point, hsingular⟩
+    let target : AffineCongruenceState (p ^ 1) a b := by
+      simpa only [pow_one] using point
+    refine ⟨target, ?_⟩
+    apply
+      (card_primePowerAffineReductionFiber_ne_expected_iff_singular
+        p 1 (by omega) a b target).2
+    simpa [target, affineCongruenceStatePrimeReduction,
+      affineCongruenceStateReduction, zmodPointReduction, zmodReduction]
+      using hsingular
+  · rintro ⟨target, hnonregular⟩
+    let point : AffineCongruenceState p a b :=
+      affineCongruenceStatePrimeReduction p 1 (by omega) a b target
+    refine ⟨point, ?_⟩
+    exact
+      (card_primePowerAffineReductionFiber_ne_expected_iff_singular
+        p 1 (by omega) a b target).1 hnonregular
+
 end
 
 end CPFormal.Elliptic
