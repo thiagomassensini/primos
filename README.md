@@ -29,7 +29,7 @@ A nota de migração e o alcance lógico exato estão em
 [`docs/RELEASE_0.62.0.md`](docs/RELEASE_0.62.0.md) e
 [`docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md`](docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md).
 
-## Resultado pós-v0.62 — não compensação da cauda de tilt C3
+## Checkpoint v0.63.0 — tilt cofinal e gate exato do carrier C3
 
 Para todo parâmetro no strip com `Re(s) != 1/2`, o primeiro centro C3
 completo domina estritamente toda a cauda dos centros de tilt posteriores.
@@ -62,6 +62,10 @@ primeiro bloco completo. Como `a_3` não zera no strip, a compensação exata
 globalmente é equivalente à não-anulação forte, e não um lema de cutoff mais
 fraco. A fórmula, a auditoria de escopo e o alvo geométrico exato restante estão em
 [`docs/C3_CARRIER_COMPENSATION_GATE.md`](docs/C3_CARRIER_COMPENSATION_GATE.md).
+
+O escopo consolidado da release, incluindo o quociente mínimo de proveniência
+e os limites lógicos explícitos, está em
+[`docs/RELEASE_0.63.0.md`](docs/RELEASE_0.63.0.md).
 
 ## Correção semântica do zero nativo
 
@@ -411,9 +415,9 @@ job `91116286122`. A certificacao cobre os imports de `CPFormal.lean`,
 incluindo as cameras naturais e o certificado de persistencia estrutural;
 `CPFormal.ResearchReserve` permanece fora dela.
 
-O workflow de release da `v0.62.0` repete a auditoria sobre o `main` exato
-antes de criar a tag anotada e a GitHub Release. Essa verificacao final do
-commit publicado e separada do registro do head matematico acima.
+A release `v0.63.0` só é etiquetada depois que a auditoria Lean do `main`
+exato fica verde. A tag anotada e a GitHub Release ficam ligadas ao mesmo SHA;
+essa publicação também emite o evento consumido pela integração do Zenodo.
 
 A familia de inversas restritas do checkpoint v0.54.0 esta
 `KERNEL_CHECKED` no commit
@@ -426,6 +430,9 @@ afirma uma inversa global ou uma lei sobre toda a matematica.
 ## Ordem de leitura
 
 Para uma visao completa deste checkpoint, comece por
+`docs/RELEASE_0.63.0.md`,
+`docs/C3_TILT_TAIL_NONCOMPENSATION.md`,
+`docs/C3_CARRIER_COMPENSATION_GATE.md`,
 `docs/RELEASE_0.62.0.md`,
 `docs/NATIVE_ZERO_SEMANTICS_CORRECTION.md`,
 `docs/RELEASE_0.60.0.md`,
