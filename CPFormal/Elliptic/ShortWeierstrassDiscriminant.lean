@@ -249,15 +249,35 @@ theorem int_dvd_shortWeierstrassDiscriminant_iff_exists_nonregular_primePowerOne
   rw [int_dvd_shortWeierstrassDiscriminant_iff_exists_singular p hp a b]
   constructor
   · rintro ⟨point, hsingular⟩
-    let target : AffineCongruenceState (p ^ 1) a b := by
-      simpa only [pow_one] using point
+    let target : AffineCongruenceState (p ^ 1) a b :=
+      ⟨(((ZMod.cast point.1.1 : ℤ) : ZMod (p ^ 1)),
+          ((ZMod.cast point.1.2 : ℤ) : ZMod (p ^ 1))), by
+        simpa only [pow_one, ZMod.intCast_zmod_cast] using point.2⟩
     refine ⟨target, ?_⟩
     apply
       (card_primePowerAffineReductionFiber_ne_expected_iff_singular
         p 1 (by omega) a b target).2
-    simpa [target, affineCongruenceStatePrimeReduction,
-      affineCongruenceStateReduction, zmodPointReduction, zmodReduction]
-      using hsingular
+    have hred :
+        affineCongruenceStatePrimeReduction p 1 (by omega) a b target =
+          point := by
+      apply Subtype.ext
+      apply Prod.ext
+      · change
+          (ZMod.cast
+            (((ZMod.cast point.1.1 : ℤ) : ZMod (p ^ 1))) :
+              ZMod p) = point.1.1
+        rw [ZMod.cast_intCast (R := ZMod p)
+          (primeDvdPrimePower p 1 (by omega))]
+        exact ZMod.intCast_zmod_cast point.1.1
+      · change
+          (ZMod.cast
+            (((ZMod.cast point.1.2 : ℤ) : ZMod (p ^ 1))) :
+              ZMod p) = point.1.2
+        rw [ZMod.cast_intCast (R := ZMod p)
+          (primeDvdPrimePower p 1 (by omega))]
+        exact ZMod.intCast_zmod_cast point.1.2
+    rw [hred]
+    exact hsingular
   · rintro ⟨target, hnonregular⟩
     let point : AffineCongruenceState p a b :=
       affineCongruenceStatePrimeReduction p 1 (by omega) a b target
