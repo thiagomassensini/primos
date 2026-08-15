@@ -149,7 +149,8 @@ theorem zmodReduction_primePowerCoordinateLift
   have hpzero :
       (((p : ℤ) ^ k : ℤ) : ZMod (p ^ k)) = 0 := by
     apply (CharP.intCast_eq_zero_iff (ZMod (p ^ k)) (p ^ k) _).2
-    simpa using (dvd_refl ((p : ℤ) ^ k))
+    change (p : ℤ) ^ k ∣ (p : ℤ) ^ k
+    exact dvd_rfl
   rw [hpzero, zero_mul, add_zero]
 
 /-- An anchored digit as an element of the coordinate reduction fiber. -/
