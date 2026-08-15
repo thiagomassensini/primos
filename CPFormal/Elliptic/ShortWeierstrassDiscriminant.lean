@@ -16,7 +16,7 @@ and primes `p >= 5`, this file identifies three finite local supports:
 * existence of a singular affine state modulo `p`;
 * existence of a non-regular intrinsic reduction fiber from `p^2` to `p`.
 
-The restriction `p >= 5` keeps `2` and `3` invertible.  Characteristics `2`
+The restriction `p >= 5` keeps `2` and `3` invertible. Characteristics `2`
 and `3` require separate normal forms and are deliberately not folded into the
 short-Weierstrass argument.
 -/
@@ -121,10 +121,16 @@ theorem shortWeierstrassDiscriminantCore_eq_zero_of_singular
   have ha :
       (a : ZMod p) = (-3 : ZMod p) * point.1.1 ^ 2 :=
     (sub_eq_zero.mp hsingular.1).symm
+  have hcurveRaw :
+      point.1.2 ^ 2 -
+          (point.1.1 ^ 3 + (a : ZMod p) * point.1.1 +
+            (b : ZMod p)) = 0 :=
+    point.2
   have hcurve :
       point.1.1 ^ 3 + (a : ZMod p) * point.1.1 +
           (b : ZMod p) = 0 := by
-    simpa [shortWeierstrassResidual, hy] using point.2
+    rw [hy] at hcurveRaw
+    linear_combination -hcurveRaw
   have hb :
       (b : ZMod p) = (2 : ZMod p) * point.1.1 ^ 3 := by
     rw [ha] at hcurve
@@ -169,17 +175,41 @@ theorem exists_affineSingularState_of_discriminantCore_eq_zero
     have hden :
         (2 : ZMod p) * (a : ZMod p) ≠ 0 :=
       mul_ne_zero (zmodTwo_ne_zero_of_five_le p hp) ha
-    have hxGradient :
-        shortWeierstrassGradientX p a x = 0 := by
+    have hxRelation :
+        ((2 : ZMod p) * (a : ZMod p)) * x =
+          -((3 : ZMod p) * (b : ZMod p)) := by
+      dsimp [x]
+      field_simp [hden]
+    have hxRelationSq :=
+      congrArg (fun z : ZMod p => z ^ 2) hxRelation
+    have hxRelationCube :=
+      congrArg (fun z : ZMod p => z ^ 3) hxRelation
+    have hdenSq :
+        ((2 : ZMod p) * (a : ZMod p)) ^ 2 ≠ 0 :=
+      pow_ne_zero 2 hden
+    have hdenCube :
+        ((2 : ZMod p) * (a : ZMod p)) ^ 3 ≠ 0 :=
+      pow_ne_zero 3 hden
+    have hscaledGradient :
+        ((2 : ZMod p) * (a : ZMod p)) ^ 2 *
+            (shortWeierstrassGradientX p a x) = 0 := by
       rw [shortWeierstrassGradientX]
-      dsimp [x]
-      field_simp [hden]
-      linear_combination -hcore'
+      linear_combination
+        (-3 : ZMod p) * hxRelationSq - hcore'
+    have hxGradient :
+        shortWeierstrassGradientX p a x = 0 :=
+      (mul_eq_zero.mp hscaledGradient).resolve_left hdenSq
+    have hscaledCurve :
+        ((2 : ZMod p) * (a : ZMod p)) ^ 3 *
+            (x ^ 3 + (a : ZMod p) * x + (b : ZMod p)) = 0 := by
+      linear_combination
+        hxRelationCube +
+          ((a : ZMod p) *
+            ((2 : ZMod p) * (a : ZMod p)) ^ 2) * hxRelation -
+          (b : ZMod p) * hcore'
     have hcurvePolynomial :
-        x ^ 3 + (a : ZMod p) * x + (b : ZMod p) = 0 := by
-      dsimp [x]
-      field_simp [hden]
-      linear_combination -(b : ZMod p) * hcore'
+        x ^ 3 + (a : ZMod p) * x + (b : ZMod p) = 0 :=
+      (mul_eq_zero.mp hscaledCurve).resolve_left hdenCube
     let point : AffineCongruenceState p a b :=
       ⟨(x, 0), by
         simp [shortWeierstrassResidual, hcurvePolynomial]⟩
@@ -201,48 +231,6 @@ theorem int_dvd_shortWeierstrassDiscriminant_iff_exists_singular
   · rintro ⟨point, hsingular⟩
     exact shortWeierstrassDiscriminantCore_eq_zero_of_singular
       p hp a b point hsingular
-
-/-- Reduction from the first prime-power level back to `p` is the identity. -/
-@[simp]
-theorem affineCongruenceStatePrimeReduction_one
-    (p : ℕ) [Fact (Nat.Prime p)]
-    (a b : ℤ)
-    (target : AffineCongruenceState p a b) :
-    affineCongruenceStatePrimeReduction p 1 (by omega) a b target =
-      target := by
-  apply Subtype.ext
-  apply Prod.ext <;>
-    simp [affineCongruenceStatePrimeReduction,
-      affineCongruenceStateReduction, zmodPointReduction, zmodReduction]
-
-/--
-For `p >= 5`, bad discriminant support is exactly the support of a non-regular
-intrinsic fiber from `p^2` to `p`.
--/
-theorem int_dvd_shortWeierstrassDiscriminant_iff_exists_nonregular_primeSquareFiber
-    (p : ℕ) [Fact (Nat.Prime p)] (hp : 5 ≤ p)
-    (a b : ℤ) :
-    (p : ℤ) ∣ shortWeierstrassDiscriminantInt a b ↔
-      ∃ target : AffineCongruenceState p a b,
-        Fintype.card
-            (MapFiber
-              (affineCongruenceStateReduction
-                (primePowerStepDvd p 1) a b)
-              target) ≠ p := by
-  rw [int_dvd_shortWeierstrassDiscriminant_iff_exists_singular p hp a b]
-  constructor
-  · rintro ⟨target, hsingular⟩
-    refine ⟨target, ?_⟩
-    apply
-      (card_primePowerAffineReductionFiber_ne_expected_iff_singular
-        p 1 (by omega) a b target).2
-    simpa using hsingular
-  · rintro ⟨target, hnonregular⟩
-    refine ⟨target, ?_⟩
-    have hsingular :=
-      (card_primePowerAffineReductionFiber_ne_expected_iff_singular
-        p 1 (by omega) a b target).1 hnonregular
-    simpa using hsingular
 
 end
 
