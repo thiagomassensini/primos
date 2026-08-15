@@ -19,7 +19,7 @@ namespace CPFormal.Elliptic
 noncomputable section
 
 /-- The canonical divisibility `p^k ∣ p^(k+1)`. -/
-def primePowerStepDvd (p k : ℕ) : p ^ k ∣ p ^ (k + 1) := by
+theorem primePowerStepDvd (p k : ℕ) : p ^ k ∣ p ^ (k + 1) := by
   refine ⟨p, ?_⟩
   simp [pow_succ]
 
@@ -35,13 +35,35 @@ def zmodPrimePowerTargetDigitEquiv
     ⟨mul_ne_zero (NeZero.ne p) (pow_ne_zero k (NeZero.ne p))⟩
   have hpow : p * p ^ k = p ^ (k + 1) := by
     simp [pow_succ, Nat.mul_comm]
+  let toFinProduct : ZMod p × ZMod (p ^ k) ≃ Fin p × Fin (p ^ k) :=
+    ((ZMod.finEquiv p).symm.toEquiv).prodCongr
+      ((ZMod.finEquiv (p ^ k)).symm.toEquiv)
+  let packFin : Fin p × Fin (p ^ k) ≃ Fin (p * p ^ k) :=
+    finProdFinEquiv
+  let toZMod : Fin (p * p ^ k) ≃ ZMod (p * p ^ k) :=
+    (ZMod.finEquiv (p * p ^ k)).toEquiv
+  let changeModulus : ZMod (p * p ^ k) ≃ ZMod (p ^ (k + 1)) :=
+    (ZMod.ringEquivCongr hpow).toEquiv
   exact
     (Equiv.prodComm (ZMod (p ^ k)) (ZMod p)).trans
-      (((((ZMod.finEquiv p).symm.toEquiv).prodCongr
-          ((ZMod.finEquiv (p ^ k)).symm.toEquiv)).trans
-        finProdFinEquiv).trans
-        (ZMod.finEquiv (p * p ^ k)).toEquiv).trans
-        (ZMod.ringEquivCongr hpow).toEquiv
+      (((toFinProduct.trans packFin).trans toZMod).trans changeModulus)
+
+/-- The mixed-radix equivalence has the expected canonical natural value. -/
+@[simp]
+theorem zmodPrimePowerTargetDigitEquiv_apply
+    (p k : ℕ) [NeZero p]
+    (target : ZMod (p ^ k)) (digit : ZMod p) :
+    zmodPrimePowerTargetDigitEquiv p k (target, digit) =
+      ((target.val + p ^ k * digit.val : ℕ) : ZMod (p ^ (k + 1))) := by
+  letI : NeZero (p ^ k) := ⟨pow_ne_zero k (NeZero.ne p)⟩
+  letI : NeZero (p * p ^ k) :=
+    ⟨mul_ne_zero (NeZero.ne p) (pow_ne_zero k (NeZero.ne p))⟩
+  letI : NeZero (p ^ (k + 1)) :=
+    ⟨pow_ne_zero (k + 1) (NeZero.ne p)⟩
+  rw [← ZMod.natCast_zmod_val
+    (zmodPrimePowerTargetDigitEquiv p k (target, digit))]
+  congr 1
+  simp [zmodPrimePowerTargetDigitEquiv, finProdFinEquiv_apply_val]
 
 /-- The target component of the digit decomposition is canonical reduction. -/
 @[simp]
@@ -52,11 +74,10 @@ theorem zmodReduction_zmodPrimePowerTargetDigitEquiv
         (zmodPrimePowerTargetDigitEquiv p k (target, digit)) =
       target := by
   letI : NeZero (p ^ k) := ⟨pow_ne_zero k (NeZero.ne p)⟩
-  obtain ⟨targetNat, rfl⟩ := ZMod.natCast_zmod_surjective target
-  obtain ⟨digitNat, rfl⟩ := ZMod.natCast_zmod_surjective digit
-  simp [zmodPrimePowerTargetDigitEquiv, zmodReduction,
-    primePowerStepDvd, finProdFinEquiv, pow_succ, Nat.mul_comm,
-    Nat.add_mod]
+  rw [zmodPrimePowerTargetDigitEquiv_apply]
+  change
+    ((target.val + p ^ k * digit.val : ℕ) : ZMod (p ^ k)) = target
+  simp [ZMod.natCast_zmod_val]
 
 end
 
