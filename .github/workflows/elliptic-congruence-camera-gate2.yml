@@ -1,0 +1,41 @@
+name: Elliptic congruence camera Gate 2
+
+on:
+  pull_request:
+    paths:
+      - "experiments/elliptic_congruence_camera.py"
+      - "experiments/elliptic_congruence_camera_family.py"
+      - "experiments/test_elliptic_congruence_camera_family.py"
+      - "docs/ELLIPTIC_CONGRUENCE_CAMERA_GATE2.md"
+      - ".github/workflows/elliptic-congruence-camera-gate2.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate2:
+    name: Run finite curve-family and CRT gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run Gate 2 unit tests
+        run: |
+          python3 -m unittest -v \
+            experiments.test_elliptic_congruence_camera_family
+
+      - name: Rebuild Gate 2 experimental ledger
+        run: |
+          python3 -m experiments.elliptic_congruence_camera_family \
+            --output /tmp/elliptic_congruence_camera_gate2.json
+          python3 -m json.tool \
+            /tmp/elliptic_congruence_camera_gate2.json >/dev/null
