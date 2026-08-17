@@ -4,6 +4,7 @@ defaultTargets = [
   "CPFormal",
   "CPFormal.Analytic.CpPrimeTowerCarryMangoldtBridge",
   "CPFormal.Analytic.CpPrimeDepthLogWaveBridge",
+  "CPFormal.Analytic.CpPrimeDepthFiniteDerivativeBridge",
   "CPFormal.Analytic.CpTfvdSeededReconstructionBridgeProbe",
   "CPFormal.Analytic.CpTfvdSeededFiniteBesselConservation",
   "CPFormal.Analytic.CpTfvdSeededNativeMomentContraction",
