@@ -225,3 +225,4 @@ import CPFormal.Analytic.CpNativeGpreFiniteTowerCollapse
 import CPFormal.Analytic.CpNativeGpreTfvdCommutatorTowerSource
 import CPFormal.Analytic.CpPrimeTowerCarryMangoldtBridge
 import CPFormal.Analytic.CpPrimeDepthLogWaveBridge
+import CPFormal.Analytic.CpPrimeDepthFiniteDerivativeBridge
