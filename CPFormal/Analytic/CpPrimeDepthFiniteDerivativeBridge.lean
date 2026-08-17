@@ -6,7 +6,7 @@ import Mathlib.Analysis.SpecialFunctions.Pow.Deriv
 # Finite native-camera derivative through the Mangoldt carry ledger
 
 The prime-depth bridge reconstructs `log n` exactly from active prime-camera
-carry depths and from the classical divisor-sum von Mangoldt ledger.  This file
+carry depths and from the classical divisor-sum von Mangoldt ledger. This file
 puts that reconstruction inside the spectral derivative of the finite camera.
 
 The order of construction is deliberately denominator-free:
@@ -21,9 +21,9 @@ Thus, for every finite odd-prime camera,
 
 `-d/ds finiteChart(p,M,n^(-s))`
 
-is exactly the same finite camera applied to the Mangoldt-weighted field.  No
+is exactly the same finite camera applied to the Mangoldt-weighted field. No
 zero, quotient, analytic continuation, asymptotic estimate, or nonvanishing
-hypothesis occurs in this identity.  Logarithmic-derivative formulas may be
+hypothesis occurs in this identity. Logarithmic-derivative formulas may be
 formed only afterwards, on domains where their denominators are nonzero.
 -/
 
@@ -161,13 +161,31 @@ theorem hasDerivAt_finiteChart_of_pointwise
       exact hfield (alignedCenter p k + a)
     exact hlegs.sub
       ((hfield (alignedCenter p k)).const_mul ((p - 1 : ℕ) : ℂ))
-  simpa [finiteChart, seedSum, bracket, legSum] using hseed.add hblocks
+  change HasDerivAt
+    ((fun z : ℂ ↦
+        ∑ n ∈ Finset.Icc (1 : ℤ) (halfRange p : ℤ), field z n) +
+      (fun z : ℂ ↦
+        ∑ k ∈ Finset.range M,
+          ((∑ a ∈ balancedOffsets p,
+              field z (alignedCenter p k + a)) -
+            ((p - 1 : ℕ) : ℂ) * field z (alignedCenter p k))))
+    ((∑ n ∈ Finset.Icc (1 : ℤ) (halfRange p : ℤ), field' n) +
+      ∑ k ∈ Finset.range M,
+        ((∑ a ∈ balancedOffsets p,
+            field' (alignedCenter p k + a)) -
+          ((p - 1 : ℕ) : ℂ) * field' (alignedCenter p k))) s
+  exact hseed.add hblocks
 
-/-- Negating every integer sample negates the finite camera resultant. -/
-theorem finiteChart_neg (p M : ℕ) (f : ℤ → ℂ) :
+/-- Negating every positive camera sample negates the finite camera resultant. -/
+theorem finiteChart_neg
+    (p M : ℕ) (hp : Nat.Prime p) (hpodd : Odd p)
+    (f : ℤ → ℂ) :
     finiteChart p M (fun n ↦ -f n) = -finiteChart p M f := by
-  classical
-  simp [finiteChart, seedSum, bracket, legSum]
+  rw [finiteChart_eq_positiveIntervalSum_sub_p_mul_centerSum
+      p hp hpodd M (fun n ↦ -f n)]
+  rw [finiteChart_eq_positiveIntervalSum_sub_p_mul_centerSum
+      p hp hpodd M f]
+  simp only [Finset.sum_neg_distrib, mul_neg]
   ring
 
 /-- Replacing the zero-extended positive field by the ordinary Dirichlet field
@@ -229,6 +247,7 @@ theorem positiveIntegerLogDirichletSample_eq_mangoldt
   · simp only [positiveIntegerLogDirichletSample,
       positiveIntegerMangoldtDirichletSample, if_pos hn]
     rw [primePowerSignal_divisorSum_eq_integerLog]
+    simp [natLogDirichletTerm]
   · simp [positiveIntegerLogDirichletSample,
       positiveIntegerMangoldtDirichletSample, hn]
 
@@ -276,7 +295,14 @@ theorem hasDerivAt_finiteChart_dirichlet_eq_neg_mangoldt
   have hderiv :
       finiteChart p M (fun n ↦ -positiveIntegerLogDirichletSample s n) =
         -finiteChart p M (positiveIntegerMangoldtDirichletSample s) := by
-    rw [finiteChart_neg, hsamples]
+    calc
+      finiteChart p M
+          (fun n ↦ -positiveIntegerLogDirichletSample s n) =
+        -finiteChart p M (positiveIntegerLogDirichletSample s) :=
+          finiteChart_neg p M hp hpodd _
+      _ = -finiteChart p M
+          (positiveIntegerMangoldtDirichletSample s) := by
+        rw [hsamples]
   rw [hfun, hderiv] at hraw
   exact hraw
 
