@@ -1,0 +1,37 @@
+name: Elliptic congruence camera gate
+
+on:
+  pull_request:
+    paths:
+      - "experiments/elliptic_congruence_camera.py"
+      - "experiments/test_elliptic_congruence_camera.py"
+      - "docs/ELLIPTIC_CONGRUENCE_CAMERA_GATE1.md"
+      - ".github/workflows/elliptic-congruence-camera.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  gate1:
+    name: Run finite congruence-camera gate
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Run unit tests
+        run: python3 -m unittest -v experiments.test_elliptic_congruence_camera
+
+      - name: Rebuild experimental ledger
+        run: |
+          python3 experiments/elliptic_congruence_camera.py \
+            --output /tmp/elliptic_congruence_camera_gate1.json
+          python3 -m json.tool /tmp/elliptic_congruence_camera_gate1.json >/dev/null

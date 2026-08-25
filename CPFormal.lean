@@ -3,6 +3,17 @@ import CPFormal.Logic.CausalCompression
 import CPFormal.Logic.StructuralPersistence
 import CPFormal.Finite.SymmetricPair
 import CPFormal.Finite.Bracket
+import CPFormal.Elliptic.LinearizedLift
+import CPFormal.Elliptic.WeierstrassLinearizedLift
+import CPFormal.Elliptic.RawLiftTaylor
+import CPFormal.Elliptic.PrimePowerReductionFiber
+import CPFormal.Elliptic.PrimePowerAffineFiber
+import CPFormal.Elliptic.PrimePowerIntrinsicFiber
+import CPFormal.Elliptic.ShortWeierstrassDiscriminant
+import CPFormal.Elliptic.ProductFiber
+import CPFormal.Elliptic.ProductEnergy
+import CPFormal.Elliptic.CoprimeState
+import CPFormal.Elliptic.ReductionFiber
 import CPFormal.Carry.Shift
 import CPFormal.Carry.C2Adjacent
 import CPFormal.Carry.C2Depth
